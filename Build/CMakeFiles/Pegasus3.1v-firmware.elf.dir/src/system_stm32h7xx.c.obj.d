@@ -3,13 +3,13 @@ CMakeFiles/Pegasus3.1v-firmware.elf.dir/src/system_stm32h7xx.c.obj: \
  D:\Pegasus_Code\Drivers\CMSIS\Device\ST\STM32H7xx\Include/stm32h7xx.h \
  D:\Pegasus_Code\Drivers\CMSIS\Device\ST\STM32H7xx\Include/stm32h743xx.h \
  D:\Pegasus_Code\Drivers\CMSIS\Include/core_cm7.h \
- c:\users\pratik~1\downlo~1\gnutoo~1\gnutoo~1\62017-~1\lib\gcc\arm-none-eabi\6.3.1\include\stdint.h \
- c:\users\pratik~1\downlo~1\gnutoo~1\gnutoo~1\62017-~1\arm-none-eabi\include\stdint.h \
- c:\users\pratik~1\downlo~1\gnutoo~1\gnutoo~1\62017-~1\arm-none-eabi\include\machine\_default_types.h \
- c:\users\pratik~1\downlo~1\gnutoo~1\gnutoo~1\62017-~1\arm-none-eabi\include\sys\features.h \
- c:\users\pratik~1\downlo~1\gnutoo~1\gnutoo~1\62017-~1\arm-none-eabi\include\_newlib_version.h \
- c:\users\pratik~1\downlo~1\gnutoo~1\gnutoo~1\62017-~1\arm-none-eabi\include\sys\_intsup.h \
- c:\users\pratik~1\downlo~1\gnutoo~1\gnutoo~1\62017-~1\arm-none-eabi\include\sys\_stdint.h \
+ c:\progra~2\gnuarm~1\102021~1.10\lib\gcc\arm-none-eabi\10.3.1\include\stdint.h \
+ c:\progra~2\gnuarm~1\102021~1.10\arm-none-eabi\include\stdint.h \
+ c:\progra~2\gnuarm~1\102021~1.10\arm-none-eabi\include\machine\_default_types.h \
+ c:\progra~2\gnuarm~1\102021~1.10\arm-none-eabi\include\sys\features.h \
+ c:\progra~2\gnuarm~1\102021~1.10\arm-none-eabi\include\_newlib_version.h \
+ c:\progra~2\gnuarm~1\102021~1.10\arm-none-eabi\include\sys\_intsup.h \
+ c:\progra~2\gnuarm~1\102021~1.10\arm-none-eabi\include\sys\_stdint.h \
  D:\Pegasus_Code\Drivers\CMSIS\Include/cmsis_version.h \
  D:\Pegasus_Code\Drivers\CMSIS\Include/cmsis_compiler.h \
  D:\Pegasus_Code\Drivers\CMSIS\Include/cmsis_gcc.h \
@@ -20,18 +20,18 @@ CMakeFiles/Pegasus3.1v-firmware.elf.dir/src/system_stm32h7xx.c.obj: \
  D:\Pegasus_Code\Drivers\STM32H7xx_HAL_Driver\Inc/stm32h7xx_hal_rcc.h \
  D:\Pegasus_Code\Drivers\STM32H7xx_HAL_Driver\Inc/stm32h7xx_hal_def.h \
  D:\Pegasus_Code\Drivers\STM32H7xx_HAL_Driver\Inc/Legacy/stm32_hal_legacy.h \
- c:\users\pratik~1\downlo~1\gnutoo~1\gnutoo~1\62017-~1\lib\gcc\arm-none-eabi\6.3.1\include\stddef.h \
- c:\users\pratik~1\downlo~1\gnutoo~1\gnutoo~1\62017-~1\arm-none-eabi\include\math.h \
- c:\users\pratik~1\downlo~1\gnutoo~1\gnutoo~1\62017-~1\arm-none-eabi\include\sys\reent.h \
- c:\users\pratik~1\downlo~1\gnutoo~1\gnutoo~1\62017-~1\arm-none-eabi\include\_ansi.h \
- c:\users\pratik~1\downlo~1\gnutoo~1\gnutoo~1\62017-~1\arm-none-eabi\include\newlib.h \
- c:\users\pratik~1\downlo~1\gnutoo~1\gnutoo~1\62017-~1\arm-none-eabi\include\sys\config.h \
- c:\users\pratik~1\downlo~1\gnutoo~1\gnutoo~1\62017-~1\arm-none-eabi\include\machine\ieeefp.h \
- c:\users\pratik~1\downlo~1\gnutoo~1\gnutoo~1\62017-~1\arm-none-eabi\include\sys\_types.h \
- c:\users\pratik~1\downlo~1\gnutoo~1\gnutoo~1\62017-~1\arm-none-eabi\include\machine\_types.h \
- c:\users\pratik~1\downlo~1\gnutoo~1\gnutoo~1\62017-~1\arm-none-eabi\include\sys\lock.h \
- c:\users\pratik~1\downlo~1\gnutoo~1\gnutoo~1\62017-~1\arm-none-eabi\include\sys\cdefs.h \
- c:\users\pratik~1\downlo~1\gnutoo~1\gnutoo~1\62017-~1\arm-none-eabi\include\_ansi.h \
+ c:\progra~2\gnuarm~1\102021~1.10\lib\gcc\arm-none-eabi\10.3.1\include\stddef.h \
+ c:\progra~2\gnuarm~1\102021~1.10\arm-none-eabi\include\math.h \
+ c:\progra~2\gnuarm~1\102021~1.10\arm-none-eabi\include\sys\reent.h \
+ c:\progra~2\gnuarm~1\102021~1.10\arm-none-eabi\include\_ansi.h \
+ c:\progra~2\gnuarm~1\102021~1.10\arm-none-eabi\include\newlib.h \
+ c:\progra~2\gnuarm~1\102021~1.10\arm-none-eabi\include\sys\config.h \
+ c:\progra~2\gnuarm~1\102021~1.10\arm-none-eabi\include\machine\ieeefp.h \
+ c:\progra~2\gnuarm~1\102021~1.10\arm-none-eabi\include\sys\_types.h \
+ c:\progra~2\gnuarm~1\102021~1.10\arm-none-eabi\include\machine\_types.h \
+ c:\progra~2\gnuarm~1\102021~1.10\arm-none-eabi\include\sys\lock.h \
+ c:\progra~2\gnuarm~1\102021~1.10\arm-none-eabi\include\sys\cdefs.h \
+ c:\progra~2\gnuarm~1\102021~1.10\arm-none-eabi\include\_ansi.h \
  D:\Pegasus_Code\Drivers\STM32H7xx_HAL_Driver\Inc/stm32h7xx_hal_rcc_ex.h \
  D:\Pegasus_Code\Drivers\STM32H7xx_HAL_Driver\Inc/stm32h7xx_hal_gpio.h \
  D:\Pegasus_Code\Drivers\STM32H7xx_HAL_Driver\Inc/stm32h7xx_hal_gpio_ex.h \

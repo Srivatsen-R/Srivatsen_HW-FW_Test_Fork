@@ -118,6 +118,8 @@ int main(void) {
   EEPROM_Read_Data();
 
   bootup_config();
+
+  uint8_t i = 0;
   
   //while loop running on CLK frequency.
   while (1) 
@@ -145,6 +147,7 @@ int main(void) {
 
       //delay to log can data each 100ms.
       HAL_Delay(100);
+      i++;
   }
 
 }

@@ -34,7 +34,7 @@ endif()
 
 # Set default install directory permissions.
 if(NOT DEFINED CMAKE_OBJDUMP)
-  set(CMAKE_OBJDUMP "C:/Users/Pratik TRN0094/Downloads/GNU Tools ARM Embedded/GNU Tools ARM Embedded/6 2017-q1-update/bin/arm-none-eabi-objdump.exe")
+  set(CMAKE_OBJDUMP "C:/Program Files (x86)/GNU Arm Embedded Toolchain/10 2021.10/bin/arm-none-eabi-objdump.exe")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
