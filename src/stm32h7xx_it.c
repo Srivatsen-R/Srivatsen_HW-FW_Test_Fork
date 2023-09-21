@@ -41,15 +41,9 @@ void NMI_Handler(void)
   */
 void HardFault_Handler(void)
 {
-  led_t hardFault = {
-        .toggle   = toggleColor,
-        .write    = writeColor,
-  };
-  hardFault.write(BLACK);
-  while (1)
+  while(1)
   {
-     hardFault.toggle(RED);
-     HAL_Delay(500);
+    
   }
 }
 

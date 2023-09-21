@@ -38,9 +38,12 @@ Build
 *.i*86
 *.x86_64
 *.hex
+*.bin
 
 # Debug files
 *.dSYM/
 *.su
 *.idb
 *.pdb
+
+*.yaml

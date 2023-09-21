@@ -1,3 +1,4 @@
-D:/Pegasus_Code/Build/CMakeFiles/Pegasus3.1v-firmware.elf.dir
+D:/Pegasus_Code/Build/CMakeFiles/Pegasus3.1v-appPrimary.elf.dir
+D:/Pegasus_Code/Build/CMakeFiles/Pegasus3.1v-appSecondary.elf.dir
 D:/Pegasus_Code/Build/CMakeFiles/edit_cache.dir
 D:/Pegasus_Code/Build/CMakeFiles/rebuild_cache.dir

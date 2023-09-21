@@ -74,7 +74,8 @@ set(COMMON_FILES
 
     startup_stm32h743zitx.s)
 
-set(EXECUTABLE_FIRMWARE ${PROJECT_NAME}-firmware.elf)
+set(EXECUTABLE_APP_PRI ${PROJECT_NAME}-appPrimary.elf)
+set(EXECUTABLE_APP_SEC ${PROJECT_NAME}-appSecondary.elf)
 
 set(FIRMWARE_MAIN
    src/main.c)
@@ -111,21 +112,32 @@ set(FIRMWARE_FILES
     lib/ApplicationLayer/can-tp-module-threadx/can_tp_app.c
     )
 
+add_executable(${EXECUTABLE_APP_PRI} 
+                ${COMMON_FILES} 
+                ${FIRMWARE_MAIN} ${FIRMWARE_FILES})
 
-add_executable(${EXECUTABLE_FIRMWARE} 
+add_executable(${EXECUTABLE_APP_SEC} 
                 ${COMMON_FILES} 
                 ${FIRMWARE_MAIN} ${FIRMWARE_FILES})
                 
-target_compile_definitions(${EXECUTABLE_FIRMWARE} PRIVATE
+target_compile_definitions(${EXECUTABLE_APP_PRI} PRIVATE
     -DUSE_HAL_DRIVER
     -DSTM32H743xx
     -DGIT_SHA=\"${GIT_SHA}\"
     -DNDEBUG=${NDEBUG}
     )
 
-target_include_directories(${EXECUTABLE_FIRMWARE} PUBLIC ${COMMON_INCLUDE})
+target_compile_definitions(${EXECUTABLE_APP_SEC} PRIVATE
+    -DUSE_HAL_DRIVER
+    -DSTM32H743xx
+    -DGIT_SHA=\"${GIT_SHA}\"
+    -DNDEBUG=${NDEBUG}
+    )
 
-target_compile_options(${EXECUTABLE_FIRMWARE} PRIVATE
+target_include_directories(${EXECUTABLE_APP_PRI} PUBLIC ${COMMON_INCLUDE})
+target_include_directories(${EXECUTABLE_APP_SEC} PUBLIC ${COMMON_INCLUDE})
+
+target_compile_options(${EXECUTABLE_APP_PRI} PRIVATE
     -mcpu=cortex-m7
     -mthumb
     -mfpu=fpv4-sp-d16
@@ -142,13 +154,33 @@ target_compile_options(${EXECUTABLE_FIRMWARE} PRIVATE
     $<$<CONFIG:Debug>:-Og>
     )
 
-target_link_options(${EXECUTABLE_FIRMWARE} PRIVATE
-    "SHELL:-T ${CMAKE_SOURCE_DIR}/linkerScripts/STM32H743ZITX_FLASH.ld"
+target_compile_options(${EXECUTABLE_APP_SEC} PRIVATE
+    -mcpu=cortex-m7
+    -mthumb
+    -mfpu=fpv4-sp-d16
+    -mfloat-abi=hard
+
+    -fdata-sections
+    -ffunction-sections
+
+    -std=gnu99
+    
+    -Wall
+    -Wno-comment
+    
+    $<$<CONFIG:Debug>:-Og>
+    )
+
+target_link_options(${EXECUTABLE_APP_PRI} PRIVATE
+    "SHELL:-T ${CMAKE_SOURCE_DIR}/linkerScripts/memory_map.ld"
+    "SHELL:-T ${CMAKE_SOURCE_DIR}/linkerScripts/app1.ld"
     -mcpu=cortex-m7
     --specs=nosys.specs
 
-    -Wl,-Map=${PROJECT_NAME}-firmware.map,--cref
+    -Wl,-Map=${PROJECT_NAME}-appPrimary.map,--cref
     -Wl,--gc-sections -static
+
+    -fno-math-errno
 
     --specs=nano.specs
     
@@ -165,11 +197,46 @@ target_link_options(${EXECUTABLE_FIRMWARE} PRIVATE
     -lnosys
     )
 
-add_custom_command(TARGET ${EXECUTABLE_FIRMWARE}
-    POST_BUILD
-    COMMAND arm-none-eabi-size ${EXECUTABLE_FIRMWARE})
+target_link_options(${EXECUTABLE_APP_SEC} PRIVATE
+    "SHELL:-T ${CMAKE_SOURCE_DIR}/linkerScripts/memory_map.ld"
+    "SHELL:-T ${CMAKE_SOURCE_DIR}/linkerScripts/app2.ld"
+    -mcpu=cortex-m7
+    --specs=nosys.specs
 
-add_custom_command(TARGET ${EXECUTABLE_FIRMWARE}
+    -Wl,-Map=${PROJECT_NAME}-appSecondary.map,--cref
+    -Wl,--gc-sections -static
+
+    -fno-math-errno
+
+    --specs=nano.specs
+    
+    -mthumb
+    -u_printf_float
+    -mfpu=fpv4-sp-d16
+    -mfloat-abi=hard
+
+    -Wl,--start-group
+    -lc 
+    -lm 
+    -Wl,--end-group
+
+    -lnosys
+    )
+
+add_custom_command(TARGET ${EXECUTABLE_APP_PRI}
     POST_BUILD
-    COMMAND arm-none-eabi-objcopy -O ihex ${EXECUTABLE_FIRMWARE} ${PROJECT_NAME}-firmware.hex
-    COMMAND arm-none-eabi-objcopy -O binary ${EXECUTABLE_FIRMWARE} ${PROJECT_NAME}-firmware.bin)
+    COMMAND arm-none-eabi-size ${EXECUTABLE_APP_PRI})
+
+add_custom_command(TARGET ${EXECUTABLE_APP_SEC}
+    POST_BUILD
+    COMMAND arm-none-eabi-size ${EXECUTABLE_APP_SEC})
+
+add_custom_command(TARGET ${EXECUTABLE_APP_PRI}
+    POST_BUILD
+    COMMAND arm-none-eabi-objcopy -O ihex ${EXECUTABLE_APP_PRI} ${PROJECT_NAME}-appPrimary.hex
+    COMMAND arm-none-eabi-objcopy -O binary ${EXECUTABLE_APP_PRI} ${PROJECT_NAME}-appPrimary.bin)
+
+add_custom_command(TARGET ${EXECUTABLE_APP_SEC}
+    POST_BUILD
+    COMMAND arm-none-eabi-objcopy -O ihex ${EXECUTABLE_APP_SEC} ${PROJECT_NAME}-appSecondary.hex
+    COMMAND arm-none-eabi-objcopy -O binary ${EXECUTABLE_APP_SEC} ${PROJECT_NAME}-appSecondary.bin)

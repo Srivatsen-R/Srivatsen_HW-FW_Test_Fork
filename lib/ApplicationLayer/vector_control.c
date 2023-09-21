@@ -576,20 +576,20 @@ void FOC_TORQUE_PI_CONTROL()
             }
           
             if(forward_flag){
-                if(foc.vq_ref > sqroot(SQ_MAX_PU_VOLTAGE - ipow(foc.vd_ref, 2.0))){foc.vq_ref = sqroot(SQ_MAX_PU_VOLTAGE - ipow(foc.vd_ref, 2.0));}
+                if(foc.vq_ref > sqrt(SQ_MAX_PU_VOLTAGE - powf(foc.vd_ref, 2.0))){foc.vq_ref = sqrt(SQ_MAX_PU_VOLTAGE - powf(foc.vd_ref, 2.0));}
             }
 
             if(reverse_flag){
-                if(foc.vq_ref < -sqroot(SQ_MAX_PU_VOLTAGE - ipow(foc.vd_ref, 2.0))){foc.vq_ref = -sqroot(SQ_MAX_PU_VOLTAGE - ipow(foc.vd_ref, 2.0));}
+                if(foc.vq_ref < -sqrt(SQ_MAX_PU_VOLTAGE - powf(foc.vd_ref, 2.0))){foc.vq_ref = -sqrt(SQ_MAX_PU_VOLTAGE - powf(foc.vd_ref, 2.0));}
             }
 
             if(forward_flag == 0 && reverse_flag == 0){
                 if(motorControl.drive.fnr_status == 1){
-                    if(foc.vq_ref > sqroot(SQ_MAX_PU_VOLTAGE - ipow(foc.vd_ref, 2.0))){foc.vq_ref = sqroot(SQ_MAX_PU_VOLTAGE - ipow(foc.vd_ref, 2.0));}
+                    if(foc.vq_ref > sqrt(SQ_MAX_PU_VOLTAGE - powf(foc.vd_ref, 2.0))){foc.vq_ref = sqrt(SQ_MAX_PU_VOLTAGE - powf(foc.vd_ref, 2.0));}
                 }
 
                 if(motorControl.drive.fnr_status == 2){
-                    if(foc.vq_ref < -sqroot(SQ_MAX_PU_VOLTAGE - ipow(foc.vd_ref, 2.0))){foc.vq_ref = -sqroot(SQ_MAX_PU_VOLTAGE - ipow(foc.vd_ref, 2.0));}
+                    if(foc.vq_ref < -sqrt(SQ_MAX_PU_VOLTAGE - powf(foc.vd_ref, 2.0))){foc.vq_ref = -sqrt(SQ_MAX_PU_VOLTAGE - powf(foc.vd_ref, 2.0));}
                 }
             }
 }

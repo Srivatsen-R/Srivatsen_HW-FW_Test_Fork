@@ -87,7 +87,7 @@ double NTC_Board_Temp(double ntc) {
           // temp_resistance = (ntc * 100000) / (ADC_Vref - ntc);
           temp_resistance = (ntc * 10000) / (ADC_Vref - ntc);
           // temp_ln = log(temp_resistance);
-          temp_ln=(298)*nat_log(10000/temp_resistance);
+          temp_ln=(298)*log(10000/temp_resistance);
           /*  Steinhart-Hart Thermistor Equation:
               Temperature in Kelvin = 1 / (A + B[ln(R)] + C[ln(R)]^3)
               where A = 0.001129148, B = 0.000234125 and C = 8.76741*10^-8

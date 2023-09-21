@@ -169,13 +169,13 @@ void ANALOG_READING()
      motorControl.temperature.w     = moving_Temperature_measured_fun_w(mControl.temperature.read(analog.read(BOARD_TEMP_W)),TEMP_AVG);
      avg_board_temp = (motorControl.temperature.u + motorControl.temperature.v + motorControl.temperature.w)/3.0;
 
-     v_rms = 10*sqroot(terminal.vd.ref * terminal.vd.ref + terminal.vq.ref * terminal.vq.ref);
+     v_rms = 10*sqrt(terminal.vd.ref * terminal.vd.ref + terminal.vq.ref * terminal.vq.ref);
      v_rms /= 32767.0;
 
     //Motor NTC Temperature Calculation
      double resistance = (analog.bufferData[MOTOR_TEMP_SENSE] * 10000)/(Adc_max_COUNT - analog.bufferData[MOTOR_TEMP_SENSE]);
      double temp_K = resistance/NTC_PULL_UP_RESISTOR;
-     temp_K = nat_log(temp_K);
+     temp_K = log(temp_K);
      temp_K /= BETA_VALUE;
      temp_K += 1.0/(T_AMBIENT + KELVIN_TO_CELSIUS);
      temp_K = 1.0/temp_K;
@@ -189,7 +189,7 @@ void ANALOG_READING()
 
     v_rms *= busVoltage/ROOT2;
 
-    current = (10*sqroot(terminal.vq.ref * terminal.vq.ref + terminal.vd.ref * terminal.vd.ref));
+    current = (10*sqrt(terminal.vq.ref * terminal.vq.ref + terminal.vd.ref * terminal.vd.ref));
     current /= 32767.0;
     current *= terminal.iq.sen;
 
