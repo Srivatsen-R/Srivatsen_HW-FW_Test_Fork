@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "eepromcrc.h": "c",
+        "vehicle.h": "c",
+        "sanity.h": "c",
+        "foc_blockset.h": "c",
+        "cmath": "c",
+        "math.h": "c",
+        "errno.h": "c",
+    }
+}

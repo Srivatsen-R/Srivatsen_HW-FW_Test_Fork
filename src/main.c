@@ -1,0 +1,330 @@
+/*
+Pegasus - Motor Controller Unit software for HL,HLP,Storm,Vortex and future projects.
+
+Contributors: Pujit Gandhi,Pratik Rout,Olay,Saksham
+
+This file acts as an entry point for major code flow responsible for motor control
+and system monitoring for voltage,temperature,current and other physical parameters.
+
+main()                          : Contains code blocks for sanity,fault & error 
+                                  detection, can communication.
+HAL_TIM_PeriodElapsedCallback() : Contain code blocks for motor control operation. (20kHz frequency)
+HAL_TIM_IC_CaptureCallback()    : Contain code blocks for intial motion sensing.
+HAL_GPIO_EXTI_Callback          : Contain code blocks for reseting position.
+
+*/
+
+
+
+/* Includes ------------------------------------------------------------------*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+
+#include "main.h"
+#include "math_func.h"
+#include "adc.h"
+#include "dma.h"
+#include "fdcan.h"
+#include "tim.h"
+#include "usart.h"
+#include "gpio.h"
+
+#include "led_AL.h"
+#include "adc_AL.h"
+#include "fdcan_AL.h"
+#include "temp_AL.h"
+
+#include "v_f_control.h"
+#include "vector_control.h"
+
+#include "motor_param.h"
+#include "eeprom_AL.h"
+#include "flash.h"
+#include "eepromCRC.h"
+#include "vehicle.h"
+#include "sanity.h"
+#include "foc_blockset.h"
+#include "microcontroller.h"
+
+#include "config.h"
+#include "can_tp_app.h"
+
+/* Variable declaration ------------------------------------------------------*/
+
+#ifndef HSEM_ID_0
+#define HSEM_ID_0 (0U) /* HW semaphore 0*/
+#endif
+
+/* externs -------------------------------------------------------------------*/
+extern led_t          led;
+extern can_t          can;
+extern adc_t          analog;
+extern terminal_t     terminal;
+extern struct gpio    io;
+extern motorControl_t motorControl;
+extern vehicle_t vehicle;
+
+/* Private function prototypes -----------------------------------------------*/
+
+float Duty;
+float freq_rpm = 0.0;
+float throttle_percent = 0.0;
+volatile uint32_t ICValue;
+volatile uint32_t angle = 30, angle_curr = 0, angle_prev = 0;
+uint8_t reset_flag = 0;
+uint8_t app_version = 0;
+uint8_t cantp_config_flag = 0;
+uint8_t interrupt_flag = 0;
+
+// cantp inits 
+IsoTpShims firmware_up_recv_shim;
+IsoTpReceiveHandle firmware_up_recv_handle;
+IsoTpMessage firmware_up_recv_message;
+uint8_t counter = 0;
+
+upgrade_states up_state = UP_INIT;
+char message[50] = {0};
+
+
+//main function. 
+int main(void) {
+
+  //system clock init.
+  SYSTEM_INIT();
+
+  //can init
+  can.setup();
+
+  //adc init and start via DMA
+  if(analog.start_dma(&hadc1, (uint32_t*) analog.bufferData, ADC_NoOfConversion) != OK) {
+     Error_Handler();
+  }
+  
+  //function to keep drive disable intially.
+  MotorControl_Init();
+  HAL_Delay(100);// to be modified
+  
+  //function to perform sanity checks at ignition.
+  RUN_SANITY();
+  HAL_Delay(5000);//to be modified.
+
+  //enabling motor control interrupts , ABZ+PWM sensing interrpts.
+  ENABLE_PERIPHERALS();
+  HAL_Delay(100);//to be modified.
+
+  //read previous odometer data.
+  EEPROM_Read_Data();
+
+  bootup_config();
+  
+  //while loop running on CLK frequency.
+  while (1) 
+  {
+      //function to continously monitor mcu faults and errors.
+      ANALOG_READING();
+      FAULT_READING();
+      //function to log can data for data analysis and rca.
+      CAN_Logging();
+      //function to calculate odo,trip and speed.
+      Calculate_OTS(terminal.w.sen);
+      //function for can tx communication with stark , mark, marvel.
+      CAN_Communication(vehicle.odometer,vehicle.trip,vehicle.speed);
+
+      //function to write odo data in eeprom if km updated.
+      if(vehicle.odo_change_status == ODO_UPDATE){
+        EEPROM_Write_Data(vehicle.odometer);
+        vehicle.odo_change_status = NO_ODO_UPDATE;
+      }
+
+      if (get_conifg_flag())
+      {
+        update_config(); // updates config and set_config_flag to zero
+      }
+
+      //delay to log can data each 100ms.
+      HAL_Delay(100);
+  }
+
+}
+
+uint8_t get_conifg_flag(){
+  return cantp_config_flag;
+}
+
+uint8_t get_interrupt_flag(){
+  return interrupt_flag;
+}
+
+void set_config_flag(uint8_t value){
+  cantp_config_flag = value;
+
+}
+
+void set_interrupt_flag(uint8_t value){
+  interrupt_flag = value;
+}
+
+/* USER CODE BEGIN 4 */
+//callback to read pwm value from encoder
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
+{
+	if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)  // If the interrupt is triggered by channel 1
+	{
+		// Read the IC value
+		ICValue = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
+
+		if (ICValue != 0)
+		{
+			// calculate the Duty Cycle
+			Duty = (HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_2) *100)/ICValue;
+		}
+	}
+}
+//callback to read Z data from encoder
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    if(GPIO_Pin == GPIO_PIN_7) // If The INT Source Is EXTI Line9_5 (PE7 Pin)
+    {
+      reset_flag = 1;
+      angle++;
+    }
+}
+
+//callback to tim17 interrupt for motor control. 20kHz freq.
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
+  /* Prevent unused argument(s) compilation warning */
+  angle_curr = angle;//to be modified.
+
+  if(htim->Instance == TIM7)
+  {
+    HAL_TIM_Base_Stop_IT(&htim17);
+    motorControl.drive.check = DRIVE_DISABLE;
+
+    switch (up_state)
+    {
+    case UP_INIT:
+      
+      up_state = UP_IN_PROG;
+      Flash_Erase_Data(0x081E0000, 16);
+      __fdcan_transferMessagesOnID6FA(SUCCESS_MESS, 2);
+      break;
+    case UP_IN_PROG:
+      if(get_interrupt_flag() == 0)
+      {
+        __fdcan_transferMessagesOnID6FA(CAN_TP_TIMEOUT, 2);
+      }
+      set_interrupt_flag(0);
+
+      if(counter >= 10)
+      {
+        up_state = UP_FAILED;
+      }
+      break;
+
+    case UP_COMPLETE:
+      if (get_conifg_flag() == 0){
+        NVIC_SystemReset();
+      }
+      
+      break;
+
+    case UP_FAILED:
+    
+      HAL_TIM_Base_Start_IT(&htim17);
+      motorControl.drive.check = DRIVE_ENABLE;
+    
+      HAL_TIM_Base_Stop_IT(&htim7);
+      counter = 0;
+      break;
+
+    default:
+      HAL_TIM_Base_Start_IT(&htim17);
+      motorControl.drive.check = DRIVE_ENABLE;
+
+      HAL_TIM_Base_Stop_IT(&htim7);
+      counter = 0;
+      break;
+    }
+  
+    counter++;
+  }
+  
+  if(htim->Instance==TIM17) {
+
+        
+        //turn led red/green depending on drive status
+        if(motorControl.drive.check == DRIVE_DISABLE) {
+          //rgb gpio
+          HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_SET);
+          HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
+          HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
+        }
+        else if(motorControl.drive.check == DRIVE_ENABLE) {
+          //  rgb gpio
+          HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_RESET);
+          HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
+          HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
+
+          //drive enable gpio
+          HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
+        }
+
+          //read fnr,motor angle,current & throttle
+          READ_FNR();
+
+          freq_rpm = terminal.w.sen * (POLEPAIRS*RPM_TO_FREQ);
+          throttle_percent = (terminal.w.ref*RPM_TO_THROTTLE_PERCENT);
+
+          READ_MOTOR_POSITION();
+          READ_MOTOR_PHASE_CURRENT();
+          READ_THROTTLE();
+
+          //sanity checks to be perfomed at 20kHz
+          SAFETY_AND_ERRORS();
+
+          //main function for motor control operation.
+
+
+          VECTOR_FOC_Control();
+          motorControl.encoder.previous = motorControl.encoder.value;
+          angle_prev = angle_curr;
+  }
+}
+
+
+
+
+/**
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
+void Error_Handler(void)
+{
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
+  __disable_irq();
+  while (1)
+  {
+  }
+  /* USER CODE END Error_Handler_Debug */
+}
+
+#ifdef  USE_FULL_ASSERT
+/**
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
+void assert_failed(uint8_t *file, uint32_t line)
+{
+  /* USER CODE BEGIN 6 */
+  /* User can add his own implementation to report the file name and line number,
+     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+  /* USER CODE END 6 */
+}
+#endif /* USE_FULL_ASSERT */
+   

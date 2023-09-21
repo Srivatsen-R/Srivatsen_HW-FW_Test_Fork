@@ -1,0 +1,180 @@
+#ifndef __ENUMS_H
+#define __ENUMS_H
+
+#include <stdio.h>
+#include <stdbool.h>
+
+
+typedef enum {
+	 SANITY_ERROR = false, 
+     SANITY_OK    = true,
+	 SANITY_FAULT = true,
+}SANITY_STATUS;
+
+typedef enum {
+     FAULT_BUS_VOLTAGE       = 1,
+	 FAULT_BOARD_TEMPERAUTRE = 2,
+	 FAULT_MOTOR_TEMPERATURE = 3,
+	 FAULT_THROTTLE          = 4,
+	 FAULT_ENCODER           = 5,
+	 FAULT_CURRENT_SENSE     = 6,
+	 FAULT_OVER_CURRENT      = 7,
+	 FAULT_FNR				 = 8,
+	 FAULT_OVER_SPEED        = 9,
+	 FAULT_DC_OVER_CURR      = 10,
+	 FAULT_UNDER_SPEED       = 11,
+	 FAULT_UNDER_SPEED_THROTTLE = 12,
+	 FAULT_UNDER_SPEED_STALL = 13,
+	 FAULT_ENCODER_DICNT     = 14,
+	 FAULT_Z_DICNT           = 15,
+	 FAULT_PWM_DICNT 		 = 16,
+	 FAULT_A_B_5V_SHORT      = 17,
+	 FAULT_CAN_ERROR		 = 18,
+	 FAULT_ABNORMAL_RUNNING  = 19
+}FAULT_STATUS;
+
+typedef enum {
+	FAULT_BUS_VOLTAGE_HEX	     = 0x00000001,
+	FAULT_BOARD_TEMPERAUTRE_HEX  = 0x00000002,
+	FAULT_MOTOR_TEMPERATURE_HEX  = 0x00000004,
+	FAULT_THROTTLE_HEX           = 0x00000008,
+	FAULT_CURRENT_SENSE_HEX      = 0x00000010,
+	FAULT_OVER_CURRENT_HEX       = 0x00000020,
+	FAULT_OVER_SPEED_HEX         = 0x00000040,
+	FAULT_DC_OVER_CURR_HEX       = 0x00000080,
+	FAULT_ENCODER_DICNT_HEX      = 0x00000100,
+	FAULT_Z_DICNT_HEX            = 0x00000200,
+	FAULT_PWM_DICNT_HEX          = 0x00000400,
+	FAULT_A_B_5V_SHORT_HEX       = 0x00000800,
+	FAULT_UNDER_SPEED_STALL_HEX  = 0x00001000,
+	FAULT_CAN_ERROR_HEX			 = 0x00002000,
+	FAULT_ABNORMAL_RUNNING_HEX   = 0x00004000
+}FAULT_STATUS_HEX;
+
+/*CAN Enumerators*/
+typedef enum {
+	E 	= 0,
+	S	= 1,
+}TypeofCANID;
+
+typedef enum{
+	FIFO0_CAN1 = 0,
+	FIFO1_CAN1 = 1,
+}FIFOs_CAN1;
+
+typedef enum {
+	FBANK0		= 0,
+	FBANK1		= 1,
+	FBANK2		= 2,
+	FBANK3		= 3,
+	FBANK4		= 4,
+	FBANK5		= 5,
+	FBANK6		= 6,
+	FBANK7		= 7,
+	FBANK8		= 8,
+	FBANK9		= 9,
+	FBANK10		= 10,
+	FBANK11		= 11,
+	FBANK12		= 12,
+	FBANK13		= 13,
+}FilterBanks_CAN1;
+
+typedef enum{
+	FIFO0_CAN2	= 0,
+	FIFO1_CAN2	= 1,
+}FIFOs_CAN2;
+
+typedef enum{
+	FDCAN_NOT_AVAILABLE	= false,
+	FDCAN_AVAILABLE	    = true,
+}FDCAN_STATUS;
+
+typedef enum{
+	TEMP_NORMAL	    = false,
+	TEMP_NOT_NORMAL	= true,
+}TEMP_STATUS;
+
+typedef enum {
+     EEPROM_OK      = 0,
+	 EEPROM_ERROR   = 1,
+	 EEPROM_BUSY    = 2,
+	 EEPROM_TIMEOUT = 3,
+}EEPROM_STATUS;
+
+typedef enum{
+	FBANK14		= 14,
+	FBANK15		= 15,
+	FBANK16		= 16,
+	FBANK17		= 17,
+	FBANK18		= 18,
+	FBANK19		= 19,
+	FBANK20		= 20,
+	FBANK21		= 21,
+	FBANK22		= 22,
+	FBANK23		= 23,
+	FBANK24		= 24,
+	FBANK25		= 25,
+	FBANK26		= 26,
+	FBANK27		= 27,
+}FilterBanks_CAN2;
+
+
+typedef enum{
+	OFF		= 0,
+	ON		= 1,
+}PinStateType;
+
+
+typedef enum {
+     PHASE_CURRENT_W   = 0,
+     BOARD_TEMP_U      = 1,
+     BOARD_TEMP_W      = 2,
+     MOTOR_TEMP_SENSE  = 3,
+     BOARD_TEMP_V      = 4,
+     BUS_CURRENT_W     = 5,
+     BUS_VOLTAGE       = 6,
+     BUS_CURRENT_U     = 7, 
+     BUS_CURRENT_V     = 8,
+     PHASE_CURRENT_V   = 9,
+	 THROTTLE		   = 10,	
+}ADC_Channels_t;
+
+typedef enum {
+      PWM_W_Channel =  TIM_CHANNEL_1,
+      PWM_V_Channel =  TIM_CHANNEL_2,
+      PWM_U_Channel =  TIM_CHANNEL_3,
+}TIM_Channels_t;
+
+typedef enum {
+      DRIVE_ENABLE  = 0,
+      DRIVE_DISABLE = 1,
+}DRIVE_STATUS;
+
+typedef enum {
+    DOWNLOAD_BIN = 1,
+    RECEIVE_BIN = 2,
+    DOWNLOAD_CONF = 3,
+    RECEIVE_CONF = 4,
+    PERFORM_UPGRADE = 5,
+    PAUSE_UPGRADE = 6,
+    RESUME_UPGRADE = 7,
+} request_codes;
+
+typedef enum {
+    SUCCESS_MESS = (uint8_t)1,
+    CAN_TP_TIMEOUT = (uint8_t)2,
+    FILE_CREATE_ERROR = (uint8_t)3,
+    CRC_ERROR = (uint8_t)4,
+    FILE_WRITE_ERROR = (uint8_t)5,
+    CHECKSUM_ERROR = (uint8_t)6
+} firmware_upgrade_error_codes_e;
+
+typedef enum {
+	UP_INIT = (uint8_t)1,
+	UP_IN_PROG = (uint8_t)2,
+	UP_COMPLETE = (uint8_t)3,
+	UP_FAILED = (uint8_t)4,
+} upgrade_states;
+
+
+#endif
