@@ -126,6 +126,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
+  "CMakeFiles/Pegasus3.1v-bootloader.elf.dir/DependInfo.cmake"
   "CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/DependInfo.cmake"
   "CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/DependInfo.cmake"
   )

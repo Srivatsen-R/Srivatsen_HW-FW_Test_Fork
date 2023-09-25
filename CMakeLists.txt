@@ -33,6 +33,9 @@ set(COMMON_INCLUDE
     lib/CustomLibs/
     lib/DriverLayer/
 
+    lib/Bootloader/
+    lib/Memory/
+
     )
 
 set(COMMON_FILES
@@ -74,8 +77,27 @@ set(COMMON_FILES
 
     startup_stm32h743zitx.s)
 
+set(EXECUTABLE_BOOTLDR ${PROJECT_NAME}-bootloader.elf)
 set(EXECUTABLE_APP_PRI ${PROJECT_NAME}-appPrimary.elf)
 set(EXECUTABLE_APP_SEC ${PROJECT_NAME}-appSecondary.elf)
+
+set(BOOTLOADER_MAIN
+    lib/Bootloader/bootloaderMain.c)
+
+set(BOOTLOADER_FILES
+    lib/Bootloader/bootloaderFunctions.c
+
+    lib/ApplicationLayer/flash.c
+    lib/ApplicationLayer/crc32.c
+    lib/ApplicationLayer/fdcan_AL.c
+
+    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c
+    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c
+    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c
+    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/src/isotp/isotp.c
+    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/src/isotp/receive.c
+    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/src/isotp/send.c
+    lib/ApplicationLayer/can-tp-module-threadx/can_tp_app.c)   
 
 set(FIRMWARE_MAIN
    src/main.c)
@@ -112,6 +134,10 @@ set(FIRMWARE_FILES
     lib/ApplicationLayer/can-tp-module-threadx/can_tp_app.c
     )
 
+add_executable(${EXECUTABLE_BOOTLDR}
+                ${COMMON_FILES}
+                ${BOOTLOADER_MAIN} ${BOOTLOADER_FILES})        
+    
 add_executable(${EXECUTABLE_APP_PRI} 
                 ${COMMON_FILES} 
                 ${FIRMWARE_MAIN} ${FIRMWARE_FILES})
@@ -119,6 +145,13 @@ add_executable(${EXECUTABLE_APP_PRI}
 add_executable(${EXECUTABLE_APP_SEC} 
                 ${COMMON_FILES} 
                 ${FIRMWARE_MAIN} ${FIRMWARE_FILES})
+
+target_compile_definitions(${EXECUTABLE_BOOTLDR} PRIVATE
+    -DUSE_HAL_DRIVER
+    -DSTM32H743xx
+    -DGIT_SHA=\"${GIT_SHA}\"
+    -DNDEBUG=${NDEBUG}
+    )
                 
 target_compile_definitions(${EXECUTABLE_APP_PRI} PRIVATE
     -DUSE_HAL_DRIVER
@@ -134,8 +167,26 @@ target_compile_definitions(${EXECUTABLE_APP_SEC} PRIVATE
     -DNDEBUG=${NDEBUG}
     )
 
+target_include_directories(${EXECUTABLE_BOOTLDR} PUBLIC ${COMMON_INCLUDE})    
 target_include_directories(${EXECUTABLE_APP_PRI} PUBLIC ${COMMON_INCLUDE})
 target_include_directories(${EXECUTABLE_APP_SEC} PUBLIC ${COMMON_INCLUDE})
+
+target_compile_options(${EXECUTABLE_BOOTLDR} PRIVATE
+    -mcpu=cortex-m7
+    -mthumb
+    -mfpu=fpv4-sp-d16
+    -mfloat-abi=hard
+
+    -fdata-sections
+    -ffunction-sections
+
+    -std=gnu99
+    
+    -Wall
+    -Wno-comment
+    
+    $<$<CONFIG:Debug>:-Og>
+    )
 
 target_compile_options(${EXECUTABLE_APP_PRI} PRIVATE
     -mcpu=cortex-m7
@@ -169,6 +220,32 @@ target_compile_options(${EXECUTABLE_APP_SEC} PRIVATE
     -Wno-comment
     
     $<$<CONFIG:Debug>:-Og>
+    )
+
+target_link_options(${EXECUTABLE_BOOTLDR} PRIVATE
+    "SHELL:-T ${CMAKE_SOURCE_DIR}/linkerScripts/memory_map.ld"
+    "SHELL:-T ${CMAKE_SOURCE_DIR}/linkerScripts/master.ld"
+    -mcpu=cortex-m7
+    --specs=nosys.specs
+
+    -Wl,-Map=${PROJECT_NAME}-appPrimary.map,--cref
+    -Wl,--gc-sections -static
+
+    -fno-math-errno
+
+    --specs=nano.specs
+    
+    -mthumb
+    -u_printf_float
+    -mfpu=fpv4-sp-d16
+    -mfloat-abi=hard
+
+    -Wl,--start-group
+    -lc 
+    -lm 
+    -Wl,--end-group
+
+    -lnosys
     )
 
 target_link_options(${EXECUTABLE_APP_PRI} PRIVATE
@@ -223,6 +300,10 @@ target_link_options(${EXECUTABLE_APP_SEC} PRIVATE
     -lnosys
     )
 
+add_custom_command(TARGET ${EXECUTABLE_BOOTLDR}
+    POST_BUILD
+    COMMAND arm-none-eabi-size ${EXECUTABLE_BOOTLDR})
+
 add_custom_command(TARGET ${EXECUTABLE_APP_PRI}
     POST_BUILD
     COMMAND arm-none-eabi-size ${EXECUTABLE_APP_PRI})
@@ -230,6 +311,11 @@ add_custom_command(TARGET ${EXECUTABLE_APP_PRI}
 add_custom_command(TARGET ${EXECUTABLE_APP_SEC}
     POST_BUILD
     COMMAND arm-none-eabi-size ${EXECUTABLE_APP_SEC})
+
+add_custom_command(TARGET ${EXECUTABLE_BOOTLDR}
+    POST_BUILD
+    COMMAND arm-none-eabi-objcopy -O ihex ${EXECUTABLE_BOOTLDR} ${PROJECT_NAME}-bootloader.hex
+    COMMAND arm-none-eabi-objcopy -O binary ${EXECUTABLE_BOOTLDR} ${PROJECT_NAME}-bootloader.bin)
 
 add_custom_command(TARGET ${EXECUTABLE_APP_PRI}
     POST_BUILD

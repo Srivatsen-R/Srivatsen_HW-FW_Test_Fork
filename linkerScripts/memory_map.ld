@@ -35,10 +35,10 @@
 MEMORY
 {
   sharedram (rwx) : ORIGIN = 0x20000000, LENGTH = 256
-  bl1 (rw)        : ORIGIN = 0x08000000, LENGTH = 100K
-  app1 (rx)       : ORIGIN = 0x08080000, LENGTH = 400K
-  app2 (rx)       : ORIGIN = 0x08019000, LENGTH = 400K
-  commondata (rwx): ORIGIN = 0x080E4000, LENGTH = 100K
+  bl1 (rw)        : ORIGIN = 0x08000000, LENGTH = 40K
+  app1 (rx)       : ORIGIN = 0x08040000, LENGTH = 256K
+  app2 (rx)       : ORIGIN = 0x08080000, LENGTH = 256K
+  commondata (rwx): ORIGIN = 0x080C0000, LENGTH = 40K
   DTCMRAM (xrw)   : ORIGIN = 0x20000100, LENGTH = 128K - LENGTH(sharedram)
   RAM_D1 (xrw)    : ORIGIN = 0x24000000, LENGTH = 512K
   RAM_D2 (xrw)    : ORIGIN = 0x30000000, LENGTH = 288K
