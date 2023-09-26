@@ -7,5 +7,9 @@
         "cmath": "c",
         "math.h": "c",
         "errno.h": "c",
-    }
+        "bootloaderfunctions.h": "c",
+        "fdcan.h": "c",
+        "main.h": "c"
+    },
+    "cortex-debug.variableUseNaturalFormat": false
 }

@@ -11,6 +11,9 @@ extern "C" {
 #include "stm32h7xx_hal.h"
 #include "isotp/isotp_types.h"
 
+// #define APP1 1
+#define APP2 2
+
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);

@@ -9,30 +9,12 @@
 
 /* Private typedef -----------------------------------------------------------*/
 
-typedef struct __attribute__((packed))
-{
-    uint16_t    imageMagic;
-    uint16_t    imageHDRversion;
-    uint32_t    crc;
-    uint32_t    dataSize;
-    uint8_t     imageType;
-    uint8_t     versionMajor;
-    uint8_t     versionMinor;
-    uint8_t     versionPatch;
-    uint32_t    activeApp;
-    uint32_t    reserved;
-    char        gitSHA[8];
-} imageHDR_type;
-
 /* Private define ------------------------------------------------------------*/
 
 /* Private macro -------------------------------------------------------------*/
-#define projectID (uint32_t)0x66778351 //BMS3
 
 /* External variables --------------------------------------------------------*/
 
-extern uint32_t __sharedram_start__;
-extern uint32_t __sharedram_size__;
 extern uint32_t __bootloader_start__;
 extern uint32_t __bootloader_size__;
 extern uint32_t __app1_start__;

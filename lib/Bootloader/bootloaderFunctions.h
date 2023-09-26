@@ -13,20 +13,20 @@
 
 //image header contains 32 bytes
 
-typedef struct __attribute__((packed))
-{
-	uint16_t image_magic;
-	uint16_t image_hdr_version;
-	uint32_t crc;
-	uint32_t data_size;
-	uint8_t image_type;
-	uint8_t version_major;
-	uint8_t version_minor;
-	uint8_t version_patch;
-	uint32_t active_app;
-	uint32_t reserved;
-	char git_sha[8];
-} image_hdr_t;
+// typedef struct __attribute__((packed))
+// {
+// 	uint16_t image_magic;
+// 	uint16_t image_hdr_version;
+// 	uint32_t crc;
+// 	uint32_t data_size;
+// 	uint8_t image_type;
+// 	uint8_t version_major;
+// 	uint8_t version_minor;
+// 	uint8_t version_patch;
+// 	uint32_t active_app;
+// 	uint32_t reserved;
+// 	char git_sha[8];
+// } image_hdr_t;
 
 #ifdef APP1
 #define CURR_APP 1
@@ -37,7 +37,7 @@ typedef struct __attribute__((packed))
 /* Private define ------------------------------------------------------------*/
 
 /* Private macro -------------------------------------------------------------*/
-#define VECTOR_OFFSET    (uint32_t)0x200
+#define VECTOR_OFFSET    (uint32_t)0x0
 #define APP_START_OFFSET (uint16_t)32
 
 #define APP1_VECTOR (uint32_t)(VECTOR_OFFSET + (uint32_t)&__app1_start__)
@@ -45,10 +45,10 @@ typedef struct __attribute__((packed))
 
 /*******************************************************************************/
 
-#define SHARED_MAGIC (uint32_t)0x27182818
+#define SHARED_MAGIC (uint32_t)0x12341234
 #define UART_WAIT    (uint16_t)500
 
-#define IMAGE_MAGIC          0x7777
+#define IMAGE_MAGIC          0x5555
 #define IMAGE_HEADER_VERSION 1
 
 #ifndef IMAGE_CRC

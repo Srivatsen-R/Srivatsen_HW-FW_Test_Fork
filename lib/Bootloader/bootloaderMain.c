@@ -22,11 +22,11 @@ extern can_t    can;
 void SystemClock_Config(void);
 void increment_boot_loop_count(void);
 
-typedef struct __attribute__((packed))
-{
-	uint32_t magic;
-	uint32_t flags;
-} shared_memory_t;
+// typedef struct __attribute__((packed))
+// {
+// 	uint32_t magic;
+// 	uint32_t flags;
+// } shared_memory_t;
 
 uint8_t interrupt_flag = 0;
 uint8_t cantp_config_flag = 0;
@@ -36,7 +36,7 @@ uint8_t cantp_config_flag = 0;
  * @brief  The bootloader entry point.
  * @retval int
  */
-shared_memory_t sharedmemory __attribute__((section(".shared_memory")));
+// shared_memory_t sharedmemory __attribute__((section(".shared_memory")));
 
 IsoTpShims firmware_up_recv_shim;
 IsoTpReceiveHandle firmware_up_recv_handle;
@@ -56,85 +56,89 @@ int main(void) {
   SCB_EnableDCache();
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
+#if NDEBUG == 1
+	switchToSecondaryApp();  // Comment if not testing
+#endif
   /* Configure the system clock */
   SystemClock_Config();
   /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_FDCAN2_Init();
+  // MX_GPIO_Init();
+  // MX_FDCAN2_Init();
 
   //can init
-  can.setup();
+  // can.setup();
   
   //while loop running on CLK frequency.
   while (1) 
   {
-    for (int blinkCounter = 0; blinkCounter < 10; blinkCounter++)
-    {
-      HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_11);
-      HAL_Delay(100);
-    }
-    // switchToPrimaryApp();
-    if (sharedmemory.magic == SHARED_MAGIC)
-    {
-      // get flag
-      bootloader_flag_handler(&sharedmemory.flags);
-    }
-    else
-    {
-      // Magic Byte incorrect
-      // Reboot Detected
-      // Clear flags
-      sharedmemory.flags = 0;
-    }
-
-    // Set magic byte
-    sharedmemory.magic = SHARED_MAGIC;
-
-    increment_boot_loop_count();
-    uint16_t app_partition = getAppPartition();
-    if (app_partition == 1)
-    {
-      // setApp1Active();
-      switchToPrimaryApp();
-    }
-    else if (app_partition == 2)
-    {
-    //  setApp2Active();
-     switchToSecondaryApp();
-    }
-    else
-    {
-      // no valid app partition found
-
-      // Checking if any valid app exists
-      if (verifyApp1() == 1)
-      {
-        setApp1Active();
-        switchToPrimaryApp();
-      }
-      else if (verifyApp2() == 1)
-      {
-        setApp2Active();
-        switchToSecondaryApp();
-      }
-    }
+    // for (int blinkCounter = 0; blinkCounter <= 1; blinkCounter++)
+    // {
+    //   HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_11);
+    //   HAL_Delay(100);
+    // }
   }
+    // switchToPrimaryApp();
+  //   if (sharedmemory.magic == SHARED_MAGIC)
+  //   {
+  //     // get flag
+  //     bootloader_flag_handler(&sharedmemory.flags);
+  //   }
+  //   else
+  //   {
+  //     // Magic Byte incorrect
+  //     // Reboot Detected
+  //     // Clear flags
+  //     sharedmemory.flags = 0;
+  //   }
+
+  //   // Set magic byte
+  //   sharedmemory.magic = SHARED_MAGIC;
+
+  //   increment_boot_loop_count();
+  //   uint16_t app_partition = getAppPartition();
+  //   if (app_partition == 1)
+  //   {
+  //     // setApp1Active();
+  //     switchToPrimaryApp();
+  //   }
+  //   else if (app_partition == 2)
+  //   {
+  //   //  setApp2Active();
+  //    switchToSecondaryApp();
+  //   }
+  //   else
+  //   {
+  //     // no valid app partition found
+
+  //     // Checking if any valid app exists
+  //     if (verifyApp1() == 1)
+  //     {
+  //       setApp1Active();
+  //       switchToPrimaryApp();
+  //     }
+  //     else if (verifyApp2() == 1)
+  //     {
+  //       setApp2Active();
+  //       switchToSecondaryApp();
+  //     }
+  //   }
+  // }
 
 }
 
-void increment_boot_loop_count()
-{
-  uint32_t flags, boot_loop_count;
-  boot_loop_count = (sharedmemory.flags >> 24) & 0xFF;
-  flags = (sharedmemory.flags);
+// void increment_boot_loop_count()
+// {
+//   uint32_t flags, boot_loop_count;
+//   boot_loop_count = (sharedmemory.flags >> 24) & 0xFF;
+//   flags = (sharedmemory.flags);
 
-  flags = sharedmemory.flags & 0xFFFF;
+//   flags = sharedmemory.flags & 0xFFFF;
 
-  boot_loop_count += 1;
+//   boot_loop_count += 1;
 
-  flags = (flags | (boot_loop_count << 24));
-  sharedmemory.flags = flags;
-}
+//   flags = (flags | (boot_loop_count << 24));
+//   sharedmemory.flags = flags;
+// }
 
 void set_interrupt_flag(uint8_t value){
   interrupt_flag = value;
