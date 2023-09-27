@@ -1,5 +1,5 @@
-D:/Pegasus_Code/Build/CMakeFiles/Pegasus3.1v-bootloader.elf.dir
-D:/Pegasus_Code/Build/CMakeFiles/Pegasus3.1v-appPrimary.elf.dir
-D:/Pegasus_Code/Build/CMakeFiles/Pegasus3.1v-appSecondary.elf.dir
-D:/Pegasus_Code/Build/CMakeFiles/edit_cache.dir
-D:/Pegasus_Code/Build/CMakeFiles/rebuild_cache.dir
+C:/Users/L-647/Desktop/Reps/pfork/pegasus-fork/Build/CMakeFiles/Pegasus3.1v-bootloader.elf.dir
+C:/Users/L-647/Desktop/Reps/pfork/pegasus-fork/Build/CMakeFiles/Pegasus3.1v-appPrimary.elf.dir
+C:/Users/L-647/Desktop/Reps/pfork/pegasus-fork/Build/CMakeFiles/Pegasus3.1v-appSecondary.elf.dir
+C:/Users/L-647/Desktop/Reps/pfork/pegasus-fork/Build/CMakeFiles/edit_cache.dir
+C:/Users/L-647/Desktop/Reps/pfork/pegasus-fork/Build/CMakeFiles/rebuild_cache.dir

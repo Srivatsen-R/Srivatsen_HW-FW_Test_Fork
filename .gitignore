@@ -38,7 +38,6 @@ Build
 *.i*86
 *.x86_64
 *.hex
-*.bin
 
 # Debug files
 *.dSYM/
@@ -46,4 +45,11 @@ Build
 *.idb
 *.pdb
 
-*.yaml
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
