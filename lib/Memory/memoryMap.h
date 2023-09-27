@@ -15,6 +15,8 @@
 
 /* External variables --------------------------------------------------------*/
 
+extern uint32_t __sharedram_start__;
+extern uint32_t __sharedram_size__;
 extern uint32_t __bootloader_start__;
 extern uint32_t __bootloader_size__;
 extern uint32_t __app1_start__;

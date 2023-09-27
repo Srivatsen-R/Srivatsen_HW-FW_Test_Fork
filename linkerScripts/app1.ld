@@ -14,11 +14,14 @@ _Min_Stack_Size = 0x400; /* required amount of stack */
 /* Define output sections */
 SECTIONS
 {
+  .image_hdr : {
+    KEEP (*(.image_hdr))
+  } > app1
 
   /* The startup code goes first into app1 */
   .isr_vector :
   {
-    . = ALIGN(4);
+    . = ALIGN(1024);
     KEEP(*(.isr_vector)) /* Startup code */
     . = ALIGN(4);
   } >app1

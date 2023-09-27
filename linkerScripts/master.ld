@@ -17,7 +17,7 @@ SECTIONS
   /* The startup code goes first into bl1 */
   .isr_vector :
   {
-    . = ALIGN(4);
+    . = ALIGN(1024);
     KEEP(*(.isr_vector)) /* Startup code */
     . = ALIGN(4);
   } >bl1

@@ -13,20 +13,20 @@
 
 //image header contains 32 bytes
 
-// typedef struct __attribute__((packed))
-// {
-// 	uint16_t image_magic;
-// 	uint16_t image_hdr_version;
-// 	uint32_t crc;
-// 	uint32_t data_size;
-// 	uint8_t image_type;
-// 	uint8_t version_major;
-// 	uint8_t version_minor;
-// 	uint8_t version_patch;
-// 	uint32_t active_app;
-// 	uint32_t reserved;
-// 	char git_sha[8];
-// } image_hdr_t;
+typedef struct __attribute__((packed))
+{
+	uint16_t image_magic;
+	uint16_t image_hdr_version;
+	uint32_t crc;
+	uint32_t data_size;
+	uint8_t image_type;
+	uint8_t version_major;
+	uint8_t version_minor;
+	uint8_t version_patch;
+	uint32_t active_app;
+	uint32_t reserved;
+	char git_sha[8];
+} image_hdr_t;
 
 #ifdef APP1
 #define CURR_APP 1
@@ -37,7 +37,7 @@
 /* Private define ------------------------------------------------------------*/
 
 /* Private macro -------------------------------------------------------------*/
-#define VECTOR_OFFSET    (uint32_t)0x0
+#define VECTOR_OFFSET    (uint32_t)0x400
 #define APP_START_OFFSET (uint16_t)32
 
 #define APP1_VECTOR (uint32_t)(VECTOR_OFFSET + (uint32_t)&__app1_start__)

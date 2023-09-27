@@ -2,9 +2,9 @@
 ::(Hidden, System, and Read-Only Files are Not Affected) 
 ::
 @ECHO OFF 
-@REM rd /s /q Build
-@REM mkdir Build
+rd /s /q Build
+mkdir Build
 cd .\Build\
-cmake -G "MinGW Makefiles" --toolchain ../arm-none-eabi-gcc.cmake -DCMAKE_BUILD_TYPE=Debug -DNDEBUG=1 .. 
+cmake -G "MinGW Makefiles" --toolchain ../arm-none-eabi-gcc.cmake -DCMAKE_BUILD_TYPE=Debug -DNDEBUG=0 .. 
 cmake --build . --
 cd ..
