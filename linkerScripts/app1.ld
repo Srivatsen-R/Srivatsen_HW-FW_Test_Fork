@@ -23,13 +23,13 @@ SECTIONS
   {
     . = ALIGN(1024);
     KEEP(*(.isr_vector)) /* Startup code */
-    . = ALIGN(4);
+    . = ALIGN(8);
   } >app1
 
   /* The program code and other data goes into app1 */
   .text :
   {
-    . = ALIGN(4);
+    . = ALIGN(8);
     *(.text)           /* .text sections (code) */
     *(.text*)          /* .text* sections (code) */
     *(.glue_7)         /* glue arm to thumb code */
@@ -39,17 +39,17 @@ SECTIONS
     KEEP (*(.init))
     KEEP (*(.fini))
 
-    . = ALIGN(4);
+    . = ALIGN(8);
     _etext = .;        /* define a global symbols at end of code */
   } >app1
 
   /* Constant data goes into app1 */
   .rodata :
   {
-    . = ALIGN(4);
+    . = ALIGN(8);
     *(.rodata)         /* .rodata sections (constants, strings, etc.) */
     *(.rodata*)        /* .rodata* sections (constants, strings, etc.) */
-    . = ALIGN(4);
+    . = ALIGN(8);
   } >app1
 
   .ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >app1
@@ -88,14 +88,14 @@ SECTIONS
   /* Initialized data sections goes into RAM, load LMA copy after code */
   .data :
   {
-    . = ALIGN(4);
+    . = ALIGN(8);
     _sdata = .;        /* create a global symbol at data start */
     *(.data)           /* .data sections */
     *(.data*)          /* .data* sections */
     *(.RamFunc)        /* .RamFunc sections */
     *(.RamFunc*)       /* .RamFunc* sections */
 
-    . = ALIGN(4);
+    . = ALIGN(8);
     _edata = .;        /* define a global symbol at data end */
   } >RAM_D1 AT> app1
 

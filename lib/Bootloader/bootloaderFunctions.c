@@ -176,6 +176,8 @@ void switchToPrimaryApp(void)
 
 	HAL_RCC_DeInit();
 	HAL_DeInit();
+	SCB_DisableDCache();
+	SCB_DisableICache();
 
 	SysTick->CTRL = 0;
 	SysTick->LOAD = 0;
@@ -211,6 +213,8 @@ void switchToSecondaryApp(void)
 
 	HAL_RCC_DeInit();
 	HAL_DeInit();
+	SCB_DisableDCache();
+	SCB_DisableICache();
 
 	SysTick->CTRL = 0;
 	SysTick->LOAD = 0;

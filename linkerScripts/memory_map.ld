@@ -34,13 +34,13 @@
 /* Specify the memory areas */
 MEMORY
 {
-  sharedram (rwx) : ORIGIN = 0x24000000, LENGTH = 10K
+  sharedram (rwx) : ORIGIN = 0x20000000, LENGTH = 10K
   bl1 (rw)        : ORIGIN = 0x08000000, LENGTH = 100K
   app1 (rx)       : ORIGIN = 0x08040000, LENGTH = 256K
   app2 (rx)       : ORIGIN = 0x08080000, LENGTH = 256K
   commondata (rwx): ORIGIN = 0x080C0000, LENGTH = 40K
-  DTCMRAM (xrw)   : ORIGIN = 0x20000000, LENGTH = 128K
-  RAM_D1 (xrw)    : ORIGIN = 0x24002800, LENGTH = 512K - LENGTH(sharedram)
+  DTCMRAM (xrw)   : ORIGIN = 0x20002800, LENGTH = 128K - LENGTH(sharedram)
+  RAM_D1 (xrw)    : ORIGIN = 0x24000000, LENGTH = 512K
   RAM_D2 (xrw)    : ORIGIN = 0x30000000, LENGTH = 288K
   RAM_D3 (xrw)    : ORIGIN = 0x38000000, LENGTH = 64K
   ITCMRAM (xrw)   : ORIGIN = 0x00000000, LENGTH = 64K

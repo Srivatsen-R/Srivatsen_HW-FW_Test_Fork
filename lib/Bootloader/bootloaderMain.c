@@ -22,8 +22,9 @@ void increment_boot_loop_count(void);
 
 typedef struct __attribute__((packed))
 {
-	uint32_t magic;
+	
 	uint32_t flags;
+  uint32_t magic;
 } shared_memory_t;
 
 /* USER CODE END 0 */
