@@ -25,9 +25,9 @@ set(COMMON_INCLUDE
     Drivers/CMSIS/Device/ST/STM32H7xx/Include/
     Drivers/CMSIS/Include/
 
-    lib/ApplicationLayer/can-tp-module-threadx
-    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/src
-    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/deps/bitfield-c/src
+    Utility/can-tp-module-threadx
+    Utility/can-tp-module-threadx/isotp-c/src
+    Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src
 
     lib/ApplicationLayer/
     lib/CustomLibs/
@@ -91,13 +91,13 @@ set(BOOTLOADER_FILES
     lib/ApplicationLayer/crc32.c
     lib/ApplicationLayer/fdcan_AL.c
 
-    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c
-    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c
-    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c
-    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/src/isotp/isotp.c
-    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/src/isotp/receive.c
-    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/src/isotp/send.c
-    lib/ApplicationLayer/can-tp-module-threadx/can_tp_app.c)   
+    Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c
+    Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c
+    Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c
+    Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c
+    Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c
+    Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c
+    Utility/can-tp-module-threadx/can_tp_app.c)   
 
 set(FIRMWARE_MAIN
    src/main.c)
@@ -125,13 +125,13 @@ set(FIRMWARE_FILES
     lib/CustomLibs/printf.c
     lib/CustomLibs/math_func.c
 
-    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c
-    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c
-    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c
-    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/src/isotp/isotp.c
-    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/src/isotp/receive.c
-    lib/ApplicationLayer/can-tp-module-threadx/isotp-c/src/isotp/send.c
-    lib/ApplicationLayer/can-tp-module-threadx/can_tp_app.c
+    Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c
+    Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c
+    Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c
+    Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c
+    Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c
+    Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c
+    Utility/can-tp-module-threadx/can_tp_app.c
     )
 
 add_executable(${EXECUTABLE_BOOTLDR}
