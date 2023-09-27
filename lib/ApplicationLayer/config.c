@@ -2,6 +2,7 @@
 #include "flash.h"
 #include "main.h"
 #include <string.h>
+#include "firmware_upgrade_app.h"
 
 #define NO_OF_CONFIG_PARAMS 27
 

@@ -9,7 +9,25 @@
         "errno.h": "c",
         "bootloaderfunctions.h": "c",
         "fdcan.h": "c",
-        "main.h": "c"
+        "main.h": "c",
+        "math_func.h": "c",
+        "flash.h": "c",
+        "memorymap.h": "c",
+        "bootloadermain.h": "c",
+        "isotp_types.h": "c",
+        "isotp.h": "c",
+        "can_tp_app.h": "c",
+        "fdcan_al.h": "c",
+        "adc.h": "c",
+        "gpio.h": "c",
+        "dma.h": "c",
+        "tim.h": "c",
+        "stm32h7xx_it.h": "c",
+        "stm32h7xx_hal.h": "c",
+        "string.h": "c",
+        "firmware_upgrade_app.h": "c",
+        "crc32.h": "c",
+        "stdint.h": "c"
     },
     "cortex-debug.variableUseNaturalFormat": false
 }

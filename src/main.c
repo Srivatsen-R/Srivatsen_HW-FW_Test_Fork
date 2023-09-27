@@ -51,6 +51,9 @@ HAL_GPIO_EXTI_Callback          : Contain code blocks for reseting position.
 #include "config.h"
 #include "can_tp_app.h"
 #include "bootloaderFunctions.h"
+#include "firmware_upgrade_app.h"
+#include "isotp/isotp_types.h"
+
 
 /* Variable declaration ------------------------------------------------------*/
 
@@ -79,13 +82,8 @@ uint8_t app_version = 0;
 uint8_t cantp_config_flag = 0;
 uint8_t interrupt_flag = 0;
 
-// cantp inits 
-IsoTpShims firmware_up_recv_shim;
-IsoTpReceiveHandle firmware_up_recv_handle;
-IsoTpMessage firmware_up_recv_message;
 uint8_t counter = 0;
 
-upgrade_states up_state = UP_INIT;
 char message[50] = {0};
 
 typedef struct __attribute__((packed))
@@ -131,15 +129,15 @@ int main(void) {
   
   //function to keep drive disable intially.
   MotorControl_Init();
-  HAL_Delay(100);// to be modified
+  // HAL_Delay(100); commented
   
   //function to perform sanity checks at ignition.
   RUN_SANITY();
-  HAL_Delay(5000);//to be modified.
+  // HAL_Delay(5000); commented
 
   //enabling motor control interrupts , ABZ+PWM sensing interrpts.
   ENABLE_PERIPHERALS();
-  HAL_Delay(100);//to be modified.
+  // HAL_Delay(100);  commented
 
   //read previous odometer data.
   EEPROM_Read_Data();
@@ -153,7 +151,7 @@ int main(void) {
       ANALOG_READING();
       FAULT_READING();
       //function to log can data for data analysis and rca.
-      CAN_Logging();
+      // CAN_Logging();
       //function to calculate odo,trip and speed.
       Calculate_OTS(terminal.w.sen);
       //function for can tx communication with stark , mark, marvel.
@@ -228,54 +226,75 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
   {
     HAL_TIM_Base_Stop_IT(&htim17);
     motorControl.drive.check = DRIVE_DISABLE;
-
-    switch (up_state)
+    switch (upgrade_state)
     {
-    case UP_INIT:
-      
-      up_state = UP_IN_PROG;
-      Flash_Erase_Data(0x081E0000, 16);
-      __fdcan_transferMessagesOnID6FA(SUCCESS_MESS, 2);
-      break;
-    case UP_IN_PROG:
-      if(get_interrupt_flag() == 0)
-      {
-        __fdcan_transferMessagesOnID6FA(CAN_TP_TIMEOUT, 2);
-      }
-      set_interrupt_flag(0);
-
-      if(counter >= 10)
-      {
-        up_state = UP_FAILED;
-      }
-      break;
-
-    case UP_COMPLETE:
-      if (get_conifg_flag() == 0){
-        NVIC_SystemReset();
-      }
-      
-      break;
-
-    case UP_FAILED:
-    
-      HAL_TIM_Base_Start_IT(&htim17);
-      motorControl.drive.check = DRIVE_ENABLE;
-    
-      HAL_TIM_Base_Stop_IT(&htim7);
-      counter = 0;
-      break;
-
+    case UPGRADE_INIT:
+        handle_upgrade_init();
+        break;
+    case UPGRADE_RECEIVE_DATA:
+        handle_rceive_data();
+        break;
+    case UPGRADE_PAUSE:
+        handle_upgrade_pause();
+        break;
+    case UPGRADE_COMPLETE:
+        handle_upgrade_complete();
+        break;
+    case UPGRADE_FAILED:
+        return;
+        break;
     default:
-      HAL_TIM_Base_Start_IT(&htim17);
-      motorControl.drive.check = DRIVE_ENABLE;
-
-      HAL_TIM_Base_Stop_IT(&htim7);
-      counter = 0;
-      break;
+        return;
+        break;
     }
+
+    // switch (up_state)
+    // {
+    // case UP_INIT:
+    //   handle_upgrade_init();
+    //   up_state = UP_IN_PROG;
+    //   Flash_Erase_Data(0x081E0000, 16);
+    //   __fdcan_transferMessagesOnID6FA(SUCCESS_MESS, 2);
+    //   break;
+    // case UP_IN_PROG:
+    //   if(get_interrupt_flag() == 0)
+    //   {
+    //     __fdcan_transferMessagesOnID6FA(CAN_TP_TIMEOUT, 2);
+    //   }
+    //   set_interrupt_flag(0);
+
+    //   if(counter >= 10)
+    //   {
+    //     up_state = UP_FAILED;
+    //   }
+    //   break;
+
+    // case UP_COMPLETE:
+    //   if (get_conifg_flag() == 0){
+    //     NVIC_SystemReset();
+    //   }
+      
+    //   break;
+
+    // case UP_FAILED:
+    
+    //   HAL_TIM_Base_Start_IT(&htim17);
+    //   motorControl.drive.check = DRIVE_ENABLE;
+    
+    //   HAL_TIM_Base_Stop_IT(&htim7);
+    //   counter = 0;
+    //   break;
+
+    // default:
+    //   HAL_TIM_Base_Start_IT(&htim17);
+    //   motorControl.drive.check = DRIVE_ENABLE;
+
+    //   HAL_TIM_Base_Stop_IT(&htim7);
+    //   counter = 0;
+    //   break;
+    // }
   
-    counter++;
+    // counter++;
   }
   
   if(htim->Instance==TIM17) {
@@ -321,6 +340,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
 }
 
 
+void switch_partition_and_reset()
+{
+	shared_memory.flags |= BL_SWITCH_PARTITION;
+	NVIC_SystemReset();
+}
 
 
 /**

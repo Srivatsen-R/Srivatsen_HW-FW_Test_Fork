@@ -10,5 +10,7 @@ void Convert_To_Str (uint32_t *Data, char *Buf);
 
 void Flash_Write_NUM (uint32_t StartSectorAddress, float Num);
 float Flash_Read_NUM (uint32_t StartSectorAddress);
+uint32_t clearApp2(void);
+uint32_t clearApp1(void);
 
 #endif /* INC_FLASH_SECTOR_H_ */

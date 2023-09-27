@@ -11,7 +11,6 @@ This file contains functions associated with CAN/Logging.
 #include "sanity.h"
 #include "can_tp_app.h"
 
-
 void FDCAN_dataLoggingForPythonScript(terminal_t, float, uint8_t, float, motorControl_t, adc_t, float, float, float, float, float, float, float, float);
 
 extern gpio_t  io;
@@ -24,7 +23,6 @@ extern float v_rms;
 extern IsoTpShims firmware_up_recv_shim;
 extern IsoTpReceiveHandle firmware_up_recv_handle;
 extern IsoTpMessage firmware_up_recv_message;
-extern upgrade_states up_state;
 
 #define FUPFG_REQUEST 1
 #define FUPFG_STATUS  0
@@ -160,12 +158,21 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
         can.rx_flag = true;
 		if(can.RxMessageBuf.Identifier == rx_Controller_6FA){
 			if(can.rxMsg[1] == PEGASUS_ID){
-				if ( (can.rxMsg[2] == FUPFG_REQUEST) && ( can.rxMsg[3] == RECEIVE_CONF)){
-					up_state = UP_INIT;
+				if ( (can.rxMsg[2] == FUPFG_REQUEST) && ( can.rxMsg[3] == RECEIVE_CONF))
+				{
+					uptype = COTA;
+					upgrade_state = UPGRADE_INIT;
 					HAL_TIM_Base_Start_IT(&htim7);
 				}
-				else if ((can.rxMsg[2] == FUPFG_REQUEST) && ( can.rxMsg[3] == PERFORM_UPGRADE)){
-					up_state = UP_COMPLETE;
+				else if ( (can.rxMsg[2] == FUPFG_REQUEST) && ( can.rxMsg[3] == PERFORM_UPGRADE) )
+				{
+					upgrade_state = UPGRADE_COMPLETE;
+				}
+				else if ( (can.rxMsg[2] == FUPFG_REQUEST) && ( can.rxMsg[3] == RECEIVE_BIN) )
+				{
+					uptype = FOTA;
+					upgrade_state = UPGRADE_INIT;
+					HAL_TIM_Base_Start_IT(&htim7);
 				}
 			}
 		}
@@ -385,6 +392,17 @@ void __fdcan_transferMessagesOnID6FA(firmware_upgrade_error_codes_e message, uin
 	   __fdcan->transmit(tx_controller_6FA, S, __fdcan->BufferForMessageToTransmit, 8);
 
 	   free(__fdcan);
+}
+
+void _fdcan_transmit_on_can(uint32_t arbitration_id, TypeofCANID format, uint8_t * can_data, uint8_t dlc){
+	can_t *__fdcan = malloc(sizeof(can_t));
+	__fdcan->transmit = can.transmit;
+	for (uint8_t i = 0; i<dlc; i++)
+	{
+		__fdcan->BufferForMessageToTransmit[i] = __fdcan_addScalingFactorToMessage(can_data[i]); 
+	}
+	__fdcan->transmit(arbitration_id, format, __fdcan->BufferForMessageToTransmit, dlc);
+	free(__fdcan);
 }
 
 void FDCAN_dataLoggingForPythonScript(terminal_t terminal, float dcCurrent, uint8_t fault_status, 

@@ -10,6 +10,7 @@
 #include "structures.h"
 #include "dr_devices.h"
 #include "can_tp_app.h"
+#include "firmware_upgrade_app.h"
 
 #include "led_AL.h"
 #include "sanity.h"
@@ -32,7 +33,7 @@
 #define tx_Controller_727       0x727
 #define rx_BMS_109              0x109 
 #define FDCAN_DLC_BYTES         0x008  
-#define FDCAN_TX_BUFFER_NUMBER  0x012 
+#define FDCAN_TX_BUFFER_NUMBER  0x018 
 #define rx_Controller_7FE       0x7FE
 #define rx_Controller_109       0x109
 #define tx_controller_6FA       0x6FA
@@ -73,4 +74,5 @@ void CAN_Write(void);
 FDCAN_STATUS isFDCAN_Available(void);
 void FDCAN_ApplicationSetup (void);
 void __fdcan_transferMessagesOnID6FA(firmware_upgrade_error_codes_e message, uint8_t flag_msg);
+void _fdcan_transmit_on_can(uint32_t arbitration_id, TypeofCANID format, uint8_t * can_data, uint8_t dlc);
 #endif

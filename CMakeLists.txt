@@ -75,6 +75,10 @@ set(COMMON_FILES
     Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c
     Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c
 
+    
+
+    
+
     startup_stm32h743zitx.s)
 
 set(EXECUTABLE_BOOTLDR ${PROJECT_NAME}-bootloader.elf)
@@ -89,15 +93,7 @@ set(BOOTLOADER_FILES
 
     lib/ApplicationLayer/flash.c
     lib/ApplicationLayer/crc32.c
-    lib/ApplicationLayer/fdcan_AL.c
-
-    Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c
-    Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c
-    Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c
-    Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c
-    Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c
-    Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c
-    Utility/can-tp-module-threadx/can_tp_app.c)   
+    )   
 
 set(FIRMWARE_MAIN
    src/main.c)
@@ -124,6 +120,8 @@ set(FIRMWARE_FILES
 
     lib/CustomLibs/printf.c
     lib/CustomLibs/math_func.c
+
+    lib/CustomLibs/firmware_upgrade_app.c
 
     Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c
     Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c
@@ -157,6 +155,7 @@ target_compile_definitions(${EXECUTABLE_APP_PRI} PRIVATE
     -DUSE_HAL_DRIVER
     -DSTM32H743xx
     -DGIT_SHA=\"${GIT_SHA}\"
+    -DAPP1
     -DNDEBUG=${NDEBUG}
     )
 
@@ -164,6 +163,7 @@ target_compile_definitions(${EXECUTABLE_APP_SEC} PRIVATE
     -DUSE_HAL_DRIVER
     -DSTM32H743xx
     -DGIT_SHA=\"${GIT_SHA}\"
+    -DAPP2
     -DNDEBUG=${NDEBUG}
     )
 

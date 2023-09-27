@@ -54,8 +54,9 @@ void CAN_TP_Receive_interrupt(uint32_t arbitration_id, uint8_t* data, uint16_t d
     isotp_continue_receive(shim, recv_mess, recv_handle, arbitration_id, data, dlc);
     if(recv_mess->completed && recv_handle->completed)
     {
-        __fdcan_transferMessagesOnID6FA(SUCCESS_MESS, 1);
-        set_config_flag(1);
+        // __fdcan_transferMessagesOnID6FA(SUCCESS_MESS, 1);
+
+        // set_config_flag(1);
         set_interrupt_flag(1);
     }
 }

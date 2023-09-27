@@ -2,7 +2,8 @@
 #include "flash.h"
 #include "string.h"
 #include "stdio.h"
-
+#include "memoryMap.h"
+#include <stdint.h>
 
 // If using STM32H7Ax/BX Series, uncomment the line below
 //#define FLASHWORD 		4
@@ -202,6 +203,73 @@ If you try to write a single 32 bit word, it will automatically write 0's for th
 *          - 256 bits for STM32H72x/3X devices (8x 32bits words)
 *
 */
+
+uint32_t clearApp1(void)
+{
+  uint32_t address = &__app1_start__;
+  static FLASH_EraseInitTypeDef EraseInitStruct;
+	uint32_t SECTORError;
+
+    HAL_FLASH_Unlock();
+
+  	/* Get the number of sector to erase from 1st sector */
+
+	  uint32_t StartSector = GetSector(address);
+
+	  /* Fill EraseInit structure*/
+	  EraseInitStruct.TypeErase     = FLASH_TYPEERASE_SECTORS;
+	  EraseInitStruct.VoltageRange  = FLASH_VOLTAGE_RANGE_3;
+	  EraseInitStruct.Sector        = StartSector;
+
+	  // The the proper BANK to erase the Sector
+	  if (address < 0x08100000)
+		  EraseInitStruct.Banks     = FLASH_BANK_1;
+	  else EraseInitStruct.Banks    = FLASH_BANK_2;
+
+	  EraseInitStruct.NbSectors     = 2;
+
+  	if (HAL_FLASHEx_Erase(&EraseInitStruct, &SECTORError) != HAL_OK)
+	  {
+		  return HAL_FLASH_GetError ();
+	  }
+  
+  HAL_FLASH_Lock();
+  return 1;
+}
+
+uint32_t clearApp2(void)
+{
+  uint32_t address = &__app2_start__;
+
+  static FLASH_EraseInitTypeDef EraseInitStruct;
+	uint32_t SECTORError;
+  HAL_FLASH_Unlock();
+  	/* Get the number of sector to erase from 1st sector */
+
+  uint32_t StartSector = GetSector(address);
+
+  /* Fill EraseInit structure*/
+  EraseInitStruct.TypeErase     = FLASH_TYPEERASE_SECTORS;
+  EraseInitStruct.VoltageRange  = FLASH_VOLTAGE_RANGE_3;
+  EraseInitStruct.Sector        = StartSector;
+
+  // The the proper BANK to erase the Sector
+  if (address < 0x08100000)
+    EraseInitStruct.Banks     = FLASH_BANK_1;
+  else EraseInitStruct.Banks    = FLASH_BANK_2;
+
+  EraseInitStruct.NbSectors     = 2;
+
+  if (HAL_FLASHEx_Erase(&EraseInitStruct, &SECTORError) != HAL_OK)
+  {
+    return HAL_FLASH_GetError ();
+  }
+
+  HAL_FLASH_Lock();
+
+  return 1;
+}
+
 
 uint32_t Flash_Write_Data (uint32_t StartSectorAddress, uint32_t *data, uint16_t numberofwords)
 {

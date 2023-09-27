@@ -150,31 +150,4 @@ typedef enum {
       DRIVE_DISABLE = 1,
 }DRIVE_STATUS;
 
-typedef enum {
-    DOWNLOAD_BIN = 1,
-    RECEIVE_BIN = 2,
-    DOWNLOAD_CONF = 3,
-    RECEIVE_CONF = 4,
-    PERFORM_UPGRADE = 5,
-    PAUSE_UPGRADE = 6,
-    RESUME_UPGRADE = 7,
-} request_codes;
-
-typedef enum {
-    SUCCESS_MESS = (uint8_t)1,
-    CAN_TP_TIMEOUT = (uint8_t)2,
-    FILE_CREATE_ERROR = (uint8_t)3,
-    CRC_ERROR = (uint8_t)4,
-    FILE_WRITE_ERROR = (uint8_t)5,
-    CHECKSUM_ERROR = (uint8_t)6
-} firmware_upgrade_error_codes_e;
-
-typedef enum {
-	UP_INIT = (uint8_t)1,
-	UP_IN_PROG = (uint8_t)2,
-	UP_COMPLETE = (uint8_t)3,
-	UP_FAILED = (uint8_t)4,
-} upgrade_states;
-
-
 #endif

@@ -1,7 +1,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "adc.h"
 #include "dma.h"
-#include "fdcan.h"
 #include "tim.h"
 #include "gpio.h"
 #include "stm32h7xx_it.h"
@@ -9,14 +8,13 @@
 #include "bootloaderFunctions.h"
 #include "memoryMap.h"
 #include "bootloaderMain.h"
-#include "fdcan_AL.h"
 #include "flash.h"
 
-#include "config.h"
-#include "can_tp_app.h"
+/*  Removed can init from bootloader 
+
+*/
 
 /* Variable declaration ------------------------------------------------------*/
-extern can_t    can;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -28,8 +26,6 @@ typedef struct __attribute__((packed))
 	uint32_t flags;
 } shared_memory_t;
 
-uint8_t interrupt_flag = 0;
-uint8_t cantp_config_flag = 0;
 /* USER CODE END 0 */
 
 /**
@@ -38,12 +34,6 @@ uint8_t cantp_config_flag = 0;
  */
 shared_memory_t sharedmemory __attribute__((section(".shared_memory")));
 
-IsoTpShims firmware_up_recv_shim;
-IsoTpReceiveHandle firmware_up_recv_handle;
-IsoTpMessage firmware_up_recv_message;
-uint8_t counter = 0;
-
-upgrade_states up_state = UP_INIT;
 char message[50] = {0};
 
 //main function. 
@@ -63,10 +53,8 @@ int main(void) {
   SystemClock_Config();
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_FDCAN2_Init();
 
   //can init
-  can.setup();
   
   //while loop running on CLK frequency.
   while (1) 
@@ -140,21 +128,7 @@ void increment_boot_loop_count()
   sharedmemory.flags = flags;
 }
 
-void set_interrupt_flag(uint8_t value){
-  interrupt_flag = value;
-}
 
-uint8_t get_interrupt_flag(){
-  return interrupt_flag;
-}
-
-void set_config_flag(uint8_t value){
-  cantp_config_flag = value;
-}
-
-uint8_t get_conifg_flag(){
-  return cantp_config_flag;
-}
 
 /**
   * @brief System Clock Configuration

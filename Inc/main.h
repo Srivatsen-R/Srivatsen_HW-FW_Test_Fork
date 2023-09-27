@@ -9,10 +9,6 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32h7xx_hal.h"
-#include "isotp/isotp_types.h"
-
-// #define APP1 1
-#define APP2 2
 
 
 /* Exported functions prototypes ---------------------------------------------*/
@@ -21,6 +17,7 @@ uint8_t get_conifg_flag();
 void set_config_flag(uint8_t value);
 void set_interrupt_flag(uint8_t value);
 uint8_t get_interrupt_flag();
+void switch_partition_and_reset();
 
 /* Private defines -----------------------------------------------------------*/
 #define Ibus_U_Pin                GPIO_PIN_0

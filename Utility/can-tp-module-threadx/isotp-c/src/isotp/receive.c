@@ -162,7 +162,6 @@ void isotp_continue_receive(IsoTpShims* shims, IsoTpMessage* message,
                     isotp_handle_multi_frame(handle, message);
                 }
             }
-            isotp_send_flow_control_frame(shims, message);
             break;
         }
         default:
