@@ -82,8 +82,6 @@ uint8_t app_version = 0;
 uint8_t cantp_config_flag = 0;
 uint8_t interrupt_flag = 0;
 
-uint8_t counter = 0;
-
 char message[50] = {0};
 
 typedef struct __attribute__((packed))
@@ -229,72 +227,34 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
     switch (upgrade_state)
     {
     case UPGRADE_INIT:
-        handle_upgrade_init();
-        break;
+      handle_upgrade_init();
+      break;
     case UPGRADE_RECEIVE_DATA:
-        handle_rceive_data();
-        break;
+      handle_rceive_data();
+      break;
     case UPGRADE_PAUSE:
-        handle_upgrade_pause();
-        break;
+      handle_upgrade_pause();
+      HAL_TIM_Base_Start_IT(&htim17);
+      motorControl.drive.check = DRIVE_ENABLE;
+      HAL_TIM_Base_Stop_IT(&htim7);
+      break;
+    case UPGRADE_RESUME:
+      handle_upgrade_resume();
+      break;
     case UPGRADE_COMPLETE:
-        handle_upgrade_complete();
-        break;
+      handle_upgrade_complete();
+      HAL_TIM_Base_Start_IT(&htim17);
+      motorControl.drive.check = DRIVE_ENABLE;
+      HAL_TIM_Base_Stop_IT(&htim7);
+      break;
     case UPGRADE_FAILED:
-        return;
-        break;
+      HAL_TIM_Base_Start_IT(&htim17);
+      motorControl.drive.check = DRIVE_ENABLE;
+      HAL_TIM_Base_Stop_IT(&htim7);
+      break;
     default:
-        return;
-        break;
+      break;
     }
-
-    // switch (up_state)
-    // {
-    // case UP_INIT:
-    //   handle_upgrade_init();
-    //   up_state = UP_IN_PROG;
-    //   Flash_Erase_Data(0x081E0000, 16);
-    //   __fdcan_transferMessagesOnID6FA(SUCCESS_MESS, 2);
-    //   break;
-    // case UP_IN_PROG:
-    //   if(get_interrupt_flag() == 0)
-    //   {
-    //     __fdcan_transferMessagesOnID6FA(CAN_TP_TIMEOUT, 2);
-    //   }
-    //   set_interrupt_flag(0);
-
-    //   if(counter >= 10)
-    //   {
-    //     up_state = UP_FAILED;
-    //   }
-    //   break;
-
-    // case UP_COMPLETE:
-    //   if (get_conifg_flag() == 0){
-    //     NVIC_SystemReset();
-    //   }
-      
-    //   break;
-
-    // case UP_FAILED:
-    
-    //   HAL_TIM_Base_Start_IT(&htim17);
-    //   motorControl.drive.check = DRIVE_ENABLE;
-    
-    //   HAL_TIM_Base_Stop_IT(&htim7);
-    //   counter = 0;
-    //   break;
-
-    // default:
-    //   HAL_TIM_Base_Start_IT(&htim17);
-    //   motorControl.drive.check = DRIVE_ENABLE;
-
-    //   HAL_TIM_Base_Stop_IT(&htim7);
-    //   counter = 0;
-    //   break;
-    // }
-  
-    // counter++;
   }
   
   if(htim->Instance==TIM17) {

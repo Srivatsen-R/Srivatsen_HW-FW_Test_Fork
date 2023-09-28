@@ -29,6 +29,15 @@ uint32_t app_address = 0;
 uint16_t curr_frame = 0;
 uint16_t total_frames = 0;
 uint8_t firmware_up_complete = 0;
+uint8_t up_pause_flag = 0;
+
+uint8_t get_pause_flag(){
+    return up_pause_flag;
+}
+
+void set_pause_flag(uint8_t val){
+    up_pause_flag = val;
+}
 
 
 
@@ -70,9 +79,10 @@ void Transmit_on_CAN1(uint32_t arbitration_id, TypeofCANID format, uint8_t * can
 
 void handle_upgrade_init()
 {
-
-    if (uptype == FOTA)
+    switch (uptype)
     {
+    case FOTA:
+
 #ifdef APP1
         app_address =  &__app2_start__;
         uint8_t res = clearApp2();
@@ -91,11 +101,23 @@ void handle_upgrade_init()
             upgrade_state = UPGRADE_FAILED;
             return;
         }
+
+        response[3] = SUCCESS_MESS;
+        upgrade_state = UPGRADE_RECEIVE_DATA;
+        
+        break;
+    case COTA:
+        // clear flash from that area
+        response[3] = SUCCESS_MESS;
+        upgrade_state = UPGRADE_RECEIVE_DATA;
+        break;
+
+    default:
+        upgrade_state = UPGRADE_FAILED; 
+        break;
     }
 
-    response[3] = SUCCESS_MESS;
     Transmit_on_CAN1(FIRMWARE_UPGRADE_COMM, S, response, 5); 
-    upgrade_state = UPGRADE_RECEIVE_DATA;
 }
 
 void handle_rceive_data()
@@ -113,10 +135,16 @@ void handle_rceive_data()
     uint8_t timeout_count = 0;
     uint8_t retry = 0;
 
-    // get update and pause flag first
-
-    if (get_complete_Flag() == 1){
+    if (get_complete_Flag() == 1)
+    {
+        set_complete_flag(0);
         upgrade_state = UPGRADE_COMPLETE;
+        return;
+    }
+
+    if (get_pause_flag() == 1){
+        set_pause_flag(0);
+        upgrade_state = UPGRADE_PAUSE;
         return;
     }
 
@@ -190,102 +218,36 @@ void handle_rceive_data()
         if (retry > MAX_RETRY) {upgrade_state = UPGRADE_FAILED; return ;}
     }
 
-    // if(tx_event_flags_get(&system_event_flag, STARK_CAN_TP_RX | PUASE_OTA | COMPLETE_OTA, TX_OR, &actual_flag, RECEIVE_TIMEOUT) == TX_SUCCESS)
-    // {
-    //     if (tx_event_flags_get(&system_event_flag, COMPLETE_OTA, TX_OR, &actual_flag, TX_NO_WAIT) == TX_SUCCESS){
-    //         upgrade_state = UPGRADE_COMPLETE;
-    //         return;
-    //     }
-
-    //     if (tx_event_flags_get(&system_event_flag, PUASE_OTA, TX_OR_CLEAR, &actual_flag, TX_NO_WAIT) == TX_SUCCESS){
-            
-    //         tx_event_flags_get(&system_event_flag, STARK_CAN_TP_RX, TX_OR_CLEAR, &actual_flag, TX_NO_WAIT);
-    //         previous_upgrade_state = upgrade_state;
-    //         upgrade_state = UPGRADE_PAUSE;
-    //         tx_event_flags_get(&system_event_flag, RESUME_OTA, TX_OR_CLEAR, &actual_flag, TX_NO_WAIT);
-    //         return;
-    //     }            
-
-    //     tx_event_flags_get(&system_event_flag, STARK_CAN_TP_RX, TX_OR_CLEAR, &actual_flag, TX_NO_WAIT);
-
-    //     memcpy(&message_type, firmware_up_recv_message.payload, 1);
-
-    //     switch (message_type)
-    //     {
-    //     case COTA_MESSAGE:
-    //         memcpy(&recv_crc, firmware_up_recv_message.payload + 1, 4); 
-    //         update_config(&defaultFlashConfigData);
-    //         break;
-        
-    //     case FOTA_MESSAGE:
-    //         memcpy(mess_buff, firmware_up_recv_message.payload+9, firmware_up_recv_message.size-9);
-    //         memcpy(&recv_crc, firmware_up_recv_message.payload + 1, 4); 
-    //         memcpy(&offset, firmware_up_recv_message.payload + 5, 4);
-
-    //         mess_len = firmware_up_recv_message.size-9;
-    //         computed_crc = crc32(mess_buff, mess_len);
-    //         if(computed_crc != recv_crc)
-    //         {
-    //             response[3] = CRC_ERROR;
-    //             Transmit_on_CAN1(FIRMWARE_UPGRADE_COMM, S, response, 5);
-    //             firmware_up_flag = 0;
-
-    //             // FAILED
-    //             upgrade_state = UPGRADE_FAILED;
-    //             return;
-    //         }
-
-    //         for(int word_c = 0 ; word_c < mess_len/4 ; word_c++){
-    //             uint32_t* word = &mess_buff[word_c*4];
-    //             words[word_c] = *word;
-    //         }
-
-    //         unsigned int address = app_address + offset;
-    //         Flash_Write_Data(address, words, mess_len/8);
-    //         curr_frame++;
-    //         write_progress.offset = offset;
-
-    //         // Transmit_on_CAN1(tx_flash_write_progress, S, &write_progress, sizeof(write_progress));
-    //         response[3] = SUCCESS_MESS;
-    //         Transmit_on_CAN1(FIRMWARE_UPGRADE_COMM, S, response, 5);
-    //         break;
-        
-    //     default:
-    //         break;
-    //     }
-    // }
-    // else
-    // {
-    //     retry++;
-    //     response[3] = CAN_TP_TIMEOUT;
-    //     Transmit_on_CAN1(FIRMWARE_UPGRADE_COMM, S, response,5);
-    //     firmware_up_flag = 0;
-    //     if (retry > MAX_RETRY) {upgrade_state = UPGRADE_FAILED; return ;}  
-    // }
 }
 
-void handle_upgrade_pause(){
+void handle_upgrade_pause()
+{
+    previous_upgrade_state = upgrade_state;
 
-    // uint8_t debug[5] = {5};
-    // Transmit_on_CAN1(0x340, S, debug, 5);
+}
 
-    // ULONG actual_flag;
-    // if (tx_event_flags_get(&system_event_flag, RESUME_OTA, TX_OR_CLEAR, &actual_flag, TX_WAIT_FOREVER) == TX_SUCCESS)
-    // {
-    //     // reset flags 
-    //     tx_event_flags_get(&system_event_flag, PUASE_OTA, TX_OR_CLEAR, &actual_flag, TX_NO_WAIT);
-    //     response[3] = RESUME_UPGRADE;
-    //     Transmit_on_CAN1(FIRMWARE_UPGRADE_COMM, S, response, 5);
-    //     upgrade_state = previous_upgrade_state;
-    //     return;
 
-    // }
-    
+void handle_upgrade_resume()
+{
+    response[3] = RESUME_UPGRADE;
+    Transmit_on_CAN1(FIRMWARE_UPGRADE_COMM, S, response, 5);
+    upgrade_state = previous_upgrade_state;
 }
 
 void handle_upgrade_complete()
 {
-    switch_partition_and_reset();
+    switch (uptype)
+    {
+    case FOTA:
+        switch_partition_and_reset();
+        break;
+    case COTA:
+        HAL_NVIC_SystemReset();
+        break;
+    default:
+        upgrade_state = UPGRADE_FAILED;
+        break;
+    }
 }
 
 

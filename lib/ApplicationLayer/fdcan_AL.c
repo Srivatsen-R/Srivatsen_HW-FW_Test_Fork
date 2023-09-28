@@ -152,7 +152,8 @@ void CAN_Filter_IDList(uint32_t U32_receiveCANid, TypeofCANID U8_idType, FilterB
 
 
 
-void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs) {
+void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs) 
+{
 
 	    HAL_FDCAN_GetRxMessage(&hfdcan2, FDCAN_RX_FIFO0, &can.RxMessageBuf, can.rxMsg);
         can.rx_flag = true;
@@ -166,7 +167,16 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 				}
 				else if ( (can.rxMsg[2] == FUPFG_REQUEST) && ( can.rxMsg[3] == PERFORM_UPGRADE) )
 				{
-					upgrade_state = UPGRADE_COMPLETE;
+					set_complete_flag(1);
+				}
+				else if ( (can.rxMsg[2] == FUPFG_REQUEST) && ( can.rxMsg[3] == PAUSE_UPGRADE) )
+				{
+					set_pause_flag(1);
+				}
+				else if ( (can.rxMsg[2] == FUPFG_REQUEST) && ( can.rxMsg[3] == RESUME_UPGRADE) )
+				{
+					upgrade_state = UPGRADE_RESUME;
+					HAL_TIM_Base_Start_IT(&htim7);
 				}
 				else if ( (can.rxMsg[2] == FUPFG_REQUEST) && ( can.rxMsg[3] == RECEIVE_BIN) )
 				{

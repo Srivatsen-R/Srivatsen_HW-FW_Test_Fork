@@ -107,7 +107,7 @@ typedef enum {
 
 typedef enum {
     COTA = (uint8_t) 1,
-    FOTA     = (uint8_t) 0,
+    FOTA     = (uint8_t) 2,
 } upgrade_type;
 
 
@@ -122,6 +122,10 @@ void handle_upgrade_init();
 void handle_rceive_data();
 void handle_upgrade_pause();
 void handle_upgrade_complete();
+
+uint8_t get_pause_flag();
+void set_pause_flag(uint8_t val);
+void set_complete_flag(uint8_t val);
 // uint8_t dataParserCOTA(uint64_t *flashData, char * server_cmd, char * delimiter);
 // void upgrade_firmware();
 extern upgrade_type uptype;
