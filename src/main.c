@@ -161,11 +161,6 @@ int main(void) {
         vehicle.odo_change_status = NO_ODO_UPDATE;
       }
 
-      if (get_conifg_flag())
-      {
-        update_config(); // updates config and set_config_flag to zero
-      }
-
       //delay to log can data each 100ms.
       HAL_Delay(100);
   }

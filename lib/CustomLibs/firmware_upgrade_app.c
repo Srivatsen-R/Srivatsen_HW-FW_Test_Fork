@@ -109,7 +109,7 @@ void handle_upgrade_init()
         break;
     case COTA:
         // clear flash from that area
-        Flash_Erase_Data(0x081E0000, 16);
+        Flash_Erase_Data(0x081E0000, 64);
         response[3] = SUCCESS_MESS;
         upgrade_state = UPGRADE_RECEIVE_DATA;
         break;
