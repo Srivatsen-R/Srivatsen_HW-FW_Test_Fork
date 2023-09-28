@@ -155,12 +155,12 @@ float Bytes2float(uint8_t * ftoa_bytes_temp)
    return float_variable;
 }
 
-uint32_t Flash_Erase_Data (uint32_t StartSectorAddress, uint16_t numberofwords)
+uint32_t Flash_Erase_Data (uint32_t StartSectorAddress, uint16_t noofBytes)
 {
   static FLASH_EraseInitTypeDef EraseInitStruct;
 	uint32_t SECTORError;
 
-  numberofwords = ceil((float)numberofwords/ 4.0);
+  uint16_t numberofwords = ceil((float)noofBytes/ 4.0);
   HAL_FLASH_Unlock();
 
   	/* Get the number of sector to erase from 1st sector */
@@ -271,12 +271,12 @@ uint32_t clearApp2(void)
 }
 
 
-uint32_t Flash_Write_Data (uint32_t StartSectorAddress, uint32_t *data, uint16_t numberofwords)
+uint32_t Flash_Write_Data (uint32_t StartSectorAddress, uint32_t *data, uint16_t noofBytes)
 {
 
 	// static FLASH_EraseInitTypeDef EraseInitStruct;
 	// uint32_t SECTORError;
-  numberofwords = ceil((float)numberofwords/ 4.0);
+  uint16_t numberofwords = ceil((float)noofBytes/ 4.0);
 	int sofar=0;
 
 	 /* Unlock the Flash to enable the flash control register access *************/

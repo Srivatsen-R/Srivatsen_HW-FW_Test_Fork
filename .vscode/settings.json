@@ -27,7 +27,8 @@
         "string.h": "c",
         "firmware_upgrade_app.h": "c",
         "crc32.h": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "macros.h": "c"
     },
-    "cortex-debug.variableUseNaturalFormat": false
+    "cortex-debug.variableUseNaturalFormat": true
 }

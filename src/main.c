@@ -76,7 +76,7 @@ float Duty;
 float freq_rpm = 0.0;
 float throttle_percent = 0.0;
 volatile uint32_t ICValue;
-volatile uint32_t angle = 30, angle_curr = 0, angle_prev = 0;
+volatile uint32_t z_trig = 0;
 uint8_t reset_flag = 0;
 uint8_t app_version = 0;
 uint8_t cantp_config_flag = 0;
@@ -149,7 +149,7 @@ int main(void) {
       ANALOG_READING();
       FAULT_READING();
       //function to log can data for data analysis and rca.
-      // CAN_Logging();
+      CAN_Logging();
       //function to calculate odo,trip and speed.
       Calculate_OTS(terminal.w.sen);
       //function for can tx communication with stark , mark, marvel.
@@ -206,14 +206,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     if(GPIO_Pin == GPIO_PIN_7) // If The INT Source Is EXTI Line9_5 (PE7 Pin)
     {
       reset_flag = 1;
-      angle++;
+      z_trig += 1;
     }
 }
 
 //callback to tim17 interrupt for motor control. 20kHz freq.
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
   /* Prevent unused argument(s) compilation warning */
-  angle_curr = angle;//to be modified.
 
   if(htim->Instance == TIM7)
   {
@@ -290,7 +289,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
 
           VECTOR_FOC_Control();
           motorControl.encoder.previous = motorControl.encoder.value;
-          angle_prev = angle_curr;
   }
 }
 

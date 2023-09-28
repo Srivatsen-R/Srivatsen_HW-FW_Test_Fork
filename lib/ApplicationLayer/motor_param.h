@@ -56,7 +56,7 @@
 #define RPM_TO_FREQ                         2.0/120.0
 #define RPM_TO_THROTTLE_PERCENT             100.0/5000.0   
 #define CURRENT_AVG_FACTOR                  20.0 
-#define NTC_PULL_UP_RESISTOR                10000
+#define NTC_PULL_UP_RESISTOR                52600
 #define BETA_VALUE                          4000.0   
 #define T_AMBIENT                           25.0
 #define KELVIN_TO_CELSIUS                   273.15 

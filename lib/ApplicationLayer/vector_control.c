@@ -45,6 +45,7 @@ duty cycle values that generate the desired voltage vector.
 #include "sanity.h"
 #include "foc_blockset.h"
 #include "foc_mtpa_lut.h"
+#include <stdint.h>
 
 extern int a_current;
 extern int b_current;

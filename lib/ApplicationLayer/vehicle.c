@@ -35,7 +35,7 @@ extern float motorT;
 extern motorControl_t motorControl;
 extern adc_t analog;
 extern float Duty;
-extern volatile uint32_t angle;
+extern volatile uint32_t z_trig;
 
 static float kmph_can;
 static float trip_can;
@@ -87,7 +87,7 @@ if(vehicle.odometer>odo_prev)
 }
 
 
-void CAN_Logging()
+void CAN_Logging(void)
 {
   //Logging CAN data.
     can.dataLoggingForPythonScript(terminal, 
@@ -97,7 +97,7 @@ void CAN_Logging()
                                   motorControl, 
                                   analog, 
                                   Duty,
-                                  angle, (float)odo_can, (float)kmph_can, (float)trip_can, (float)fault.fault_code, forward_pin_state, reverse_pin_state);
+                                  z_trig, (float)odo_can, (float)kmph_can, (float)trip_can, (float)fault.fault_code, avg_board_temp, v_rms);
                                   //angle, (float)odo_can, (float)kmph_can, (float)trip_can, (float)fault.fault_code, avg_board_temp, v_rms);
 }
 

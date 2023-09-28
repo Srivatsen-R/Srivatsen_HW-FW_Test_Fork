@@ -93,12 +93,12 @@ typedef struct foc_t {
 
 
 //Motor-Controller Specific Parameters
-#define PPR                     4096.0          // ACIM Pulses Per Revolution
+#define PPR                     2048.0          // ACIM Pulses Per Revolution
 #define POLEPAIRS               3.0            // POLE PAIRS ACIM
-#define FW_RPM                  2650.0
+#define FW_RPM                  2000.0
 #define MAX_RPM                 5000.0
 #define FW_MIN_CURRENT_PU       312.5
-#define FW_MAX_CURRENT_PU       3600.0
+#define FW_MAX_CURRENT_PU       8212.0
 #define MTPA_MAX_CURRENT_PU     3500.0
 #define POWER_MAPPING_LOWER_RPM     1100.0
 #define POWER_MAPPING_UPPER_RPM     2000.0    
