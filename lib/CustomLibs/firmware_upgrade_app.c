@@ -7,6 +7,7 @@
 #include "main.h"
 #include "flash.h"
 #include "fdcan_AL.h"
+#include "config.h"
 #include <stdint.h>
 
 // #define APP1
@@ -108,6 +109,7 @@ void handle_upgrade_init()
         break;
     case COTA:
         // clear flash from that area
+        Flash_Erase_Data(0x081E0000, 16);
         response[3] = SUCCESS_MESS;
         upgrade_state = UPGRADE_RECEIVE_DATA;
         break;
@@ -149,7 +151,9 @@ void handle_rceive_data()
         {
         case COTA_MESSAGE:
             memcpy(&recv_crc, firmware_up_recv_message.payload + 1, 4); 
-            // update_config(&defaultFlashConfigData);
+            update_config();
+            response[3] = SUCCESS_MESS;
+            Transmit_on_CAN1(FIRMWARE_UPGRADE_COMM, S, response, 5);
             break;
         
         case FOTA_MESSAGE:
