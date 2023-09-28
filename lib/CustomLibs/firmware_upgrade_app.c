@@ -46,7 +46,7 @@ uint8_t get_complete_Flag(){
 }
 
 void set_complete_flag(uint8_t val){
-    firmware_up_flag = 1;
+    firmware_up_complete = val;
 }
 
 uint8_t response[5] = {PEGASUS_ID, STARK_ID, FUPG_STATUS, 1, PEGASUS_ID};
@@ -135,18 +135,9 @@ void handle_rceive_data()
     uint8_t timeout_count = 0;
     uint8_t retry = 0;
 
-    if (get_complete_Flag() == 1)
-    {
-        set_complete_flag(0);
-        upgrade_state = UPGRADE_COMPLETE;
-        return;
-    }
+    
 
-    if (get_pause_flag() == 1){
-        set_pause_flag(0);
-        upgrade_state = UPGRADE_PAUSE;
-        return;
-    }
+    
 
     if (get_interrupt_flag() == 1)
     {
@@ -217,6 +208,20 @@ void handle_rceive_data()
         }
         if (retry > MAX_RETRY) {upgrade_state = UPGRADE_FAILED; return ;}
     }
+
+    if (get_complete_Flag() == 1)
+    {
+        set_complete_flag(0);
+        upgrade_state = UPGRADE_COMPLETE;
+        return;
+    }
+
+    if (get_pause_flag() == 1){
+        set_pause_flag(0);
+        upgrade_state = UPGRADE_PAUSE;
+        return;
+    }
+    
 
 }
 
