@@ -40,6 +40,8 @@ unsigned int Get_Batt_Voltage_measured(unsigned int voltage_adc_count)  // 0.1 v
 	
 
 
+
+
       int moving_Throttle_measured_fun(int current_val,int MOV_AVG_SAMPLE )
       {
         static float Prev_current_val;
@@ -106,6 +108,37 @@ unsigned int Get_Batt_Voltage_measured(unsigned int voltage_adc_count)  // 0.1 v
         current_val = Prev_current_val ;
         return current_val ;
     }	
+
+	 float moving_AC_voltage_measured_fun( float current_val , float MOV_AVG_SAMPLE)   // 0.1 amp Batt_current_measured
+    {
+        static float Prev_current_val;
+        float Bus_Current_Error_value;
+        Bus_Current_Error_value = (current_val - Prev_current_val);
+        Prev_current_val += (Bus_Current_Error_value / MOV_AVG_SAMPLE);
+        current_val = Prev_current_val ;
+        return current_val ;
+    }
+
+    float moving_Q_current_measured_fun( float current_val , float MOV_AVG_SAMPLE)   // 0.1 amp Batt_current_measured
+    {
+        static float Prev_current_val;
+        float Bus_Current_Error_value;
+        Bus_Current_Error_value = (current_val - Prev_current_val);
+        Prev_current_val += (Bus_Current_Error_value / MOV_AVG_SAMPLE);
+        current_val = Prev_current_val ;
+        return current_val ;
+    }	
+
+    float moving_D_current_measured_fun( float current_val , float MOV_AVG_SAMPLE)   // 0.1 amp Batt_current_measured
+    {
+        static float Prev_current_val;
+        float Bus_Current_Error_value;
+        Bus_Current_Error_value = (current_val - Prev_current_val);
+        Prev_current_val += (Bus_Current_Error_value / MOV_AVG_SAMPLE);
+        current_val = Prev_current_val ;
+        return current_val ;
+    }
+
 
 
 
@@ -226,17 +259,14 @@ float Throttle_Control(int target_speed,float prev_output,int f_flag,int r_flag)
         if(target_speed >= prev_output)
         {
       
-            if(target_speed<=14000)
+            if(target_speed<=THROTTLE_THRESHOLD_A)
             {    
-            // th_increment =RAMP_UP_CONST;    
-            th_increment = 1.0;
+            th_increment = ACCELERATION_CONST;
             }
             
-            if(target_speed>14000)
+            if(target_speed>THROTTLE_THRESHOLD_B)
             {    
-            // th_increment =0.4;   
-               th_increment = 1.0; 
-
+               th_increment = ACCELERATION_CONST; 
             }
 
 
@@ -249,7 +279,7 @@ float Throttle_Control(int target_speed,float prev_output,int f_flag,int r_flag)
         else
         {
    
-            th_decrement =0.3;
+            th_decrement =DEACCELERATION_CONST;
 
             if(target_speed <= (prev_output - th_decrement)) prev_output -= th_decrement ;
             else prev_output = target_speed ;
@@ -265,18 +295,8 @@ int Rpm_Target_Function(int  throttle_input)
     int rpm_th_temp ;
 
     rpm_th_temp = ((throttle_input) - THROTTLE_ADC_OFFSET_COUNT)*SPEED_MUL_FACTOR ;// 0.27~7950
-
-    if(rpm_th_temp<0)
-    {
-        rpm_th_temp=0;
-    }
-
-    if(rpm_th_temp>MAX_SPEED*SPEED_MUL_FACTOR)
-    {
-        rpm_th_temp=MAX_SPEED*SPEED_MUL_FACTOR;
-    }
-
-    
+    if(rpm_th_temp<0){rpm_th_temp=0;}
+    if(rpm_th_temp>MAX_SPEED*SPEED_MUL_FACTOR){rpm_th_temp=MAX_SPEED*SPEED_MUL_FACTOR;}
     return ((rpm_th_temp));
 }
 
@@ -307,7 +327,6 @@ int Throttle_Fault(int  Th_val_adc_sense)
 
     int error=0;
     
-
     if((Th_val_adc_sense <= TH_MIN_VAL) ||(Th_val_adc_sense > TH_AVG_MAX_ADC_COUNT) || (Th_val_adc_sense >= 48000))
     {
        error=1; 

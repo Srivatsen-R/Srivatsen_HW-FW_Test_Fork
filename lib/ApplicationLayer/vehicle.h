@@ -8,7 +8,7 @@
 
 typedef struct vehicle_t {
 
-       uint32_t  odometer,
+       float    odometer,
                  speed,
                  trip;
        char      odo_change_status;

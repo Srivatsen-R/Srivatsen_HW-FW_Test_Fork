@@ -15,6 +15,7 @@ This file contains functions associated with Vector FOC Control for motor contro
 #include "tim.h"
 #include "sanity.h"
 #include "foc_mtpa_lut.h"
+#include "motor_param.h"
 
 
 extern mtpa_lut mtpa;
@@ -38,10 +39,8 @@ float READ_SPEED(float angle) {
         derivative_sine_rotor = DERIVATIVE_CONSTANT*(sine_rotor-sine_rotor_prev);
         cosine_rotor = cos(angle);
         derivative_cosine_rotor = DERIVATIVE_CONSTANT*(cosine_rotor-cosine_rotor_prev);
-
         sine_rotor_prev = sine_rotor;
         cosine_rotor_prev = cosine_rotor;
-
         return ((cosine_rotor*derivative_sine_rotor)-(sine_rotor*derivative_cosine_rotor));
 
 }
@@ -53,7 +52,6 @@ float READ_POSITION(int position) {
 
 //Filter for  speed of rotor.
 float  SPEED_FILTER(float speed ,float speed_prev,float speed_filtered_prev) {
-
     return ((SPEED_FILTER_CONSTANT_1*speed_filtered_prev) +(SPEED_FILTER_CONSTANT_2*(speed+speed_prev)));
 }
 
@@ -61,27 +59,11 @@ float  SPEED_FILTER(float speed ,float speed_prev,float speed_filtered_prev) {
 float CALCULATE_SLIP_SPEED(float iq_sen,float imr_ref)
 {
     float slip;
-    
     slip = iq_sen/(ROTOR_TIME_CONSTANT*imr_ref);//0.22 5Nm 0.59 7Nm 0.89 10Nm 0.99Nm  
-
-    
-    
-    
-    if(slip>SLIP_LIMIT)
-    {
-        slip =SLIP_LIMIT;
-    }
-
-    if(slip<0.0)
-    {
-        slip=0.0;
-    }
-
-   
-
+    if(slip>SLIP_LIMIT){slip =SLIP_LIMIT;}
+    if(slip<0.0){slip=0.0;}
     return slip ;        
 }
-
 
 
 //Torque PI Control
@@ -106,96 +88,66 @@ error = iq_ref - iq_sen;
 
 gain = KP_IQ*error;
 
-if(gain > VQ_LIMIT){
-    gain = VQ_LIMIT;
-}else if(gain < -VQ_LIMIT){
-    gain = -VQ_LIMIT;
-}
+if(gain > VQ_LIMIT){gain = VQ_LIMIT;}
+else if(gain < -VQ_LIMIT){gain = -VQ_LIMIT;}
 
 u = gain +intg;
 
-if(u>VQ_LIMIT)
-{
-     out = VQ_LIMIT;   
-}
-else if(u<-VQ_LIMIT)
-{
-    out = -VQ_LIMIT;
-}  
-
-else
-{
-    out = u;
-}
+if(u>VQ_LIMIT){out = VQ_LIMIT;}
+else if(u<-VQ_LIMIT){out = -VQ_LIMIT;}  
+else{out = u;}
 
 excess = u - out;
 
 
-
-if(forward_flag)
-{
-if((error<1000 && error>-1000 && terminal.iq.ref<=10) ) 
-{
-    intg_prev=intg_prev-0.5;
-
-    if(intg_prev<0){intg_prev=0;}
-}
-
-}
-
-if(reverse_flag )
-{
-if((error<1000 && error>-1000 && terminal.iq.ref>=-10))
-{
-    intg_prev=intg_prev+0.5;
-
-    if(intg_prev>0){intg_prev=0;}
-}
-
-}
-
-
-if(forward_flag==0 && reverse_flag==0)
+if(TORQUE_MODE)
 {
 
-if(motorControl.drive.fnr_status==1)
-{
+        if(forward_flag)
+        {
+            if((error<1000 && error>-1000 && terminal.iq.ref<=10)) 
+            {
+                intg_prev=intg_prev-0.5;
+                if(intg_prev<0){intg_prev=0;}
+            }
+        }
 
-  if((error<1000 && error>-1000 && terminal.iq.ref<=10) ) 
-{
-    intg_prev=intg_prev-0.5;
+        if(reverse_flag )
+        {
+            if((error<1000 && error>-1000 && terminal.iq.ref>=-10))
+            {
+                intg_prev=intg_prev+0.5;
+                if(intg_prev>0){intg_prev=0;}
+            }
+        }
 
-    if(intg_prev<0){intg_prev=0;}
-}
+        if(neutral_flag)
+        {
+            if(motorControl.drive.fnr_status==1)
+            {
+                if((error<1000 && error>-1000 && terminal.iq.ref<=10) ) 
+                {
+                    intg_prev=intg_prev-0.5;
+                    if(intg_prev<0){intg_prev=0;}
+                }
+            }
 
-
-}
-
-if(motorControl.drive.fnr_status==2)
-{
-
-  if((error<1000 && error>-1000 && terminal.iq.ref>=-10))
-{
-    intg_prev=intg_prev+0.5;
-
-    if(intg_prev>0){intg_prev=0;}
-}
- 
-  
-}
+            if(motorControl.drive.fnr_status==2)
+            {
+                if((error<1000 && error>-1000 && terminal.iq.ref>=-10))
+                {
+                    intg_prev=intg_prev+0.5;
+                    if(intg_prev>0){intg_prev=0;}
+                }
+            }
+        }
 
 }
 
-
-  
 intg = intg_prev + ((IQ_INTG_CONST)*(error+error_prev)) - (KC_W*excess);
 
-
-if(intg > VQ_LIMIT){
-    intg = VQ_LIMIT;
-}else if(intg < -VQ_LIMIT){
-    intg = -VQ_LIMIT;
-}
+if(intg > VQ_LIMIT){intg = VQ_LIMIT;}
+else if(intg < -VQ_LIMIT){intg = -VQ_LIMIT;}
 //  terminal.iq.intg = intg;
 
 // if(intg > intg_prev + MAX_RATE_Q*T_S){
@@ -215,15 +167,12 @@ return out;
 
 //Synchronous Speed Routine
 float CALCULATE_SYNC_SPEED(float slip , float rotor_speed) {
-    
     return (slip+(POLEPAIRS*(rotor_speed*628.0)));
 }
 
 //Electrical angle calculation
 float  READ_ROTOR_ANGLE(float rho_prev,float w_s,float w_s_prev) {
-
     return (rho_prev+((0.5*T_S)*(w_s+w_s_prev)));
-
 }
 
 //Speed PI Control
@@ -235,48 +184,24 @@ static float intg;
 static float intg_prev;
 static float error_prev;  
 float out;
-
 float u;
 float excess;
 
-
 error = w_ref - w_sen;
-
 terminal.w.err = error;
-
 gain = KP_W*error;
-
 terminal.w.gain = gain;
-
 
 u = gain +intg;
 
-if(u<=0.0)
-{
-    u=0.0;
-}
-
-if(u>phase_current_limit)
-{
-    out = phase_current_limit;
-}
-
-else if(u<=0.0)
-{
-    out=0.0;
-}
-
-else
-{
-    out = u;
-}
+if(u<=0.0){u=0.0;}
+if(u>phase_current_limit){out = phase_current_limit;}
+else if(u<=0.0){out=0.0;}
+else{out = u;}
 
 excess = u - out;
-
 intg = intg_prev + ((SPEED_INTG_CONST)*(error+error_prev))- (KC_W*excess);
-
 terminal.w.intg = intg;
-
 intg_prev=intg;
 error_prev=error;
 
@@ -340,38 +265,21 @@ error = id_ref - id_sen;
 
 gain = KP_IQ*error;
 
-if(gain > 18000.0){
-    gain = 18000.0;
-}else if(gain < -18000.0){
-    gain = -18000.0;
-}
+if(gain > VD_LIMIT){gain = VD_LIMIT;} 
+else if(gain < -VD_LIMIT){gain = -VD_LIMIT;}
 
 u = gain +intg;
 
-if(u>VD_LIMIT)
-{
-     out = VD_LIMIT;   
-}
-else if(u<-VD_LIMIT)
-{
-    out = -VD_LIMIT;
-}  
-
-else
-{
-    out = u;
-}
-
+if(u>VD_LIMIT){out = VD_LIMIT;}
+else if(u<-VD_LIMIT){out = -VD_LIMIT;}  
+else{out = u;}
 
 excess = u - out;
 
 intg = intg_prev + ((ID_INTG_CONST)*(error+error_prev)) - (KC_W*excess);
 
-if(intg > 18000.0){
-    intg = 18000.0;
-}else if(intg < -18000.0){
-    intg = -18000.0;
-}
+if(intg > VD_LIMIT){intg = VD_LIMIT;}
+else if(intg < -VD_LIMIT){intg = -VD_LIMIT;}
 
 intg_prev = intg;
 error_prev = error;

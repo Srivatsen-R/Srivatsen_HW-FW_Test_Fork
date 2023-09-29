@@ -69,7 +69,10 @@ extern float Duty;
 extern int reverse_pin_state;
 extern int forward_pin_state;
 
+extern float freq_rpm;
+extern float throttle_percent;
 
+extern int count_duty;
 
 
 void RUN_SANITY(void)
@@ -77,14 +80,11 @@ void RUN_SANITY(void)
 
     int sanity_val=0;
 
-    for (sanity_val=0;sanity_val<SANITY_COUNT;sanity_val++)
-     {
-        ANALOG_READING();
-     }
+    for (sanity_val=0;sanity_val<SANITY_COUNT;sanity_val++){ANALOG_READING();}
+    
+    FAULT_READING();
 
-        FAULT_READING();
-
-     // Current sensor
+     // Current sensor W
     if(analog.bufferData[PHASE_CURRENT_W]>=CURRENT_SENSOR_MAX || analog.bufferData[PHASE_CURRENT_W]<=CURRENT_SENSOR_MIN)
     {
          fault.fault_code |= FAULT_CURRENT_SENSE_HEX;
@@ -92,6 +92,7 @@ void RUN_SANITY(void)
          fault.status             = FAULT_CURRENT_SENSE;
     }
 
+   // Current sensor U   
    if(analog.bufferData[PHASE_CURRENT_V]>=CURRENT_SENSOR_MAX || analog.bufferData[PHASE_CURRENT_V]<=CURRENT_SENSOR_MIN)
     {
          fault.fault_code |= FAULT_CURRENT_SENSE_HEX;
@@ -99,6 +100,7 @@ void RUN_SANITY(void)
          fault.status             = FAULT_CURRENT_SENSE;
     }
 
+   //Drive not neutral while sanity.
    reverse_pin_state = HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_3);
    forward_pin_state = HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_4);
 
@@ -108,14 +110,15 @@ void RUN_SANITY(void)
        fault.status                  = FAULT_FNR;
     }
 
-    Encoder_Check(3);  
+    //If encoder not connected   
+    //Encoder_Check(3);  
 
 }
 
 
 void FAULT_READING()
 {
-  // motor_stall_error = Motor_Stall_Fault();
+      // motor_stall_error = Motor_Stall_Fault();
       fault.boardTemperature_u = Temperature_Fault_Controller((motorControl.temperature.u));
       fault.boardTemperature_v = Temperature_Fault_Controller((motorControl.temperature.v));
       fault.boardTemperature_w = Temperature_Fault_Controller((motorControl.temperature.w));
@@ -125,32 +128,42 @@ void FAULT_READING()
       fault.currentSensor    = Current_Sensor_Fault(analog.bufferData[PHASE_CURRENT_W],analog.bufferData[PHASE_CURRENT_V]);
       fault.overCurrent      = Overcurrent_Fault(analog.bufferData[BUS_CURRENT_U]+analog.bufferData[BUS_CURRENT_V]+analog.bufferData[BUS_CURRENT_W]);
       
+      //overvoltage/undervoltage fault
       if(fault.busVoltage == SANITY_FAULT) {
          fault.fault_code |= FAULT_BUS_VOLTAGE_HEX;
          motorControl.drive.check = DRIVE_DISABLE;
          fault.status             = FAULT_BUS_VOLTAGE;
       }
 
+      //controller temperature fault
       else if((fault.boardTemperature_u == SANITY_FAULT)||(fault.boardTemperature_v == SANITY_FAULT)||(fault.boardTemperature_w == SANITY_FAULT) ) {
          fault.fault_code |= FAULT_BOARD_TEMPERAUTRE_HEX;
          motorControl.drive.check = DRIVE_DISABLE;
          fault.status             = FAULT_BOARD_TEMPERAUTRE;
       }
+
+      //motor temperature fault
       else if(fault.motorTemperature == SANITY_FAULT) {
          fault.fault_code |= FAULT_MOTOR_TEMPERATURE_HEX;
          motorControl.drive.check = DRIVE_DISABLE;
          fault.status             = FAULT_MOTOR_TEMPERATURE;
       }
+
+      //throttle fault
       else if(fault.throttle == SANITY_FAULT) {
          fault.fault_code |= FAULT_THROTTLE_HEX;
          motorControl.drive.check = DRIVE_DISABLE;
          fault.status             = FAULT_THROTTLE;
       }
+
+      //can error fault - to be tested.
       else if((FDCAN_ERROR_BIT & 0x0000001) == 1 && (FDCAN_ERROR_BIT & 0x000001) == 0){
         fault.fault_code |= FAULT_CAN_ERROR_HEX;
         motorControl.drive.check = DRIVE_DISABLE;
         fault.status = FAULT_CAN_ERROR;
       }
+
+      //over speed error fault.
       else if(terminal.w.sen >= 6000.0){
         fault.fault_code |= FAULT_OVER_SPEED_HEX;
         motorControl.drive.check = DRIVE_DISABLE;
@@ -164,15 +177,13 @@ void ANALOG_READING()
      float current=0; 
      float dcV=0;
 
+     //controller temperature 
      motorControl.temperature.u     = moving_Temperature_measured_fun_u(mControl.temperature.read(analog.read(BOARD_TEMP_U)),TEMP_AVG);
      motorControl.temperature.v     = moving_Temperature_measured_fun_v(mControl.temperature.read(analog.read(BOARD_TEMP_V)),TEMP_AVG);
      motorControl.temperature.w     = moving_Temperature_measured_fun_w(mControl.temperature.read(analog.read(BOARD_TEMP_W)),TEMP_AVG);
      avg_board_temp = (motorControl.temperature.u + motorControl.temperature.v + motorControl.temperature.w)/3.0;
 
-     v_rms = 10*sqrt(terminal.vd.ref * terminal.vd.ref + terminal.vq.ref * terminal.vq.ref);
-     v_rms /= 32767.0;
-
-    //Motor NTC Temperature Calculation
+     //motor temperature
      double resistance = (analog.bufferData[MOTOR_TEMP_SENSE] * 10000)/(Adc_max_COUNT - analog.bufferData[MOTOR_TEMP_SENSE]);
      double temp_K = resistance/NTC_PULL_UP_RESISTOR;
      temp_K = log(temp_K);
@@ -183,19 +194,43 @@ void ANALOG_READING()
      motorControl.temperature.motor = moving_Temperature_measured_fun_M(temp_K, TEMP_AVG);
      motorT = motorControl.temperature.motor;
 
-    dcV = moving_Batt_voltage_measured_fun(0.00211*analog.bufferData[BUS_VOLTAGE] +4.7,VOLTAGE_AVG);
-    busVoltage = dcV; 
-    terminal.rotor.angle = busVoltage;
+     //bus voltage
+     dcV = moving_Batt_voltage_measured_fun(0.00211*analog.bufferData[BUS_VOLTAGE] +VBUS_OFFSET,VOLTAGE_AVG);
+     busVoltage = dcV; 
+     terminal.rotor.angle = busVoltage;
+   
+     //ac phase voltage    
+     v_rms = 10*sqrt(terminal.vd.ref * terminal.vd.ref + terminal.vq.ref * terminal.vq.ref);
+     v_rms /= 32767.0;
+     v_rms *= busVoltage/ROOT2;
+     v_rms = moving_AC_voltage_measured_fun(v_rms,VOLTAGE_AVG);
 
-    v_rms *= busVoltage/ROOT2;
+     //dc current  
 
-    current = (10*sqrt(terminal.vq.ref * terminal.vq.ref + terminal.vd.ref * terminal.vd.ref));
-    current /= 32767.0;
-    current *= terminal.iq.sen;
+     if(terminal.iq.sen<=0)
+     {
+     current = (10*sqrt(terminal.vq.ref * terminal.vq.ref + terminal.vd.ref * terminal.vd.ref));
+     current /= 32767.0;
+     current *= sqrt(terminal.iq.sen*terminal.iq.sen + terminal.id.sen*terminal.id.sen);
+     dc_current = current;
+     dc_current = -moving_Batt_current_measured_fun(dc_current,VOLTAGE_AVG);
+     }
 
-    dc_current = current;
+      if(terminal.iq.sen>0)
+     {
+     current = (10*sqrt(terminal.vq.ref * terminal.vq.ref + terminal.vd.ref * terminal.vd.ref));
+     current /= 32767.0;
+     current *= sqrt(terminal.iq.sen*terminal.iq.sen + terminal.id.sen*terminal.id.sen);
+     dc_current = current;
+     dc_current = moving_Batt_current_measured_fun(dc_current,VOLTAGE_AVG);
+     }
+ 
 
-    
+     //motor frequency 
+     freq_rpm = terminal.w.sen * (POLEPAIRS*RPM_TO_FREQ);
+     //throttle percentage
+     throttle_percent = (terminal.w.ref*RPM_TO_THROTTLE_PERCENT);
+   
 }
 
 void Encoder_Check(int test_case) {
@@ -219,17 +254,13 @@ void Encoder_Check(int test_case) {
    }
 
    //Disconnection during drive
-   if(test_case==2)
-   {
-      Encoder_Fault(encoder_a_state,encoder_b_state);
-   }
+   if(test_case==2){Encoder_Fault(encoder_a_state,encoder_b_state);}
 
    //Not connected during sanity itself.
    if(test_case==3)
    {
-      encoder_a_state = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_15);
-      encoder_b_state = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3);
-      if(encoder_a_state==1 && encoder_b_state==1 && Duty==0 )
+      
+      if(count_duty==0 )// to be edited, Duty maybe zero!!!
       {
              motorControl.drive.check      = DRIVE_DISABLE;
              fault.status                  = FAULT_ENCODER;
@@ -239,7 +270,6 @@ void Encoder_Check(int test_case) {
 
  
 }
-
 
 int Encoder_Fault(int a,int b) {
   int encoder_retValue;
@@ -278,8 +308,10 @@ void SAFETY_AND_ERRORS()
          static uint16_t time_count_iq;
          static uint8_t fault_iq_count;
 
+         //if drive command >1000 and motor doesn't move for 3 sec   
          Encoder_Check(1);
 
+         // if torque current sense is greater than 270A and speed less than 500 rpm 10 sec
         if(terminal.iq.sen >= 270.0 && terminal.w.sen < 500.0){
 
           time_count_iq++;
@@ -297,6 +329,7 @@ void SAFETY_AND_ERRORS()
           }
         }
 
+        //if peak current 410A measured by current sensor. 
         if(terminal.iq.sen >= 410.0){
           count_spike++;
 
@@ -307,6 +340,7 @@ void SAFETY_AND_ERRORS()
           }
         }
 
+        //if peak 200A computed. 
         if(dc_current >= 200.0){
           fault.fault_code |= FAULT_DC_OVER_CURR_HEX;
           motorControl.drive.check = DRIVE_DISABLE;

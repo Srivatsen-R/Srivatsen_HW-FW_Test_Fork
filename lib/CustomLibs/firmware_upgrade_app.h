@@ -120,6 +120,7 @@ typedef struct __attribute__((packed)){
 
 void handle_upgrade_init();
 void handle_rceive_data();
+void handle_upgrade_resume();
 void handle_upgrade_pause();
 void handle_upgrade_complete();
 

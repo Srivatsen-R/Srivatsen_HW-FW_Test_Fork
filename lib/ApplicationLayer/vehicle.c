@@ -20,10 +20,10 @@ This file contains functions associated with vehicle such as throttle, FNR , CAN
 
 vehicle_t vehicle = {
 
-           .odometer=0,
-           .speed=0,
-           .trip=0,
-           .odo_change_status=0,
+           .odometer=0.0,
+           .speed=0.0,
+           .trip=0.0,
+           .odo_change_status=0.0,
            .calculate_ots = Calculate_OTS
                     };
 
@@ -66,29 +66,30 @@ __IO int a_current                = 0,
 
 __IO float speed_filtered         = 0;         
 
-
+extern int count_duty;
 
 void  Calculate_OTS(uint32_t wheel_rpm)
 {
 
-uint32_t odo_prev;
+static int odo_prev;
 
-odo_prev = vehicle.odometer;
 vehicle.speed = wheel_rpm*RPM_TO_KMPH;
 vehicle.trip = vehicle.trip +(vehicle.speed*HOUR_TO_MS_100);
-vehicle.odometer = vehicle.odometer + vehicle.trip;
-
-if(vehicle.odometer>odo_prev)
+vehicle.odometer = vehicle.odometer + (vehicle.speed*HOUR_TO_MS_100);
+if((vehicle.odometer-odo_prev)>=1.0)
 {
-    vehicle.odo_change_status = ODO_UPDATE;
+  vehicle.odo_change_status = ODO_UPDATE;
+
+}
+odo_prev = vehicle.odometer;
 }
 
 
-}
-
-
-void CAN_Logging(void)
+void CAN_Logging()
 {
+
+    terminal.iq.sen = moving_Q_current_measured_fun(terminal.iq.sen,10);
+    terminal.id.sen = moving_D_current_measured_fun(terminal.id.sen,10);
   //Logging CAN data.
     can.dataLoggingForPythonScript(terminal, 
                                   dc_current, 
@@ -96,8 +97,14 @@ void CAN_Logging(void)
                                   motorT, 
                                   motorControl, 
                                   analog, 
-                                  Duty,
-                                  z_trig, (float)odo_can, (float)kmph_can, (float)trip_can, (float)fault.fault_code, avg_board_temp, v_rms);
+                                  count_duty,
+                                  z_trig, 
+                                  (float)odo_can, 
+                                  (float)kmph_can, 
+                                  (float)trip_can, 
+                                  (float)fault.fault_code, 
+                                  dc_current, 
+                                  v_rms);
                                   //angle, (float)odo_can, (float)kmph_can, (float)trip_can, (float)fault.fault_code, avg_board_temp, v_rms);
 }
 
@@ -185,7 +192,8 @@ void READ_FNR()
         forward_pin_state = HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_4);
 
         //if speed less than 100 rpm
-        if(abs((int)terminal.w.sen) <= 100){
+          if(abs((int)terminal.w.sen) <= 100){
+
 
           if(forward_pin_state==FW_DIRECTION)
           {
@@ -227,22 +235,42 @@ void READ_FNR()
 }
 void READ_THROTTLE()
 {
-        if(throttle_enable_flag)
+        //if(throttle_enable_flag){throttle_input    = moving_Throttle_measured_fun(Read_Throttle(analog.bufferData[THROTTLE]),1);}
+        if(reverse_pin_state == 1 && forward_pin_state == 1)
         {
-        throttle_input    = moving_Throttle_measured_fun(Read_Throttle(analog.bufferData[THROTTLE]),1);    // RAW ADC DATA. moving_Throttle_measured_fun   
+          target_speed_reference -= 5000;
+          if(target_speed_reference <= 0){target_speed_reference = 0;}
+
+        }
+        else if(forward_pin_state == 0 && motorControl.drive.fnr_status==1) 
+        {
+          throttle_input    = moving_Throttle_measured_fun(Read_Throttle(analog.bufferData[THROTTLE]),1);
+          target_speed_reference  = Rpm_Target_Function(throttle_input);    
+        }
+        else if(reverse_pin_state == 0 && motorControl.drive.fnr_status==2)
+        {
+          throttle_input    = moving_Throttle_measured_fun(Read_Throttle(analog.bufferData[THROTTLE]),1);
+          target_speed_reference  = Rpm_Target_Function(throttle_input); 
         }
 
-        if(reverse_pin_state == 1 && forward_pin_state == 1){
-          target_speed_reference -= 1200;
-          if(target_speed_reference <= 0){target_speed_reference = 0;}
-        }else{
-          target_speed_reference  = Rpm_Target_Function(throttle_input);
+
+        if(forward_pin_state == 0 && motorControl.drive.fnr_status==2)
+        {
+          target_speed_reference -= 5000;
+          if(target_speed_reference <= 0){target_speed_reference = 0;} 
         }
+        else if (reverse_pin_state == 0 && motorControl.drive.fnr_status==1)
+        {
+          target_speed_reference -= 5000;
+          if(target_speed_reference <= 0){target_speed_reference = 0;} 
+        }
+        
         
         speed_filtered = Throttle_Control(target_speed_reference,speed_filtered,forward_flag,reverse_flag);                  
         ref_output = speed_filtered;
 
 }
+
 void READ_MOTOR_PHASE_CURRENT()
 {
 

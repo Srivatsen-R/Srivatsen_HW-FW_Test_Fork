@@ -76,11 +76,17 @@ float Duty;
 float freq_rpm = 0.0;
 float throttle_percent = 0.0;
 volatile uint32_t ICValue;
+volatile uint32_t angle_curr = 0, angle_prev = 0;
+uint32_t z_count=50;
 volatile uint32_t z_trig = 0;
 uint8_t reset_flag = 0;
 uint8_t app_version = 0;
 uint8_t cantp_config_flag = 0;
 uint8_t interrupt_flag = 0;
+
+int count_duty=0;
+int counter_100ms=0;
+    
 
 char message[50] = {0};
 
@@ -145,26 +151,38 @@ int main(void) {
   //while loop running on CLK frequency.
   while (1) 
   {
+
+    
       //function to continously monitor mcu faults and errors.
       ANALOG_READING();
       FAULT_READING();
-      //function to log can data for data analysis and rca.
-      CAN_Logging();
-      //function to calculate odo,trip and speed.
-      Calculate_OTS(terminal.w.sen);
-      //function for can tx communication with stark , mark, marvel.
-      CAN_Communication(vehicle.odometer,vehicle.trip,vehicle.speed);
+      //read fnr ,throttle
+      READ_FNR();
+      READ_THROTTLE();
 
-      //function to write odo data in eeprom if km updated.
-      if(vehicle.odo_change_status == ODO_UPDATE){
-        EEPROM_Write_Data(vehicle.odometer);
-        vehicle.odo_change_status = NO_ODO_UPDATE;
+      if(counter_100ms>=2000)
+      {
+            counter_100ms=0;
+            //function to log can data for data analysis and rca.
+            CAN_Logging();
+            //function to calculate odo,trip and speed.
+            //terminal.w.sen=43200;
+            Calculate_OTS(terminal.w.sen);
+            //function for can tx communication with stark , mark, marvel.
+            CAN_Communication(vehicle.odometer,vehicle.trip,vehicle.speed);
+
+            //function to write odo data in eeprom if km updated.
+            if(vehicle.odo_change_status == ODO_UPDATE)
+            {
+            EEPROM_Write_Data(vehicle.odometer);
+            vehicle.odo_change_status = NO_ODO_UPDATE;
+            }
       }
 
       //delay to log can data each 100ms.
-      HAL_Delay(100);
+      HAL_Delay(1);
+      
   }
-
 }
 
 uint8_t get_conifg_flag(){
@@ -279,16 +297,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
 
           READ_MOTOR_POSITION();
           READ_MOTOR_PHASE_CURRENT();
-          READ_THROTTLE();
 
           //sanity checks to be perfomed at 20kHz
           SAFETY_AND_ERRORS();
 
           //main function for motor control operation.
-
-
           VECTOR_FOC_Control();
           motorControl.encoder.previous = motorControl.encoder.value;
+          angle_prev = angle_curr;
+
+
   }
 }
 

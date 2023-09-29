@@ -15,11 +15,14 @@ typedef struct foc_t {
              float speed_limit;
              float speed_ref_output;
              float torque_current_ref;
+             float torque_current_max;
              float flux_current_ref;
              float imr_ref;
              float imr_ref_min;
              float vd_ref;
              float vq_ref;
+             float vq_ref_max;
+             float vd_ref_max;
              float vq_ref_limit;
              float vd_ref_prev;
              float vq_ref_prev;
@@ -93,20 +96,35 @@ typedef struct foc_t {
 
 
 //Motor-Controller Specific Parameters
-#define PPR                     2048.0          // ACIM Pulses Per Revolution
-#define POLEPAIRS               3.0            // POLE PAIRS ACIM
+
+#define TIM1_PSCLR              3;
+#define TIM1_PERIOD             2500;// frequency = 200MHz/(2*(TIM1_PSCLR+1)*TIM1_PERIOD)
+#define TIM1_DEADTIME           185
+
+#define PPR                     4096.0//NIDEC        
+//#define PPR                     2048.0//ULTRON    
+//#define POLEPAIRS               4.0// Nidec 14kg
+#define POLEPAIRS               3.0// Nidec 22kg & ULTRON
 #define FW_RPM                  2000.0
 #define MAX_RPM                 5000.0
 #define FW_MIN_CURRENT_PU       312.5
-#define FW_MAX_CURRENT_PU       8212.0
-#define MTPA_MAX_CURRENT_PU     3500.0
+#define FW_MAX_CURRENT_PU       5500.0
+#define MTPA_MAX_CURRENT_PU     6500.0//3500.0
+#define D_CURRENT_DERATING_RPM_1  1000.0
+#define D_CURRENT_DERATING_RPM_2  2000.0
+#define FW_FLUX_CURRENT_SCALING_FACTOR  1.2
+
 #define POWER_MAPPING_LOWER_RPM     1100.0
 #define POWER_MAPPING_UPPER_RPM     2000.0    
 #define POWER_MAPPING_UPPER_IQ_LIMIT_PU 23051.0
 #define POWER_MAPPING_LOWER_IQ_LIMIT_PU 13031.0
 
-#define VD_LIMIT                            18000.0
-#define VQ_LIMIT                            29200.0
+
+#define VD_LIMIT                            25000.0
+#define VQ_LIMIT                            29000.0
+
+#define VQ_LIMIT_FACTOR                     0.724
+#define ANGLE_OFFSET                        0.523
 
 
 //General parameters
@@ -115,8 +133,8 @@ typedef struct foc_t {
 #define T_F_ROTOR_SPEED                     0.03           // Constant to filter rotor speed
 #define MAGNETISING_CURRENT_REF             0.0//6000.0//6750.0
 #define OUTPUT_LIMIT                        29200.0//17000.0       // OUTPUT LIMIT VD VQ
-#define KP_W                                4.5//2.5//1.2//GAIN CONSTANT
-#define KI_W                                10.0//50.0//0.48//INTG CONSTANT
+#define KP_W                                1.2//2.5//1.2//GAIN CONSTANT
+#define KI_W                                3.5//50.0//0.48//INTG CONSTANT
 #define KP_IQ                               1.2
 #define KI_IQ                               3.5
 #define KP_ID                               1.2
@@ -195,6 +213,7 @@ void   FOC_SPACE_VECTOR_MODULATION(void);
 void   FW_AND_MTPA_CONFIG(int);
 void   POWER_MAPPING(int);
 void   THROTTLE_PROFILE(int);
+void   FOC_SPEED_TORQUE_PI_CONTROL();
 
 
 #endif 

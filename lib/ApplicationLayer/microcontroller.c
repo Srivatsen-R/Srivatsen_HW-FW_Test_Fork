@@ -26,6 +26,7 @@ initializations.Functions specific to STM32 are mentioned in this file.
 #include "fdcan_AL.h"
 #include "temp_AL.h"
 
+#include "math.h"
 #include "v_f_control.h"
 #include "vector_control.h"
 

@@ -1,3 +1,13 @@
+/*
+Pegasus - Motor Controller Unit software for HL,HLP,Storm,Vortex and future projects.
+
+Contributors: Pujit Gandhi,Pratik Rout,Olay,Saksham
+
+This file contains functions associated with flash read/write.
+
+*/
+
+
 #include "stm32h7xx_hal.h"
 #include "flash.h"
 #include "string.h"

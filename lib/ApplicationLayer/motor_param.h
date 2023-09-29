@@ -4,16 +4,23 @@
 
 
 //Drive parameters
-#define RAMP_UP_CONST                   0.02
-#define RAMP_DOWN_CONST                 0.0001
-#define UNDER_VOLT_LIMIT                40
-#define OVER_VOLT_LIMIT                 90.0//72 corresponds to 80V
+#define NTC_PULL_UP_RESISTOR                10000//NIDEC NTC VALUE
+//#define NTC_PULL_UP_RESISTOR                52600//ULTRON
+
+#define TORQUE_MODE                     1.0
+#define SPEED_LIMIT                     5000.0
+#define SPORTS_MODE                     0.0
+#define ECO_MODE                        0.0
+
+#define THROTTLE_THRESHOLD_A            14000.0
+#define THROTTLE_THRESHOLD_B            14000.0    
+#define ACCELERATION_CONST              25.0//15.0
+#define DEACCELERATION_CONST            15.0//7.0
+#define UNDER_VOLT_LIMIT                0.0   
+#define OVER_VOLT_LIMIT                 75.0//72 corresponds to 80V
 #define HEAT_SINK_MAX_TEMP_LIMIT        75.0
 #define MOTOR_TEMP_LIMIT                130.0   
 
-
-
-#define SPEED_LIMIT                     5000.0
 #define MAX_SPEED                       30000    
 #define SPEED_MUL_FACTOR                ((SPEED_LIMIT*32767.0)/(6000.0*MAX_SPEED))//0.364//0.273
 #define HEAT_SINK_TEMP_HYS              10.0 
@@ -23,7 +30,7 @@
 #define KP_FOR_DC_CURR_UP               0.001
 #define KP_FOR_DC_CURR_DOWN             0.001
 
-
+#define VBUS_OFFSET                      0.0   
 #define OVER_VOLT_HYS                    0.5   
 #define UNDER_VOLT_HYS                   0.5   
 #define BATT_CURRENT_ADC_OFFSET          0.0
@@ -56,7 +63,6 @@
 #define RPM_TO_FREQ                         2.0/120.0
 #define RPM_TO_THROTTLE_PERCENT             100.0/5000.0   
 #define CURRENT_AVG_FACTOR                  20.0 
-#define NTC_PULL_UP_RESISTOR                52600
 #define BETA_VALUE                          4000.0   
 #define T_AMBIENT                           25.0
 #define KELVIN_TO_CELSIUS                   273.15 
@@ -73,10 +79,15 @@ unsigned int Get_Batt_Voltage_measured(unsigned int);  // 0.1 volt resolution
 unsigned char Get_temperature(unsigned int) ;
 float moving_Batt_current_measured_fun(float  , float ) ;  // 0.1 amp Batt_current_measured
 float moving_Batt_voltage_measured_fun(float  , float ) ;  // 0.1 amp Batt_current_measured
+float moving_AC_voltage_measured_fun(float  , float ) ;  // 0.1 amp Batt_current_measured
 float moving_Temperature_measured_fun_u(float ,float);
 float moving_Temperature_measured_fun_v(float ,float);
 float moving_Temperature_measured_fun_w(float ,float);
 float moving_Temperature_measured_fun_M(float ,float);
+float moving_Q_current_measured_fun(float  , float ) ;  // 0.1 amp Batt_current_measured
+float moving_D_current_measured_fun(float  , float ) ;  // 0.1 amp Batt_current_measured
+
+
 
 int moving_Throttle_measured_fun(int,int);
 int Temperature_Fault(int);
