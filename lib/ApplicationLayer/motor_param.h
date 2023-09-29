@@ -16,8 +16,8 @@
 #define THROTTLE_THRESHOLD_B            14000.0    
 #define ACCELERATION_CONST              25.0//15.0
 #define DEACCELERATION_CONST            15.0//7.0
-#define UNDER_VOLT_LIMIT                0.0   
-#define OVER_VOLT_LIMIT                 75.0//72 corresponds to 80V
+#define UNDER_VOLT_LIMIT                40.0   
+#define OVER_VOLT_LIMIT                 90.0//72 corresponds to 80V
 #define HEAT_SINK_MAX_TEMP_LIMIT        75.0
 #define MOTOR_TEMP_LIMIT                130.0   
 

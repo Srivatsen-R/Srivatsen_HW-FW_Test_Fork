@@ -104,7 +104,7 @@ typedef struct foc_t {
 #define PPR                     4096.0//NIDEC        
 //#define PPR                     2048.0//ULTRON    
 //#define POLEPAIRS               4.0// Nidec 14kg
-#define POLEPAIRS               3.0// Nidec 22kg & ULTRON
+#define POLEPAIRS               4.0// Nidec 22kg & ULTRON
 #define FW_RPM                  2000.0
 #define MAX_RPM                 5000.0
 #define FW_MIN_CURRENT_PU       312.5
