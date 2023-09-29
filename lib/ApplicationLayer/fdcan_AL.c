@@ -15,6 +15,7 @@ void FDCAN_dataLoggingForPythonScript(terminal_t, float, uint8_t, float, motorCo
 
 extern gpio_t  io;
 extern terminal_t terminal;
+extern motorControl_t motorControl;
 extern motor_t motor;
 float SOC_Data=0;
 extern float avg_board_temp;
@@ -163,6 +164,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 				{
 					uptype = COTA;
 					upgrade_state = UPGRADE_INIT;
+					motorControl.drive.check = DRIVE_DISABLE;
 					HAL_TIM_Base_Start_IT(&htim7);
 				}
 				else if ( (can.rxMsg[2] == FUPFG_REQUEST) && ( can.rxMsg[3] == PERFORM_UPGRADE) )
@@ -182,6 +184,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 				{
 					uptype = FOTA;
 					upgrade_state = UPGRADE_INIT;
+					motorControl.drive.check = DRIVE_DISABLE;
 					HAL_TIM_Base_Start_IT(&htim7);
 				}
 			}

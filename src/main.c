@@ -208,6 +208,11 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)  // If the interrupt is triggered by channel 1
 	{
+
+    count_duty++;
+
+    if(count_duty>=50){count_duty=1;}
+
 		// Read the IC value
 		ICValue = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
 
@@ -289,12 +294,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
           HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
         }
 
-          //read fnr,motor angle,current & throttle
-          READ_FNR();
-
-          freq_rpm = terminal.w.sen * (POLEPAIRS*RPM_TO_FREQ);
-          throttle_percent = (terminal.w.ref*RPM_TO_THROTTLE_PERCENT);
-
+          //motor angle,current
           READ_MOTOR_POSITION();
           READ_MOTOR_PHASE_CURRENT();
 
@@ -305,6 +305,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
           VECTOR_FOC_Control();
           motorControl.encoder.previous = motorControl.encoder.value;
           angle_prev = angle_curr;
+
+          counter_100ms++;
 
 
   }
