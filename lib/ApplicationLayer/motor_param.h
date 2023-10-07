@@ -7,6 +7,10 @@
 #define NTC_PULL_UP_RESISTOR                10000//NIDEC NTC VALUE
 //#define NTC_PULL_UP_RESISTOR                52600//ULTRON
 
+#define UNDER_VOLT_LIMIT                0.0   
+#define OVER_VOLT_LIMIT                 75.0//72 corresponds to 80V
+
+
 #define TORQUE_MODE                     1.0
 #define SPEED_LIMIT                     5000.0
 #define SPORTS_MODE                     0.0
@@ -14,10 +18,8 @@
 
 #define THROTTLE_THRESHOLD_A            14000.0
 #define THROTTLE_THRESHOLD_B            14000.0    
-#define ACCELERATION_CONST              25.0//15.0
-#define DEACCELERATION_CONST            15.0//7.0
-#define UNDER_VOLT_LIMIT                40.0   
-#define OVER_VOLT_LIMIT                 90.0//72 corresponds to 80V
+#define ACCELERATION_CONST              42.0//15.0
+#define DEACCELERATION_CONST            47.0//7.0
 #define HEAT_SINK_MAX_TEMP_LIMIT        75.0
 #define MOTOR_TEMP_LIMIT                130.0   
 
@@ -68,7 +70,7 @@
 #define KELVIN_TO_CELSIUS                   273.15 
 #define THROTTLE_AVG                        5.0
 #define TEMP_AVG                            15.0
-#define VOLTAGE_AVG                         5.0
+#define VOLTAGE_AVG                         9.0
 #define ROOT2                               1.414
 
 

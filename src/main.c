@@ -86,7 +86,11 @@ uint8_t interrupt_flag = 0;
 
 int count_duty=0;
 int counter_100ms=0;
-    
+int counter_current_ms = 0;
+int counter_encoder_ms = 0;
+ 
+int pwm_pulse=0;
+int z_pulse=0;    
 
 char message[50] = {0};
 
@@ -307,7 +311,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
           angle_prev = angle_curr;
 
           counter_100ms++;
-
+          counter_current_ms++;
+          counter_encoder_ms++;
 
   }
 }

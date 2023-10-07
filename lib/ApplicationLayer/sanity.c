@@ -65,6 +65,8 @@ float v_rms=0;
 extern float encoder_a_state;
 extern float encoder_b_state;
 extern float Duty;
+extern int counter_current_ms;
+extern int counter_encoder_ms;
 
 extern int reverse_pin_state;
 extern int forward_pin_state;
@@ -309,7 +311,7 @@ void SAFETY_AND_ERRORS()
          static uint8_t fault_iq_count;
 
          //if drive command >1000 and motor doesn't move for 3 sec   
-         Encoder_Check(1);
+         //Encoder_Check(1);
 
          // if torque current sense is greater than 270A and speed less than 500 rpm 10 sec
         if(terminal.iq.sen >= 270.0 && terminal.w.sen < 500.0){
@@ -341,10 +343,32 @@ void SAFETY_AND_ERRORS()
         }
 
         //if peak 200A computed. 
-        if(dc_current >= 200.0){
+        if(dc_current >= 225.0){
           fault.fault_code |= FAULT_DC_OVER_CURR_HEX;
           motorControl.drive.check = DRIVE_DISABLE;
           fault.status = FAULT_DC_OVER_CURR;
+        }
+
+        if(terminal.iq.sen >= 120.0 && terminal.iq.ref >=100.0 && abs(terminal.iq.ref - terminal.iq.sen) >= 2.0 && terminal.w.sen <= 100){
+         if(counter_current_ms >= 40000){
+            fault.fault_code |= FAULT_OVER_CURRENT_HEX;
+            motorControl.drive.check = DRIVE_DISABLE;
+            fault.status = FAULT_OVER_CURRENT;
+            counter_current_ms = 0;
+         }else{
+            counter_current_ms = 0;
+         }
+        }
+
+        if(abs(motorControl.encoder.value - motorControl.encoder.previous) <= 2 && terminal.w.sen <= 100.0 && terminal.iq.sen >= 120.0){
+         if(counter_encoder_ms >= 60000){
+            fault.fault_code |= FAULT_ENCODER_DICNT_HEX;
+            motorControl.drive.check = DRIVE_DISABLE;
+            fault.status = FAULT_ENCODER;
+            counter_encoder_ms = 0;
+         }else{
+            counter_encoder_ms = 0;
+         }
         }
 
                 // if(terminal.w.ref >= 100.0){

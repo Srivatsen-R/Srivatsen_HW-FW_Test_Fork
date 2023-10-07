@@ -17,7 +17,7 @@ extern gpio_t  io;
 extern terminal_t terminal;
 extern motorControl_t motorControl;
 extern motor_t motor;
-float SOC_Data=0;
+float SOC_Data = 0.0, DCLI = 0.0, DCLO = 0.0;
 extern float avg_board_temp;
 extern float v_rms;
 
@@ -381,10 +381,12 @@ static void __fdcan_transferMessagesOnID307(float avg_board_temp, float v_rms, f
 	   __fdcan->transmit = can.transmit;
 	   __fdcan->BufferForMessageToTransmit[0] = __fdcan_addScalingFactorToMessage(avg_board_temp)  & 0x00FF; 
 	   __fdcan->BufferForMessageToTransmit[1] = (__fdcan_addScalingFactorToMessage(avg_board_temp) & 0xFF00) >> 8;
-	   __fdcan->BufferForMessageToTransmit[2] = __fdcan_addScalingFactorToMessage(v_rms)  & 0x00FF; 
-	   __fdcan->BufferForMessageToTransmit[3] = (__fdcan_addScalingFactorToMessage(v_rms) & 0xFF00) >> 8;
+	   __fdcan->BufferForMessageToTransmit[2] = __fdcan_addScalingFactorToMessage(DCLO)  & 0x00FF; 
+	   __fdcan->BufferForMessageToTransmit[3] = (__fdcan_addScalingFactorToMessage(DCLO) & 0xFF00) >> 8;
 	   __fdcan->BufferForMessageToTransmit[4] = __fdcan_addScalingFactorToMessage(SOC)  & 0x00FF; 
 	   __fdcan->BufferForMessageToTransmit[5] = (__fdcan_addScalingFactorToMessage(SOC) & 0xFF00) >> 8;
+	   __fdcan->BufferForMessageToTransmit[6] = __fdcan_addScalingFactorToMessage(DCLI) & 0x00FF;
+	   __fdcan->BufferForMessageToTransmit[7] = (__fdcan_addScalingFactorToMessage(DCLI) & 0xFF00) >> 8;
 	   __fdcan->transmit(FDCAN_DEBUG_ID_307, S, __fdcan->BufferForMessageToTransmit, 8);
 
 	   free(__fdcan);

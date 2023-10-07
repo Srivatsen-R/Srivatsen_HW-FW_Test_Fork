@@ -97,35 +97,58 @@ typedef struct foc_t {
 
 //Motor-Controller Specific Parameters
 
-#define TIM1_PSCLR              3;
-#define TIM1_PERIOD             2500;// frequency = 200MHz/(2*(TIM1_PSCLR+1)*TIM1_PERIOD)
-#define TIM1_DEADTIME           185
 
 #define PPR                     4096.0//NIDEC        
 //#define PPR                     2048.0//ULTRON    
+
 //#define POLEPAIRS               4.0// Nidec 14kg
-#define POLEPAIRS               4.0// Nidec 22kg & ULTRON
-#define FW_RPM                  2000.0
+#define POLEPAIRS               3.0// Nidec 22kg & ULTRON
+
+#define FW_RPM                  2000.0 //FW 58V system.
+//#define FW_RPM                  2650.0 //FW 72V system.
+
+#define FW_MAX_CURRENT_PU       5500.0 //58V system
+//#define FW_MAX_CURRENT_PU       1800.0 //72V system
+
+#define TIM1_PSCLR              3
+#define TIM1_PERIOD             2500// frequency = 200MHz/(2*(TIM1_PSCLR+1)*TIM1_PERIOD)
+#define TIM1_DEADTIME           185
 #define MAX_RPM                 5000.0
 #define FW_MIN_CURRENT_PU       312.5
-#define FW_MAX_CURRENT_PU       5500.0
-#define MTPA_MAX_CURRENT_PU     6500.0//3500.0
+#define MTPA_MAX_CURRENT_PU     4500.0
 #define D_CURRENT_DERATING_RPM_1  1000.0
 #define D_CURRENT_DERATING_RPM_2  2000.0
 #define FW_FLUX_CURRENT_SCALING_FACTOR  1.2
-
 #define POWER_MAPPING_LOWER_RPM     1100.0
 #define POWER_MAPPING_UPPER_RPM     2000.0    
 #define POWER_MAPPING_UPPER_IQ_LIMIT_PU 23051.0
 #define POWER_MAPPING_LOWER_IQ_LIMIT_PU 13031.0
-
-
 #define VD_LIMIT                            25000.0
 #define VQ_LIMIT                            29000.0
-
 #define VQ_LIMIT_FACTOR                     0.724
-#define ANGLE_OFFSET                        0.523
 
+//#define ANGLE_OFFSET                        4.188//Proto -3 Ultron
+//#define ANGLE_OFFSET                        0.0//Proto -12 Ultron
+//#define ANGLE_OFFSET                        0.523//Nidec 6 pole.
+
+#define ANGLE_OFFSET_FW                           0.523//Nidec 8 pole
+#define ANGLE_OFFSET_RW                          -0.523//Nidec 8 pole
+
+
+/*
+30->0.523 
+60->1.047 
+90->1.570 
+120->2.094 
+150->2.617 
+180->3.141
+210->3.665
+240->4.1887
+270->4.7123
+300->5.235
+330->5.759
+360->6.283
+*/
 
 //General parameters
 

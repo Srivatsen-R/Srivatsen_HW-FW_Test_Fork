@@ -260,7 +260,7 @@ if(config==1)
                         }
                         else if(((foc.speed_sense*SPEED_PU_TO_RPM) <D_CURRENT_DERATING_RPM_1))
                         {
-                            foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200.0, 0.0, MTPA_MAX_CURRENT_PU);//not correct   
+                            foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200.0, 312.5, MTPA_MAX_CURRENT_PU);//not correct   
                         }
 
                         if(foc.flux_current_ref >= MTPA_MAX_CURRENT_PU){foc.flux_current_ref = MTPA_MAX_CURRENT_PU;}
@@ -589,7 +589,8 @@ void FOC_ELECTRICAL_ANGLE_CALCULATION()
             //reset angle to 0
             if(reset_flag == 1)
             {
-                foc.rho = 0.0;
+
+                //foc.rho_prev = PPR_TO_RAD_CONSTANT*motorControl.encoder.value;
                 foc.rho_prev = 0.0;
                 reset_flag=0;
             }
@@ -599,16 +600,52 @@ void FOC_ELECTRICAL_ANGLE_CALCULATION()
                 if(forward_flag){foc.rho_prev = (Duty)*DUTY_TO_RADIAN;}
                 if(reverse_flag){foc.rho_prev = -(Duty)*DUTY_TO_RADIAN;}
                 duty_state = 0;
-            }
 
             //Angle Calculation
             foc.rho = READ_ROTOR_ANGLE(foc.rho_prev,foc.sync_speed,foc.sync_speed_prev);//electrical angle
+            }
+            else
+            {
+            //Angle Calculation
+            foc.rho = READ_ROTOR_ANGLE(foc.rho_prev,foc.sync_speed,foc.sync_speed_prev);//electrical angle
+
+            }
+
              if (foc.rho>=6.28){foc.rho=0.0;} 
              else if (foc.rho<=-6.28){foc.rho=0.0;}
 
             //Sin and Cos
-            foc.cos_rho = cos(foc.rho+ANGLE_OFFSET);
-            foc.sin_rho = sin(foc.rho+ANGLE_OFFSET);
+
+            if(forward_flag)
+            {
+            foc.cos_rho = cos(foc.rho+ANGLE_OFFSET_FW);
+            foc.sin_rho = sin(foc.rho+ANGLE_OFFSET_FW);            
+            }
+
+            if(reverse_flag)
+            {
+            foc.cos_rho = cos(foc.rho+ANGLE_OFFSET_RW);
+            foc.sin_rho = sin(foc.rho+ANGLE_OFFSET_RW);
+            }
+
+            if(neutral_flag)
+            {
+                if(motorControl.drive.fnr_status == 1)
+                {  
+                    foc.cos_rho = cos(foc.rho+ANGLE_OFFSET_FW);
+                    foc.sin_rho = sin(foc.rho+ANGLE_OFFSET_FW);            
+                }
+
+                if(motorControl.drive.fnr_status == 2)
+                {
+                    foc.cos_rho = cos(foc.rho+ANGLE_OFFSET_RW);
+                    foc.sin_rho = sin(foc.rho+ANGLE_OFFSET_RW);
+                }
+            }
+     
+
+
+
 
 }
 /*
@@ -644,7 +681,7 @@ void FOC_FIELD_WEAKENING_AND_MTPA()
                     if(((foc.speed_sense*SPEED_PU_TO_RPM) >= D_CURRENT_DERATING_RPM_1) && ((foc.speed_sense*SPEED_PU_TO_RPM) <= D_CURRENT_DERATING_RPM_2))
                      {foc.flux_current_ref = map(foc.speed_sense*SPEED_PU_TO_RPM, D_CURRENT_DERATING_RPM_1, D_CURRENT_DERATING_RPM_2, MTPA_MAX_CURRENT_PU, 0);}
                     else if(((foc.speed_sense*SPEED_PU_TO_RPM) <D_CURRENT_DERATING_RPM_1))
-                     {foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200.0, 0.0, MTPA_MAX_CURRENT_PU);}
+                     {foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200.0, 312.5, MTPA_MAX_CURRENT_PU);}
 
                     if(foc.flux_current_ref >= MTPA_MAX_CURRENT_PU){foc.flux_current_ref = MTPA_MAX_CURRENT_PU;}
                 }
@@ -665,7 +702,7 @@ void FOC_FIELD_WEAKENING_AND_MTPA()
                         if(((foc.speed_sense*SPEED_PU_TO_RPM) >= D_CURRENT_DERATING_RPM_1) && ((foc.speed_sense*SPEED_PU_TO_RPM) <= D_CURRENT_DERATING_RPM_2))
                         {foc.flux_current_ref = map(foc.speed_sense*SPEED_PU_TO_RPM, D_CURRENT_DERATING_RPM_1, D_CURRENT_DERATING_RPM_2, MTPA_MAX_CURRENT_PU, 0);}
                         else if(((foc.speed_sense*SPEED_PU_TO_RPM) <D_CURRENT_DERATING_RPM_1))
-                        {foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200.0, 0.0, MTPA_MAX_CURRENT_PU);}
+                        {foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200.0, 312.5, MTPA_MAX_CURRENT_PU);}
 
                         if(foc.flux_current_ref >= MTPA_MAX_CURRENT_PU){foc.flux_current_ref = MTPA_MAX_CURRENT_PU;}
                     }
