@@ -18,8 +18,8 @@
 
 #define THROTTLE_THRESHOLD_A            14000.0
 #define THROTTLE_THRESHOLD_B            14000.0    
-#define ACCELERATION_CONST              65.0//15.0
-#define DEACCELERATION_CONST            45.0//7.0
+#define ACCELERATION_CONST              100.0//15.0
+#define DEACCELERATION_CONST            17.0//7.0
 #define HEAT_SINK_MAX_TEMP_LIMIT        75.0
 #define MOTOR_TEMP_LIMIT                130.0   
 

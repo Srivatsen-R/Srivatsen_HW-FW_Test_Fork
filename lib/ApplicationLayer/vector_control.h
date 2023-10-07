@@ -107,7 +107,7 @@ typedef struct foc_t {
 #define FW_RPM                  2000.0 //FW 58V system.
 //#define FW_RPM                  2650.0 //FW 72V system.
 
-#define FW_MAX_CURRENT_PU       6500.0 //58V system
+#define FW_MAX_CURRENT_PU       6150.0 //58V system
 //#define FW_MAX_CURRENT_PU       1800.0 //72V system
 
 #define TIM1_PSCLR              3
@@ -121,7 +121,7 @@ typedef struct foc_t {
 #define FW_FLUX_CURRENT_SCALING_FACTOR  1.2
 #define POWER_MAPPING_LOWER_RPM     1100.0
 #define POWER_MAPPING_UPPER_RPM     2000.0    
-#define POWER_MAPPING_UPPER_IQ_LIMIT_PU 23051.0
+#define POWER_MAPPING_UPPER_IQ_LIMIT_PU 26054.75
 #define POWER_MAPPING_LOWER_IQ_LIMIT_PU 13031.0
 #define VD_LIMIT                            25000.0
 #define VQ_LIMIT                            29000.0
@@ -157,11 +157,11 @@ typedef struct foc_t {
 #define MAGNETISING_CURRENT_REF             0.0//6000.0//6750.0
 #define OUTPUT_LIMIT                        29200.0//17000.0       // OUTPUT LIMIT VD VQ
 #define KP_W                                1.2//2.5//1.2//GAIN CONSTANT
-#define KI_W                                3.5//50.0//0.48//INTG CONSTANT
+#define KI_W                                0.8//50.0//0.48//INTG CONSTANT
 #define KP_IQ                               1.2
-#define KI_IQ                               3.5
+#define KI_IQ                               0.8
 #define KP_ID                               1.2
-#define KI_ID                               3.5
+#define KI_ID                               0.8
 #define SLIP_LIMIT                          20.0
 #define FW_DIRECTION                        0
 #define RW_DIRECTION                        0

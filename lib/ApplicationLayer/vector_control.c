@@ -121,7 +121,7 @@ terminal_t terminal = {
 
 void THROTTLE_PROFILE(int config)
 {
-    if(config==1){foc.torque_current_ref = (0.84*foc.speed_ref)  + 115;}
+    if(config==1){foc.torque_current_ref = (0.95*foc.speed_ref)  + 115;}
 }
 
 void POWER_MAPPING(int config)

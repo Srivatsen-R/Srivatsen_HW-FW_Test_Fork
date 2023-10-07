@@ -349,27 +349,27 @@ void SAFETY_AND_ERRORS()
           fault.status = FAULT_DC_OVER_CURR;
         }
 
-        if(terminal.iq.sen >= 160.0 && abs(terminal.iq.ref - terminal.iq.sen) >= 5.0 && terminal.w.sen <= 100){
-         if(counter_current_ms >= 120000){
-            fault.fault_code |= FAULT_OVER_CURRENT_HEX;
-            motorControl.drive.check = DRIVE_DISABLE;
-            fault.status = FAULT_OVER_CURRENT;
-            counter_current_ms = 0;
-         }else{
-            counter_current_ms = 0;
-         }
-        }
+      //   if(terminal.iq.sen >= 240.0 && abs(terminal.iq.ref - terminal.iq.sen) >= 5.0 && terminal.w.sen <= 100){
+      //    if(counter_current_ms >= 120000){
+      //       fault.fault_code |= FAULT_OVER_CURRENT_HEX;
+      //       motorControl.drive.check = DRIVE_DISABLE;
+      //       fault.status = FAULT_OVER_CURRENT;
+      //       counter_current_ms = 0;
+      //    }else{
+      //       counter_current_ms = 0;
+      //    }
+      //   }
 
-        if(abs(motorControl.encoder.value - motorControl.encoder.previous) <= 5 && terminal.w.sen <= 100.0 && terminal.iq.sen >= 160.0){
-         if(counter_encoder_ms >= 80000){
-            fault.fault_code |= FAULT_ENCODER_DICNT_HEX;
-            motorControl.drive.check = DRIVE_DISABLE;
-            fault.status = FAULT_ENCODER;
-            counter_encoder_ms = 0;
-         }else{
-            counter_encoder_ms = 0;
-         }
-        }
+      //   if(abs(motorControl.encoder.value - motorControl.encoder.previous) <= 5 && terminal.w.sen <= 100.0 && terminal.iq.sen >= 160.0){
+      //    if(counter_encoder_ms >= 80000){
+      //       fault.fault_code |= FAULT_ENCODER_DICNT_HEX;
+      //       motorControl.drive.check = DRIVE_DISABLE;
+      //       fault.status = FAULT_ENCODER;
+      //       counter_encoder_ms = 0;
+      //    }else{
+      //       counter_encoder_ms = 0;
+      //    }
+      //   }
 
                 // if(terminal.w.ref >= 100.0){
 
