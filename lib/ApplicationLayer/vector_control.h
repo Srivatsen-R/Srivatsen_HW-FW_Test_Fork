@@ -107,7 +107,7 @@ typedef struct foc_t {
 #define FW_RPM                  2000.0 //FW 58V system.
 //#define FW_RPM                  2650.0 //FW 72V system.
 
-#define FW_MAX_CURRENT_PU       5500.0 //58V system
+#define FW_MAX_CURRENT_PU       6500.0 //58V system
 //#define FW_MAX_CURRENT_PU       1800.0 //72V system
 
 #define TIM1_PSCLR              3
@@ -115,7 +115,7 @@ typedef struct foc_t {
 #define TIM1_DEADTIME           185
 #define MAX_RPM                 5000.0
 #define FW_MIN_CURRENT_PU       312.5
-#define MTPA_MAX_CURRENT_PU     4500.0
+#define MTPA_MAX_CURRENT_PU     3500.0
 #define D_CURRENT_DERATING_RPM_1  1000.0
 #define D_CURRENT_DERATING_RPM_2  2000.0
 #define FW_FLUX_CURRENT_SCALING_FACTOR  1.2

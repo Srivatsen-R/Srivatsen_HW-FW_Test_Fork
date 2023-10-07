@@ -343,14 +343,14 @@ void SAFETY_AND_ERRORS()
         }
 
         //if peak 200A computed. 
-        if(dc_current >= 225.0){
+        if(dc_current >= 250.0){
           fault.fault_code |= FAULT_DC_OVER_CURR_HEX;
           motorControl.drive.check = DRIVE_DISABLE;
           fault.status = FAULT_DC_OVER_CURR;
         }
 
-        if(terminal.iq.sen >= 120.0 && terminal.iq.ref >=100.0 && abs(terminal.iq.ref - terminal.iq.sen) >= 2.0 && terminal.w.sen <= 100){
-         if(counter_current_ms >= 40000){
+        if(terminal.iq.sen >= 160.0 && abs(terminal.iq.ref - terminal.iq.sen) >= 5.0 && terminal.w.sen <= 100){
+         if(counter_current_ms >= 120000){
             fault.fault_code |= FAULT_OVER_CURRENT_HEX;
             motorControl.drive.check = DRIVE_DISABLE;
             fault.status = FAULT_OVER_CURRENT;
@@ -360,8 +360,8 @@ void SAFETY_AND_ERRORS()
          }
         }
 
-        if(abs(motorControl.encoder.value - motorControl.encoder.previous) <= 2 && terminal.w.sen <= 100.0 && terminal.iq.sen >= 120.0){
-         if(counter_encoder_ms >= 60000){
+        if(abs(motorControl.encoder.value - motorControl.encoder.previous) <= 5 && terminal.w.sen <= 100.0 && terminal.iq.sen >= 160.0){
+         if(counter_encoder_ms >= 80000){
             fault.fault_code |= FAULT_ENCODER_DICNT_HEX;
             motorControl.drive.check = DRIVE_DISABLE;
             fault.status = FAULT_ENCODER;
