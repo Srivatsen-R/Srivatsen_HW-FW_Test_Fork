@@ -105,18 +105,18 @@ if(TORQUE_MODE)
 
         if(forward_flag)
         {
-            if((error<1000 && error>-1000 && terminal.iq.ref<=10)) 
+            if((error<3200.0 && error>-3200.0 && terminal.iq.ref<=10)) 
             {
-                intg_prev=intg_prev-0.5;
+                intg_prev=intg_prev-4.5;
                 if(intg_prev<0){intg_prev=0;}
             }
         }
 
         if(reverse_flag )
         {
-            if((error<1000 && error>-1000 && terminal.iq.ref>=-10))
+            if((error<3200.0 && error>-3200.0 && terminal.iq.ref>=-10))
             {
-                intg_prev=intg_prev+0.5;
+                intg_prev=intg_prev+4.5;
                 if(intg_prev>0){intg_prev=0;}
             }
         }
@@ -125,18 +125,18 @@ if(TORQUE_MODE)
         {
             if(motorControl.drive.fnr_status==1)
             {
-                if((error<1000 && error>-1000 && terminal.iq.ref<=10) ) 
+                if((error<3200.0 && error>-3200.0 && terminal.iq.ref<=10) ) 
                 {
-                    intg_prev=intg_prev-0.5;
+                    intg_prev=intg_prev-4.5;
                     if(intg_prev<0){intg_prev=0;}
                 }
             }
 
             if(motorControl.drive.fnr_status==2)
             {
-                if((error<1000 && error>-1000 && terminal.iq.ref>=-10))
+                if((error<3200.0 && error>-3200.0 && terminal.iq.ref>=-10))
                 {
-                    intg_prev=intg_prev+0.5;
+                    intg_prev=intg_prev+4.5;
                     if(intg_prev>0){intg_prev=0;}
                 }
             }

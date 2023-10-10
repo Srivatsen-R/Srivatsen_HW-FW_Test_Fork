@@ -198,6 +198,11 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 		if(can.RxMessageBuf.Identifier == rx_Controller_109){
 			SOC_Data = (float)(((can.rxMsg[1]<<8) | can.rxMsg[0]) * 0.01);
 		}
+
+		if(can.RxMessageBuf.Identifier == rx_controller_12A){
+			DCLI = (float)(((can.rxMsg[1]<<8 | can.rxMsg[0])) * 0.1);
+			DCLO = (float)(((can.rxMsg[3]<<8 | can.rxMsg[2])) * 0.1);
+		}
 }
 
 void CAN_Write(void) {
@@ -228,6 +233,7 @@ void FDCAN_ApplicationSetup (void) {
   CAN_Filter_IDList(rx_Controller_6FA, S, FBANK0, FIFO0_CAN2);
   CAN_Filter_IDList(rx_Controller_7FE, S, FBANK1, FIFO0_CAN2);
   CAN_Filter_IDList(rx_Controller_109, S, FBANK2, FIFO0_CAN2);
+  CAN_Filter_IDList(rx_controller_12A, S, FBANK3, FIFO0_CAN2);
 
   /* Start the FDCAN module */
   if(HAL_FDCAN_Start(&hfdcan2) != HAL_OK) {

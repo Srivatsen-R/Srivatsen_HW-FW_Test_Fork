@@ -343,7 +343,7 @@ void SAFETY_AND_ERRORS()
         }
 
         //if peak 200A computed. 
-        if(dc_current >= 250.0){
+        if(dc_current >= 280.0){
           fault.fault_code |= FAULT_DC_OVER_CURR_HEX;
           motorControl.drive.check = DRIVE_DISABLE;
           fault.status = FAULT_DC_OVER_CURR;

@@ -17,7 +17,8 @@
 
 
 
-/* Parameters for CAN */ 
+/* Parameters for CAN */
+#define rx_controller_12A       0x12A 
 #define rx_Controller_6FA       0x6FA
 #define rx_Controller_704       0x704
 #define tx_Controller_705       0x705
@@ -33,7 +34,7 @@
 #define tx_Controller_727       0x727
 #define rx_BMS_109              0x109 
 #define FDCAN_DLC_BYTES         0x008  
-#define FDCAN_TX_BUFFER_NUMBER  0x018 
+#define FDCAN_TX_BUFFER_NUMBER  22 
 #define rx_Controller_7FE       0x7FE
 #define rx_Controller_109       0x109
 #define tx_controller_6FA       0x6FA

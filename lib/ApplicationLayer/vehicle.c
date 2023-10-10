@@ -103,7 +103,7 @@ void CAN_Logging()
                                   (float)kmph_can, 
                                   (float)trip_can, 
                                   (float)fault.fault_code, 
-                                  dc_current, 
+                                  avg_board_temp, 
                                   v_rms);
                                   //angle, (float)odo_can, (float)kmph_can, (float)trip_can, (float)fault.fault_code, avg_board_temp, v_rms);
 }
