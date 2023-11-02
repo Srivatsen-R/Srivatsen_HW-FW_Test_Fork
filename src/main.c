@@ -168,7 +168,7 @@ int main(void) {
       {
             counter_100ms=0;
             //function to log can data for data analysis and rca.
-            // CAN_Logging();
+            CAN_Logging();
             //function to calculate odo,trip and speed.
             //terminal.w.sen=43200;
             Calculate_OTS(terminal.w.sen);
@@ -223,7 +223,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 		if (ICValue != 0)
 		{
 			// calculate the Duty Cycle
-			Duty = (HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_2) *100)/ICValue;
+			Duty = (HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_2) * 100.0)/(float)ICValue;
 		}
 	}
 }

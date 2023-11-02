@@ -583,10 +583,172 @@ PWM pulse = To calculate initial rotor mechanical angle.
 
 void FOC_ELECTRICAL_ANGLE_CALCULATION()
 {
+
+    static float angle_mech;
+
             foc.slip_speed = 0.0;
             //Synchronous Speed Calculation
             foc.sync_speed = CALCULATE_SYNC_SPEED(foc.slip_speed,foc.rotor_speed_filtered);//sync speed
-            //reset angle to 0
+
+
+            #if ULTRON_MOTOR_PWM
+
+            if(forward_flag)
+            {
+                if(foc.speed_sense*SPEED_PU_TO_RPM<100)
+                {
+                    //pwm signal        
+                    if(angle_mech<0){angle_mech = angle_mech+6.28;}
+                    else if(angle_mech>=0){angle_mech = (Duty)*DUTY_TO_RADIAN;}   
+
+                    // angle_mech = (Duty)*DUTY_TO_RADIAN; //mech angle
+                    foc.rho_prev = 3.0*angle_mech; // elec angle
+                    if (angle_mech>2.095 && angle_mech<4.1866){foc.rho_prev = foc.rho_prev - 6.28;}
+                    else  if(angle_mech>=4.1886){foc.rho_prev = foc.rho_prev - 12.56;}
+                }
+            }
+
+            if(reverse_flag)
+            {
+                if(foc.speed_sense*SPEED_PU_TO_RPM<100)
+                {
+                    //pwm signal        
+                    angle_mech = -(6.28-(Duty)*DUTY_TO_RADIAN); //mech angle
+                    foc.rho_prev = 3.0*angle_mech; // elec angle
+                    if (angle_mech<-2.095 && angle_mech>-4.1866){foc.rho_prev = foc.rho_prev + 6.28;}
+                    else  if(angle_mech<=-4.1886){foc.rho_prev = foc.rho_prev + 12.56;}
+                }
+
+            }
+
+            if(neutral_flag)
+            {
+                if(motorControl.drive.fnr_status == 1)
+                {  
+                        if(foc.speed_sense*SPEED_PU_TO_RPM<100)
+                        {
+                         
+                         //pwm signal        
+                         if(angle_mech<0){angle_mech = angle_mech+6.28;}
+                         else if(angle_mech>=0){angle_mech = (Duty)*DUTY_TO_RADIAN;}   
+
+                         // angle_mech = (Duty)*DUTY_TO_RADIAN; //mech angle
+
+                            foc.rho_prev = 3.0*angle_mech; // elec angle
+                            if (angle_mech>2.095 && angle_mech<4.1866){foc.rho_prev = foc.rho_prev - 6.28;}
+                            else  if(angle_mech>=4.1886){foc.rho_prev = foc.rho_prev - 12.56;}
+                        }
+
+                }
+
+                if(motorControl.drive.fnr_status == 2)
+                {
+                        if(foc.speed_sense*SPEED_PU_TO_RPM<100)
+                        {
+                            //pwm signal        
+                            angle_mech = -(6.28-(Duty)*DUTY_TO_RADIAN); //mech angle
+                            foc.rho_prev = 3.0*angle_mech; // elec angle
+                            if (angle_mech<-2.095 && angle_mech>-4.1866){foc.rho_prev = foc.rho_prev + 6.28;}
+                            else  if(angle_mech<=-4.1886){foc.rho_prev = foc.rho_prev + 12.56;}
+                        }
+                }
+            }
+
+             if(reset_flag == 1)
+            {
+
+                //foc.rho_prev = PPR_TO_RAD_CONSTANT*motorControl.encoder.value;
+                foc.rho_prev = 0.0;
+                reset_flag=0;
+            }
+     
+            foc.rho = READ_ROTOR_ANGLE(foc.rho_prev,foc.sync_speed,foc.sync_speed_prev);//electrical angle
+            #endif
+
+            #if NIDEC_MOTOR_PWM
+
+            if(forward_flag)
+            {
+                if(foc.speed_sense*SPEED_PU_TO_RPM<100)
+                {
+                    //pwm signal        
+                    // if(angle_mech<0){angle_mech = angle_mech+6.28;}
+                    // else if(angle_mech>=0){angle_mech = (100-Duty)*DUTY_TO_RADIAN;}   
+
+                    angle_mech = (100-Duty)*DUTY_TO_RADIAN;
+
+                    // angle_mech = (Duty)*DUTY_TO_RADIAN; //mech angle
+                    foc.rho_prev = 3.0*angle_mech; // elec angle
+                    if (angle_mech>2.095 && angle_mech<4.1866){foc.rho_prev = foc.rho_prev - 6.28;}
+                    else  if(angle_mech>=4.1886){foc.rho_prev = foc.rho_prev - 12.56;}
+                }
+            }
+
+            if(reverse_flag)
+            {
+                if(foc.speed_sense*SPEED_PU_TO_RPM<100)
+                {
+                    //pwm signal        
+                    angle_mech = -(6.28-(100-Duty)*DUTY_TO_RADIAN); //mech angle
+                    foc.rho_prev = 3.0*angle_mech; // elec angle
+                    if (angle_mech<-2.095 && angle_mech>-4.1866){foc.rho_prev = foc.rho_prev + 6.28;}
+                    else  if(angle_mech<=-4.1886){foc.rho_prev = foc.rho_prev + 12.56;}
+                }
+
+            }
+
+            if(neutral_flag)
+            {
+                if(motorControl.drive.fnr_status == 1)
+                {  
+                        if(foc.speed_sense*SPEED_PU_TO_RPM<100)
+                        {
+                         
+                         //pwm signal        
+                        //  if(angle_mech<0){angle_mech = angle_mech+6.28;}
+                        //  else if(angle_mech>=0){angle_mech = (100-Duty)*DUTY_TO_RADIAN;}   
+
+                            angle_mech = (100-Duty)*DUTY_TO_RADIAN;
+
+
+                         // angle_mech = (Duty)*DUTY_TO_RADIAN; //mech angle
+
+                            foc.rho_prev = 3.0*angle_mech; // elec angle
+                            if (angle_mech>2.095 && angle_mech<4.1866){foc.rho_prev = foc.rho_prev - 6.28;}
+                            else  if(angle_mech>=4.1886){foc.rho_prev = foc.rho_prev - 12.56;}
+                        }
+
+                }
+
+                if(motorControl.drive.fnr_status == 2)
+                {
+                        if(foc.speed_sense*SPEED_PU_TO_RPM<100)
+                        {
+                            //pwm signal        
+                            angle_mech = -(6.28-(100-Duty)*DUTY_TO_RADIAN); //mech angle
+                            foc.rho_prev = 3.0*angle_mech; // elec angle
+                            if (angle_mech<-2.095 && angle_mech>-4.1866){foc.rho_prev = foc.rho_prev + 6.28;}
+                            else  if(angle_mech<=-4.1886){foc.rho_prev = foc.rho_prev + 12.56;}
+                        }
+                }
+            }
+
+            if(reset_flag == 1)
+            {
+
+                //foc.rho_prev = PPR_TO_RAD_CONSTANT*motorControl.encoder.value;
+                foc.rho_prev = 0.0;
+                reset_flag=0;
+            }
+          
+            foc.rho = READ_ROTOR_ANGLE(foc.rho_prev,foc.sync_speed,foc.sync_speed_prev);//electrical angle
+            #endif
+
+
+
+
+            #if SKIP_PWM
+           //reset angle to 0
             if(reset_flag == 1)
             {
 
@@ -600,9 +762,8 @@ void FOC_ELECTRICAL_ANGLE_CALCULATION()
                 if(forward_flag){foc.rho_prev = (Duty)*DUTY_TO_RADIAN;}
                 if(reverse_flag){foc.rho_prev = -(Duty)*DUTY_TO_RADIAN;}
                 duty_state = 0;
-
-            //Angle Calculation
-            foc.rho = READ_ROTOR_ANGLE(foc.rho_prev,foc.sync_speed,foc.sync_speed_prev);//electrical angle
+                //Angle Calculation
+                foc.rho = READ_ROTOR_ANGLE(foc.rho_prev,foc.sync_speed,foc.sync_speed_prev);//electrical angle
             }
             else
             {
@@ -610,9 +771,12 @@ void FOC_ELECTRICAL_ANGLE_CALCULATION()
             foc.rho = READ_ROTOR_ANGLE(foc.rho_prev,foc.sync_speed,foc.sync_speed_prev);//electrical angle
 
             }
+            #endif
 
-             if (foc.rho>=6.28){foc.rho=0.0;} 
-             else if (foc.rho<=-6.28){foc.rho=0.0;}
+
+            
+            if (foc.rho>=6.28){foc.rho=0.0;} 
+            else if (foc.rho<=-6.28){foc.rho=0.0;}
 
             //Sin and Cos
 
@@ -642,11 +806,6 @@ void FOC_ELECTRICAL_ANGLE_CALCULATION()
                     foc.sin_rho = sin(foc.rho+ANGLE_OFFSET_RW);
                 }
             }
-     
-
-
-
-
 }
 /*
 This function is used to compute field weakening and mtpa operations.

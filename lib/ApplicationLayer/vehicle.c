@@ -106,6 +106,7 @@ void CAN_Logging()
                                   avg_board_temp, 
                                   v_rms);
                                   //angle, (float)odo_can, (float)kmph_can, (float)trip_can, (float)fault.fault_code, avg_board_temp, v_rms);
+    HAL_Delay(10);
 }
 
 
@@ -183,13 +184,15 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
 
       can.write();
 
+      HAL_Delay(10);
+
 }
 
 
 void READ_FNR()
 {
-        reverse_pin_state = HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_3);
-        forward_pin_state = HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_4);
+        reverse_pin_state = HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_4);
+        forward_pin_state = HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_3);
 
         //if speed less than 100 rpm
           if(abs((int)terminal.w.sen) <= 100){

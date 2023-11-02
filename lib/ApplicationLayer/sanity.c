@@ -103,14 +103,14 @@ void RUN_SANITY(void)
     }
 
    //Drive not neutral while sanity.
-   reverse_pin_state = HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_3);
-   forward_pin_state = HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_4);
+   // reverse_pin_state = HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_3);
+   // forward_pin_state = HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_4);
 
-    if(forward_pin_state==0 || reverse_pin_state==0)
-    {
-       motorControl.drive.check      = DRIVE_DISABLE;
-       fault.status                  = FAULT_FNR;
-    }
+   //  if(forward_pin_state==0 || reverse_pin_state==0)
+   //  {
+   //     motorControl.drive.check      = DRIVE_DISABLE;
+   //     fault.status                  = FAULT_FNR;
+   //  }
 
     //If encoder not connected   
     //Encoder_Check(3);  
@@ -131,14 +131,14 @@ void FAULT_READING()
       fault.overCurrent      = Overcurrent_Fault(analog.bufferData[BUS_CURRENT_U]+analog.bufferData[BUS_CURRENT_V]+analog.bufferData[BUS_CURRENT_W]);
       
       //overvoltage/undervoltage fault
-      if(fault.busVoltage == SANITY_FAULT) {
-         fault.fault_code |= FAULT_BUS_VOLTAGE_HEX;
-         motorControl.drive.check = DRIVE_DISABLE;
-         fault.status             = FAULT_BUS_VOLTAGE;
-      }
+      // if(fault.busVoltage == SANITY_FAULT) {
+      //    fault.fault_code |= FAULT_BUS_VOLTAGE_HEX;
+      //    motorControl.drive.check = DRIVE_DISABLE;
+      //    fault.status             = FAULT_BUS_VOLTAGE;
+      // }
 
       //controller temperature fault
-      else if((fault.boardTemperature_u == SANITY_FAULT)||(fault.boardTemperature_v == SANITY_FAULT)||(fault.boardTemperature_w == SANITY_FAULT) ) {
+      if((fault.boardTemperature_u == SANITY_FAULT)||(fault.boardTemperature_v == SANITY_FAULT)||(fault.boardTemperature_w == SANITY_FAULT) ) {
          fault.fault_code |= FAULT_BOARD_TEMPERAUTRE_HEX;
          motorControl.drive.check = DRIVE_DISABLE;
          fault.status             = FAULT_BOARD_TEMPERAUTRE;
