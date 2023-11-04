@@ -134,9 +134,9 @@ typedef struct foc_t {
 #define ANGLE_OFFSET_FW                           0.523//Nidec 8 pole
 #define ANGLE_OFFSET_RW                          -0.523//Nidec 8 pole
 
-#define NIDEC_MOTOR_PWM             0
+#define NIDEC_MOTOR_PWM             1
 #define ULTRON_MOTOR_PWM            0
-#define SKIP_PWM                    1
+#define SKIP_PWM                    0
 
 
 /*

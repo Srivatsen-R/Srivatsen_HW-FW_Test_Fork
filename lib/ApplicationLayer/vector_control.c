@@ -121,7 +121,7 @@ terminal_t terminal = {
 
 void THROTTLE_PROFILE(int config)
 {
-    if(config==1){foc.torque_current_ref = (0.95*foc.speed_ref);}
+    if(config==1){foc.torque_current_ref = (0.95*foc.speed_ref)  + 115;}
 }
 
 void POWER_MAPPING(int config)
@@ -669,7 +669,7 @@ void FOC_ELECTRICAL_ANGLE_CALCULATION()
 
             if(forward_flag)
             {
-                if(foc.speed_sense*SPEED_PU_TO_RPM<100)
+                if(duty_state == 1)
                 {
                     //pwm signal        
                     // if(angle_mech<0){angle_mech = angle_mech+6.28;}
@@ -682,11 +682,12 @@ void FOC_ELECTRICAL_ANGLE_CALCULATION()
                     if (angle_mech>2.095 && angle_mech<4.1866){foc.rho_prev = foc.rho_prev - 6.28;}
                     else  if(angle_mech>=4.1886){foc.rho_prev = foc.rho_prev - 12.56;}
                 }
+
             }
 
             if(reverse_flag)
             {
-                if(foc.speed_sense*SPEED_PU_TO_RPM<100)
+                if(duty_state == 1)
                 {
                     //pwm signal        
                     angle_mech = -(6.28-(100-Duty)*DUTY_TO_RADIAN); //mech angle
@@ -739,6 +740,7 @@ void FOC_ELECTRICAL_ANGLE_CALCULATION()
                 //foc.rho_prev = PPR_TO_RAD_CONSTANT*motorControl.encoder.value;
                 foc.rho_prev = 0.0;
                 reset_flag=0;
+                duty_state = 0;
             }
           
             foc.rho = READ_ROTOR_ANGLE(foc.rho_prev,foc.sync_speed,foc.sync_speed_prev);//electrical angle
