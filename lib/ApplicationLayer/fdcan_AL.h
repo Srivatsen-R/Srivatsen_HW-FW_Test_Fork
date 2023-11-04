@@ -32,6 +32,7 @@
 #define tx_Controller_725       0x725
 #define tx_Controller_726       0x726
 #define tx_Controller_727       0x727
+#define tx_Controller_7A0       0x7A0
 #define rx_BMS_109              0x109 
 #define FDCAN_DLC_BYTES         0x008  
 #define FDCAN_TX_BUFFER_NUMBER  22 

@@ -215,6 +215,7 @@ void CAN_Write(void) {
 	 can.transmit(tx_Controller_717, S, can.txMsg[6],  FDCAN_DLC_BYTES);
 	 can.transmit(tx_Controller_724, S, can.txMsg[7],  FDCAN_DLC_BYTES);
 	 can.transmit(tx_Controller_726, S, can.txMsg[8],  FDCAN_DLC_BYTES);
+	 can.transmit(tx_Controller_7A0, S, can.txMsg[9],  FDCAN_DLC_BYTES);
 
 }
 

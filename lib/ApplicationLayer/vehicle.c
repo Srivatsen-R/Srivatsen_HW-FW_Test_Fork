@@ -133,10 +133,12 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
       can.txMsg[0][7] = ((uint32_t) odo_can)>>24;
 
       // 706
-      can.txMsg[1][0] = motorControl.direction & 0x07;
-      can.txMsg[1][1] = motorControl.status;
-      can.txMsg[1][2] = motorControl.assistGear;
-      can.txMsg[1][3] = motorControl.alarm;
+      if(forward_flag){can.txMsg[1][0] = 0x02;}
+      else if(reverse_flag){can.txMsg[1][0] = 0x04;}
+      else if(neutral_flag){can.txMsg[1][0] = 0x01;}
+      can.txMsg[1][1] = 0xFF;
+      can.txMsg[1][2] = 0xFF;
+      can.txMsg[1][3] |= fault.status;
       can.txMsg[1][4] = ((uint16_t) kmph_can);
       can.txMsg[1][5] = ((uint16_t) kmph_can)>>8;
       can.txMsg[1][6] = ((uint16_t) trip_can);
@@ -177,10 +179,22 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
       }
 
       //726
-      can.txMsg[8][3] = 0x6E;
-      can.txMsg[8][4] = 0xE1;
-      can.txMsg[8][6] = 0x01;
-      can.txMsg[8][7] = 0x04;
+      can.txMsg[8][0] = 0x6E;
+      can.txMsg[8][1] = 0xE1;
+      can.txMsg[8][2] = 0x04;
+      can.txMsg[8][3] = 0x04;
+
+      //7A0
+      can.txMsg[9][0] = 0x03;
+      can.txMsg[9][1] = 0x01;
+      can.txMsg[9][2] = 0x00;
+      can.txMsg[9][3] = 0x01;
+      #if APP1
+        can.txMsg[9][7] = 0x01;
+      #endif
+      #if APP2
+        can.txMsg[9][7] = 0x02;
+      #endif
 
       can.write();
 

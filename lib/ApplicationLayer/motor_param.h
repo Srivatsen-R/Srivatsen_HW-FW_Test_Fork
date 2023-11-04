@@ -51,7 +51,7 @@
 #define TH_HYSS_LIMIT                       5.0
 #define ENCODER_TIMEOUT_LIMIT               60000
 
-#define RPM_TO_KMPH                         0.0083333
+#define RPM_TO_KMPH                         0.007781
 #define HOUR_TO_MS_100                      0.00002777
 #define ODO_UPDATE                          1
 #define NO_ODO_UPDATE                       0

@@ -164,7 +164,7 @@ int main(void) {
       READ_FNR();
       READ_THROTTLE();
 
-      if(counter_100ms>=2000)
+      if(counter_100ms>=10000)
       {
             counter_100ms=0;
             //function to log can data for data analysis and rca.
