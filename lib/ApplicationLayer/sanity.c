@@ -208,24 +208,32 @@ void ANALOG_READING()
      v_rms = moving_AC_voltage_measured_fun(v_rms,VOLTAGE_AVG);
 
      //dc current  
-
-     if(terminal.iq.sen<=0)
-     {
      current = (10*sqrt(terminal.vq.ref * terminal.vq.ref + terminal.vd.ref * terminal.vd.ref));
      current /= 32767.0;
      current *= sqrt(terminal.iq.sen*terminal.iq.sen + terminal.id.sen*terminal.id.sen);
-     dc_current = current;
-     dc_current = -moving_Batt_current_measured_fun(dc_current,VOLTAGE_AVG);
-     }
+    //  current *= terminal.iq.sen;
+      if(terminal.vd.ref >= 1000.0 && terminal.vd.ref <= 2400.0){
+        dc_current = -moving_Batt_current_measured_fun(current,VOLTAGE_AVG);
+      }
+      else{dc_current = moving_Batt_current_measured_fun(current,VOLTAGE_AVG);}
 
-      if(terminal.iq.sen>0)
-     {
-     current = (10*sqrt(terminal.vq.ref * terminal.vq.ref + terminal.vd.ref * terminal.vd.ref));
-     current /= 32767.0;
-     current *= sqrt(terminal.iq.sen*terminal.iq.sen + terminal.id.sen*terminal.id.sen);
-     dc_current = current;
-     dc_current = moving_Batt_current_measured_fun(dc_current,VOLTAGE_AVG);
-     }
+   //   if(terminal.iq.sen<=0)
+   //   {
+   //   current = (10*sqrt(terminal.vq.ref * terminal.vq.ref + terminal.vd.ref * terminal.vd.ref));
+   //   current /= 32767.0;
+   //   current *= sqrt(terminal.iq.sen*terminal.iq.sen + terminal.id.sen*terminal.id.sen);
+   //   dc_current = current;
+   //   dc_current = -moving_Batt_current_measured_fun(dc_current,VOLTAGE_AVG);
+   //   }
+
+   //    if(terminal.iq.sen>0)
+   //   {
+   //   current = (10*sqrt(terminal.vq.ref * terminal.vq.ref + terminal.vd.ref * terminal.vd.ref));
+   //   current /= 32767.0;
+   //   current *= sqrt(terminal.iq.sen*terminal.iq.sen + terminal.id.sen*terminal.id.sen);
+   //   dc_current = current;
+   //   dc_current = moving_Batt_current_measured_fun(dc_current,VOLTAGE_AVG);
+   //   }
  
 
      //motor frequency 
@@ -314,7 +322,7 @@ void SAFETY_AND_ERRORS()
          //Encoder_Check(1);
 
          // if torque current sense is greater than 270A and speed less than 500 rpm 10 sec
-        if(terminal.iq.sen >= 270.0 && terminal.w.sen < 500.0){
+        if(terminal.iq.sen >= 130.0 && terminal.w.sen <= 40.0){
 
           time_count_iq++;
           if(time_count_iq >= 20000){
@@ -322,7 +330,7 @@ void SAFETY_AND_ERRORS()
             fault_iq_count++;
           }
 
-          if(fault_iq_count >= 10){
+          if(fault_iq_count >= 6){
             fault_iq_count = 0;
             time_count_iq = 0;
             fault.fault_code |= FAULT_UNDER_SPEED_STALL_HEX;

@@ -183,12 +183,15 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
       can.txMsg[8][1] = 0xE1;
       can.txMsg[8][2] = 0x04;
       can.txMsg[8][3] = 0x04;
+      can.txMsg[8][4] = 0x01;
+      can.txMsg[8][5] = 0x00;
+      can.txMsg[8][6] = 0x00;
 
       //7A0
       can.txMsg[9][0] = 0x03;
       can.txMsg[9][1] = 0x01;
       can.txMsg[9][2] = 0x00;
-      can.txMsg[9][3] = 0x01;
+      can.txMsg[9][3] = 0x00;
       #if APP1
         can.txMsg[9][7] = 0x01;
       #endif

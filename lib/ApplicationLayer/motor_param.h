@@ -51,7 +51,7 @@
 #define TH_HYSS_LIMIT                       5.0
 #define ENCODER_TIMEOUT_LIMIT               60000
 
-#define RPM_TO_KMPH                         0.007781
+#define RPM_TO_KMPH                         0.0083246
 #define HOUR_TO_MS_100                      0.00002777
 #define ODO_UPDATE                          1
 #define NO_ODO_UPDATE                       0
@@ -70,7 +70,7 @@
 #define KELVIN_TO_CELSIUS                   273.15 
 #define THROTTLE_AVG                        5.0
 #define TEMP_AVG                            15.0
-#define VOLTAGE_AVG                         30.0
+#define VOLTAGE_AVG                         40.0
 #define ROOT2                               1.414
 
 

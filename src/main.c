@@ -141,7 +141,7 @@ int main(void) {
   
   //function to perform sanity checks at ignition.
   RUN_SANITY();
-  // HAL_Delay(5000); commented
+  // HAL_Delay(5000); //commented
 
   //enabling motor control interrupts , ABZ+PWM sensing interrpts.
   ENABLE_PERIPHERALS();
@@ -164,6 +164,8 @@ int main(void) {
       READ_FNR();
       READ_THROTTLE();
 
+      Calculate_OTS(terminal.w.sen);
+
       if(counter_100ms>=10000)
       {
             counter_100ms=0;
@@ -171,15 +173,14 @@ int main(void) {
             CAN_Logging();
             //function to calculate odo,trip and speed.
             //terminal.w.sen=43200;
-            Calculate_OTS(terminal.w.sen);
             //function for can tx communication with stark , mark, marvel.
             CAN_Communication(vehicle.odometer,vehicle.trip,vehicle.speed);
 
             //function to write odo data in eeprom if km updated.
             if(vehicle.odo_change_status == ODO_UPDATE)
             {
-            EEPROM_Write_Data(vehicle.odometer);
-            vehicle.odo_change_status = NO_ODO_UPDATE;
+              EEPROM_Write_Data(vehicle.odometer);
+              vehicle.odo_change_status = NO_ODO_UPDATE;
             }
       }
 
