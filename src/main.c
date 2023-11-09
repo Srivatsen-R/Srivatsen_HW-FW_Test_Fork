@@ -142,7 +142,7 @@ int main(void) {
   
   //function to perform sanity checks at ignition.
   RUN_SANITY();
-  // HAL_Delay(5000); //commented
+  HAL_Delay(5000); //commented
 
   //enabling motor control interrupts , ABZ+PWM sensing interrpts.
   ENABLE_PERIPHERALS();

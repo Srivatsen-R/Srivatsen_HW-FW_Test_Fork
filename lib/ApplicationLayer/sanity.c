@@ -173,7 +173,7 @@ void FAULT_READING()
       }
 
       //over speed error fault.
-      else if(terminal.w.sen >= 6000.0){
+      else if(terminal.w.sen >= 7000.0){
         fault.fault_code |= FAULT_OVER_SPEED_HEX;
         motorControl.drive.check = DRIVE_DISABLE;
         fault.status = FAULT_OVER_SPEED;
@@ -361,11 +361,11 @@ void SAFETY_AND_ERRORS()
         }
 
         //if peak 200A computed. 
-        if(dc_current >= 280.0){
-          fault.fault_code |= FAULT_DC_OVER_CURR_HEX;
-          motorControl.drive.check = DRIVE_DISABLE;
-          fault.status = FAULT_DC_OVER_CURR;
-        }
+        // if(dc_current >= 280.0){
+        //   fault.fault_code |= FAULT_DC_OVER_CURR_HEX;
+        //   motorControl.drive.check = DRIVE_DISABLE;
+        //   fault.status = FAULT_DC_OVER_CURR;
+        // }
 
       //   if(terminal.iq.sen >= 240.0 && abs(terminal.iq.ref - terminal.iq.sen) >= 5.0 && terminal.w.sen <= 100){
       //    if(counter_current_ms >= 120000){

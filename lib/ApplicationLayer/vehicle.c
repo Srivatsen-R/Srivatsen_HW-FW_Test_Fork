@@ -37,7 +37,6 @@ extern adc_t analog;
 extern float Duty;
 extern volatile uint32_t z_trig;
 extern uint8_t start_flag;
-extern __IO float dc_current;
 
 static float kmph_can;
 static float trip_can;
@@ -73,17 +72,17 @@ extern int count_duty;
 void  Calculate_OTS(uint32_t wheel_rpm)
 {
 
-static int odo_prev;
+  static int odo_prev;
 
-vehicle.speed = wheel_rpm*RPM_TO_KMPH;
-vehicle.trip = vehicle.trip +(vehicle.speed*HOUR_TO_MS_100);
-vehicle.odometer = vehicle.odometer + (vehicle.speed*HOUR_TO_MS_100);
-if((vehicle.odometer-odo_prev)>=1.0)
-{
-  vehicle.odo_change_status = ODO_UPDATE;
+  vehicle.speed = wheel_rpm*RPM_TO_KMPH;
+  vehicle.trip = vehicle.trip +(vehicle.speed*HOUR_TO_MS_100)/2.0;
+  vehicle.odometer = vehicle.odometer + (vehicle.speed*HOUR_TO_MS_100)/2.0;
+  if((vehicle.odometer-odo_prev)>=1.0)
+  {
+    vehicle.odo_change_status = ODO_UPDATE;
 
-}
-odo_prev = vehicle.odometer;
+  }
+  odo_prev = vehicle.odometer;
 }
 
 
@@ -139,14 +138,14 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
       else if(reverse_flag){can.txMsg[1][0] = 0x04;}
       else if(neutral_flag){can.txMsg[1][0] = 0x01;}
 
-      if(dc_current >= 0.0){can.txMsg[1][1] |= (0 << 2);}
+      if(dc_current >= 0.0){can.txMsg[1][1] &= (0 << 2);}
       else if(dc_current < 0.0){can.txMsg[1][1] |= (1 << 2);}
 
       if(terminal.rotor.angle < 44.0){can.txMsg[1][1] |= (1 << 3);}
-      else{can.txMsg[1][1] |= (0 << 3);}
+      else{can.txMsg[1][1] &= (0 << 3);}
 
       if(start_flag){can.txMsg[1][1] |= (1 << 5);}
-      else{can.txMsg[1][1] |= (0 << 5);}
+      else{can.txMsg[1][1] &= (0 << 5);}
 
       can.txMsg[1][2] = 0xFF;
 
@@ -156,12 +155,13 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
       if(fault.status == FAULT_HARDWARE_OVER_VOLTAGE){can.txMsg[1][3] |= (1 << 4);}
       if(fault.status == FAULT_UNDER_VOLTAGE){can.txMsg[1][3] |= (1 << 5);}
       if(fault.status == FAULT_TEMP_LOW){can.txMsg[1][3] |= (1 << 6);}
-      if(fault.status == FAULT_SPEED_LIMIT){can.txMsg[1][3] |= (1 << 7);}
+      // if(fault.status == FAULT_SPEED_LIMIT){can.txMsg[1][3] |= (1 << 7);}
+      // else if(terminal.w.sen < 5500.0){can.txMsg[1][3] &= (0 << 7);}
 
-      can.txMsg[1][4] = ((uint16_t) (kmph_can + 4.0));
-      can.txMsg[1][5] = ((uint16_t) (kmph_can + 4.0)>>8);
-      can.txMsg[1][6] = ((uint16_t) (trip_can/2.0));
-      can.txMsg[1][7] = ((uint16_t) (trip_can/2.0)>>8);
+      can.txMsg[1][4] = ((uint16_t) (kmph_can + 6.0));
+      can.txMsg[1][5] = ((uint16_t) (kmph_can + 6.0)>>8);
+      can.txMsg[1][6] = ((uint16_t) (trip_can));
+      can.txMsg[1][7] = ((uint16_t) (trip_can)>>8);
 
       // 708
       if(fault.status >= FAULT_MOTOR_TEMPERATURE && fault.status <= FAULT_DIRECTION_ERR){can.txMsg[2][0] |= (1 << fault.status);}
