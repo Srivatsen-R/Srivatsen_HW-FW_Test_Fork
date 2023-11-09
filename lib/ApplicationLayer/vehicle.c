@@ -139,10 +139,10 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
       can.txMsg[1][1] = 0xFF;
       can.txMsg[1][2] = 0xFF;
       can.txMsg[1][3] |= fault.status;
-      can.txMsg[1][4] = ((uint16_t) kmph_can);
-      can.txMsg[1][5] = ((uint16_t) kmph_can)>>8;
-      can.txMsg[1][6] = ((uint16_t) trip_can);
-      can.txMsg[1][7] = ((uint16_t) trip_can)>>8;
+      can.txMsg[1][4] = ((uint16_t) (kmph_can + 4.0));
+      can.txMsg[1][5] = ((uint16_t) (kmph_can + 4.0)>>8);
+      can.txMsg[1][6] = ((uint16_t) (trip_can/2.0));
+      can.txMsg[1][7] = ((uint16_t) (trip_can/2.0)>>8);
 
       // 708
       can.txMsg[2][0] = fault.boardTemperature_u;

@@ -164,11 +164,10 @@ int main(void) {
       READ_FNR();
       READ_THROTTLE();
 
-      Calculate_OTS(terminal.w.sen);
-
       if(counter_100ms>=10000)
       {
             counter_100ms=0;
+            Calculate_OTS(terminal.w.sen);
             //function to log can data for data analysis and rca.
             CAN_Logging();
             //function to calculate odo,trip and speed.

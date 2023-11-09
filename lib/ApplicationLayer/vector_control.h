@@ -160,12 +160,12 @@ typedef struct foc_t {
 #define T_F_ROTOR_SPEED                     0.03           // Constant to filter rotor speed
 #define MAGNETISING_CURRENT_REF             0.0//6000.0//6750.0
 #define OUTPUT_LIMIT                        29200.0//17000.0       // OUTPUT LIMIT VD VQ
-#define KP_W                                1.2//2.5//1.2//GAIN CONSTANT
-#define KI_W                                1.8//50.0//0.48//INTG CONSTANT
-#define KP_IQ                               1.2
-#define KI_IQ                               1.8
-#define KP_ID                               1.2
-#define KI_ID                               1.8
+#define KP_W                                1.0//2.5//1.2//GAIN CONSTANT
+#define KI_W                                1.4//50.0//0.48//INTG CONSTANT
+#define KP_IQ                               1.0
+#define KI_IQ                               1.4
+#define KP_ID                               1.0
+#define KI_ID                               1.4
 #define SLIP_LIMIT                          20.0
 #define FW_DIRECTION                        0
 #define RW_DIRECTION                        0

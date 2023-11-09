@@ -322,7 +322,7 @@ void SAFETY_AND_ERRORS()
          //Encoder_Check(1);
 
          // if torque current sense is greater than 270A and speed less than 500 rpm 10 sec
-        if(terminal.iq.sen >= 130.0 && terminal.w.sen <= 40.0){
+        if(terminal.iq.sen >= 130.0 && terminal.w.sen <= 100.0){
 
           time_count_iq++;
           if(time_count_iq >= 20000){
