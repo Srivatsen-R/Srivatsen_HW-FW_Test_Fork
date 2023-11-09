@@ -18,6 +18,7 @@ extern terminal_t terminal;
 extern motorControl_t motorControl;
 extern motor_t motor;
 float SOC_Data = 0.0, DCLI = 0.0, DCLO = 0.0;
+float Pack_V = 0.0, Pack_Ah = 0.0;
 extern float avg_board_temp;
 extern float v_rms;
 
@@ -144,7 +145,7 @@ void CAN_Filter_IDList(uint32_t U32_receiveCANid, TypeofCANID U8_idType, FilterB
     HAL_FDCAN_ConfigGlobalFilter(&hfdcan2, FDCAN_REJECT, FDCAN_REJECT, FDCAN_REJECT_REMOTE, FDCAN_REJECT_REMOTE);
 
     /* Configure Rx FIFO 0 watermark to 2 */
-    HAL_FDCAN_ConfigFifoWatermark(&hfdcan2, FDCAN_CFG_RX_FIFO0, 4);
+    HAL_FDCAN_ConfigFifoWatermark(&hfdcan2, FDCAN_CFG_RX_FIFO0, 5);
 
     /* Activate Rx FIFO 0 watermark notification */
     HAL_FDCAN_ActivateNotification(&hfdcan2, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
@@ -197,11 +198,16 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 
 		if(can.RxMessageBuf.Identifier == rx_Controller_109){
 			SOC_Data = (float)(((can.rxMsg[1]<<8) | can.rxMsg[0]) * 0.01);
+			Pack_V = (float)((can.rxMsg[7]<<8 | can.rxMsg[6]) * 0.1);
 		}
 
 		if(can.RxMessageBuf.Identifier == rx_controller_12A){
 			DCLI = (float)(((can.rxMsg[1]<<8 | can.rxMsg[0])) * 0.1);
 			DCLO = (float)(((can.rxMsg[3]<<8 | can.rxMsg[2])) * 0.1);
+		}
+
+		if(can.RxMessageBuf.Identifier == rx_controller_11C){
+			Pack_Ah = (float)((can.rxMsg[3]<<8 | can.rxMsg[2]) * 0.1);
 		}
 }
 
@@ -235,6 +241,7 @@ void FDCAN_ApplicationSetup (void) {
   CAN_Filter_IDList(rx_Controller_7FE, S, FBANK1, FIFO0_CAN2);
   CAN_Filter_IDList(rx_Controller_109, S, FBANK2, FIFO0_CAN2);
   CAN_Filter_IDList(rx_controller_12A, S, FBANK3, FIFO0_CAN2);
+  CAN_Filter_IDList(rx_controller_11C, S, FBANK4, FIFO0_CAN2);
 
   /* Start the FDCAN module */
   if(HAL_FDCAN_Start(&hfdcan2) != HAL_OK) {
@@ -386,8 +393,8 @@ static void __fdcan_transferMessagesOnID307(float avg_board_temp, float v_rms, f
 	   can_t *__fdcan = malloc(sizeof(can_t));
        
 	   __fdcan->transmit = can.transmit;
-	   __fdcan->BufferForMessageToTransmit[0] = __fdcan_addScalingFactorToMessage(avg_board_temp)  & 0x00FF; 
-	   __fdcan->BufferForMessageToTransmit[1] = (__fdcan_addScalingFactorToMessage(avg_board_temp) & 0xFF00) >> 8;
+	   __fdcan->BufferForMessageToTransmit[0] = __fdcan_addScalingFactorToMessage(Pack_V * Pack_Ah)  & 0x00FF; 
+	   __fdcan->BufferForMessageToTransmit[1] = (__fdcan_addScalingFactorToMessage(Pack_V * Pack_Ah) & 0xFF00) >> 8;
 	   __fdcan->BufferForMessageToTransmit[2] = __fdcan_addScalingFactorToMessage(DCLO)  & 0x00FF; 
 	   __fdcan->BufferForMessageToTransmit[3] = (__fdcan_addScalingFactorToMessage(DCLO) & 0xFF00) >> 8;
 	   __fdcan->BufferForMessageToTransmit[4] = __fdcan_addScalingFactorToMessage(SOC)  & 0x00FF; 

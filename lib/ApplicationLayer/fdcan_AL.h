@@ -18,6 +18,7 @@
 
 
 /* Parameters for CAN */
+#define rx_controller_11C       0x11C
 #define rx_controller_12A       0x12A 
 #define rx_Controller_6FA       0x6FA
 #define rx_Controller_704       0x704

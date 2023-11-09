@@ -107,7 +107,7 @@ if(TORQUE_MODE)
         {
             if((error<3200.0 && error>-3200.0 && terminal.iq.ref<=10)) 
             {
-                intg_prev=intg_prev-9.5;
+                intg_prev=intg_prev-0.5;
                 if(intg_prev<0){intg_prev=0;}
             }
         }
@@ -116,7 +116,7 @@ if(TORQUE_MODE)
         {
             if((error<3200.0 && error>-3200.0 && terminal.iq.ref>=-10))
             {
-                intg_prev=intg_prev+9.5;
+                intg_prev=intg_prev+0.5;
                 if(intg_prev>0){intg_prev=0;}
             }
         }
@@ -127,7 +127,7 @@ if(TORQUE_MODE)
             {
                 if((error<3200.0 && error>-3200.0 && terminal.iq.ref<=10) ) 
                 {
-                    intg_prev=intg_prev-9.5;
+                    intg_prev=intg_prev-0.5;
                     if(intg_prev<0){intg_prev=0;}
                 }
             }
@@ -136,7 +136,7 @@ if(TORQUE_MODE)
             {
                 if((error<3200.0 && error>-3200.0 && terminal.iq.ref>=-10))
                 {
-                    intg_prev=intg_prev+9.5;
+                    intg_prev=intg_prev+0.5;
                     if(intg_prev>0){intg_prev=0;}
                 }
             }

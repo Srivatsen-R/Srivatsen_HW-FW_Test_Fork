@@ -85,13 +85,13 @@ void MX_FDCAN2_Init(void)
   hfdcan2.Init.DataTimeSeg1         = 13;
   hfdcan2.Init.DataTimeSeg2         = 2;
   hfdcan2.Init.MessageRAMOffset     = 0;
-  hfdcan2.Init.StdFiltersNbr        = 4;
+  hfdcan2.Init.StdFiltersNbr        = 5;
   hfdcan2.Init.ExtFiltersNbr        = 0;
-  hfdcan2.Init.RxFifo0ElmtsNbr      = 4;
+  hfdcan2.Init.RxFifo0ElmtsNbr      = 5;
   hfdcan2.Init.RxFifo0ElmtSize      = FDCAN_DATA_BYTES_8;
-  hfdcan2.Init.RxFifo1ElmtsNbr      = 4;
+  hfdcan2.Init.RxFifo1ElmtsNbr      = 5;
   hfdcan2.Init.RxFifo1ElmtSize      = FDCAN_DATA_BYTES_8;
-  hfdcan2.Init.RxBuffersNbr         = 4;
+  hfdcan2.Init.RxBuffersNbr         = 5;
   hfdcan2.Init.RxBufferSize         = FDCAN_DATA_BYTES_8;
   hfdcan2.Init.TxEventsNbr          = 0;
   hfdcan2.Init.TxBuffersNbr         = 22;

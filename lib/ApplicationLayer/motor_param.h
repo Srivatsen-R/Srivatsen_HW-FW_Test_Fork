@@ -19,14 +19,14 @@
 #define THROTTLE_THRESHOLD_A            14000.0
 #define THROTTLE_THRESHOLD_B            14000.0    
 #define ACCELERATION_CONST              350.0//15.0
-#define DEACCELERATION_CONST            60.0//7.0
+#define DEACCELERATION_CONST            110.0//7.0
 #define HEAT_SINK_MAX_TEMP_LIMIT        75.0
 #define MOTOR_TEMP_LIMIT                130.0   
 
 #define MAX_SPEED                       30000    
 #define SPEED_MUL_FACTOR                ((SPEED_LIMIT*32767.0)/(6000.0*MAX_SPEED))//0.364//0.273
 #define HEAT_SINK_TEMP_HYS              10.0 
-#define THROTTLE_ADC_OFFSET_COUNT       1700 //0.8V
+#define THROTTLE_ADC_OFFSET_COUNT       3700 //0.8V
 #define TH_MIN_VAL                      1000
 #define KI_FOR_DC_CURRENT               0.00000005
 #define KP_FOR_DC_CURR_UP               0.001
@@ -52,7 +52,7 @@
 #define ENCODER_TIMEOUT_LIMIT               60000
 
 #define RPM_TO_KMPH                         0.0083246
-#define HOUR_TO_MS_100                      0.00002777
+#define HOUR_TO_MS_100                      0.0002777
 #define ODO_UPDATE                          1
 #define NO_ODO_UPDATE                       0
 #define KMPH_CAN_SCALING                    10
