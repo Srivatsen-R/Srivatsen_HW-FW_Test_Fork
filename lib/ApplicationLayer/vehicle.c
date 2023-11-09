@@ -36,6 +36,8 @@ extern motorControl_t motorControl;
 extern adc_t analog;
 extern float Duty;
 extern volatile uint32_t z_trig;
+extern uint8_t start_flag;
+extern __IO float dc_current;
 
 static float kmph_can;
 static float trip_can;
@@ -123,10 +125,10 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
 
   
       // 705
-      can.txMsg[0][0] = (uint8_t) motorControl.temperature.motor;
-      can.txMsg[0][1] = (uint8_t) motorControl.temperature.u;
-      can.txMsg[0][2] = (uint8_t) motorControl.temperature.v;
-      can.txMsg[0][3] = (uint8_t) motorControl.temperature.w;
+      can.txMsg[0][0] = (uint8_t) (motorT + 50.0);
+      can.txMsg[0][1] = (uint8_t) (avg_board_temp + 50.0);
+      if(dc_current < 0.0) {can.txMsg[0][2] = (uint8_t) ((dc_current/200.0) * 100.0);}
+      else {can.txMsg[0][2] = 0;}
       can.txMsg[0][4] = ((uint32_t) odo_can & 0xFF);
       can.txMsg[0][5] = ((uint32_t) odo_can)>>8;
       can.txMsg[0][6] = ((uint32_t) odo_can)>>16;
@@ -136,23 +138,35 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
       if(forward_flag){can.txMsg[1][0] = 0x02;}
       else if(reverse_flag){can.txMsg[1][0] = 0x04;}
       else if(neutral_flag){can.txMsg[1][0] = 0x01;}
-      can.txMsg[1][1] = 0xFF;
+
+      if(dc_current >= 0.0){can.txMsg[1][1] |= (0 << 2);}
+      else if(dc_current < 0.0){can.txMsg[1][1] |= (1 << 2);}
+
+      if(terminal.rotor.angle < 44.0){can.txMsg[1][1] |= (1 << 3);}
+      else{can.txMsg[1][1] |= (0 << 3);}
+
+      if(start_flag){can.txMsg[1][1] |= (1 << 5);}
+      else{can.txMsg[1][1] |= (0 << 5);}
+
       can.txMsg[1][2] = 0xFF;
-      can.txMsg[1][3] |= fault.status;
+
+      if(fault.status == FAULT_OVER_SPEED){can.txMsg[1][3] |= (1 << 1);}
+      if(fault.status == FAULT_MOTOR_LOAD){can.txMsg[1][3] |= (1 << 2);}
+      if(fault.status == FAULT_MOTOR_TEMPERATURE){can.txMsg[1][3] |= (1 << 3);}
+      if(fault.status == FAULT_HARDWARE_OVER_VOLTAGE){can.txMsg[1][3] |= (1 << 4);}
+      if(fault.status == FAULT_UNDER_VOLTAGE){can.txMsg[1][3] |= (1 << 5);}
+      if(fault.status == FAULT_TEMP_LOW){can.txMsg[1][3] |= (1 << 6);}
+      if(fault.status == FAULT_SPEED_LIMIT){can.txMsg[1][3] |= (1 << 7);}
+
       can.txMsg[1][4] = ((uint16_t) (kmph_can + 4.0));
       can.txMsg[1][5] = ((uint16_t) (kmph_can + 4.0)>>8);
       can.txMsg[1][6] = ((uint16_t) (trip_can/2.0));
       can.txMsg[1][7] = ((uint16_t) (trip_can/2.0)>>8);
 
       // 708
-      can.txMsg[2][0] = fault.boardTemperature_u;
-      can.txMsg[2][1] = fault.busVoltage;
-      can.txMsg[2][2] = fault.currentSensor;
-      can.txMsg[2][3] = fault.encoder;
-      can.txMsg[2][4] = fault.motorTemperature;
-      can.txMsg[2][5] = fault.overCurrent;
-      can.txMsg[2][6] = fault.throttle;
-      can.txMsg[2][7] = fault.status;
+      if(fault.status >= FAULT_MOTOR_TEMPERATURE && fault.status <= FAULT_DIRECTION_ERR){can.txMsg[2][0] |= (1 << fault.status);}
+      if(fault.status == FAULT_ENCODER){can.txMsg[2][1] |= (1 << 1);}
+      if(fault.status == FAULT_HARDWARE_OVER_VOLTAGE){can.txMsg[2][1] |= (1 << 2);}
 
       //710
       can.txMsg[3][0] = (uint8_t)((int)throttle_percent);
@@ -160,7 +174,7 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
 
       //715
       can.txMsg[4][4] = (uint8_t)busVoltage;
-      can.txMsg[4][6] = (uint8_t)((int)terminal.w.sen & 0x0FF);
+      can.txMsg[4][6] = (uint8_t)((int)terminal.w.sen & 0x00FF);
       can.txMsg[4][7] = (uint8_t)(((int)terminal.w.sen & 0xFF00) >> 8);
 
       //716
@@ -173,7 +187,7 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
 
       //724
       if(forward_flag || reverse_flag){
-        can.txMsg[7][4] = 0x01;
+        can.txMsg[7][4] = 0x00;
       }else{
         can.txMsg[7][4] = 0x00;
       }
@@ -185,13 +199,14 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
       can.txMsg[8][3] = 0x04;
       can.txMsg[8][4] = 0x01;
       can.txMsg[8][5] = 0x00;
-      can.txMsg[8][6] = 0x00;
+      can.txMsg[8][6] = 0x02;
+      can.txMsg[8][7] = 0x01;
 
       //7A0
       can.txMsg[9][0] = 0x03;
       can.txMsg[9][1] = 0x01;
       can.txMsg[9][2] = 0x00;
-      can.txMsg[9][3] = 0x00;
+      can.txMsg[9][3] = 0x02;
       #if APP1
         can.txMsg[9][7] = 0x01;
       #endif

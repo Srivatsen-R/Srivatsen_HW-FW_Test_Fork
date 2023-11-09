@@ -243,11 +243,13 @@ int BUS_Voltage_OV_UV_Fault(int measure_Vbus_temp)
            else UV_Bus_fault = 0 ;
        }
 
-       if(UV_Bus_fault == 0)Fault_Status =0 ;
-       else Fault_Status =2 ;
+    //    if(UV_Bus_fault == 0)Fault_Status =0 ;
+    //    else Fault_Status =2 ;
 
-       if((OV_Bus_fault == 1)|| (UV_Bus_fault == 1)) V_Bus_fault = 1 ;
+       if((OV_Bus_fault == 1)) V_Bus_fault = 2;
+       else if(UV_Bus_fault == 1) V_Bus_fault = 1;
        else V_Bus_fault = 0 ;
+       
        return V_Bus_fault;
    }
 

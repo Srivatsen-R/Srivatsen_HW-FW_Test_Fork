@@ -67,6 +67,7 @@ extern float encoder_b_state;
 extern float Duty;
 extern int counter_current_ms;
 extern int counter_encoder_ms;
+extern float throttle_adc_voltage;
 
 extern int reverse_pin_state;
 extern int forward_pin_state;
@@ -134,7 +135,13 @@ void FAULT_READING()
       if(fault.busVoltage == SANITY_FAULT) {
          fault.fault_code |= FAULT_BUS_VOLTAGE_HEX;
          motorControl.drive.check = DRIVE_DISABLE;
-         fault.status             = FAULT_BUS_VOLTAGE;
+         fault.status             = FAULT_UNDER_VOLTAGE;
+      }
+
+      else if(fault.busVoltage == 2) {
+         fault.fault_code |= FAULT_BUS_VOLTAGE_HEX;
+         motorControl.drive.check = DRIVE_DISABLE;
+         fault.status             = FAULT_HARDWARE_OVER_VOLTAGE;
       }
 
       //controller temperature fault
@@ -170,6 +177,12 @@ void FAULT_READING()
         fault.fault_code |= FAULT_OVER_SPEED_HEX;
         motorControl.drive.check = DRIVE_DISABLE;
         fault.status = FAULT_OVER_SPEED;
+      }
+
+      else if(terminal.w.sen >= 5500.0){
+        fault.fault_code |= FAULT_OVER_SPEED_HEX;
+        // motorControl.drive.check = DRIVE_DISABLE;
+        fault.status = FAULT_SPEED_LIMIT;
       }
 
 }
@@ -211,11 +224,8 @@ void ANALOG_READING()
      current = (10*sqrt(terminal.vq.ref * terminal.vq.ref + terminal.vd.ref * terminal.vd.ref));
      current /= 32767.0;
      current *= sqrt(terminal.iq.sen*terminal.iq.sen + terminal.id.sen*terminal.id.sen);
-    //  current *= terminal.iq.sen;
-      if(terminal.vd.ref >= 1000.0 && terminal.vd.ref <= 2400.0){
-        dc_current = -moving_Batt_current_measured_fun(current,VOLTAGE_AVG);
-      }
-      else{dc_current = moving_Batt_current_measured_fun(current,VOLTAGE_AVG);}
+     current *= terminal.iq.sen;
+     dc_current = current;
 
    //   if(terminal.iq.sen<=0)
    //   {
@@ -235,7 +245,7 @@ void ANALOG_READING()
    //   dc_current = moving_Batt_current_measured_fun(dc_current,VOLTAGE_AVG);
    //   }
  
-
+     throttle_adc_voltage = 2.0 * moving_Throttle_measured_fun(analog.bufferData[THROTTLE],THROTTLE_AVG) * (3.3/65535.0);
      //motor frequency 
      freq_rpm = terminal.w.sen * (POLEPAIRS*RPM_TO_FREQ);
      //throttle percentage
@@ -335,7 +345,7 @@ void SAFETY_AND_ERRORS()
             time_count_iq = 0;
             fault.fault_code |= FAULT_UNDER_SPEED_STALL_HEX;
             motorControl.drive.check = DRIVE_DISABLE;
-            fault.status = FAULT_UNDER_SPEED_STALL;
+            fault.status = FAULT_STALL;
           }
         }
 
@@ -346,7 +356,7 @@ void SAFETY_AND_ERRORS()
           if(count_spike >= 10){
             fault.fault_code |= FAULT_OVER_CURRENT_HEX;
             motorControl.drive.check = DRIVE_DISABLE;
-            fault.status = FAULT_OVER_CURRENT;
+            fault.status = FAULT_SOFTWARE_OVER_CURR;
           }
         }
 

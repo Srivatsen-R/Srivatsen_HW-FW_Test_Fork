@@ -83,6 +83,7 @@ uint8_t reset_flag = 0;
 uint8_t app_version = 0;
 uint8_t cantp_config_flag = 0;
 uint8_t interrupt_flag = 0;
+uint8_t start_flag = 0;
 
 int count_duty=0;
 int counter_100ms=0;
@@ -151,6 +152,8 @@ int main(void) {
   EEPROM_Read_Data();
 
   bootup_config();
+
+  start_flag = 1;
   
   //while loop running on CLK frequency.
   while (1) 
