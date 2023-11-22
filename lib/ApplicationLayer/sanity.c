@@ -67,6 +67,7 @@ extern float encoder_b_state;
 extern float Duty;
 extern int counter_current_ms;
 extern int counter_encoder_ms;
+extern int counter_abnormal_run;
 extern float throttle_adc_voltage;
 
 extern int reverse_pin_state;
@@ -76,6 +77,8 @@ extern float freq_rpm;
 extern float throttle_percent;
 
 extern int count_duty;
+extern int forward_flag;
+extern int reverse_flag;
 
 
 void RUN_SANITY(void)
@@ -84,6 +87,8 @@ void RUN_SANITY(void)
     int sanity_val=0;
 
     for (sanity_val=0;sanity_val<SANITY_COUNT;sanity_val++){ANALOG_READING();}
+
+    HAL_Delay(10000);
     
     FAULT_READING();
 
@@ -132,54 +137,54 @@ void FAULT_READING()
       fault.overCurrent      = Overcurrent_Fault(analog.bufferData[BUS_CURRENT_U]+analog.bufferData[BUS_CURRENT_V]+analog.bufferData[BUS_CURRENT_W]);
       
       //overvoltage/undervoltage fault
-      if(fault.busVoltage == SANITY_FAULT) {
+      if(busVoltage < UNDER_VOLT_LIMIT) {
          fault.fault_code |= FAULT_BUS_VOLTAGE_HEX;
          motorControl.drive.check = DRIVE_DISABLE;
          fault.status             = FAULT_UNDER_VOLTAGE;
       }
 
-      else if(fault.busVoltage == 2) {
+      if(busVoltage > OVER_VOLT_LIMIT) {
          fault.fault_code |= FAULT_BUS_VOLTAGE_HEX;
          motorControl.drive.check = DRIVE_DISABLE;
          fault.status             = FAULT_HARDWARE_OVER_VOLTAGE;
       }
 
       //controller temperature fault
-      else if((fault.boardTemperature_u == SANITY_FAULT)||(fault.boardTemperature_v == SANITY_FAULT)||(fault.boardTemperature_w == SANITY_FAULT) ) {
+      if((fault.boardTemperature_u == SANITY_FAULT)||(fault.boardTemperature_v == SANITY_FAULT)||(fault.boardTemperature_w == SANITY_FAULT) ) {
          fault.fault_code |= FAULT_BOARD_TEMPERAUTRE_HEX;
          motorControl.drive.check = DRIVE_DISABLE;
          fault.status             = FAULT_BOARD_TEMPERAUTRE;
       }
 
       //motor temperature fault
-      else if(fault.motorTemperature == SANITY_FAULT) {
+      if(fault.motorTemperature == SANITY_FAULT) {
          fault.fault_code |= FAULT_MOTOR_TEMPERATURE_HEX;
          motorControl.drive.check = DRIVE_DISABLE;
          fault.status             = FAULT_MOTOR_TEMPERATURE;
       }
 
       //throttle fault
-      else if(fault.throttle == SANITY_FAULT) {
+      if(fault.throttle == SANITY_FAULT) {
          fault.fault_code |= FAULT_THROTTLE_HEX;
          motorControl.drive.check = DRIVE_DISABLE;
          fault.status             = FAULT_THROTTLE;
       }
 
       //can error fault - to be tested.
-      else if((FDCAN_ERROR_BIT & 0x0000001) == 1 && (FDCAN_ERROR_BIT & 0x000001) == 0){
+      if((FDCAN_ERROR_BIT & 0x0000001) == 1 && (FDCAN_ERROR_BIT & 0x000001) == 0){
         fault.fault_code |= FAULT_CAN_ERROR_HEX;
         motorControl.drive.check = DRIVE_DISABLE;
         fault.status = FAULT_CAN_ERROR;
       }
 
       //over speed error fault.
-      else if(terminal.w.sen >= 7000.0){
+      if(terminal.w.sen >= 7000.0){
         fault.fault_code |= FAULT_OVER_SPEED_HEX;
         motorControl.drive.check = DRIVE_DISABLE;
         fault.status = FAULT_OVER_SPEED;
       }
 
-      else if(terminal.w.sen >= 5500.0){
+      if(terminal.w.sen >= 5500.0){
         fault.fault_code |= FAULT_OVER_SPEED_HEX;
         // motorControl.drive.check = DRIVE_DISABLE;
         fault.status = FAULT_SPEED_LIMIT;
@@ -223,8 +228,7 @@ void ANALOG_READING()
      //dc current  
      current = (10*sqrt(terminal.vq.ref * terminal.vq.ref + terminal.vd.ref * terminal.vd.ref));
      current /= 32767.0;
-     current *= sqrt(terminal.iq.sen*terminal.iq.sen + terminal.id.sen*terminal.id.sen);
-     current *= terminal.iq.sen;
+     current *= terminal.id.ref;
      dc_current = current;
 
    //   if(terminal.iq.sen<=0)
@@ -361,79 +365,9 @@ void SAFETY_AND_ERRORS()
         }
 
         //if peak 200A computed. 
-        // if(dc_current >= 280.0){
-        //   fault.fault_code |= FAULT_DC_OVER_CURR_HEX;
-        //   motorControl.drive.check = DRIVE_DISABLE;
-        //   fault.status = FAULT_DC_OVER_CURR;
-        // }
-
-      //   if(terminal.iq.sen >= 240.0 && abs(terminal.iq.ref - terminal.iq.sen) >= 5.0 && terminal.w.sen <= 100){
-      //    if(counter_current_ms >= 120000){
-      //       fault.fault_code |= FAULT_OVER_CURRENT_HEX;
-      //       motorControl.drive.check = DRIVE_DISABLE;
-      //       fault.status = FAULT_OVER_CURRENT;
-      //       counter_current_ms = 0;
-      //    }else{
-      //       counter_current_ms = 0;
-      //    }
-      //   }
-
-      //   if(abs(motorControl.encoder.value - motorControl.encoder.previous) <= 5 && terminal.w.sen <= 100.0 && terminal.iq.sen >= 160.0){
-      //    if(counter_encoder_ms >= 80000){
-      //       fault.fault_code |= FAULT_ENCODER_DICNT_HEX;
-      //       motorControl.drive.check = DRIVE_DISABLE;
-      //       fault.status = FAULT_ENCODER;
-      //       counter_encoder_ms = 0;
-      //    }else{
-      //       counter_encoder_ms = 0;
-      //    }
-      //   }
-
-                // if(terminal.w.ref >= 100.0){
-
-        //   if(motorControl.encoder.value == motorControl.encoder.previous){
-        //     time_count_en_value++;
-        //     if(time_count_en_value >= 1000){
-        //       time_count_en_value = 0;
-        //       fault_en_count_value++;
-        //     }
-
-        //     if(fault_en_count_value >= 100){
-        //       time_count_en_value = 0;
-        //       fault_en_count_value = 0;
-        //       fault_code |= FAULT_ENCODER_DICNT_HEX;
-        //       motorControl.drive.check = DRIVE_DISABLE;
-        //       fault.status = FAULT_ENCODER_DICNT;
-        //     }
-        //   }else{
-        //     time_count_en_value = 0;
-        //     fault_en_count_value = 0;
-        //   }
-
-        //   if(angle_curr == angle_prev){
-        //     time_count_z++;
-        //     if(time_count_z >= 1000){
-        //       time_count_z = 0;
-        //       fault_en_count_z++;
-        //     }
-
-        //     if(fault_en_count_z >= 20){
-        //       time_count_z = 0;
-        //       fault_en_count_z = 0;
-        //       fault_code |= FAULT_Z_DICNT_HEX;
-        //       motorControl.drive.check = DRIVE_DISABLE;
-        //       fault.status = FAULT_Z_DICNT;
-        //     }
-        //   }else{
-        //     time_count_z = 0;
-        //     fault_en_count_z = 0;
-        //   }
-
-        // }else{
-        //   time_count_z = 0;
-        //   fault_en_count_z = 0;
-        //   time_count_en_value = 0;
-        //   fault_en_count_value = 0;
-        // }
-
+        if(dc_current >= 280.0){
+          fault.fault_code |= FAULT_DC_OVER_CURR_HEX;
+          motorControl.drive.check = DRIVE_DISABLE;
+          fault.status = FAULT_DC_OVER_CURR;
+        }
 }

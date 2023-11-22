@@ -82,8 +82,8 @@ set(COMMON_FILES
     startup_stm32h743zitx.s)
 
 set(EXECUTABLE_BOOTLDR ${PROJECT_NAME}-bootloader.elf)
-set(EXECUTABLE_APP_PRI ${PROJECT_NAME}-appPrimary.elf)
-set(EXECUTABLE_APP_SEC ${PROJECT_NAME}-appSecondary.elf)
+set(EXECUTABLE_APP_PRI ${PROJECT_NAME}-app1.elf)
+set(EXECUTABLE_APP_SEC ${PROJECT_NAME}-app2.elf)
 
 set(BOOTLOADER_MAIN
     lib/Bootloader/bootloaderMain.c)
@@ -228,7 +228,7 @@ target_link_options(${EXECUTABLE_BOOTLDR} PRIVATE
     -mcpu=cortex-m7
     --specs=nosys.specs
 
-    -Wl,-Map=${PROJECT_NAME}-appPrimary.map,--cref
+    -Wl,-Map=${PROJECT_NAME}-bootloader.map,--cref
     -Wl,--gc-sections -static
 
     -fno-math-errno
@@ -254,7 +254,7 @@ target_link_options(${EXECUTABLE_APP_PRI} PRIVATE
     -mcpu=cortex-m7
     --specs=nosys.specs
 
-    -Wl,-Map=${PROJECT_NAME}-appPrimary.map,--cref
+    -Wl,-Map=${PROJECT_NAME}-app1.map,--cref
     -Wl,--gc-sections -static
 
     -fno-math-errno
@@ -280,7 +280,7 @@ target_link_options(${EXECUTABLE_APP_SEC} PRIVATE
     -mcpu=cortex-m7
     --specs=nosys.specs
 
-    -Wl,-Map=${PROJECT_NAME}-appSecondary.map,--cref
+    -Wl,-Map=${PROJECT_NAME}-app2.map,--cref
     -Wl,--gc-sections -static
 
     -fno-math-errno
@@ -319,10 +319,10 @@ add_custom_command(TARGET ${EXECUTABLE_BOOTLDR}
 
 add_custom_command(TARGET ${EXECUTABLE_APP_PRI}
     POST_BUILD
-    COMMAND arm-none-eabi-objcopy -O ihex ${EXECUTABLE_APP_PRI} ${PROJECT_NAME}-appPrimary.hex
-    COMMAND arm-none-eabi-objcopy -O binary ${EXECUTABLE_APP_PRI} ${PROJECT_NAME}-appPrimary.bin)
+    COMMAND arm-none-eabi-objcopy -O ihex ${EXECUTABLE_APP_PRI} ${PROJECT_NAME}-app1.hex
+    COMMAND arm-none-eabi-objcopy -O binary ${EXECUTABLE_APP_PRI} ${PROJECT_NAME}-app1.bin)
 
 add_custom_command(TARGET ${EXECUTABLE_APP_SEC}
     POST_BUILD
-    COMMAND arm-none-eabi-objcopy -O ihex ${EXECUTABLE_APP_SEC} ${PROJECT_NAME}-appSecondary.hex
-    COMMAND arm-none-eabi-objcopy -O binary ${EXECUTABLE_APP_SEC} ${PROJECT_NAME}-appSecondary.bin)
+    COMMAND arm-none-eabi-objcopy -O ihex ${EXECUTABLE_APP_SEC} ${PROJECT_NAME}-app2.hex
+    COMMAND arm-none-eabi-objcopy -O binary ${EXECUTABLE_APP_SEC} ${PROJECT_NAME}-app2.bin)

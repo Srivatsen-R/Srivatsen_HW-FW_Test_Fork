@@ -48,7 +48,7 @@
 
 
 
-#define TIMEOUT_COUNT           10    
+#define TIMEOUT_COUNT           120    
 #define tx_flash_write_progress 0x6FB
 #define FIRMWARE_UPGRADE_COMM   0x6FA
 #define rx_CAN_TP_Stark         0x7FE

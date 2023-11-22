@@ -7,7 +7,7 @@
 #define NTC_PULL_UP_RESISTOR                10000//NIDEC NTC VALUE
 //#define NTC_PULL_UP_RESISTOR                52600//ULTRON
 
-#define UNDER_VOLT_LIMIT                0.0   
+#define UNDER_VOLT_LIMIT                48.0   
 #define OVER_VOLT_LIMIT                 75.0//72 corresponds to 80V
 
 
@@ -59,7 +59,7 @@
 #define ODO_CAN_SCALING                     10
 #define THROTTLE_CAN_ADC_SCALING            10.0
 #define THROTTLE_ENCODER_THRESHOLD          1000
-#define SANITY_COUNT                        40
+#define SANITY_COUNT                        150
 #define CURRENT_SENSOR_MAX                  34000
 #define CURRENT_SENSOR_MIN                  30000
 #define RPM_TO_FREQ                         2.0/120.0
@@ -94,7 +94,7 @@ float moving_D_current_measured_fun(float  , float ) ;  // 0.1 amp Batt_current_
 int moving_Throttle_measured_fun(int,int);
 int Temperature_Fault(int);
 int Temperature_Fault_Controller(int);
-int BUS_Voltage_OV_UV_Fault(int);
+int BUS_Voltage_OV_UV_Fault(float);
 int Motor_Stall_Fault();
 float Throttle_Control(int,float,int,int);
 int Rpm_Target_Function(int);

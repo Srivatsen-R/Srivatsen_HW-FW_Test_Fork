@@ -138,35 +138,47 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
       else if(reverse_flag){can.txMsg[1][0] = 0x04;}
       else if(neutral_flag){can.txMsg[1][0] = 0x01;}
 
-      if(dc_current >= 0.0){can.txMsg[1][1] &= (0 << 2);}
+      if(dc_current >= 0.0){can.txMsg[1][1] &= ~(1 << 2);}
       else if(dc_current < 0.0){can.txMsg[1][1] |= (1 << 2);}
 
       if(terminal.rotor.angle < 44.0){can.txMsg[1][1] |= (1 << 3);}
-      else{can.txMsg[1][1] &= (0 << 3);}
+      else{can.txMsg[1][1] &= ~(1 << 3);}
 
       if(start_flag){can.txMsg[1][1] |= (1 << 5);}
-      else{can.txMsg[1][1] &= (0 << 5);}
+      else{can.txMsg[1][1] &= ~(1 << 5);}
 
       can.txMsg[1][2] = 0xFF;
 
       if(fault.status == FAULT_OVER_SPEED){can.txMsg[1][3] |= (1 << 1);}
+      else{can.txMsg[1][3] &= ~(1 << 1);}
       if(fault.status == FAULT_MOTOR_LOAD){can.txMsg[1][3] |= (1 << 2);}
+      else{can.txMsg[1][3] &= ~(1 << 2);}
       if(fault.status == FAULT_MOTOR_TEMPERATURE){can.txMsg[1][3] |= (1 << 3);}
-      if(fault.status == FAULT_HARDWARE_OVER_VOLTAGE){can.txMsg[1][3] |= (1 << 4);}
-      if(fault.status == FAULT_UNDER_VOLTAGE){can.txMsg[1][3] |= (1 << 5);}
+      else{can.txMsg[1][3] &= ~(1 << 3);}
+      if(busVoltage > 75.0){can.txMsg[1][3] |= (1 << 4);}
+      else if(busVoltage >= 48.0 && busVoltage <= 75.0){can.txMsg[1][3] &= ~(1 << 4);}
+      if(busVoltage < 48.0){can.txMsg[1][3] |= (1 << 5);}
+      else if(busVoltage >= 48.0 && busVoltage <= 75.0){can.txMsg[1][3] &= ~(1 << 5);}
       if(fault.status == FAULT_TEMP_LOW){can.txMsg[1][3] |= (1 << 6);}
-      // if(fault.status == FAULT_SPEED_LIMIT){can.txMsg[1][3] |= (1 << 7);}
-      // else if(terminal.w.sen < 5500.0){can.txMsg[1][3] &= (0 << 7);}
+      else{can.txMsg[1][3] &= ~(1 << 6);}
 
-      can.txMsg[1][4] = ((uint16_t) (kmph_can + 6.0));
-      can.txMsg[1][5] = ((uint16_t) (kmph_can + 6.0)>>8);
+      if(kmph_can == 0.0){
+        can.txMsg[1][4] = ((uint16_t) (kmph_can));
+        can.txMsg[1][5] = ((uint16_t) (kmph_can)>>8);
+      }
+      else{
+        can.txMsg[1][4] = ((uint16_t) (kmph_can + 6.0));
+        can.txMsg[1][5] = ((uint16_t) (kmph_can + 6.0)>>8);
+      }
       can.txMsg[1][6] = ((uint16_t) (trip_can));
       can.txMsg[1][7] = ((uint16_t) (trip_can)>>8);
 
       // 708
       if(fault.status >= FAULT_MOTOR_TEMPERATURE && fault.status <= FAULT_DIRECTION_ERR){can.txMsg[2][0] |= (1 << fault.status);}
       if(fault.status == FAULT_ENCODER){can.txMsg[2][1] |= (1 << 1);}
+      else{can.txMsg[2][1] &= ~(1 << 1);}
       if(fault.status == FAULT_HARDWARE_OVER_VOLTAGE){can.txMsg[2][1] |= (1 << 2);}
+      else{can.txMsg[2][1] &= ~(1 << 2);}
 
       //710
       can.txMsg[3][0] = (uint8_t)((int)throttle_percent);

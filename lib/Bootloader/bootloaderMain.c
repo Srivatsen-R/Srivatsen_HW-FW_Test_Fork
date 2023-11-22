@@ -60,11 +60,11 @@ int main(void) {
   //while loop running on CLK frequency.
   while (1) 
   {
-    for (int blinkCounter = 0; blinkCounter <= 1; blinkCounter++)
-    {
-      HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_11);
-      HAL_Delay(100);
-    }
+    // for (int blinkCounter = 0; blinkCounter <= 1; blinkCounter++)
+    // {
+    //   HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_11);
+    //   HAL_Delay(100);
+    // }
 
     // switchToPrimaryApp();
     if (sharedmemory.magic == SHARED_MAGIC)

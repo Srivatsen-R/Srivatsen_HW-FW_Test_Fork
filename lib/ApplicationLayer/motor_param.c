@@ -198,7 +198,7 @@ int Temperature_Fault(int  heatsink_T_temp)
 }
 
 
-int BUS_Voltage_OV_UV_Fault(int measure_Vbus_temp)
+int BUS_Voltage_OV_UV_Fault(float measure_Vbus_temp)
    {
        static int UV_Hys_var;
        static int OV_Hys_var;

@@ -10,6 +10,11 @@
 #include "config.h"
 #include <stdint.h>
 
+extern motorControl_t motorControl;
+
+extern TIM_HandleTypeDef htim7;
+extern TIM_HandleTypeDef htim17;
+
 // #define APP1
 upgrade_type uptype = COTA;
 firmware_upgrade_states upgrade_state = UPGRADE_INIT;
@@ -137,6 +142,8 @@ void handle_rceive_data()
     uint8_t timeout_count = 0;
     uint8_t retry = 0;
 
+    uint8_t can_data[5] = {0};
+    Transmit_on_CAN1(0x310, S, can_data, 5);
     
 
     
@@ -183,10 +190,10 @@ void handle_rceive_data()
             unsigned int ret_code; 
             ret_code = Flash_Write_Data(address, words, mess_len);
 
-            uint8_t can_data[5] = {0};
-            can_data[0] = ret_code;
+            // uint8_t can_data[5] = {0};
+            // can_data[0] = ret_code;
 
-            Transmit_on_CAN1(0x305, S, can_data, 5);
+            // Transmit_on_CAN1(0x310, S, can_data, 5);
 
 
             curr_frame++;
@@ -194,7 +201,9 @@ void handle_rceive_data()
 
             // Transmit_on_CAN1(tx_flash_write_progress, S, &write_progress, sizeof(write_progress));
             response[3] = SUCCESS_MESS;
+            // HAL_Delay(100);
             Transmit_on_CAN1(FIRMWARE_UPGRADE_COMM, S, response, 5);
+            timeout_counter = 0;
             break;
         
         default:
@@ -248,6 +257,7 @@ void handle_upgrade_complete()
     switch (uptype)
     {
     case FOTA:
+        HAL_TIM_Base_Stop_IT(&htim7);
         switch_partition_and_reset();
         break;
     case COTA:

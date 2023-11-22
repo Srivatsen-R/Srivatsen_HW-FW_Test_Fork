@@ -89,6 +89,7 @@ int count_duty=0;
 int counter_100ms=0;
 int counter_current_ms = 0;
 int counter_encoder_ms = 0;
+uint8_t counter_abnormal_run = 0;
  
 int pwm_pulse=0;
 int z_pulse=0;    
@@ -138,15 +139,15 @@ int main(void) {
   
   //function to keep drive disable intially.
   MotorControl_Init();
-  // HAL_Delay(100); commented
+  // HAL_Delay(100); //commented
   
   //function to perform sanity checks at ignition.
   RUN_SANITY();
-  HAL_Delay(5000); //commented
+  // HAL_Delay(9000); //commented
 
   //enabling motor control interrupts , ABZ+PWM sensing interrpts.
   ENABLE_PERIPHERALS();
-  // HAL_Delay(100);  commented
+  // HAL_Delay(100);  //commented
 
   //read previous odometer data.
   EEPROM_Read_Data();
@@ -246,8 +247,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
 
   if(htim->Instance == TIM7)
   {
-    HAL_TIM_Base_Stop_IT(&htim17);
     motorControl.drive.check = DRIVE_DISABLE;
+    HAL_TIM_Base_Stop_IT(&htim17);
     switch (upgrade_state)
     {
     case UPGRADE_INIT:
@@ -258,23 +259,20 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
       break;
     case UPGRADE_PAUSE:
       handle_upgrade_pause();
-      HAL_TIM_Base_Start_IT(&htim17);
-      motorControl.drive.check = DRIVE_ENABLE;
       HAL_TIM_Base_Stop_IT(&htim7);
+      motorControl.drive.check = DRIVE_ENABLE;
+      HAL_TIM_Base_Start_IT(&htim17);
       break;
     case UPGRADE_RESUME:
       handle_upgrade_resume();
       break;
     case UPGRADE_COMPLETE:
       handle_upgrade_complete();
-      HAL_TIM_Base_Start_IT(&htim17);
-      motorControl.drive.check = DRIVE_ENABLE;
-      HAL_TIM_Base_Stop_IT(&htim7);
       break;
     case UPGRADE_FAILED:
-      HAL_TIM_Base_Start_IT(&htim17);
-      motorControl.drive.check = DRIVE_ENABLE;
       HAL_TIM_Base_Stop_IT(&htim7);
+      motorControl.drive.check = DRIVE_ENABLE;
+      HAL_TIM_Base_Start_IT(&htim17);
       break;
     default:
       break;
@@ -316,7 +314,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
           counter_100ms++;
           counter_current_ms++;
           counter_encoder_ms++;
-
+          counter_abnormal_run++;
   }
 }
 

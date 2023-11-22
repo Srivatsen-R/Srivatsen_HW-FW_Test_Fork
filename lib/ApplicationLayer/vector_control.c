@@ -260,7 +260,7 @@ if(config==1)
                         }
                         else if(((foc.speed_sense*SPEED_PU_TO_RPM) <D_CURRENT_DERATING_RPM_1))
                         {
-                            foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200.0, 312.5, MTPA_MAX_CURRENT_PU);//not correct   
+                            foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200.0, 0.0, MTPA_MAX_CURRENT_PU);//not correct   
                         }
 
                         if(foc.flux_current_ref >= MTPA_MAX_CURRENT_PU){foc.flux_current_ref = MTPA_MAX_CURRENT_PU;}
@@ -669,7 +669,7 @@ void FOC_ELECTRICAL_ANGLE_CALCULATION()
 
             if(forward_flag)
             {
-                if(duty_state == 1)
+                if(foc.speed_sense*SPEED_PU_TO_RPM<10.0)
                 {
                     //pwm signal        
                     // if(angle_mech<0){angle_mech = angle_mech+6.28;}
@@ -687,7 +687,7 @@ void FOC_ELECTRICAL_ANGLE_CALCULATION()
 
             if(reverse_flag)
             {
-                if(duty_state == 1)
+                if(foc.speed_sense*SPEED_PU_TO_RPM<10.0)
                 {
                     //pwm signal        
                     angle_mech = -(6.28-(100-Duty)*DUTY_TO_RADIAN); //mech angle
@@ -702,7 +702,7 @@ void FOC_ELECTRICAL_ANGLE_CALCULATION()
             {
                 if(motorControl.drive.fnr_status == 1)
                 {  
-                        if(foc.speed_sense*SPEED_PU_TO_RPM<100)
+                        if(foc.speed_sense*SPEED_PU_TO_RPM<10.0)
                         {
                          
                          //pwm signal        
@@ -723,7 +723,7 @@ void FOC_ELECTRICAL_ANGLE_CALCULATION()
 
                 if(motorControl.drive.fnr_status == 2)
                 {
-                        if(foc.speed_sense*SPEED_PU_TO_RPM<100)
+                        if(foc.speed_sense*SPEED_PU_TO_RPM<10.0)
                         {
                             //pwm signal        
                             angle_mech = -(6.28-(100-Duty)*DUTY_TO_RADIAN); //mech angle
@@ -740,7 +740,6 @@ void FOC_ELECTRICAL_ANGLE_CALCULATION()
                 //foc.rho_prev = PPR_TO_RAD_CONSTANT*motorControl.encoder.value;
                 foc.rho_prev = 0.0;
                 reset_flag=0;
-                duty_state = 0;
             }
           
             foc.rho = READ_ROTOR_ANGLE(foc.rho_prev,foc.sync_speed,foc.sync_speed_prev);//electrical angle

@@ -18,7 +18,7 @@ extern terminal_t terminal;
 extern motorControl_t motorControl;
 extern motor_t motor;
 float SOC_Data = 0.0, DCLI = 0.0, DCLO = 0.0;
-float Pack_V = 0.0, Pack_Ah = 0.0;
+float Pack_V = 0.0, Pack_Ah = 0.0, Pack_C = 0.0;
 extern float avg_board_temp;
 extern float v_rms;
 
@@ -145,7 +145,7 @@ void CAN_Filter_IDList(uint32_t U32_receiveCANid, TypeofCANID U8_idType, FilterB
     HAL_FDCAN_ConfigGlobalFilter(&hfdcan2, FDCAN_REJECT, FDCAN_REJECT, FDCAN_REJECT_REMOTE, FDCAN_REJECT_REMOTE);
 
     /* Configure Rx FIFO 0 watermark to 2 */
-    HAL_FDCAN_ConfigFifoWatermark(&hfdcan2, FDCAN_CFG_RX_FIFO0, 5);
+    HAL_FDCAN_ConfigFifoWatermark(&hfdcan2, FDCAN_CFG_RX_FIFO0, 6);
 
     /* Activate Rx FIFO 0 watermark notification */
     HAL_FDCAN_ActivateNotification(&hfdcan2, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
@@ -206,8 +206,12 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 			DCLO = (float)(((can.rxMsg[3]<<8 | can.rxMsg[2])) * 0.1);
 		}
 
-		if(can.RxMessageBuf.Identifier == rx_controller_11C){
-			Pack_Ah = (float)((can.rxMsg[3]<<8 | can.rxMsg[2]) * 0.1);
+		if(can.RxMessageBuf.Identifier == rx_controller_112){
+			Pack_Ah = (float)((can.rxMsg[7]<<8 | can.rxMsg[6]) * 0.1);
+		}
+
+		if(can.RxMessageBuf.Identifier == rx_controller_110){
+			Pack_C = (float)((can.rxMsg[7] << 24 | can.rxMsg[6] << 16 | can.rxMsg[5] << 8 | can.rxMsg[0]) * 0.01);
 		}
 }
 
@@ -241,7 +245,8 @@ void FDCAN_ApplicationSetup (void) {
   CAN_Filter_IDList(rx_Controller_7FE, S, FBANK1, FIFO0_CAN2);
   CAN_Filter_IDList(rx_Controller_109, S, FBANK2, FIFO0_CAN2);
   CAN_Filter_IDList(rx_controller_12A, S, FBANK3, FIFO0_CAN2);
-  CAN_Filter_IDList(rx_controller_11C, S, FBANK4, FIFO0_CAN2);
+  CAN_Filter_IDList(rx_controller_112, S, FBANK4, FIFO0_CAN2);
+  CAN_Filter_IDList(rx_controller_110, S, FBANK5, FIFO0_CAN2);
 
   /* Start the FDCAN module */
   if(HAL_FDCAN_Start(&hfdcan2) != HAL_OK) {
@@ -348,8 +353,8 @@ static void __fdcan_transferMessagesOnID304(adc_t phaseCurrent, motorControl_t m
 	   __fdcan->BufferForMessageToTransmit[3] = (phaseCurrent.bufferData[PHASE_CURRENT_V] & 0xFF00) >> 8;
 	   __fdcan->BufferForMessageToTransmit[4] =  motorController.encoder.value            & 0x00FF; 
 	   __fdcan->BufferForMessageToTransmit[5] = (motorController.encoder.value            & 0xFF00) >> 8;
-	   __fdcan->BufferForMessageToTransmit[6] = 0;
-	   __fdcan->BufferForMessageToTransmit[7] = 0;
+	   __fdcan->BufferForMessageToTransmit[6] = ((uint32_t)Pack_C & 0x00FF);
+	   __fdcan->BufferForMessageToTransmit[7] = ((uint32_t)Pack_C & 0xFF00) >> 8;
 	   __fdcan->transmit(FDCAN_DEBUG_ID_304, S, __fdcan->BufferForMessageToTransmit, 8);
 
 	   free(__fdcan);

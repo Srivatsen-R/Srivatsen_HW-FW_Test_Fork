@@ -82,6 +82,9 @@ void bootup_config(void)
     if (config.config_set_flag == 1)
     {
         // pass
+        // variables->PPR = config.ppr;
+        // variables->POLEPAIRS = config.POLE_PAIR;
+        // variables->MAX_RPM = config.TOP_SPEED_FW;
     }
     else
     {
@@ -119,7 +122,7 @@ void update_config()
     
     configFile received_conf;
     char delimiter[2] = ",";
-    uint8_t res = parse_config(&received_conf, ((char *)firmware_up_recv_message.payload) + 5, delimiter);
+    uint8_t res = parse_config(&received_conf, ((char *)firmware_up_recv_message.payload) + 9, delimiter);
 
     Flash_Write_Data(__configdata__, (uint32_t *)&received_conf, sizeof(received_conf));
     set_config_flag(0);

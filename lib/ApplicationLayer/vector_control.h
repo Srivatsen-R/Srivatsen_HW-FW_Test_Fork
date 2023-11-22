@@ -114,7 +114,7 @@ typedef struct foc_t {
 #define TIM1_PERIOD             2500// frequency = 200MHz/(2*(TIM1_PSCLR+1)*TIM1_PERIOD)
 #define TIM1_DEADTIME           185
 #define MAX_RPM                 5000.0
-#define FW_MIN_CURRENT_PU       312.5
+#define FW_MIN_CURRENT_PU       0.0
 #define MTPA_MAX_CURRENT_PU     3500.0
 #define D_CURRENT_DERATING_RPM_1  1000.0
 #define D_CURRENT_DERATING_RPM_2  2000.0
@@ -122,10 +122,10 @@ typedef struct foc_t {
 #define POWER_MAPPING_LOWER_RPM     1000.0
 #define POWER_MAPPING_UPPER_RPM     2000.0    
 #define POWER_MAPPING_UPPER_IQ_LIMIT_PU 26054.75
-#define POWER_MAPPING_LOWER_IQ_LIMIT_PU 13031.0
+#define POWER_MAPPING_LOWER_IQ_LIMIT_PU 6516.0
 #define VD_LIMIT                            24000.0
 #define VQ_LIMIT                            32000.0
-#define VQ_LIMIT_FACTOR                     0.724
+#define VQ_LIMIT_FACTOR                     0.824
 
 //#define ANGLE_OFFSET                        4.188//Proto -3 Ultron
 //#define ANGLE_OFFSET                        0.0//Proto -12 Ultron

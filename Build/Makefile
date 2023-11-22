@@ -129,30 +129,30 @@ Pegasus3.1v-bootloader.elf/fast:
 .PHONY : Pegasus3.1v-bootloader.elf/fast
 
 #=============================================================================
-# Target rules for targets named Pegasus3.1v-appPrimary.elf
+# Target rules for targets named Pegasus3.1v-app1.elf
 
 # Build rule for target.
-Pegasus3.1v-appPrimary.elf: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Pegasus3.1v-appPrimary.elf
-.PHONY : Pegasus3.1v-appPrimary.elf
+Pegasus3.1v-app1.elf: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Pegasus3.1v-app1.elf
+.PHONY : Pegasus3.1v-app1.elf
 
 # fast build rule for target.
-Pegasus3.1v-appPrimary.elf/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/build
-.PHONY : Pegasus3.1v-appPrimary.elf/fast
+Pegasus3.1v-app1.elf/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/build
+.PHONY : Pegasus3.1v-app1.elf/fast
 
 #=============================================================================
-# Target rules for targets named Pegasus3.1v-appSecondary.elf
+# Target rules for targets named Pegasus3.1v-app2.elf
 
 # Build rule for target.
-Pegasus3.1v-appSecondary.elf: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Pegasus3.1v-appSecondary.elf
-.PHONY : Pegasus3.1v-appSecondary.elf
+Pegasus3.1v-app2.elf: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Pegasus3.1v-app2.elf
+.PHONY : Pegasus3.1v-app2.elf
 
 # fast build rule for target.
-Pegasus3.1v-appSecondary.elf/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/build
-.PHONY : Pegasus3.1v-appSecondary.elf/fast
+Pegasus3.1v-app2.elf/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/build
+.PHONY : Pegasus3.1v-app2.elf/fast
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.obj
@@ -160,8 +160,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.obj: Drivers/STM32H7xx_HAL_Driver
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.i
@@ -170,8 +170,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.i: Drivers/STM32H7xx_HAL_Driver/S
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.s
@@ -180,8 +180,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.s: Drivers/STM32H7xx_HAL_Driver/S
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.obj
@@ -190,8 +190,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.obj: Drivers/STM32H7xx_HAL_Dr
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.i
@@ -200,8 +200,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.i: Drivers/STM32H7xx_HAL_Driv
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.s
@@ -210,8 +210,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.s: Drivers/STM32H7xx_HAL_Driv
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.obj
@@ -220,8 +220,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.obj: Drivers/STM32H7xx_HAL
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.i
@@ -230,8 +230,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.i: Drivers/STM32H7xx_HAL_D
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.s
@@ -240,8 +240,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.s: Drivers/STM32H7xx_HAL_D
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.obj
@@ -250,8 +250,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.obj: Drivers/STM32H7xx_HAL
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.i
@@ -260,8 +260,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.i: Drivers/STM32H7xx_HAL_D
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.s
@@ -270,8 +270,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.s: Drivers/STM32H7xx_HAL_D
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.obj
@@ -280,8 +280,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.obj: Drivers/STM32H7xx_HAL_Dr
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.i
@@ -290,8 +290,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.i: Drivers/STM32H7xx_HAL_Driv
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.s
@@ -300,8 +300,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.s: Drivers/STM32H7xx_HAL_Driv
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.obj
@@ -310,8 +310,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.obj: Drivers/STM32H7xx_HAL
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.i
@@ -320,8 +320,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.i: Drivers/STM32H7xx_HAL_D
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.s
@@ -330,8 +330,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.s: Drivers/STM32H7xx_HAL_D
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.obj
@@ -340,8 +340,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.obj: Drivers/STM32H7xx_HAL_D
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.i
@@ -350,8 +350,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.i: Drivers/STM32H7xx_HAL_Dri
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.s
@@ -360,8 +360,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.s: Drivers/STM32H7xx_HAL_Dri
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.obj
@@ -370,8 +370,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.obj: Drivers/STM32H7xx_HAL_
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.i
@@ -380,8 +380,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.i: Drivers/STM32H7xx_HAL_Dr
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.s
@@ -390,8 +390,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.s: Drivers/STM32H7xx_HAL_Dr
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.obj
@@ -400,8 +400,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.obj: Drivers/STM32H7xx_HAL_
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.i
@@ -410,8 +410,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.i: Drivers/STM32H7xx_HAL_Dr
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.s
@@ -420,8 +420,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.s: Drivers/STM32H7xx_HAL_Dr
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.obj
@@ -430,8 +430,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.obj: Drivers/STM32H7xx_H
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.i
@@ -440,8 +440,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.i: Drivers/STM32H7xx_HAL
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.s
@@ -450,8 +450,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.s: Drivers/STM32H7xx_HAL
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.obj
@@ -460,8 +460,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.obj: Drivers/STM32H7xx_HAL_D
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.i
@@ -470,8 +470,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.i: Drivers/STM32H7xx_HAL_Dri
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.s
@@ -480,8 +480,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.s: Drivers/STM32H7xx_HAL_Dri
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.obj
@@ -490,8 +490,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.obj: Drivers/STM32H7xx_HAL_Dr
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.i
@@ -500,8 +500,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.i: Drivers/STM32H7xx_HAL_Driv
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.s
@@ -510,8 +510,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.s: Drivers/STM32H7xx_HAL_Driv
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.obj
@@ -520,8 +520,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.obj: Drivers/STM32H7xx_HAL
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.i
@@ -530,8 +530,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.i: Drivers/STM32H7xx_HAL_D
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.s
@@ -540,8 +540,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.s: Drivers/STM32H7xx_HAL_D
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.obj
@@ -550,8 +550,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.obj: Drivers/STM32H7xx_HAL_Dr
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.i
@@ -560,8 +560,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.i: Drivers/STM32H7xx_HAL_Driv
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.s
@@ -570,8 +570,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.s: Drivers/STM32H7xx_HAL_Driv
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.obj
@@ -580,8 +580,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.obj: Drivers/STM32H7xx_HAL
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.i
@@ -590,8 +590,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.i: Drivers/STM32H7xx_HAL_D
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.s
@@ -600,8 +600,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.s: Drivers/STM32H7xx_HAL_D
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.obj
@@ -610,8 +610,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.obj: Drivers/STM32H7xx_HAL_Dr
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.i
@@ -620,8 +620,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.i: Drivers/STM32H7xx_HAL_Driv
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.s
@@ -630,8 +630,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.s: Drivers/STM32H7xx_HAL_Driv
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.obj
@@ -640,8 +640,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.obj: Drivers/STM32H7xx_HAL
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.i
@@ -650,8 +650,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.i: Drivers/STM32H7xx_HAL_D
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.s
@@ -660,8 +660,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.s: Drivers/STM32H7xx_HAL_D
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.obj
@@ -670,8 +670,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.obj: Drivers/STM32H7xx_HAL_Dr
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.i
@@ -680,8 +680,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.i: Drivers/STM32H7xx_HAL_Driv
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.s
@@ -690,8 +690,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.s: Drivers/STM32H7xx_HAL_Driv
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.obj
@@ -700,8 +700,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.obj: Drivers/STM32H7xx_HAL
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.i
@@ -710,8 +710,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.i: Drivers/STM32H7xx_HAL_D
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.s
@@ -720,8 +720,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.s: Drivers/STM32H7xx_HAL_D
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.obj
@@ -730,8 +730,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.obj: Drivers/STM32H7xx_HAL_D
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.i
@@ -740,8 +740,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.i: Drivers/STM32H7xx_HAL_Dri
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.s
@@ -750,8 +750,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.s: Drivers/STM32H7xx_HAL_Dri
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.obj
@@ -760,8 +760,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.obj: Drivers/STM32H7xx_HA
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.i
@@ -770,8 +770,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.i: Drivers/STM32H7xx_HAL_
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.s
@@ -780,8 +780,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.s: Drivers/STM32H7xx_HAL_
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.obj
@@ -790,8 +790,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.obj: Drivers/STM32H7xx_HAL_
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.i
@@ -800,8 +800,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.i: Drivers/STM32H7xx_HAL_Dr
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.s
@@ -810,8 +810,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.s: Drivers/STM32H7xx_HAL_Dr
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c.s
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.obj: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.obj
@@ -820,8 +820,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.obj: Drivers/STM32H7xx_H
 # target to build an object file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.obj
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.obj
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.i: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.i
@@ -830,8 +830,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.i: Drivers/STM32H7xx_HAL
 # target to preprocess a source file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.i
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.i
 
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.s: Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.s
@@ -840,8 +840,8 @@ Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.s: Drivers/STM32H7xx_HAL
 # target to generate assembly for a file
 Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.s
 .PHONY : Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c.s
 
 Utility/can-tp-module-threadx/can_tp_app.obj: Utility/can-tp-module-threadx/can_tp_app.c.obj
@@ -849,8 +849,8 @@ Utility/can-tp-module-threadx/can_tp_app.obj: Utility/can-tp-module-threadx/can_
 
 # target to build an object file
 Utility/can-tp-module-threadx/can_tp_app.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/can_tp_app.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/can_tp_app.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/can_tp_app.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/can_tp_app.c.obj
 .PHONY : Utility/can-tp-module-threadx/can_tp_app.c.obj
 
 Utility/can-tp-module-threadx/can_tp_app.i: Utility/can-tp-module-threadx/can_tp_app.c.i
@@ -858,8 +858,8 @@ Utility/can-tp-module-threadx/can_tp_app.i: Utility/can-tp-module-threadx/can_tp
 
 # target to preprocess a source file
 Utility/can-tp-module-threadx/can_tp_app.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/can_tp_app.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/can_tp_app.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/can_tp_app.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/can_tp_app.c.i
 .PHONY : Utility/can-tp-module-threadx/can_tp_app.c.i
 
 Utility/can-tp-module-threadx/can_tp_app.s: Utility/can-tp-module-threadx/can_tp_app.c.s
@@ -867,8 +867,8 @@ Utility/can-tp-module-threadx/can_tp_app.s: Utility/can-tp-module-threadx/can_tp
 
 # target to generate assembly for a file
 Utility/can-tp-module-threadx/can_tp_app.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/can_tp_app.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/can_tp_app.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/can_tp_app.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/can_tp_app.c.s
 .PHONY : Utility/can-tp-module-threadx/can_tp_app.c.s
 
 Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.obj: Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.obj
@@ -876,8 +876,8 @@ Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.obj: Ut
 
 # target to build an object file
 Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.obj
 .PHONY : Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.obj
 
 Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.i: Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.i
@@ -885,8 +885,8 @@ Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.i: Util
 
 # target to preprocess a source file
 Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.i
 .PHONY : Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.i
 
 Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.s: Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.s
@@ -894,8 +894,8 @@ Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.s: Util
 
 # target to generate assembly for a file
 Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.s
 .PHONY : Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/8byte.c.s
 
 Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.obj: Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.obj
@@ -903,8 +903,8 @@ Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.obj:
 
 # target to build an object file
 Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.obj
 .PHONY : Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.obj
 
 Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.i: Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.i
@@ -912,8 +912,8 @@ Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.i: U
 
 # target to preprocess a source file
 Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.i
 .PHONY : Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.i
 
 Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.s: Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.s
@@ -921,8 +921,8 @@ Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.s: U
 
 # target to generate assembly for a file
 Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.s
 .PHONY : Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitarray.c.s
 
 Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.obj: Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.obj
@@ -930,8 +930,8 @@ Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.obj:
 
 # target to build an object file
 Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.obj
 .PHONY : Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.obj
 
 Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.i: Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.i
@@ -939,8 +939,8 @@ Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.i: U
 
 # target to preprocess a source file
 Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.i
 .PHONY : Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.i
 
 Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.s: Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.s
@@ -948,8 +948,8 @@ Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.s: U
 
 # target to generate assembly for a file
 Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.s
 .PHONY : Utility/can-tp-module-threadx/isotp-c/deps/bitfield-c/src/bitfield/bitfield.c.s
 
 Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.obj: Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.obj
@@ -957,8 +957,8 @@ Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.obj: Utility/can-tp-module
 
 # target to build an object file
 Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.obj
 .PHONY : Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.obj
 
 Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.i: Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.i
@@ -966,8 +966,8 @@ Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.i: Utility/can-tp-module-t
 
 # target to preprocess a source file
 Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.i
 .PHONY : Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.i
 
 Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.s: Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.s
@@ -975,8 +975,8 @@ Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.s: Utility/can-tp-module-t
 
 # target to generate assembly for a file
 Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.s
 .PHONY : Utility/can-tp-module-threadx/isotp-c/src/isotp/isotp.c.s
 
 Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.obj: Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.obj
@@ -984,8 +984,8 @@ Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.obj: Utility/can-tp-modu
 
 # target to build an object file
 Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.obj
 .PHONY : Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.obj
 
 Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.i: Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.i
@@ -993,8 +993,8 @@ Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.i: Utility/can-tp-module
 
 # target to preprocess a source file
 Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.i
 .PHONY : Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.i
 
 Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.s: Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.s
@@ -1002,8 +1002,8 @@ Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.s: Utility/can-tp-module
 
 # target to generate assembly for a file
 Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.s
 .PHONY : Utility/can-tp-module-threadx/isotp-c/src/isotp/receive.c.s
 
 Utility/can-tp-module-threadx/isotp-c/src/isotp/send.obj: Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.obj
@@ -1011,8 +1011,8 @@ Utility/can-tp-module-threadx/isotp-c/src/isotp/send.obj: Utility/can-tp-module-
 
 # target to build an object file
 Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.obj
 .PHONY : Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.obj
 
 Utility/can-tp-module-threadx/isotp-c/src/isotp/send.i: Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.i
@@ -1020,8 +1020,8 @@ Utility/can-tp-module-threadx/isotp-c/src/isotp/send.i: Utility/can-tp-module-th
 
 # target to preprocess a source file
 Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.i
 .PHONY : Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.i
 
 Utility/can-tp-module-threadx/isotp-c/src/isotp/send.s: Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.s
@@ -1029,8 +1029,8 @@ Utility/can-tp-module-threadx/isotp-c/src/isotp/send.s: Utility/can-tp-module-th
 
 # target to generate assembly for a file
 Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.s
 .PHONY : Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.s
 
 lib/ApplicationLayer/adc_AL.obj: lib/ApplicationLayer/adc_AL.c.obj
@@ -1038,8 +1038,8 @@ lib/ApplicationLayer/adc_AL.obj: lib/ApplicationLayer/adc_AL.c.obj
 
 # target to build an object file
 lib/ApplicationLayer/adc_AL.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/adc_AL.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/adc_AL.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/adc_AL.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/adc_AL.c.obj
 .PHONY : lib/ApplicationLayer/adc_AL.c.obj
 
 lib/ApplicationLayer/adc_AL.i: lib/ApplicationLayer/adc_AL.c.i
@@ -1047,8 +1047,8 @@ lib/ApplicationLayer/adc_AL.i: lib/ApplicationLayer/adc_AL.c.i
 
 # target to preprocess a source file
 lib/ApplicationLayer/adc_AL.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/adc_AL.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/adc_AL.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/adc_AL.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/adc_AL.c.i
 .PHONY : lib/ApplicationLayer/adc_AL.c.i
 
 lib/ApplicationLayer/adc_AL.s: lib/ApplicationLayer/adc_AL.c.s
@@ -1056,8 +1056,8 @@ lib/ApplicationLayer/adc_AL.s: lib/ApplicationLayer/adc_AL.c.s
 
 # target to generate assembly for a file
 lib/ApplicationLayer/adc_AL.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/adc_AL.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/adc_AL.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/adc_AL.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/adc_AL.c.s
 .PHONY : lib/ApplicationLayer/adc_AL.c.s
 
 lib/ApplicationLayer/config.obj: lib/ApplicationLayer/config.c.obj
@@ -1065,8 +1065,8 @@ lib/ApplicationLayer/config.obj: lib/ApplicationLayer/config.c.obj
 
 # target to build an object file
 lib/ApplicationLayer/config.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/config.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/config.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/config.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/config.c.obj
 .PHONY : lib/ApplicationLayer/config.c.obj
 
 lib/ApplicationLayer/config.i: lib/ApplicationLayer/config.c.i
@@ -1074,8 +1074,8 @@ lib/ApplicationLayer/config.i: lib/ApplicationLayer/config.c.i
 
 # target to preprocess a source file
 lib/ApplicationLayer/config.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/config.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/config.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/config.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/config.c.i
 .PHONY : lib/ApplicationLayer/config.c.i
 
 lib/ApplicationLayer/config.s: lib/ApplicationLayer/config.c.s
@@ -1083,8 +1083,8 @@ lib/ApplicationLayer/config.s: lib/ApplicationLayer/config.c.s
 
 # target to generate assembly for a file
 lib/ApplicationLayer/config.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/config.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/config.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/config.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/config.c.s
 .PHONY : lib/ApplicationLayer/config.c.s
 
 lib/ApplicationLayer/crc32.obj: lib/ApplicationLayer/crc32.c.obj
@@ -1093,8 +1093,8 @@ lib/ApplicationLayer/crc32.obj: lib/ApplicationLayer/crc32.c.obj
 # target to build an object file
 lib/ApplicationLayer/crc32.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/lib/ApplicationLayer/crc32.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/crc32.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/crc32.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/crc32.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/crc32.c.obj
 .PHONY : lib/ApplicationLayer/crc32.c.obj
 
 lib/ApplicationLayer/crc32.i: lib/ApplicationLayer/crc32.c.i
@@ -1103,8 +1103,8 @@ lib/ApplicationLayer/crc32.i: lib/ApplicationLayer/crc32.c.i
 # target to preprocess a source file
 lib/ApplicationLayer/crc32.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/lib/ApplicationLayer/crc32.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/crc32.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/crc32.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/crc32.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/crc32.c.i
 .PHONY : lib/ApplicationLayer/crc32.c.i
 
 lib/ApplicationLayer/crc32.s: lib/ApplicationLayer/crc32.c.s
@@ -1113,8 +1113,8 @@ lib/ApplicationLayer/crc32.s: lib/ApplicationLayer/crc32.c.s
 # target to generate assembly for a file
 lib/ApplicationLayer/crc32.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/lib/ApplicationLayer/crc32.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/crc32.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/crc32.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/crc32.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/crc32.c.s
 .PHONY : lib/ApplicationLayer/crc32.c.s
 
 lib/ApplicationLayer/eepromCRC.obj: lib/ApplicationLayer/eepromCRC.c.obj
@@ -1122,8 +1122,8 @@ lib/ApplicationLayer/eepromCRC.obj: lib/ApplicationLayer/eepromCRC.c.obj
 
 # target to build an object file
 lib/ApplicationLayer/eepromCRC.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/eepromCRC.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/eepromCRC.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/eepromCRC.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/eepromCRC.c.obj
 .PHONY : lib/ApplicationLayer/eepromCRC.c.obj
 
 lib/ApplicationLayer/eepromCRC.i: lib/ApplicationLayer/eepromCRC.c.i
@@ -1131,8 +1131,8 @@ lib/ApplicationLayer/eepromCRC.i: lib/ApplicationLayer/eepromCRC.c.i
 
 # target to preprocess a source file
 lib/ApplicationLayer/eepromCRC.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/eepromCRC.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/eepromCRC.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/eepromCRC.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/eepromCRC.c.i
 .PHONY : lib/ApplicationLayer/eepromCRC.c.i
 
 lib/ApplicationLayer/eepromCRC.s: lib/ApplicationLayer/eepromCRC.c.s
@@ -1140,8 +1140,8 @@ lib/ApplicationLayer/eepromCRC.s: lib/ApplicationLayer/eepromCRC.c.s
 
 # target to generate assembly for a file
 lib/ApplicationLayer/eepromCRC.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/eepromCRC.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/eepromCRC.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/eepromCRC.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/eepromCRC.c.s
 .PHONY : lib/ApplicationLayer/eepromCRC.c.s
 
 lib/ApplicationLayer/eeprom_AL.obj: lib/ApplicationLayer/eeprom_AL.c.obj
@@ -1149,8 +1149,8 @@ lib/ApplicationLayer/eeprom_AL.obj: lib/ApplicationLayer/eeprom_AL.c.obj
 
 # target to build an object file
 lib/ApplicationLayer/eeprom_AL.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/eeprom_AL.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/eeprom_AL.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/eeprom_AL.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/eeprom_AL.c.obj
 .PHONY : lib/ApplicationLayer/eeprom_AL.c.obj
 
 lib/ApplicationLayer/eeprom_AL.i: lib/ApplicationLayer/eeprom_AL.c.i
@@ -1158,8 +1158,8 @@ lib/ApplicationLayer/eeprom_AL.i: lib/ApplicationLayer/eeprom_AL.c.i
 
 # target to preprocess a source file
 lib/ApplicationLayer/eeprom_AL.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/eeprom_AL.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/eeprom_AL.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/eeprom_AL.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/eeprom_AL.c.i
 .PHONY : lib/ApplicationLayer/eeprom_AL.c.i
 
 lib/ApplicationLayer/eeprom_AL.s: lib/ApplicationLayer/eeprom_AL.c.s
@@ -1167,8 +1167,8 @@ lib/ApplicationLayer/eeprom_AL.s: lib/ApplicationLayer/eeprom_AL.c.s
 
 # target to generate assembly for a file
 lib/ApplicationLayer/eeprom_AL.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/eeprom_AL.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/eeprom_AL.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/eeprom_AL.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/eeprom_AL.c.s
 .PHONY : lib/ApplicationLayer/eeprom_AL.c.s
 
 lib/ApplicationLayer/fdcan_AL.obj: lib/ApplicationLayer/fdcan_AL.c.obj
@@ -1176,8 +1176,8 @@ lib/ApplicationLayer/fdcan_AL.obj: lib/ApplicationLayer/fdcan_AL.c.obj
 
 # target to build an object file
 lib/ApplicationLayer/fdcan_AL.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/fdcan_AL.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/fdcan_AL.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/fdcan_AL.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/fdcan_AL.c.obj
 .PHONY : lib/ApplicationLayer/fdcan_AL.c.obj
 
 lib/ApplicationLayer/fdcan_AL.i: lib/ApplicationLayer/fdcan_AL.c.i
@@ -1185,8 +1185,8 @@ lib/ApplicationLayer/fdcan_AL.i: lib/ApplicationLayer/fdcan_AL.c.i
 
 # target to preprocess a source file
 lib/ApplicationLayer/fdcan_AL.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/fdcan_AL.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/fdcan_AL.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/fdcan_AL.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/fdcan_AL.c.i
 .PHONY : lib/ApplicationLayer/fdcan_AL.c.i
 
 lib/ApplicationLayer/fdcan_AL.s: lib/ApplicationLayer/fdcan_AL.c.s
@@ -1194,8 +1194,8 @@ lib/ApplicationLayer/fdcan_AL.s: lib/ApplicationLayer/fdcan_AL.c.s
 
 # target to generate assembly for a file
 lib/ApplicationLayer/fdcan_AL.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/fdcan_AL.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/fdcan_AL.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/fdcan_AL.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/fdcan_AL.c.s
 .PHONY : lib/ApplicationLayer/fdcan_AL.c.s
 
 lib/ApplicationLayer/flash.obj: lib/ApplicationLayer/flash.c.obj
@@ -1204,8 +1204,8 @@ lib/ApplicationLayer/flash.obj: lib/ApplicationLayer/flash.c.obj
 # target to build an object file
 lib/ApplicationLayer/flash.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/lib/ApplicationLayer/flash.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/flash.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/flash.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/flash.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/flash.c.obj
 .PHONY : lib/ApplicationLayer/flash.c.obj
 
 lib/ApplicationLayer/flash.i: lib/ApplicationLayer/flash.c.i
@@ -1214,8 +1214,8 @@ lib/ApplicationLayer/flash.i: lib/ApplicationLayer/flash.c.i
 # target to preprocess a source file
 lib/ApplicationLayer/flash.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/lib/ApplicationLayer/flash.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/flash.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/flash.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/flash.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/flash.c.i
 .PHONY : lib/ApplicationLayer/flash.c.i
 
 lib/ApplicationLayer/flash.s: lib/ApplicationLayer/flash.c.s
@@ -1224,8 +1224,8 @@ lib/ApplicationLayer/flash.s: lib/ApplicationLayer/flash.c.s
 # target to generate assembly for a file
 lib/ApplicationLayer/flash.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/lib/ApplicationLayer/flash.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/flash.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/flash.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/flash.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/flash.c.s
 .PHONY : lib/ApplicationLayer/flash.c.s
 
 lib/ApplicationLayer/foc_blockset.obj: lib/ApplicationLayer/foc_blockset.c.obj
@@ -1233,8 +1233,8 @@ lib/ApplicationLayer/foc_blockset.obj: lib/ApplicationLayer/foc_blockset.c.obj
 
 # target to build an object file
 lib/ApplicationLayer/foc_blockset.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/foc_blockset.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/foc_blockset.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/foc_blockset.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/foc_blockset.c.obj
 .PHONY : lib/ApplicationLayer/foc_blockset.c.obj
 
 lib/ApplicationLayer/foc_blockset.i: lib/ApplicationLayer/foc_blockset.c.i
@@ -1242,8 +1242,8 @@ lib/ApplicationLayer/foc_blockset.i: lib/ApplicationLayer/foc_blockset.c.i
 
 # target to preprocess a source file
 lib/ApplicationLayer/foc_blockset.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/foc_blockset.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/foc_blockset.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/foc_blockset.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/foc_blockset.c.i
 .PHONY : lib/ApplicationLayer/foc_blockset.c.i
 
 lib/ApplicationLayer/foc_blockset.s: lib/ApplicationLayer/foc_blockset.c.s
@@ -1251,8 +1251,8 @@ lib/ApplicationLayer/foc_blockset.s: lib/ApplicationLayer/foc_blockset.c.s
 
 # target to generate assembly for a file
 lib/ApplicationLayer/foc_blockset.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/foc_blockset.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/foc_blockset.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/foc_blockset.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/foc_blockset.c.s
 .PHONY : lib/ApplicationLayer/foc_blockset.c.s
 
 lib/ApplicationLayer/foc_mtpa_lut.obj: lib/ApplicationLayer/foc_mtpa_lut.c.obj
@@ -1260,8 +1260,8 @@ lib/ApplicationLayer/foc_mtpa_lut.obj: lib/ApplicationLayer/foc_mtpa_lut.c.obj
 
 # target to build an object file
 lib/ApplicationLayer/foc_mtpa_lut.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/foc_mtpa_lut.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/foc_mtpa_lut.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/foc_mtpa_lut.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/foc_mtpa_lut.c.obj
 .PHONY : lib/ApplicationLayer/foc_mtpa_lut.c.obj
 
 lib/ApplicationLayer/foc_mtpa_lut.i: lib/ApplicationLayer/foc_mtpa_lut.c.i
@@ -1269,8 +1269,8 @@ lib/ApplicationLayer/foc_mtpa_lut.i: lib/ApplicationLayer/foc_mtpa_lut.c.i
 
 # target to preprocess a source file
 lib/ApplicationLayer/foc_mtpa_lut.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/foc_mtpa_lut.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/foc_mtpa_lut.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/foc_mtpa_lut.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/foc_mtpa_lut.c.i
 .PHONY : lib/ApplicationLayer/foc_mtpa_lut.c.i
 
 lib/ApplicationLayer/foc_mtpa_lut.s: lib/ApplicationLayer/foc_mtpa_lut.c.s
@@ -1278,8 +1278,8 @@ lib/ApplicationLayer/foc_mtpa_lut.s: lib/ApplicationLayer/foc_mtpa_lut.c.s
 
 # target to generate assembly for a file
 lib/ApplicationLayer/foc_mtpa_lut.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/foc_mtpa_lut.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/foc_mtpa_lut.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/foc_mtpa_lut.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/foc_mtpa_lut.c.s
 .PHONY : lib/ApplicationLayer/foc_mtpa_lut.c.s
 
 lib/ApplicationLayer/led_AL.obj: lib/ApplicationLayer/led_AL.c.obj
@@ -1287,8 +1287,8 @@ lib/ApplicationLayer/led_AL.obj: lib/ApplicationLayer/led_AL.c.obj
 
 # target to build an object file
 lib/ApplicationLayer/led_AL.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/led_AL.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/led_AL.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/led_AL.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/led_AL.c.obj
 .PHONY : lib/ApplicationLayer/led_AL.c.obj
 
 lib/ApplicationLayer/led_AL.i: lib/ApplicationLayer/led_AL.c.i
@@ -1296,8 +1296,8 @@ lib/ApplicationLayer/led_AL.i: lib/ApplicationLayer/led_AL.c.i
 
 # target to preprocess a source file
 lib/ApplicationLayer/led_AL.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/led_AL.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/led_AL.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/led_AL.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/led_AL.c.i
 .PHONY : lib/ApplicationLayer/led_AL.c.i
 
 lib/ApplicationLayer/led_AL.s: lib/ApplicationLayer/led_AL.c.s
@@ -1305,8 +1305,8 @@ lib/ApplicationLayer/led_AL.s: lib/ApplicationLayer/led_AL.c.s
 
 # target to generate assembly for a file
 lib/ApplicationLayer/led_AL.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/led_AL.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/led_AL.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/led_AL.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/led_AL.c.s
 .PHONY : lib/ApplicationLayer/led_AL.c.s
 
 lib/ApplicationLayer/microcontroller.obj: lib/ApplicationLayer/microcontroller.c.obj
@@ -1314,8 +1314,8 @@ lib/ApplicationLayer/microcontroller.obj: lib/ApplicationLayer/microcontroller.c
 
 # target to build an object file
 lib/ApplicationLayer/microcontroller.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/microcontroller.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/microcontroller.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/microcontroller.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/microcontroller.c.obj
 .PHONY : lib/ApplicationLayer/microcontroller.c.obj
 
 lib/ApplicationLayer/microcontroller.i: lib/ApplicationLayer/microcontroller.c.i
@@ -1323,8 +1323,8 @@ lib/ApplicationLayer/microcontroller.i: lib/ApplicationLayer/microcontroller.c.i
 
 # target to preprocess a source file
 lib/ApplicationLayer/microcontroller.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/microcontroller.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/microcontroller.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/microcontroller.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/microcontroller.c.i
 .PHONY : lib/ApplicationLayer/microcontroller.c.i
 
 lib/ApplicationLayer/microcontroller.s: lib/ApplicationLayer/microcontroller.c.s
@@ -1332,8 +1332,8 @@ lib/ApplicationLayer/microcontroller.s: lib/ApplicationLayer/microcontroller.c.s
 
 # target to generate assembly for a file
 lib/ApplicationLayer/microcontroller.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/microcontroller.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/microcontroller.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/microcontroller.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/microcontroller.c.s
 .PHONY : lib/ApplicationLayer/microcontroller.c.s
 
 lib/ApplicationLayer/motor_param.obj: lib/ApplicationLayer/motor_param.c.obj
@@ -1341,8 +1341,8 @@ lib/ApplicationLayer/motor_param.obj: lib/ApplicationLayer/motor_param.c.obj
 
 # target to build an object file
 lib/ApplicationLayer/motor_param.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/motor_param.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/motor_param.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/motor_param.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/motor_param.c.obj
 .PHONY : lib/ApplicationLayer/motor_param.c.obj
 
 lib/ApplicationLayer/motor_param.i: lib/ApplicationLayer/motor_param.c.i
@@ -1350,8 +1350,8 @@ lib/ApplicationLayer/motor_param.i: lib/ApplicationLayer/motor_param.c.i
 
 # target to preprocess a source file
 lib/ApplicationLayer/motor_param.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/motor_param.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/motor_param.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/motor_param.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/motor_param.c.i
 .PHONY : lib/ApplicationLayer/motor_param.c.i
 
 lib/ApplicationLayer/motor_param.s: lib/ApplicationLayer/motor_param.c.s
@@ -1359,8 +1359,8 @@ lib/ApplicationLayer/motor_param.s: lib/ApplicationLayer/motor_param.c.s
 
 # target to generate assembly for a file
 lib/ApplicationLayer/motor_param.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/motor_param.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/motor_param.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/motor_param.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/motor_param.c.s
 .PHONY : lib/ApplicationLayer/motor_param.c.s
 
 lib/ApplicationLayer/sanity.obj: lib/ApplicationLayer/sanity.c.obj
@@ -1368,8 +1368,8 @@ lib/ApplicationLayer/sanity.obj: lib/ApplicationLayer/sanity.c.obj
 
 # target to build an object file
 lib/ApplicationLayer/sanity.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/sanity.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/sanity.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/sanity.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/sanity.c.obj
 .PHONY : lib/ApplicationLayer/sanity.c.obj
 
 lib/ApplicationLayer/sanity.i: lib/ApplicationLayer/sanity.c.i
@@ -1377,8 +1377,8 @@ lib/ApplicationLayer/sanity.i: lib/ApplicationLayer/sanity.c.i
 
 # target to preprocess a source file
 lib/ApplicationLayer/sanity.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/sanity.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/sanity.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/sanity.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/sanity.c.i
 .PHONY : lib/ApplicationLayer/sanity.c.i
 
 lib/ApplicationLayer/sanity.s: lib/ApplicationLayer/sanity.c.s
@@ -1386,8 +1386,8 @@ lib/ApplicationLayer/sanity.s: lib/ApplicationLayer/sanity.c.s
 
 # target to generate assembly for a file
 lib/ApplicationLayer/sanity.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/sanity.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/sanity.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/sanity.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/sanity.c.s
 .PHONY : lib/ApplicationLayer/sanity.c.s
 
 lib/ApplicationLayer/temp_AL.obj: lib/ApplicationLayer/temp_AL.c.obj
@@ -1395,8 +1395,8 @@ lib/ApplicationLayer/temp_AL.obj: lib/ApplicationLayer/temp_AL.c.obj
 
 # target to build an object file
 lib/ApplicationLayer/temp_AL.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/temp_AL.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/temp_AL.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/temp_AL.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/temp_AL.c.obj
 .PHONY : lib/ApplicationLayer/temp_AL.c.obj
 
 lib/ApplicationLayer/temp_AL.i: lib/ApplicationLayer/temp_AL.c.i
@@ -1404,8 +1404,8 @@ lib/ApplicationLayer/temp_AL.i: lib/ApplicationLayer/temp_AL.c.i
 
 # target to preprocess a source file
 lib/ApplicationLayer/temp_AL.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/temp_AL.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/temp_AL.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/temp_AL.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/temp_AL.c.i
 .PHONY : lib/ApplicationLayer/temp_AL.c.i
 
 lib/ApplicationLayer/temp_AL.s: lib/ApplicationLayer/temp_AL.c.s
@@ -1413,8 +1413,8 @@ lib/ApplicationLayer/temp_AL.s: lib/ApplicationLayer/temp_AL.c.s
 
 # target to generate assembly for a file
 lib/ApplicationLayer/temp_AL.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/temp_AL.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/temp_AL.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/temp_AL.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/temp_AL.c.s
 .PHONY : lib/ApplicationLayer/temp_AL.c.s
 
 lib/ApplicationLayer/usart_AL.obj: lib/ApplicationLayer/usart_AL.c.obj
@@ -1422,8 +1422,8 @@ lib/ApplicationLayer/usart_AL.obj: lib/ApplicationLayer/usart_AL.c.obj
 
 # target to build an object file
 lib/ApplicationLayer/usart_AL.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/usart_AL.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/usart_AL.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/usart_AL.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/usart_AL.c.obj
 .PHONY : lib/ApplicationLayer/usart_AL.c.obj
 
 lib/ApplicationLayer/usart_AL.i: lib/ApplicationLayer/usart_AL.c.i
@@ -1431,8 +1431,8 @@ lib/ApplicationLayer/usart_AL.i: lib/ApplicationLayer/usart_AL.c.i
 
 # target to preprocess a source file
 lib/ApplicationLayer/usart_AL.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/usart_AL.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/usart_AL.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/usart_AL.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/usart_AL.c.i
 .PHONY : lib/ApplicationLayer/usart_AL.c.i
 
 lib/ApplicationLayer/usart_AL.s: lib/ApplicationLayer/usart_AL.c.s
@@ -1440,8 +1440,8 @@ lib/ApplicationLayer/usart_AL.s: lib/ApplicationLayer/usart_AL.c.s
 
 # target to generate assembly for a file
 lib/ApplicationLayer/usart_AL.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/usart_AL.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/usart_AL.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/usart_AL.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/usart_AL.c.s
 .PHONY : lib/ApplicationLayer/usart_AL.c.s
 
 lib/ApplicationLayer/v_f_control.obj: lib/ApplicationLayer/v_f_control.c.obj
@@ -1449,8 +1449,8 @@ lib/ApplicationLayer/v_f_control.obj: lib/ApplicationLayer/v_f_control.c.obj
 
 # target to build an object file
 lib/ApplicationLayer/v_f_control.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/v_f_control.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/v_f_control.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/v_f_control.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/v_f_control.c.obj
 .PHONY : lib/ApplicationLayer/v_f_control.c.obj
 
 lib/ApplicationLayer/v_f_control.i: lib/ApplicationLayer/v_f_control.c.i
@@ -1458,8 +1458,8 @@ lib/ApplicationLayer/v_f_control.i: lib/ApplicationLayer/v_f_control.c.i
 
 # target to preprocess a source file
 lib/ApplicationLayer/v_f_control.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/v_f_control.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/v_f_control.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/v_f_control.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/v_f_control.c.i
 .PHONY : lib/ApplicationLayer/v_f_control.c.i
 
 lib/ApplicationLayer/v_f_control.s: lib/ApplicationLayer/v_f_control.c.s
@@ -1467,8 +1467,8 @@ lib/ApplicationLayer/v_f_control.s: lib/ApplicationLayer/v_f_control.c.s
 
 # target to generate assembly for a file
 lib/ApplicationLayer/v_f_control.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/v_f_control.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/v_f_control.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/v_f_control.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/v_f_control.c.s
 .PHONY : lib/ApplicationLayer/v_f_control.c.s
 
 lib/ApplicationLayer/vector_control.obj: lib/ApplicationLayer/vector_control.c.obj
@@ -1476,8 +1476,8 @@ lib/ApplicationLayer/vector_control.obj: lib/ApplicationLayer/vector_control.c.o
 
 # target to build an object file
 lib/ApplicationLayer/vector_control.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/vector_control.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/vector_control.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/vector_control.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/vector_control.c.obj
 .PHONY : lib/ApplicationLayer/vector_control.c.obj
 
 lib/ApplicationLayer/vector_control.i: lib/ApplicationLayer/vector_control.c.i
@@ -1485,8 +1485,8 @@ lib/ApplicationLayer/vector_control.i: lib/ApplicationLayer/vector_control.c.i
 
 # target to preprocess a source file
 lib/ApplicationLayer/vector_control.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/vector_control.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/vector_control.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/vector_control.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/vector_control.c.i
 .PHONY : lib/ApplicationLayer/vector_control.c.i
 
 lib/ApplicationLayer/vector_control.s: lib/ApplicationLayer/vector_control.c.s
@@ -1494,8 +1494,8 @@ lib/ApplicationLayer/vector_control.s: lib/ApplicationLayer/vector_control.c.s
 
 # target to generate assembly for a file
 lib/ApplicationLayer/vector_control.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/vector_control.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/vector_control.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/vector_control.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/vector_control.c.s
 .PHONY : lib/ApplicationLayer/vector_control.c.s
 
 lib/ApplicationLayer/vehicle.obj: lib/ApplicationLayer/vehicle.c.obj
@@ -1503,8 +1503,8 @@ lib/ApplicationLayer/vehicle.obj: lib/ApplicationLayer/vehicle.c.obj
 
 # target to build an object file
 lib/ApplicationLayer/vehicle.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/vehicle.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/vehicle.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/vehicle.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/vehicle.c.obj
 .PHONY : lib/ApplicationLayer/vehicle.c.obj
 
 lib/ApplicationLayer/vehicle.i: lib/ApplicationLayer/vehicle.c.i
@@ -1512,8 +1512,8 @@ lib/ApplicationLayer/vehicle.i: lib/ApplicationLayer/vehicle.c.i
 
 # target to preprocess a source file
 lib/ApplicationLayer/vehicle.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/vehicle.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/vehicle.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/vehicle.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/vehicle.c.i
 .PHONY : lib/ApplicationLayer/vehicle.c.i
 
 lib/ApplicationLayer/vehicle.s: lib/ApplicationLayer/vehicle.c.s
@@ -1521,8 +1521,8 @@ lib/ApplicationLayer/vehicle.s: lib/ApplicationLayer/vehicle.c.s
 
 # target to generate assembly for a file
 lib/ApplicationLayer/vehicle.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/ApplicationLayer/vehicle.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/ApplicationLayer/vehicle.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/vehicle.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/vehicle.c.s
 .PHONY : lib/ApplicationLayer/vehicle.c.s
 
 lib/Bootloader/bootloaderFunctions.obj: lib/Bootloader/bootloaderFunctions.c.obj
@@ -1578,8 +1578,8 @@ lib/CustomLibs/firmware_upgrade_app.obj: lib/CustomLibs/firmware_upgrade_app.c.o
 
 # target to build an object file
 lib/CustomLibs/firmware_upgrade_app.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/CustomLibs/firmware_upgrade_app.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/CustomLibs/firmware_upgrade_app.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/CustomLibs/firmware_upgrade_app.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/CustomLibs/firmware_upgrade_app.c.obj
 .PHONY : lib/CustomLibs/firmware_upgrade_app.c.obj
 
 lib/CustomLibs/firmware_upgrade_app.i: lib/CustomLibs/firmware_upgrade_app.c.i
@@ -1587,8 +1587,8 @@ lib/CustomLibs/firmware_upgrade_app.i: lib/CustomLibs/firmware_upgrade_app.c.i
 
 # target to preprocess a source file
 lib/CustomLibs/firmware_upgrade_app.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/CustomLibs/firmware_upgrade_app.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/CustomLibs/firmware_upgrade_app.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/CustomLibs/firmware_upgrade_app.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/CustomLibs/firmware_upgrade_app.c.i
 .PHONY : lib/CustomLibs/firmware_upgrade_app.c.i
 
 lib/CustomLibs/firmware_upgrade_app.s: lib/CustomLibs/firmware_upgrade_app.c.s
@@ -1596,8 +1596,8 @@ lib/CustomLibs/firmware_upgrade_app.s: lib/CustomLibs/firmware_upgrade_app.c.s
 
 # target to generate assembly for a file
 lib/CustomLibs/firmware_upgrade_app.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/CustomLibs/firmware_upgrade_app.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/CustomLibs/firmware_upgrade_app.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/CustomLibs/firmware_upgrade_app.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/CustomLibs/firmware_upgrade_app.c.s
 .PHONY : lib/CustomLibs/firmware_upgrade_app.c.s
 
 lib/CustomLibs/math_func.obj: lib/CustomLibs/math_func.c.obj
@@ -1605,8 +1605,8 @@ lib/CustomLibs/math_func.obj: lib/CustomLibs/math_func.c.obj
 
 # target to build an object file
 lib/CustomLibs/math_func.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/CustomLibs/math_func.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/CustomLibs/math_func.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/CustomLibs/math_func.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/CustomLibs/math_func.c.obj
 .PHONY : lib/CustomLibs/math_func.c.obj
 
 lib/CustomLibs/math_func.i: lib/CustomLibs/math_func.c.i
@@ -1614,8 +1614,8 @@ lib/CustomLibs/math_func.i: lib/CustomLibs/math_func.c.i
 
 # target to preprocess a source file
 lib/CustomLibs/math_func.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/CustomLibs/math_func.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/CustomLibs/math_func.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/CustomLibs/math_func.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/CustomLibs/math_func.c.i
 .PHONY : lib/CustomLibs/math_func.c.i
 
 lib/CustomLibs/math_func.s: lib/CustomLibs/math_func.c.s
@@ -1623,8 +1623,8 @@ lib/CustomLibs/math_func.s: lib/CustomLibs/math_func.c.s
 
 # target to generate assembly for a file
 lib/CustomLibs/math_func.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/CustomLibs/math_func.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/CustomLibs/math_func.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/CustomLibs/math_func.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/CustomLibs/math_func.c.s
 .PHONY : lib/CustomLibs/math_func.c.s
 
 lib/CustomLibs/printf.obj: lib/CustomLibs/printf.c.obj
@@ -1632,8 +1632,8 @@ lib/CustomLibs/printf.obj: lib/CustomLibs/printf.c.obj
 
 # target to build an object file
 lib/CustomLibs/printf.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/CustomLibs/printf.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/CustomLibs/printf.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/CustomLibs/printf.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/CustomLibs/printf.c.obj
 .PHONY : lib/CustomLibs/printf.c.obj
 
 lib/CustomLibs/printf.i: lib/CustomLibs/printf.c.i
@@ -1641,8 +1641,8 @@ lib/CustomLibs/printf.i: lib/CustomLibs/printf.c.i
 
 # target to preprocess a source file
 lib/CustomLibs/printf.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/CustomLibs/printf.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/CustomLibs/printf.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/CustomLibs/printf.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/CustomLibs/printf.c.i
 .PHONY : lib/CustomLibs/printf.c.i
 
 lib/CustomLibs/printf.s: lib/CustomLibs/printf.c.s
@@ -1650,8 +1650,8 @@ lib/CustomLibs/printf.s: lib/CustomLibs/printf.c.s
 
 # target to generate assembly for a file
 lib/CustomLibs/printf.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/lib/CustomLibs/printf.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/lib/CustomLibs/printf.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/CustomLibs/printf.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/CustomLibs/printf.c.s
 .PHONY : lib/CustomLibs/printf.c.s
 
 src/adc.obj: src/adc.c.obj
@@ -1660,8 +1660,8 @@ src/adc.obj: src/adc.c.obj
 # target to build an object file
 src/adc.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/adc.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/adc.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/adc.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/adc.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/adc.c.obj
 .PHONY : src/adc.c.obj
 
 src/adc.i: src/adc.c.i
@@ -1670,8 +1670,8 @@ src/adc.i: src/adc.c.i
 # target to preprocess a source file
 src/adc.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/adc.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/adc.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/adc.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/adc.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/adc.c.i
 .PHONY : src/adc.c.i
 
 src/adc.s: src/adc.c.s
@@ -1680,8 +1680,8 @@ src/adc.s: src/adc.c.s
 # target to generate assembly for a file
 src/adc.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/adc.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/adc.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/adc.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/adc.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/adc.c.s
 .PHONY : src/adc.c.s
 
 src/dma.obj: src/dma.c.obj
@@ -1690,8 +1690,8 @@ src/dma.obj: src/dma.c.obj
 # target to build an object file
 src/dma.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/dma.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/dma.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/dma.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/dma.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/dma.c.obj
 .PHONY : src/dma.c.obj
 
 src/dma.i: src/dma.c.i
@@ -1700,8 +1700,8 @@ src/dma.i: src/dma.c.i
 # target to preprocess a source file
 src/dma.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/dma.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/dma.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/dma.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/dma.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/dma.c.i
 .PHONY : src/dma.c.i
 
 src/dma.s: src/dma.c.s
@@ -1710,8 +1710,8 @@ src/dma.s: src/dma.c.s
 # target to generate assembly for a file
 src/dma.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/dma.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/dma.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/dma.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/dma.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/dma.c.s
 .PHONY : src/dma.c.s
 
 src/fdcan.obj: src/fdcan.c.obj
@@ -1720,8 +1720,8 @@ src/fdcan.obj: src/fdcan.c.obj
 # target to build an object file
 src/fdcan.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/fdcan.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/fdcan.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/fdcan.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/fdcan.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/fdcan.c.obj
 .PHONY : src/fdcan.c.obj
 
 src/fdcan.i: src/fdcan.c.i
@@ -1730,8 +1730,8 @@ src/fdcan.i: src/fdcan.c.i
 # target to preprocess a source file
 src/fdcan.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/fdcan.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/fdcan.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/fdcan.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/fdcan.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/fdcan.c.i
 .PHONY : src/fdcan.c.i
 
 src/fdcan.s: src/fdcan.c.s
@@ -1740,8 +1740,8 @@ src/fdcan.s: src/fdcan.c.s
 # target to generate assembly for a file
 src/fdcan.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/fdcan.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/fdcan.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/fdcan.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/fdcan.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/fdcan.c.s
 .PHONY : src/fdcan.c.s
 
 src/gpio.obj: src/gpio.c.obj
@@ -1750,8 +1750,8 @@ src/gpio.obj: src/gpio.c.obj
 # target to build an object file
 src/gpio.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/gpio.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/gpio.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/gpio.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/gpio.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/gpio.c.obj
 .PHONY : src/gpio.c.obj
 
 src/gpio.i: src/gpio.c.i
@@ -1760,8 +1760,8 @@ src/gpio.i: src/gpio.c.i
 # target to preprocess a source file
 src/gpio.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/gpio.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/gpio.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/gpio.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/gpio.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/gpio.c.i
 .PHONY : src/gpio.c.i
 
 src/gpio.s: src/gpio.c.s
@@ -1770,8 +1770,8 @@ src/gpio.s: src/gpio.c.s
 # target to generate assembly for a file
 src/gpio.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/gpio.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/gpio.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/gpio.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/gpio.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/gpio.c.s
 .PHONY : src/gpio.c.s
 
 src/i2c.obj: src/i2c.c.obj
@@ -1780,8 +1780,8 @@ src/i2c.obj: src/i2c.c.obj
 # target to build an object file
 src/i2c.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/i2c.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/i2c.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/i2c.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/i2c.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/i2c.c.obj
 .PHONY : src/i2c.c.obj
 
 src/i2c.i: src/i2c.c.i
@@ -1790,8 +1790,8 @@ src/i2c.i: src/i2c.c.i
 # target to preprocess a source file
 src/i2c.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/i2c.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/i2c.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/i2c.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/i2c.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/i2c.c.i
 .PHONY : src/i2c.c.i
 
 src/i2c.s: src/i2c.c.s
@@ -1800,8 +1800,8 @@ src/i2c.s: src/i2c.c.s
 # target to generate assembly for a file
 src/i2c.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/i2c.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/i2c.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/i2c.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/i2c.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/i2c.c.s
 .PHONY : src/i2c.c.s
 
 src/main.obj: src/main.c.obj
@@ -1809,8 +1809,8 @@ src/main.obj: src/main.c.obj
 
 # target to build an object file
 src/main.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/main.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/main.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/main.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/main.c.obj
 .PHONY : src/main.c.obj
 
 src/main.i: src/main.c.i
@@ -1818,8 +1818,8 @@ src/main.i: src/main.c.i
 
 # target to preprocess a source file
 src/main.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/main.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/main.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/main.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/main.c.i
 .PHONY : src/main.c.i
 
 src/main.s: src/main.c.s
@@ -1827,8 +1827,8 @@ src/main.s: src/main.c.s
 
 # target to generate assembly for a file
 src/main.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/main.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/main.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/main.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/main.c.s
 .PHONY : src/main.c.s
 
 src/stm32h7xx_hal_msp.obj: src/stm32h7xx_hal_msp.c.obj
@@ -1837,8 +1837,8 @@ src/stm32h7xx_hal_msp.obj: src/stm32h7xx_hal_msp.c.obj
 # target to build an object file
 src/stm32h7xx_hal_msp.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/stm32h7xx_hal_msp.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/stm32h7xx_hal_msp.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/stm32h7xx_hal_msp.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/stm32h7xx_hal_msp.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/stm32h7xx_hal_msp.c.obj
 .PHONY : src/stm32h7xx_hal_msp.c.obj
 
 src/stm32h7xx_hal_msp.i: src/stm32h7xx_hal_msp.c.i
@@ -1847,8 +1847,8 @@ src/stm32h7xx_hal_msp.i: src/stm32h7xx_hal_msp.c.i
 # target to preprocess a source file
 src/stm32h7xx_hal_msp.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/stm32h7xx_hal_msp.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/stm32h7xx_hal_msp.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/stm32h7xx_hal_msp.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/stm32h7xx_hal_msp.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/stm32h7xx_hal_msp.c.i
 .PHONY : src/stm32h7xx_hal_msp.c.i
 
 src/stm32h7xx_hal_msp.s: src/stm32h7xx_hal_msp.c.s
@@ -1857,8 +1857,8 @@ src/stm32h7xx_hal_msp.s: src/stm32h7xx_hal_msp.c.s
 # target to generate assembly for a file
 src/stm32h7xx_hal_msp.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/stm32h7xx_hal_msp.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/stm32h7xx_hal_msp.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/stm32h7xx_hal_msp.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/stm32h7xx_hal_msp.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/stm32h7xx_hal_msp.c.s
 .PHONY : src/stm32h7xx_hal_msp.c.s
 
 src/stm32h7xx_it.obj: src/stm32h7xx_it.c.obj
@@ -1867,8 +1867,8 @@ src/stm32h7xx_it.obj: src/stm32h7xx_it.c.obj
 # target to build an object file
 src/stm32h7xx_it.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/stm32h7xx_it.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/stm32h7xx_it.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/stm32h7xx_it.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/stm32h7xx_it.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/stm32h7xx_it.c.obj
 .PHONY : src/stm32h7xx_it.c.obj
 
 src/stm32h7xx_it.i: src/stm32h7xx_it.c.i
@@ -1877,8 +1877,8 @@ src/stm32h7xx_it.i: src/stm32h7xx_it.c.i
 # target to preprocess a source file
 src/stm32h7xx_it.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/stm32h7xx_it.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/stm32h7xx_it.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/stm32h7xx_it.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/stm32h7xx_it.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/stm32h7xx_it.c.i
 .PHONY : src/stm32h7xx_it.c.i
 
 src/stm32h7xx_it.s: src/stm32h7xx_it.c.s
@@ -1887,8 +1887,8 @@ src/stm32h7xx_it.s: src/stm32h7xx_it.c.s
 # target to generate assembly for a file
 src/stm32h7xx_it.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/stm32h7xx_it.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/stm32h7xx_it.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/stm32h7xx_it.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/stm32h7xx_it.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/stm32h7xx_it.c.s
 .PHONY : src/stm32h7xx_it.c.s
 
 src/system_stm32h7xx.obj: src/system_stm32h7xx.c.obj
@@ -1897,8 +1897,8 @@ src/system_stm32h7xx.obj: src/system_stm32h7xx.c.obj
 # target to build an object file
 src/system_stm32h7xx.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/system_stm32h7xx.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/system_stm32h7xx.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/system_stm32h7xx.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/system_stm32h7xx.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/system_stm32h7xx.c.obj
 .PHONY : src/system_stm32h7xx.c.obj
 
 src/system_stm32h7xx.i: src/system_stm32h7xx.c.i
@@ -1907,8 +1907,8 @@ src/system_stm32h7xx.i: src/system_stm32h7xx.c.i
 # target to preprocess a source file
 src/system_stm32h7xx.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/system_stm32h7xx.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/system_stm32h7xx.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/system_stm32h7xx.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/system_stm32h7xx.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/system_stm32h7xx.c.i
 .PHONY : src/system_stm32h7xx.c.i
 
 src/system_stm32h7xx.s: src/system_stm32h7xx.c.s
@@ -1917,8 +1917,8 @@ src/system_stm32h7xx.s: src/system_stm32h7xx.c.s
 # target to generate assembly for a file
 src/system_stm32h7xx.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/system_stm32h7xx.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/system_stm32h7xx.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/system_stm32h7xx.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/system_stm32h7xx.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/system_stm32h7xx.c.s
 .PHONY : src/system_stm32h7xx.c.s
 
 src/tim.obj: src/tim.c.obj
@@ -1927,8 +1927,8 @@ src/tim.obj: src/tim.c.obj
 # target to build an object file
 src/tim.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/tim.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/tim.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/tim.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/tim.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/tim.c.obj
 .PHONY : src/tim.c.obj
 
 src/tim.i: src/tim.c.i
@@ -1937,8 +1937,8 @@ src/tim.i: src/tim.c.i
 # target to preprocess a source file
 src/tim.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/tim.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/tim.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/tim.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/tim.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/tim.c.i
 .PHONY : src/tim.c.i
 
 src/tim.s: src/tim.c.s
@@ -1947,8 +1947,8 @@ src/tim.s: src/tim.c.s
 # target to generate assembly for a file
 src/tim.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/tim.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/tim.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/tim.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/tim.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/tim.c.s
 .PHONY : src/tim.c.s
 
 src/usart.obj: src/usart.c.obj
@@ -1957,8 +1957,8 @@ src/usart.obj: src/usart.c.obj
 # target to build an object file
 src/usart.c.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/usart.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/usart.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/usart.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/usart.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/usart.c.obj
 .PHONY : src/usart.c.obj
 
 src/usart.i: src/usart.c.i
@@ -1967,8 +1967,8 @@ src/usart.i: src/usart.c.i
 # target to preprocess a source file
 src/usart.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/usart.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/usart.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/usart.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/usart.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/usart.c.i
 .PHONY : src/usart.c.i
 
 src/usart.s: src/usart.c.s
@@ -1977,8 +1977,8 @@ src/usart.s: src/usart.c.s
 # target to generate assembly for a file
 src/usart.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/usart.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/src/usart.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/src/usart.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/usart.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/usart.c.s
 .PHONY : src/usart.c.s
 
 startup_stm32h743zitx.obj: startup_stm32h743zitx.s.obj
@@ -1987,8 +1987,8 @@ startup_stm32h743zitx.obj: startup_stm32h743zitx.s.obj
 # target to build an object file
 startup_stm32h743zitx.s.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/startup_stm32h743zitx.s.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/startup_stm32h743zitx.s.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/startup_stm32h743zitx.s.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/startup_stm32h743zitx.s.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/startup_stm32h743zitx.s.obj
 .PHONY : startup_stm32h743zitx.s.obj
 
 # Help Target
@@ -1999,8 +1999,8 @@ help:
 	@echo ... depend
 	@echo ... edit_cache
 	@echo ... rebuild_cache
-	@echo ... Pegasus3.1v-appPrimary.elf
-	@echo ... Pegasus3.1v-appSecondary.elf
+	@echo ... Pegasus3.1v-app1.elf
+	@echo ... Pegasus3.1v-app2.elf
 	@echo ... Pegasus3.1v-bootloader.elf
 	@echo ... Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.obj
 	@echo ... Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.i

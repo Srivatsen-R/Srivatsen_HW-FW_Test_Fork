@@ -63,8 +63,8 @@ CMAKE_BINARY_DIR = D:\Pegasus_Code\Build
 
 # The main recursive "all" target.
 all: CMakeFiles/Pegasus3.1v-bootloader.elf.dir/all
-all: CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/all
-all: CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/all
+all: CMakeFiles/Pegasus3.1v-app1.elf.dir/all
+all: CMakeFiles/Pegasus3.1v-app2.elf.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -73,8 +73,8 @@ preinstall:
 
 # The main recursive "clean" target.
 clean: CMakeFiles/Pegasus3.1v-bootloader.elf.dir/clean
-clean: CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/clean
-clean: CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/clean
+clean: CMakeFiles/Pegasus3.1v-app1.elf.dir/clean
+clean: CMakeFiles/Pegasus3.1v-app2.elf.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -104,56 +104,56 @@ CMakeFiles/Pegasus3.1v-bootloader.elf.dir/clean:
 .PHONY : CMakeFiles/Pegasus3.1v-bootloader.elf.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/Pegasus3.1v-appPrimary.elf.dir
+# Target rules for target CMakeFiles/Pegasus3.1v-app1.elf.dir
 
 # All Build rule for target.
-CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\Pegasus_Code\Build\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38 "Built target Pegasus3.1v-appPrimary.elf"
-.PHONY : CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/all
+CMakeFiles/Pegasus3.1v-app1.elf.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\Pegasus_Code\Build\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38 "Built target Pegasus3.1v-app1.elf"
+.PHONY : CMakeFiles/Pegasus3.1v-app1.elf.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/rule: cmake_check_build_system
+CMakeFiles/Pegasus3.1v-app1.elf.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start D:\Pegasus_Code\Build\CMakeFiles 38
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/Pegasus3.1v-app1.elf.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start D:\Pegasus_Code\Build\CMakeFiles 0
-.PHONY : CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/rule
+.PHONY : CMakeFiles/Pegasus3.1v-app1.elf.dir/rule
 
 # Convenience name for target.
-Pegasus3.1v-appPrimary.elf: CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/rule
-.PHONY : Pegasus3.1v-appPrimary.elf
+Pegasus3.1v-app1.elf: CMakeFiles/Pegasus3.1v-app1.elf.dir/rule
+.PHONY : Pegasus3.1v-app1.elf
 
 # clean rule for target.
-CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appPrimary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/clean
-.PHONY : CMakeFiles/Pegasus3.1v-appPrimary.elf.dir/clean
+CMakeFiles/Pegasus3.1v-app1.elf.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/clean
+.PHONY : CMakeFiles/Pegasus3.1v-app1.elf.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/Pegasus3.1v-appSecondary.elf.dir
+# Target rules for target CMakeFiles/Pegasus3.1v-app2.elf.dir
 
 # All Build rule for target.
-CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\Pegasus_Code\Build\CMakeFiles --progress-num=39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76 "Built target Pegasus3.1v-appSecondary.elf"
-.PHONY : CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/all
+CMakeFiles/Pegasus3.1v-app2.elf.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\Pegasus_Code\Build\CMakeFiles --progress-num=39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76 "Built target Pegasus3.1v-app2.elf"
+.PHONY : CMakeFiles/Pegasus3.1v-app2.elf.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/rule: cmake_check_build_system
+CMakeFiles/Pegasus3.1v-app2.elf.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start D:\Pegasus_Code\Build\CMakeFiles 38
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/Pegasus3.1v-app2.elf.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start D:\Pegasus_Code\Build\CMakeFiles 0
-.PHONY : CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/rule
+.PHONY : CMakeFiles/Pegasus3.1v-app2.elf.dir/rule
 
 # Convenience name for target.
-Pegasus3.1v-appSecondary.elf: CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/rule
-.PHONY : Pegasus3.1v-appSecondary.elf
+Pegasus3.1v-app2.elf: CMakeFiles/Pegasus3.1v-app2.elf.dir/rule
+.PHONY : Pegasus3.1v-app2.elf
 
 # clean rule for target.
-CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-appSecondary.elf.dir\build.make CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/clean
-.PHONY : CMakeFiles/Pegasus3.1v-appSecondary.elf.dir/clean
+CMakeFiles/Pegasus3.1v-app2.elf.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/clean
+.PHONY : CMakeFiles/Pegasus3.1v-app2.elf.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
