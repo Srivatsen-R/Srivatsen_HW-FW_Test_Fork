@@ -107,7 +107,7 @@ typedef struct foc_t {
 #define FW_RPM                  1100.0 //FW 58V system.
 //#define FW_RPM                  2650.0 //FW 72V system.
 
-#define FW_MAX_CURRENT_PU       6150.0 //58V system
+#define FW_MAX_CURRENT_PU       5800.0 //58V system
 //#define FW_MAX_CURRENT_PU       1800.0 //72V system
 
 #define TIM1_PSCLR              3
@@ -117,12 +117,12 @@ typedef struct foc_t {
 #define FW_MIN_CURRENT_PU       0.0
 #define MTPA_MAX_CURRENT_PU     3500.0
 #define D_CURRENT_DERATING_RPM_1  1000.0
-#define D_CURRENT_DERATING_RPM_2  2000.0
+#define D_CURRENT_DERATING_RPM_2  1100.0
 #define FW_FLUX_CURRENT_SCALING_FACTOR  1.2
 #define POWER_MAPPING_LOWER_RPM     1000.0
 #define POWER_MAPPING_UPPER_RPM     2000.0    
 #define POWER_MAPPING_UPPER_IQ_LIMIT_PU 26054.75
-#define POWER_MAPPING_LOWER_IQ_LIMIT_PU 6516.0
+#define POWER_MAPPING_LOWER_IQ_LIMIT_PU 11000.0
 #define VD_LIMIT                            24000.0
 #define VQ_LIMIT                            32000.0
 #define VQ_LIMIT_FACTOR                     0.824
@@ -160,12 +160,12 @@ typedef struct foc_t {
 #define T_F_ROTOR_SPEED                     0.03           // Constant to filter rotor speed
 #define MAGNETISING_CURRENT_REF             0.0//6000.0//6750.0
 #define OUTPUT_LIMIT                        29200.0//17000.0       // OUTPUT LIMIT VD VQ
-#define KP_W                                1.0//2.5//1.2//GAIN CONSTANT
-#define KI_W                                3.5//50.0//0.48//INTG CONSTANT
-#define KP_IQ                               1.0
-#define KI_IQ                               3.5
-#define KP_ID                               1.0
-#define KI_ID                               3.5
+#define KP_W                                1.2//2.5//1.2//GAIN CONSTANT
+#define KI_W                                3.8//50.0//0.48//INTG CONSTANT
+#define KP_IQ                               1.2
+#define KI_IQ                               3.8
+#define KP_ID                               1.2
+#define KI_ID                               3.8
 #define SLIP_LIMIT                          20.0
 #define FW_DIRECTION                        0
 #define RW_DIRECTION                        0

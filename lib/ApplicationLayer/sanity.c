@@ -88,7 +88,7 @@ void RUN_SANITY(void)
 
     for (sanity_val=0;sanity_val<SANITY_COUNT;sanity_val++){ANALOG_READING();}
 
-    HAL_Delay(10000);
+    HAL_Delay(2000);
     
     FAULT_READING();
 
@@ -350,17 +350,6 @@ void SAFETY_AND_ERRORS()
             fault.fault_code |= FAULT_UNDER_SPEED_STALL_HEX;
             motorControl.drive.check = DRIVE_DISABLE;
             fault.status = FAULT_STALL;
-          }
-        }
-
-        //if peak current 410A measured by current sensor. 
-        if(terminal.iq.sen >= 410.0){
-          count_spike++;
-
-          if(count_spike >= 10){
-            fault.fault_code |= FAULT_OVER_CURRENT_HEX;
-            motorControl.drive.check = DRIVE_DISABLE;
-            fault.status = FAULT_SOFTWARE_OVER_CURR;
           }
         }
 

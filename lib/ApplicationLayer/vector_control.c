@@ -260,7 +260,7 @@ if(config==1)
                         }
                         else if(((foc.speed_sense*SPEED_PU_TO_RPM) <D_CURRENT_DERATING_RPM_1))
                         {
-                            foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200.0, 0.0, MTPA_MAX_CURRENT_PU);//not correct   
+                            foc.flux_current_ref = map(foc.speed_ref, 0.0, 4000.0, 0.0, MTPA_MAX_CURRENT_PU);//not correct   
                         }
 
                         if(foc.flux_current_ref >= MTPA_MAX_CURRENT_PU){foc.flux_current_ref = MTPA_MAX_CURRENT_PU;}
@@ -288,7 +288,7 @@ if(config==2)
                          
                         }else if(((foc.speed_sense*SPEED_PU_TO_RPM) <1000.0)){
                             //foc.flux_current_ref = map((foc.speed_sense*SPEED_PU_TO_RPM), 0.0, 999.9, 0.0, MTPA_MAX_CURRENT_PU);//not correct
-                            foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200.0, 0.0, -5500);//not correct   
+                            foc.flux_current_ref = map(foc.speed_ref, 0.0, 4000.0, 0.0, -5500);//not correct   
                         }
 
                         if(foc.flux_current_ref <= -5500){
@@ -841,7 +841,7 @@ void FOC_FIELD_WEAKENING_AND_MTPA()
                     if(((foc.speed_sense*SPEED_PU_TO_RPM) >= D_CURRENT_DERATING_RPM_1) && ((foc.speed_sense*SPEED_PU_TO_RPM) <= D_CURRENT_DERATING_RPM_2))
                      {foc.flux_current_ref = map(foc.speed_sense*SPEED_PU_TO_RPM, D_CURRENT_DERATING_RPM_1, D_CURRENT_DERATING_RPM_2, MTPA_MAX_CURRENT_PU, 0);}
                     else if(((foc.speed_sense*SPEED_PU_TO_RPM) <D_CURRENT_DERATING_RPM_1))
-                     {foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200.0, 312.5, MTPA_MAX_CURRENT_PU);}
+                     {foc.flux_current_ref = map(foc.speed_ref, 0.0, 4000, 0.0, MTPA_MAX_CURRENT_PU);}
 
                     if(foc.flux_current_ref >= MTPA_MAX_CURRENT_PU){foc.flux_current_ref = MTPA_MAX_CURRENT_PU;}
                 }
@@ -862,7 +862,7 @@ void FOC_FIELD_WEAKENING_AND_MTPA()
                         if(((foc.speed_sense*SPEED_PU_TO_RPM) >= D_CURRENT_DERATING_RPM_1) && ((foc.speed_sense*SPEED_PU_TO_RPM) <= D_CURRENT_DERATING_RPM_2))
                         {foc.flux_current_ref = map(foc.speed_sense*SPEED_PU_TO_RPM, D_CURRENT_DERATING_RPM_1, D_CURRENT_DERATING_RPM_2, MTPA_MAX_CURRENT_PU, 0);}
                         else if(((foc.speed_sense*SPEED_PU_TO_RPM) <D_CURRENT_DERATING_RPM_1))
-                        {foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200.0, 312.5, MTPA_MAX_CURRENT_PU);}
+                        {foc.flux_current_ref = map(foc.speed_ref, 0.0, 4000.0, 0.0, MTPA_MAX_CURRENT_PU);}
 
                         if(foc.flux_current_ref >= MTPA_MAX_CURRENT_PU){foc.flux_current_ref = MTPA_MAX_CURRENT_PU;}
                     }
