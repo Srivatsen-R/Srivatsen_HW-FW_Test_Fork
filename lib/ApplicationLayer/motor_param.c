@@ -260,6 +260,8 @@ float Throttle_Control(int target_speed,float prev_output,int f_flag,int r_flag)
 
         if(target_speed >= prev_output)
         {
+            acc_flag = 1;
+            deacc_flag = 0;
       
             if(target_speed<=THROTTLE_THRESHOLD_A)
             {    
@@ -280,6 +282,8 @@ float Throttle_Control(int target_speed,float prev_output,int f_flag,int r_flag)
         }
         else
         {
+            deacc_flag = 1;
+            acc_flag = 0;
    
             th_decrement =DEACCELERATION_CONST;
 

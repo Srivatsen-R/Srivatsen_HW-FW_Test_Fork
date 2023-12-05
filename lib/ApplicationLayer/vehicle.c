@@ -198,9 +198,9 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
       can.txMsg[6][1] = (uint8_t)(((int)freq_rpm & 0xFF00) >> 8);
 
       //724
-      can.txMsg[7][0] = (uint8_t)(motorControl.temperature.u);
-      can.txMsg[7][1] = (uint8_t)(motorControl.temperature.v);
-      can.txMsg[7][2] = (uint8_t)(motorControl.temperature.w);
+      can.txMsg[7][0] = (uint8_t)(motorControl.temperature.u + 50.0);
+      can.txMsg[7][1] = (uint8_t)(motorControl.temperature.v + 50.0);
+      can.txMsg[7][2] = (uint8_t)(motorControl.temperature.w + 50.0);
       can.txMsg[7][3] = (uint8_t)(v_rms);
 
       //726

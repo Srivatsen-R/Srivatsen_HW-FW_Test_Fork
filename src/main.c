@@ -84,6 +84,8 @@ uint8_t app_version = 0;
 uint8_t cantp_config_flag = 0;
 uint8_t interrupt_flag = 0;
 uint8_t start_flag = 0;
+uint8_t acc_flag = 0;
+uint8_t deacc_flag = 0;
 
 int count_duty=0;
 int counter_100ms=0;
@@ -168,7 +170,7 @@ int main(void) {
       READ_FNR();
       READ_THROTTLE();
 
-      if(counter_100ms>=10000)
+      if(counter_100ms>=2000)
       {
             counter_100ms=0;
             Calculate_OTS(terminal.w.sen);

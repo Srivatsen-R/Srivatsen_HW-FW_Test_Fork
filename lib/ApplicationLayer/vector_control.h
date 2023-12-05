@@ -101,8 +101,8 @@ typedef struct foc_t {
 #define PPR                     4096.0//NIDEC        
 //#define PPR                     2048.0//ULTRON    
 
-//#define POLEPAIRS               4.0// Nidec 14kg
-#define POLEPAIRS               3.0// Nidec 22kg & ULTRON
+#define POLEPAIRS               4.0// Nidec 14kg
+//#define POLEPAIRS               3.0// Nidec 22kg & ULTRON
 
 #define FW_RPM                  1100.0 //FW 58V system.
 //#define FW_RPM                  2650.0 //FW 72V system.
@@ -123,16 +123,16 @@ typedef struct foc_t {
 #define POWER_MAPPING_UPPER_RPM     2000.0    
 #define POWER_MAPPING_UPPER_IQ_LIMIT_PU 26054.75
 #define POWER_MAPPING_LOWER_IQ_LIMIT_PU 11000.0
-#define VD_LIMIT                            24000.0
-#define VQ_LIMIT                            32000.0
-#define VQ_LIMIT_FACTOR                     0.824
+#define VD_LIMIT                            15000.0
+#define VQ_LIMIT                            15000.0
+#define VQ_LIMIT_FACTOR                     1.0
 
 //#define ANGLE_OFFSET                        4.188//Proto -3 Ultron
 //#define ANGLE_OFFSET                        0.0//Proto -12 Ultron
 //#define ANGLE_OFFSET                        0.523//Nidec 6 pole.
 
 #define ANGLE_OFFSET_FW                           0.523//Nidec 8 pole
-#define ANGLE_OFFSET_RW                          -0.523//Nidec 8 pole
+#define ANGLE_OFFSET_RW                           0.0//Nidec 8 pole
 
 #define NIDEC_MOTOR_PWM             1
 #define ULTRON_MOTOR_PWM            0

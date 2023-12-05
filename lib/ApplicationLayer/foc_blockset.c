@@ -76,6 +76,7 @@ static float intg_prev;
 static float error_prev;  
 static float excess;
 float u;
+float limit;
 float out;
 
 #if REGEN_OFF
@@ -88,70 +89,70 @@ error = iq_ref - iq_sen;
 
 gain = KP_IQ*error;
 
-if(gain > VQ_LIMIT){gain = VQ_LIMIT;}
-else if(gain < -VQ_LIMIT){gain = -VQ_LIMIT;}
+if(gain > foc.speed_limit){gain = foc.speed_limit;}
+else if(gain < -foc.speed_limit){gain = -foc.speed_limit;}
 
 u = gain +intg;
 
-if(u>VQ_LIMIT){out = VQ_LIMIT;}
-else if(u<-VQ_LIMIT){out = -VQ_LIMIT;}  
+if(u>foc.speed_limit){out = foc.speed_limit;}
+else if(u<-foc.speed_limit){out = -foc.speed_limit;}  
 else{out = u;}
 
 excess = u - out;
 
 
-if(TORQUE_MODE)
-{
+// if(TORQUE_MODE)
+// {
 
-        if(forward_flag)
-        {
-            if((error<4200.0 && error>-4200.0 && terminal.iq.ref<=50)) 
-            {
-                intg_prev=intg_prev-0.5;
-                if(intg_prev<0){intg_prev=0;}
-                if(intg_prev == 0.0){gain = 0.0;}
-            }
-        }
+//         if(forward_flag)
+//         {
+//             if((error<4200.0 && error>-4200.0 && terminal.iq.ref<=50)) 
+//             {
+//                 intg_prev=intg_prev-0.5;
+//                 if(intg_prev<0){intg_prev=0;}
+//                 if(intg_prev == 0.0){gain = 0.0;}
+//             }
+//         }
 
-        if(reverse_flag )
-        {
-            if((error<4200.0 && error>-4200.0 && terminal.iq.ref>=-50))
-            {
-                intg_prev=intg_prev+0.5;
-                if(intg_prev>0){intg_prev=0;}
-                if(intg_prev == 0.0){gain = 0.0;}
-            }
-        }
+//         if(reverse_flag )
+//         {
+//             if((error<4200.0 && error>-4200.0 && terminal.iq.ref>=-50))
+//             {
+//                 intg_prev=intg_prev+0.5;
+//                 if(intg_prev>0){intg_prev=0;}
+//                 if(intg_prev == 0.0){gain = 0.0;}
+//             }
+//         }
 
-        if(neutral_flag)
-        {
-            if(motorControl.drive.fnr_status==1)
-            {
-                if((error<4200.0 && error>-4200.0 && terminal.iq.ref<=50) ) 
-                {
-                    intg_prev=intg_prev-0.5;
-                    if(intg_prev<0){intg_prev=0;}
-                    if(intg_prev == 0.0){gain = 0.0;}
-                }
-            }
+//         if(neutral_flag)
+//         {
+//             if(motorControl.drive.fnr_status==1)
+//             {
+//                 if((error<4200.0 && error>-4200.0 && terminal.iq.ref<=50) ) 
+//                 {
+//                     intg_prev=intg_prev-0.5;
+//                     if(intg_prev<0){intg_prev=0;}
+//                     if(intg_prev == 0.0){gain = 0.0;}
+//                 }
+//             }
 
-            if(motorControl.drive.fnr_status==2)
-            {
-                if((error<4200.0 && error>-4200.0 && terminal.iq.ref>=-50))
-                {
-                    intg_prev=intg_prev+0.5;
-                    if(intg_prev == 0.0){gain = 0.0;}
-                }
-            }
-        }
+//             if(motorControl.drive.fnr_status==2)
+//             {
+//                 if((error<4200.0 && error>-4200.0 && terminal.iq.ref>=-50))
+//                 {
+//                     intg_prev=intg_prev+0.5;
+//                     if(intg_prev == 0.0){gain = 0.0;}
+//                 }
+//             }
+//         }
 
-}
+// }
 
 intg = intg_prev + ((IQ_INTG_CONST)*(error+error_prev)) - (KC_W*excess);
 
-if(intg > VQ_LIMIT){intg = VQ_LIMIT;}
-else if(intg < -VQ_LIMIT){intg = -VQ_LIMIT;}
-//  terminal.iq.intg = intg;
+if(intg > foc.speed_limit){intg = foc.speed_limit;}
+else if(intg < -foc.speed_limit){intg = -foc.speed_limit;}
+// terminal.iq.intg = intg;
 
 // if(intg > intg_prev + MAX_RATE_Q*T_S){
 //     intg = intg_prev + MAX_RATE_Q*T_S;

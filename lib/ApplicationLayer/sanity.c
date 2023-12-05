@@ -228,7 +228,9 @@ void ANALOG_READING()
      //dc current  
      current = (10*sqrt(terminal.vq.ref * terminal.vq.ref + terminal.vd.ref * terminal.vd.ref));
      current /= 32767.0;
-     current *= terminal.id.ref;
+     if(terminal.id.ref < 0.0){ current *= terminal.id.ref * -1.0;}
+     else if(terminal.id.ref >= 0.0 && terminal.id.ref <= 40.0){current *= terminal.id.ref;}
+     else if(terminal.id.sen > 40.0){current *= terminal.id.sen * -1.0;}
      dc_current = current;
 
    //   if(terminal.iq.sen<=0)
@@ -354,7 +356,7 @@ void SAFETY_AND_ERRORS()
         }
 
         //if peak 200A computed. 
-        if(dc_current >= 280.0){
+        if(dc_current >= 210.0){
           fault.fault_code |= FAULT_DC_OVER_CURR_HEX;
           motorControl.drive.check = DRIVE_DISABLE;
           fault.status = FAULT_DC_OVER_CURR;

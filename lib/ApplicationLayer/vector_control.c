@@ -63,8 +63,8 @@ extern float Duty;
 extern uint8_t reset_flag;
 uint8_t duty_state=1;
 uint8_t speed_fix_flag=0;
-uint8_t acc_flag=0;
-uint8_t deacc_flag=0;
+extern uint8_t acc_flag;
+extern uint8_t deacc_flag;
 
 float log_gain=0;
 float log_intg=0;
@@ -72,7 +72,7 @@ extern motorControl_t motorControl;
 
 int state=0;
 
-static foc_t foc; 
+foc_t foc; 
 extern mtpa_lut mtpa;
 
 extern const int mtpa_lut_id[16][6];
@@ -137,7 +137,7 @@ if(config==1)
                 bms_dynamic_current_limit_out=250;
 
             //limiting torque current on basis on measured speed.
-            if(average_controller_temperature<60 && motorControl.temperature.motor<120 && bms_dynamic_current_limit_out>=250)
+            if(average_controller_temperature<60 && motorControl.temperature.motor<70 && bms_dynamic_current_limit_out>=250)
             {    
                 if((foc.speed_sense*SPEED_PU_TO_RPM) <= POWER_MAPPING_LOWER_RPM){foc.phase_limit = POWER_MAPPING_UPPER_IQ_LIMIT_PU;}
                 else if((foc.speed_sense*SPEED_PU_TO_RPM) >= POWER_MAPPING_UPPER_RPM){foc.phase_limit = POWER_MAPPING_LOWER_IQ_LIMIT_PU;}
@@ -149,7 +149,7 @@ if(config==1)
             //limiting torque current on basis of controller temperature
             else if(average_controller_temperature>=60)
             {    
-                foc.phase_limit = -217*average_controller_temperature + 30411;
+                foc.phase_limit = -82.6*motorControl.temperature.motor + 16568;
         
                 if(foc.torque_current_ref > foc.phase_limit){
                     foc.torque_current_ref = foc.phase_limit;
@@ -157,9 +157,9 @@ if(config==1)
             }
 
             //limiting torque current on basis of motor temperature
-            else if(motorControl.temperature.motor>=120)
+            else if(motorControl.temperature.motor>=70)
             {    
-                    foc.phase_limit = -434*motorControl.temperature.motor + 69510;
+                    foc.phase_limit = -82.6*motorControl.temperature.motor + 16568;
 
                     if(foc.torque_current_ref > foc.phase_limit){
                         foc.torque_current_ref = foc.phase_limit;
@@ -260,7 +260,7 @@ if(config==1)
                         }
                         else if(((foc.speed_sense*SPEED_PU_TO_RPM) <D_CURRENT_DERATING_RPM_1))
                         {
-                            foc.flux_current_ref = map(foc.speed_ref, 0.0, 4000.0, 0.0, MTPA_MAX_CURRENT_PU);//not correct   
+                            foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200.0, 0.0, MTPA_MAX_CURRENT_PU);//not correct   
                         }
 
                         if(foc.flux_current_ref >= MTPA_MAX_CURRENT_PU){foc.flux_current_ref = MTPA_MAX_CURRENT_PU;}
@@ -288,7 +288,7 @@ if(config==2)
                          
                         }else if(((foc.speed_sense*SPEED_PU_TO_RPM) <1000.0)){
                             //foc.flux_current_ref = map((foc.speed_sense*SPEED_PU_TO_RPM), 0.0, 999.9, 0.0, MTPA_MAX_CURRENT_PU);//not correct
-                            foc.flux_current_ref = map(foc.speed_ref, 0.0, 4000.0, 0.0, -5500);//not correct   
+                            foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200.0, 0.0, -5500);//not correct   
                         }
 
                         if(foc.flux_current_ref <= -5500){
@@ -460,50 +460,50 @@ void FOC_TORQUE_PI_CONTROL()
 
             if(forward_flag)
             {
-                    regen_speed = (foc.speed_sense*SPEED_PU_TO_RPM);
+                    foc.regen_speed = (foc.speed_sense*SPEED_PU_TO_RPM);
 
                     //add limit for regen speed.
 
-                    if (speed_ref<=0 && regen_speed>300 && forward_flag==1)
+                    if (foc.speed_ref<=0 && foc.regen_speed>300 && forward_flag==1)
                     {
 
-                        regeneration_current_limit = -regen_speed;
-                        regen_current = regen_current - REGEN_DOWN_FACTOR;
+                        foc.regeneration_current_limit = -foc.regen_speed * 0.05;
+                        foc.regen_current = foc.regen_current - REGEN_DOWN_FACTOR;
 
-                        if(regen_current<regeneration_current_limit)
+                        if(foc.regen_current<foc.regeneration_current_limit)
                         {
-                            regen_current = regeneration_current_limit;
+                            foc.regen_current = foc.regeneration_current_limit;
                         }
-                        terminal.iq.ref               = regen_current*0.00575*2.0;
+                        terminal.iq.ref               = foc.regen_current*0.00575*2.0;
                         // torque_current_commanded = regen_current;
-                        foc.vq_ref = TORQUE_PI_LOOP(regen_current,foc.torque_current_sense);//torque loop
+                        foc.vq_ref = TORQUE_PI_LOOP(foc.regen_current,foc.torque_current_sense);//torque loop
 
                     }
 
                     else
                     {
-                        regen_current = regen_current  + REGEN_DOWN_FACTOR;
+                        foc.regen_current = foc.regen_current  + REGEN_DOWN_FACTOR;
 
-                        if(regen_current>= torque_current_ref)
+                        if(foc.regen_current>= foc.torque_current_ref)
                         {
-                            regen_current = torque_current_ref;
+                            foc.regen_current = foc.torque_current_ref;
                         }
-                        terminal.iq.ref = regen_current*0.00575*2.0;
+                        terminal.iq.ref = foc.regen_current*0.00575*2.0;
                         // torque_current_commanded = regen_current;
-                        foc.vq_ref = TORQUE_PI_LOOP(regen_current,foc.torque_current_sense);//torque loop
+                        foc.vq_ref = TORQUE_PI_LOOP(foc.regen_current,foc.torque_current_sense);//torque loop
                     }
             }
 
             if(reverse_flag)
             {
-                terminal.iq.ref  = torque_current_ref*0.00575*2.0;
+                terminal.iq.ref  = foc.torque_current_ref*0.00575*2.0;
                 // torque_current_commanded = torque_current_ref;
-                foc.vq_ref = TORQUE_PI_LOOP(torque_current_ref,foc.torque_current_sense);
+                foc.vq_ref = TORQUE_PI_LOOP(foc.torque_current_ref,foc.torque_current_sense);
             }
 
             if(reverse_flag == 0 && forward_flag == 0){
-                terminal.iq.ref  = torque_current_ref*0.00575*2.0;
-                foc.vq_ref = TORQUE_PI_LOOP(torque_current_ref,foc.torque_current_sense);
+                terminal.iq.ref  = foc.torque_current_ref*0.00575*2.0;
+                foc.vq_ref = TORQUE_PI_LOOP(foc.torque_current_ref,foc.torque_current_sense);
             }
 
             #endif
@@ -511,14 +511,16 @@ void FOC_TORQUE_PI_CONTROL()
             //limiting voltage wrt throttle.
             if(forward_flag)
             {    
-                foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR + 9230;    
+                foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR + 3000;
+                //foc.speed_limit = VQ_LIMIT;
+                    
                 if(foc.vq_ref>foc.speed_limit) {foc.vq_ref = foc.speed_limit;}
                 if(foc.vq_ref<-foc.speed_limit){foc.vq_ref = -foc.speed_limit;}
             }
 
             if(reverse_flag)
             {    
-                foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR + 9230;    
+                foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR + 3000;    
                 if(foc.vq_ref<-foc.speed_limit){foc.vq_ref = -foc.speed_limit;}
             }
 
@@ -526,14 +528,16 @@ void FOC_TORQUE_PI_CONTROL()
             {
                 if(motorControl.drive.fnr_status == 1)
                 {
-                    foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR + 9230;    
+                    foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR + 3000;
+                    //foc.speed_limit = VQ_LIMIT;
+                  
                     if(foc.vq_ref>foc.speed_limit){foc.vq_ref = foc.speed_limit;}
                     if(foc.vq_ref<-foc.speed_limit){foc.vq_ref = -foc.speed_limit;}
                 }
 
                 if(motorControl.drive.fnr_status == 2)
                 {
-                    foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR + 9230;                    
+                    foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR + 3000;                    
                     if(foc.vq_ref<-foc.speed_limit){foc.vq_ref = -foc.speed_limit;}
                 }
             }
@@ -841,7 +845,7 @@ void FOC_FIELD_WEAKENING_AND_MTPA()
                     if(((foc.speed_sense*SPEED_PU_TO_RPM) >= D_CURRENT_DERATING_RPM_1) && ((foc.speed_sense*SPEED_PU_TO_RPM) <= D_CURRENT_DERATING_RPM_2))
                      {foc.flux_current_ref = map(foc.speed_sense*SPEED_PU_TO_RPM, D_CURRENT_DERATING_RPM_1, D_CURRENT_DERATING_RPM_2, MTPA_MAX_CURRENT_PU, 0);}
                     else if(((foc.speed_sense*SPEED_PU_TO_RPM) <D_CURRENT_DERATING_RPM_1))
-                     {foc.flux_current_ref = map(foc.speed_ref, 0.0, 4000, 0.0, MTPA_MAX_CURRENT_PU);}
+                     {foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200, 0.0, MTPA_MAX_CURRENT_PU);}
 
                     if(foc.flux_current_ref >= MTPA_MAX_CURRENT_PU){foc.flux_current_ref = MTPA_MAX_CURRENT_PU;}
                 }
@@ -862,7 +866,7 @@ void FOC_FIELD_WEAKENING_AND_MTPA()
                         if(((foc.speed_sense*SPEED_PU_TO_RPM) >= D_CURRENT_DERATING_RPM_1) && ((foc.speed_sense*SPEED_PU_TO_RPM) <= D_CURRENT_DERATING_RPM_2))
                         {foc.flux_current_ref = map(foc.speed_sense*SPEED_PU_TO_RPM, D_CURRENT_DERATING_RPM_1, D_CURRENT_DERATING_RPM_2, MTPA_MAX_CURRENT_PU, 0);}
                         else if(((foc.speed_sense*SPEED_PU_TO_RPM) <D_CURRENT_DERATING_RPM_1))
-                        {foc.flux_current_ref = map(foc.speed_ref, 0.0, 4000.0, 0.0, MTPA_MAX_CURRENT_PU);}
+                        {foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200.0, 0.0, MTPA_MAX_CURRENT_PU);}
 
                         if(foc.flux_current_ref >= MTPA_MAX_CURRENT_PU){foc.flux_current_ref = MTPA_MAX_CURRENT_PU;}
                     }
@@ -1035,7 +1039,9 @@ void VECTOR_FOC_Control(void) {
             terminal.rho_                 = foc.rho;
             terminal.rho.sin              = foc.sin_rho;
             terminal.rho.cos              = foc.cos_rho;
+            
             terminal.vd.ref               = (foc.vd_ref)/10.0;
+
             terminal.vq.ref               = (foc.vq_ref)/10.0;
             terminal.imr.ref              = foc.imr_ref;
             terminal.id.ref               = foc.flux_current_ref* ID_PU_TO_A;
