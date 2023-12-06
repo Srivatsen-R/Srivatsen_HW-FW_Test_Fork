@@ -199,7 +199,7 @@ float TORQUE_PI_LOOP_2(float ac_max, float ac_input  , float torque_input , floa
         ac_error += vq_prev ;
 
         if(ac_error >= torque_input) ac_error = torque_input ;
-        if(ac_error <= (0.0)) ac_error = (0.0) ;
+        if(ac_error <= torque_input) ac_error = torque_input ;
 
         return ac_error ;
     }

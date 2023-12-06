@@ -252,6 +252,102 @@ if(config==2)
 
 }    
 
+
+if(config==3)
+{
+
+    static int average_controller_temperature;
+    static int bms_dynamic_current_limit_out;
+
+                average_controller_temperature = ((motorControl.temperature.u+motorControl.temperature.v+motorControl.temperature.w)/3);    
+                bms_dynamic_current_limit_out=250;
+
+            //limiting torque current on basis on measured speed.
+            if(average_controller_temperature<60 && motorControl.temperature.motor<70 && bms_dynamic_current_limit_out>=250)
+            {    
+                if((foc.speed_sense*SPEED_PU_TO_RPM) <= POWER_MAPPING_LOWER_RPM){foc.phase_limit = POWER_MAPPING_UPPER_IQ_LIMIT_PU;}
+                else if((foc.speed_sense*SPEED_PU_TO_RPM) >= POWER_MAPPING_UPPER_RPM){foc.phase_limit = POWER_MAPPING_LOWER_IQ_LIMIT_PU;}
+                else{foc.phase_limit = -11.1*(foc.speed_sense*SPEED_PU_TO_RPM) + 34421.0;}
+
+            }  
+
+            //limiting torque current on basis of controller temperature
+            else if(average_controller_temperature>=60)
+            {    
+                foc.phase_limit = -82.6*motorControl.temperature.motor + 16568;
+        
+            }
+
+            //limiting torque current on basis of motor temperature
+            else if(motorControl.temperature.motor>=70)
+            {    
+                    foc.phase_limit = -82.6*motorControl.temperature.motor + 16568;
+            }
+                    
+
+            //limiting torque current on basis of bus voltage
+
+            //limiting torque current on basis of DCLO
+            else if(bms_dynamic_current_limit_out<190)
+            {    
+
+                    //TO BE IMPLEMENTED     
+            }
+}
+
+
+if(config==4)
+{
+
+    static int average_controller_temperature;
+    static int bms_dynamic_current_limit_out;
+
+                average_controller_temperature = ((motorControl.temperature.u+motorControl.temperature.v+motorControl.temperature.w)/3);    
+                bms_dynamic_current_limit_out=250;
+
+            //limiting torque current on basis on measured speed.
+            if(average_controller_temperature<60 && motorControl.temperature.motor<120 && bms_dynamic_current_limit_out>=250)
+            {    
+                if((foc.speed_sense*SPEED_PU_TO_RPM) <= POWER_MAPPING_LOWER_RPM){foc.phase_limit = -POWER_MAPPING_UPPER_IQ_LIMIT_PU;}
+                else if((foc.speed_sense*SPEED_PU_TO_RPM) >= POWER_MAPPING_UPPER_RPM){foc.phase_limit = -POWER_MAPPING_LOWER_IQ_LIMIT_PU;}
+                else
+                {
+                    foc.phase_limit = -11.1*(foc.speed_sense*SPEED_PU_TO_RPM) + 34421.0;
+                    foc.phase_limit = -foc.phase_limit;
+                }
+
+            }  
+
+            //limiting torque current on basis of controller temperature
+            else if(average_controller_temperature>=60)
+            {    
+                foc.phase_limit = -217*average_controller_temperature + 30411;
+                foc.phase_limit = -foc.phase_limit;
+        
+            }
+
+            //limiting torque current on basis of motor temperature
+            else if(motorControl.temperature.motor>=120)
+            {    
+                    foc.phase_limit = -434*motorControl.temperature.motor + 69510;
+                    foc.phase_limit = -foc.phase_limit;
+
+            }
+                    
+
+            //limiting torque current on basis of bus voltage
+
+            //limiting torque current on basis of DCLO
+            else if(bms_dynamic_current_limit_out<190)
+            {    
+
+                    //TO BE IMPLEMENTED     
+            }
+
+}    
+
+
+
     
 }
 
@@ -457,6 +553,10 @@ void FOC_TORQUE_PI_CONTROL()
 
             #endif
 
+
+
+#if TORQUE_PI_1
+
             if(forward_flag){POWER_MAPPING(1);}
             if(reverse_flag){POWER_MAPPING(2);}
 
@@ -466,7 +566,6 @@ void FOC_TORQUE_PI_CONTROL()
                 if(motorControl.drive.fnr_status == 2){POWER_MAPPING(2);}
             }
 
-#if TORQUE_PI_1
 
             #if REGEN_OFF
             foc.vq_ref = TORQUE_PI_LOOP(foc.torque_current_ref,foc.torque_current_sense); 
@@ -563,15 +662,22 @@ void FOC_TORQUE_PI_CONTROL()
 
 #if TORQUE_PI_2
 
+
+            if(forward_flag){POWER_MAPPING(3);}
+            if(reverse_flag){POWER_MAPPING(4);}
+
+             if(neutral_flag)
+            {
+                if(motorControl.drive.fnr_status == 1){POWER_MAPPING(3);}
+                if(motorControl.drive.fnr_status == 2){POWER_MAPPING(4);}
+            }
+
             #if REGEN_OFF
             terminal.iq.ref  = foc.phase_limit*IQ_PU_TO_A;
-            foc.vq_ref = TORQUE_PI_LOOP_2(foc.phase_limit ,foc.torque_current_sense,foc.speed_ref*1.0986, foc.vq_ref); 
+            foc.vq_ref = TORQUE_PI_LOOP_2(foc.phase_limit ,foc.torque_current_sense,foc.torque_current_ref, foc.vq_ref); 
 
-            if(foc.vq_ref>30000)
-            {
-                foc.vq_ref = 30000;
-            }    
-
+            if(foc.vq_ref>30000){foc.vq_ref = 30000;}  
+            if(foc.vq_ref<-30000){foc.vq_ref =-30000;}  
 
             #endif
 
