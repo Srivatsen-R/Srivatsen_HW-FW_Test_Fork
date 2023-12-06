@@ -168,6 +168,44 @@ error_prev = error;
 return out; 
 }
 
+//PI LOOP 2
+float TORQUE_PI_LOOP_2(float ac_max, float ac_input  , float torque_input , float vq_prev )
+    {
+        float ac_error;
+        static float ac_intg;
+
+        ac_error = ((ac_max) - (ac_input));   
+
+        if((ac_error < (868.0)) && (ac_error > (-868.0))) // if diff is 10A rms
+        {
+            ac_intg = (0.0) ;
+        }
+
+        if(ac_error >= (0.0)) // current less than max current
+        {
+            ac_intg += (ac_error *(KI_AC_CURRENT));             
+            ac_error = ((KP_AC_CURRENT_UP) *ac_error);
+        }
+        else // current more than max  current.
+        {
+            ac_intg += (ac_error *(KI_AC_CURRENT));
+            ac_error = ((KP_AC_CURRENT_DOWN)*ac_error);
+        }
+
+        ac_intg = (ac_intg >=(868.0))?(868.0):ac_intg;
+        ac_intg = (ac_intg <=(-868.0))?(-868.0):ac_intg;
+
+        ac_error += ac_intg;       
+        ac_error += vq_prev ;
+
+        if(ac_error >= torque_input) ac_error = torque_input ;
+        if(ac_error <= (0.0)) ac_error = (0.0) ;
+
+        return ac_error ;
+    }
+
+// PI LOOP 2 END
+
 
 //Synchronous Speed Routine
 float CALCULATE_SYNC_SPEED(float slip , float rotor_speed) {

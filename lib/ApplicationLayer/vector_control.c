@@ -121,7 +121,23 @@ terminal_t terminal = {
 
 void THROTTLE_PROFILE(int config)
 {
-    if(config==1){foc.torque_current_ref = (0.95*foc.speed_ref);}
+    if(config==1)
+    {
+        foc.torque_current_ref = (0.95*foc.speed_ref);
+
+        // if(deacc_flag==1 && foc.speed_sense*SPEED_PU_TO_RPM>3500)
+        // {
+        // foc.torque_current_ref = foc.phase_limit-20;
+
+        //     if(foc.torque_current_ref<0.0)
+        //     {
+        //         foc.torque_current_ref=0.0;
+        //     }
+
+        // }
+
+
+    }
 }
 
 void POWER_MAPPING(int config)
@@ -450,7 +466,7 @@ void FOC_TORQUE_PI_CONTROL()
                 if(motorControl.drive.fnr_status == 2){POWER_MAPPING(2);}
             }
 
-
+#if TORQUE_PI_1
 
             #if REGEN_OFF
             foc.vq_ref = TORQUE_PI_LOOP(foc.torque_current_ref,foc.torque_current_sense); 
@@ -541,6 +557,80 @@ void FOC_TORQUE_PI_CONTROL()
                     if(foc.vq_ref<-foc.speed_limit){foc.vq_ref = -foc.speed_limit;}
                 }
             }
+
+ #endif
+
+
+#if TORQUE_PI_2
+
+            #if REGEN_OFF
+            terminal.iq.ref  = foc.phase_limit*IQ_PU_TO_A;
+            foc.vq_ref = TORQUE_PI_LOOP_2(foc.phase_limit ,foc.torque_current_sense,foc.speed_ref*1.0986, foc.vq_ref); 
+
+            if(foc.vq_ref>30000)
+            {
+                foc.vq_ref = 30000;
+            }    
+
+
+            #endif
+
+            #if REGEN_ON
+
+            if(forward_flag)
+            {
+                    foc.regen_speed = (foc.speed_sense*SPEED_PU_TO_RPM);
+
+                    //add limit for regen speed.
+
+                    if (foc.speed_ref<=0 && foc.regen_speed>300 && forward_flag==1)
+                    {
+
+                        foc.regeneration_current_limit = -foc.regen_speed * 0.05;
+                        foc.regen_current = foc.regen_current - REGEN_DOWN_FACTOR;
+
+                        if(foc.regen_current<foc.regeneration_current_limit)
+                        {
+                            foc.regen_current = foc.regeneration_current_limit;
+                        }
+                        terminal.iq.ref               = foc.regen_current*0.00575*2.0;
+                        // torque_current_commanded = regen_current;
+                        foc.vq_ref = TORQUE_PI_LOOP(foc.regen_current,foc.torque_current_sense);//torque loop
+
+                    }
+
+                    else
+                    {
+                        foc.regen_current = foc.regen_current  + REGEN_DOWN_FACTOR;
+
+                        if(foc.regen_current>= foc.torque_current_ref)
+                        {
+                            foc.regen_current = foc.torque_current_ref;
+                        }
+                        terminal.iq.ref = foc.regen_current*0.00575*2.0;
+                        // torque_current_commanded = regen_current;
+                        foc.vq_ref = TORQUE_PI_LOOP(foc.regen_current,foc.torque_current_sense);//torque loop
+                    }
+            }
+
+            if(reverse_flag)
+            {
+                terminal.iq.ref  = foc.torque_current_ref*0.00575*2.0;
+                // torque_current_commanded = torque_current_ref;
+                foc.vq_ref = TORQUE_PI_LOOP(foc.torque_current_ref,foc.torque_current_sense);
+            }
+
+            if(reverse_flag == 0 && forward_flag == 0){
+                terminal.iq.ref  = foc.torque_current_ref*0.00575*2.0;
+                foc.vq_ref = TORQUE_PI_LOOP(foc.torque_current_ref,foc.torque_current_sense);
+            }
+
+            #endif
+
+ #endif
+
+
+
 
 
             //limiting voltage wrt voltage max limit , vs^2 = vq^2 + vd^2
@@ -1045,6 +1135,7 @@ void VECTOR_FOC_Control(void) {
             terminal.vq.ref               = (foc.vq_ref)/10.0;
             terminal.imr.ref              = foc.imr_ref;
             terminal.id.ref               = foc.flux_current_ref* ID_PU_TO_A;
+
 }
 
 

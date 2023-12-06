@@ -219,14 +219,20 @@ typedef struct foc_t {
 
 #define DUTY_TO_RADIAN          ((2*PI)/100.0)
 
-#define SQ_MAX_PU_VOLTAGE          powf(32767.0, 2.0)
+#define SQ_MAX_PU_VOLTAGE          powf(30000.0, 2.0)
 
 
 #define MAX_PU_CURRENT              39321.0
 #define MAX_PU_SPEED                65535.0
 
+#define KI_AC_CURRENT               0.000001
+#define KP_AC_CURRENT_UP            0.01
+#define KP_AC_CURRENT_DOWN          0.01
 
+#define TORQUE_PI_1  0
+#define TORQUE_PI_2  1
 
+#define AC_MAX       10000
 
 
 void   VECTOR_FOC_Control(void) ;
