@@ -674,10 +674,42 @@ void FOC_TORQUE_PI_CONTROL()
 
             #if REGEN_OFF
             terminal.iq.ref  = foc.phase_limit*IQ_PU_TO_A;
-            foc.vq_ref = TORQUE_PI_LOOP_2(foc.phase_limit ,foc.torque_current_sense,foc.torque_current_ref, foc.vq_ref); 
+            // terminal.iq.ref  = 3200*IQ_PU_TO_A;
 
+            foc.vq_ref = TORQUE_PI_LOOP_2(foc.phase_limit ,foc.torque_current_sense,foc.torque_current_ref, foc.vq_ref); 
+            // foc.vq_ref = TORQUE_PI_LOOP_2(3200.0 ,foc.torque_current_sense,foc.torque_current_ref, foc.vq_ref); 
+            
+
+            
+
+            if(forward_flag)
+            {
             if(foc.vq_ref>30000){foc.vq_ref = 30000;}  
-            if(foc.vq_ref<-30000){foc.vq_ref =-30000;}  
+            if(foc.vq_ref<0){foc.vq_ref =0;}
+            }
+
+            if(reverse_flag)
+            {
+            if(foc.vq_ref>0){foc.vq_ref = 0;}  
+            if(foc.vq_ref<-30000){foc.vq_ref =-30000;}
+            }
+
+            if(neutral_flag)
+            {
+                if(motorControl.drive.fnr_status == 1)
+                {
+                    if(foc.vq_ref>30000){foc.vq_ref = 30000;}  
+                    if(foc.vq_ref<0){foc.vq_ref =0;}
+                }
+
+                if(motorControl.drive.fnr_status == 2)
+                {
+                   if(foc.vq_ref>0){foc.vq_ref = 0;}  
+                   if(foc.vq_ref<-30000){foc.vq_ref =-30000;}
+                }
+            }
+
+
 
             #endif
 

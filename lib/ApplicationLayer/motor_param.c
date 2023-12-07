@@ -10,6 +10,8 @@ various physical parameters such as throttle, voltage , current , temperature.
 
 #include "motor_param.h"
 #include "stdint.h"
+#include "vector_control.h"
+#include "foc_blockset.h"
 
 
 int Fault_Status=0;
@@ -19,6 +21,8 @@ extern float dc_total;
 
 extern uint8_t acc_flag;
 extern uint8_t deacc_flag;
+
+extern foc_t foc;
 
 
 
@@ -263,12 +267,13 @@ float Throttle_Control(int target_speed,float prev_output,int f_flag,int r_flag)
             acc_flag = 1;
             deacc_flag = 0;
       
-            if(target_speed<=THROTTLE_THRESHOLD_A)
+            if(foc.speed_sense*SPEED_PU_TO_RPM<100)
             {    
-            th_increment = ACCELERATION_CONST;
-            }
+            //th_increment = ACCELERATION_CONST;
+            th_increment = 1.0;
             
-            if(target_speed>THROTTLE_THRESHOLD_B)
+            } 
+            else
             {    
                th_increment = ACCELERATION_CONST; 
             }
