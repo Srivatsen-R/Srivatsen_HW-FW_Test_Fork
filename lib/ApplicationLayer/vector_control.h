@@ -107,7 +107,7 @@ typedef struct foc_t {
 #define FW_RPM                  1100.0 //FW 58V system.
 //#define FW_RPM                  2650.0 //FW 72V system.
 
-#define FW_MAX_CURRENT_PU       5800.0 //58V system
+#define FW_MAX_CURRENT_PU       6800.0 //58V system
 //#define FW_MAX_CURRENT_PU       1800.0 //72V system
 
 #define TIM1_PSCLR              3
