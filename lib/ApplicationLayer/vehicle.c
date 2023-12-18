@@ -311,6 +311,17 @@ void READ_THROTTLE()
           if(target_speed_reference <= 0){target_speed_reference = 0;} 
         }
         
+        // if(target_speed_reference<1000.0)
+        // {
+        //   // motorControl.drive.check == DRIVE_DISABLE;
+        //   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
+        // }
+
+        // else if (target_speed_reference >=1000.0 && fault.status==0)
+        // {
+        //   motorControl.drive.check == DRIVE_ENABLE;
+        //   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
+        // }
         
         speed_filtered = Throttle_Control(target_speed_reference,speed_filtered,forward_flag,reverse_flag);                  
         ref_output = speed_filtered;

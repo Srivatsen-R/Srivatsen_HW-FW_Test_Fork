@@ -270,7 +270,7 @@ float Throttle_Control(int target_speed,float prev_output,int f_flag,int r_flag)
             if(foc.speed_sense*SPEED_PU_TO_RPM<100)
             {    
             //th_increment = ACCELERATION_CONST;
-            th_increment = 1.0;
+            th_increment = 60.0;
             
             } 
             else

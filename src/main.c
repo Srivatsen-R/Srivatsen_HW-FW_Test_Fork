@@ -138,6 +138,8 @@ int main(void) {
   if(analog.start_dma(&hadc1, (uint32_t*) analog.bufferData, ADC_NoOfConversion) != OK) {
      Error_Handler();
   }
+
+  HAL_Delay(5000);
   
   //function to keep drive disable intially.
   MotorControl_Init();
@@ -297,8 +299,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
           HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
           HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
 
-          //drive enable gpio
           HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
+
         }
 
           //motor angle,current

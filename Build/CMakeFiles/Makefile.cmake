@@ -99,12 +99,12 @@ set(CMAKE_MAKEFILE_DEPENDS
   "C:/Program Files/CMake/share/cmake-3.27/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake"
   "C:/Program Files/CMake/share/cmake-3.27/Modules/Internal/FeatureTesting.cmake"
   "C:/Program Files/CMake/share/cmake-3.27/Modules/Platform/Generic.cmake"
-  "CMakeFiles/3.27.6/CMakeASMCompiler.cmake"
-  "CMakeFiles/3.27.6/CMakeCCompiler.cmake"
-  "CMakeFiles/3.27.6/CMakeCXXCompiler.cmake"
-  "CMakeFiles/3.27.6/CMakeSystem.cmake"
-  "D:/Pegasus_Code/Pegasus_Code/CMakeLists.txt"
-  "D:/Pegasus_Code/Pegasus_Code/arm-none-eabi-gcc.cmake"
+  "CMakeFiles/3.27.5/CMakeASMCompiler.cmake"
+  "CMakeFiles/3.27.5/CMakeCCompiler.cmake"
+  "CMakeFiles/3.27.5/CMakeCXXCompiler.cmake"
+  "CMakeFiles/3.27.5/CMakeSystem.cmake"
+  "D:/Pegasus_Code/CMakeLists.txt"
+  "D:/Pegasus_Code/arm-none-eabi-gcc.cmake"
   )
 
 # The corresponding makefile is:
@@ -115,12 +115,12 @@ set(CMAKE_MAKEFILE_OUTPUTS
 
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
-  "CMakeFiles/3.27.6/CMakeSystem.cmake"
-  "CMakeFiles/3.27.6/CMakeCCompiler.cmake"
-  "CMakeFiles/3.27.6/CMakeCXXCompiler.cmake"
-  "CMakeFiles/3.27.6/CMakeCCompiler.cmake"
-  "CMakeFiles/3.27.6/CMakeCXXCompiler.cmake"
-  "CMakeFiles/3.27.6/CMakeASMCompiler.cmake"
+  "CMakeFiles/3.27.5/CMakeSystem.cmake"
+  "CMakeFiles/3.27.5/CMakeCCompiler.cmake"
+  "CMakeFiles/3.27.5/CMakeCXXCompiler.cmake"
+  "CMakeFiles/3.27.5/CMakeCCompiler.cmake"
+  "CMakeFiles/3.27.5/CMakeCXXCompiler.cmake"
+  "CMakeFiles/3.27.5/CMakeASMCompiler.cmake"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 

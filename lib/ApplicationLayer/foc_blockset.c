@@ -92,75 +92,18 @@ gain = KP_IQ*error;
 if(gain > foc.speed_limit){gain = foc.speed_limit;}
 else if(gain < -foc.speed_limit){gain = -foc.speed_limit;}
 
+
 u = gain +intg;
 
 if(u>foc.speed_limit){out = foc.speed_limit;}
 else if(u<-foc.speed_limit){out = -foc.speed_limit;}  
 else{out = u;}
 
-excess = u - out;
 
-
-// if(TORQUE_MODE)
-// {
-
-//         if(forward_flag)
-//         {
-//             if((error<4200.0 && error>-4200.0 && terminal.iq.ref<=50)) 
-//             {
-//                 intg_prev=intg_prev-0.5;
-//                 if(intg_prev<0){intg_prev=0;}
-//                 if(intg_prev == 0.0){gain = 0.0;}
-//             }
-//         }
-
-//         if(reverse_flag )
-//         {
-//             if((error<4200.0 && error>-4200.0 && terminal.iq.ref>=-50))
-//             {
-//                 intg_prev=intg_prev+0.5;
-//                 if(intg_prev>0){intg_prev=0;}
-//                 if(intg_prev == 0.0){gain = 0.0;}
-//             }
-//         }
-
-//         if(neutral_flag)
-//         {
-//             if(motorControl.drive.fnr_status==1)
-//             {
-//                 if((error<4200.0 && error>-4200.0 && terminal.iq.ref<=50) ) 
-//                 {
-//                     intg_prev=intg_prev-0.5;
-//                     if(intg_prev<0){intg_prev=0;}
-//                     if(intg_prev == 0.0){gain = 0.0;}
-//                 }
-//             }
-
-//             if(motorControl.drive.fnr_status==2)
-//             {
-//                 if((error<4200.0 && error>-4200.0 && terminal.iq.ref>=-50))
-//                 {
-//                     intg_prev=intg_prev+0.5;
-//                     if(intg_prev == 0.0){gain = 0.0;}
-//                 }
-//             }
-//         }
-
-// }
-
-intg = intg_prev + ((IQ_INTG_CONST)*(error+error_prev)) - (KC_W*excess);
+intg = intg_prev + ((IQ_INTG_CONST)*(error+error_prev));
 
 if(intg > foc.speed_limit){intg = foc.speed_limit;}
 else if(intg < -foc.speed_limit){intg = -foc.speed_limit;}
-// terminal.iq.intg = intg;
-
-// if(intg > intg_prev + MAX_RATE_Q*T_S){
-//     intg = intg_prev + MAX_RATE_Q*T_S;
-// }else if(intg < intg_prev - MAX_RATE_Q*T_S){
-//     intg = intg_prev - MAX_RATE_Q*T_S;
-// }else{
-
-// }
 
 intg_prev = intg;
 error_prev = error;
@@ -175,21 +118,65 @@ float TORQUE_PI_LOOP_2(float ac_max, float ac_input  , float torque_input , floa
         static float ac_intg;
 
         ac_error = ((ac_max) - (ac_input));   
+        if((ac_error < (400.0)) && (ac_error > (-400.0))){ac_intg = (0.0) ;}
 
-        if((ac_error < (868.0)) && (ac_error > (-868.0))) // if diff is 10A rms
+        if(forward_flag)
         {
-            ac_intg = (0.0) ;
-        }
-
-        if(ac_error >= (0.0)) // current less than max current
-        {
+            if(ac_error >= (0.0)) // current less than max current
+            {
             ac_intg += (ac_error *(KI_AC_CURRENT));             
             ac_error = ((KP_AC_CURRENT_UP) *ac_error);
-        }
-        else // current more than max  current.
-        {
+            }
+            else // current more than max  current.
+            {
             ac_intg += (ac_error *(KI_AC_CURRENT));
             ac_error = ((KP_AC_CURRENT_DOWN)*ac_error);
+            }
+        }
+
+        if(reverse_flag)
+        {
+            if(ac_error <= (0.0)) // current less than max current
+            {
+            ac_intg += (ac_error *(KI_AC_CURRENT));             
+            ac_error = ((KP_AC_CURRENT_UP) *ac_error);
+            }
+            else // current more than max  current.
+            {
+            ac_intg += (ac_error *(KI_AC_CURRENT));
+            ac_error = ((KP_AC_CURRENT_DOWN)*ac_error);
+            }
+        }
+
+        if(neutral_flag)
+        {
+            if(motorControl.drive.fnr_status==1)
+            {
+                if(ac_error >= (0.0)) // current less than max current
+                {
+                ac_intg += (ac_error *(KI_AC_CURRENT));             
+                ac_error = ((KP_AC_CURRENT_UP) *ac_error);
+                }
+                else // current more than max  current.
+                {
+                ac_intg += (ac_error *(KI_AC_CURRENT));
+                ac_error = ((KP_AC_CURRENT_DOWN)*ac_error);
+                }
+            }
+
+            if(motorControl.drive.fnr_status==2)
+            {
+                if(ac_error <= (0.0)) // current less than max current
+                {
+                ac_intg += (ac_error *(KI_AC_CURRENT));             
+                ac_error = ((KP_AC_CURRENT_UP) *ac_error);
+                }
+                else // current more than max  current.
+                {
+                ac_intg += (ac_error *(KI_AC_CURRENT));
+                ac_error = ((KP_AC_CURRENT_DOWN)*ac_error);
+                }
+            }
         }
 
         ac_intg = (ac_intg >=(868.0))?(868.0):ac_intg;
@@ -198,8 +185,32 @@ float TORQUE_PI_LOOP_2(float ac_max, float ac_input  , float torque_input , floa
         ac_error += ac_intg;       
         ac_error += vq_prev ;
 
-        if(ac_error >= torque_input) ac_error = torque_input ;
-        if(ac_error <= torque_input) ac_error = torque_input ;
+        if(forward_flag)
+        {
+            if(ac_error >= torque_input) ac_error = torque_input ;
+            if(ac_error <= 0) ac_error = 0 ;
+        }
+
+        if(reverse_flag)
+        {
+            if(ac_error <= torque_input) ac_error = torque_input ;
+            if(ac_error > 0) ac_error = 0 ;
+        }
+
+        if(neutral_flag)
+        {
+            if(motorControl.drive.fnr_status==1)
+            {
+                if(ac_error >= torque_input) ac_error = torque_input ;
+                if(ac_error <= 0) ac_error = 0 ;
+            }
+
+            if(motorControl.drive.fnr_status==2)
+            {
+                if(ac_error <= torque_input) ac_error = torque_input ;
+                if(ac_error > 0) ac_error = 0 ;
+            }
+        }
 
         return ac_error ;
     }

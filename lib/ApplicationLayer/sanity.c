@@ -130,7 +130,7 @@ void FAULT_READING()
       fault.boardTemperature_u = Temperature_Fault_Controller((motorControl.temperature.u));
       fault.boardTemperature_v = Temperature_Fault_Controller((motorControl.temperature.v));
       fault.boardTemperature_w = Temperature_Fault_Controller((motorControl.temperature.w));
-      fault.motorTemperature = Temperature_Fault(motorControl.temperature.motor);
+      // fault.motorTemperature = Temperature_Fault(motorControl.temperature.motor);
       fault.busVoltage       = BUS_Voltage_OV_UV_Fault(busVoltage);
       fault.throttle         = Throttle_Fault(moving_Throttle_measured_fun(analog.bufferData[THROTTLE],THROTTLE_AVG));
       fault.currentSensor    = Current_Sensor_Fault(analog.bufferData[PHASE_CURRENT_W],analog.bufferData[PHASE_CURRENT_V]);

@@ -124,19 +124,6 @@ void THROTTLE_PROFILE(int config)
     if(config==1)
     {
         foc.torque_current_ref = (0.95*foc.speed_ref);
-
-        // if(deacc_flag==1 && foc.speed_sense*SPEED_PU_TO_RPM>3500)
-        // {
-        // foc.torque_current_ref = foc.phase_limit-20;
-
-        //     if(foc.torque_current_ref<0.0)
-        //     {
-        //         foc.torque_current_ref=0.0;
-        //     }
-
-        // }
-
-
     }
 }
 
@@ -626,16 +613,15 @@ void FOC_TORQUE_PI_CONTROL()
             //limiting voltage wrt throttle.
             if(forward_flag)
             {    
-                foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR + 3000;
-                //foc.speed_limit = VQ_LIMIT;
-                    
+                foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR ;
                 if(foc.vq_ref>foc.speed_limit) {foc.vq_ref = foc.speed_limit;}
                 if(foc.vq_ref<-foc.speed_limit){foc.vq_ref = -foc.speed_limit;}
             }
 
             if(reverse_flag)
             {    
-                foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR + 3000;    
+                foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR;    
+                if(foc.vq_ref>foc.speed_limit) {foc.vq_ref = foc.speed_limit;}
                 if(foc.vq_ref<-foc.speed_limit){foc.vq_ref = -foc.speed_limit;}
             }
 
@@ -643,17 +629,17 @@ void FOC_TORQUE_PI_CONTROL()
             {
                 if(motorControl.drive.fnr_status == 1)
                 {
-                    foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR + 3000;
-                    //foc.speed_limit = VQ_LIMIT;
-                  
+                    foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR;
                     if(foc.vq_ref>foc.speed_limit){foc.vq_ref = foc.speed_limit;}
                     if(foc.vq_ref<-foc.speed_limit){foc.vq_ref = -foc.speed_limit;}
                 }
 
                 if(motorControl.drive.fnr_status == 2)
                 {
-                    foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR + 3000;                    
+                    foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR;                    
+                    if(foc.vq_ref>foc.speed_limit) {foc.vq_ref = foc.speed_limit;}
                     if(foc.vq_ref<-foc.speed_limit){foc.vq_ref = -foc.speed_limit;}
+
                 }
             }
 
@@ -674,10 +660,10 @@ void FOC_TORQUE_PI_CONTROL()
 
             #if REGEN_OFF
             terminal.iq.ref  = foc.phase_limit*IQ_PU_TO_A;
-            // terminal.iq.ref  = 3200*IQ_PU_TO_A;
+            // terminal.iq.ref  = -3200*IQ_PU_TO_A;
 
             foc.vq_ref = TORQUE_PI_LOOP_2(foc.phase_limit ,foc.torque_current_sense,foc.torque_current_ref, foc.vq_ref); 
-            // foc.vq_ref = TORQUE_PI_LOOP_2(3200.0 ,foc.torque_current_sense,foc.torque_current_ref, foc.vq_ref); 
+            // foc.vq_ref = TORQUE_PI_LOOP_2(-3200.0 ,foc.torque_current_sense,foc.torque_current_ref, foc.vq_ref); 
             
 
             
@@ -910,7 +896,7 @@ void FOC_ELECTRICAL_ANGLE_CALCULATION()
                     angle_mech = (100-Duty)*DUTY_TO_RADIAN;
 
                     // angle_mech = (Duty)*DUTY_TO_RADIAN; //mech angle
-                    foc.rho_prev = 3.0*angle_mech; // elec angle
+                    foc.rho_prev = POLEPAIRS*angle_mech; // elec angle
                     if (angle_mech>2.095 && angle_mech<4.1866){foc.rho_prev = foc.rho_prev - 6.28;}
                     else  if(angle_mech>=4.1886){foc.rho_prev = foc.rho_prev - 12.56;}
                 }
@@ -923,7 +909,7 @@ void FOC_ELECTRICAL_ANGLE_CALCULATION()
                 {
                     //pwm signal        
                     angle_mech = -(6.28-(100-Duty)*DUTY_TO_RADIAN); //mech angle
-                    foc.rho_prev = 3.0*angle_mech; // elec angle
+                    foc.rho_prev = POLEPAIRS*angle_mech; // elec angle
                     if (angle_mech<-2.095 && angle_mech>-4.1866){foc.rho_prev = foc.rho_prev + 6.28;}
                     else  if(angle_mech<=-4.1886){foc.rho_prev = foc.rho_prev + 12.56;}
                 }
@@ -946,7 +932,7 @@ void FOC_ELECTRICAL_ANGLE_CALCULATION()
 
                          // angle_mech = (Duty)*DUTY_TO_RADIAN; //mech angle
 
-                            foc.rho_prev = 3.0*angle_mech; // elec angle
+                            foc.rho_prev = POLEPAIRS*angle_mech; // elec angle
                             if (angle_mech>2.095 && angle_mech<4.1866){foc.rho_prev = foc.rho_prev - 6.28;}
                             else  if(angle_mech>=4.1886){foc.rho_prev = foc.rho_prev - 12.56;}
                         }
@@ -959,7 +945,7 @@ void FOC_ELECTRICAL_ANGLE_CALCULATION()
                         {
                             //pwm signal        
                             angle_mech = -(6.28-(100-Duty)*DUTY_TO_RADIAN); //mech angle
-                            foc.rho_prev = 3.0*angle_mech; // elec angle
+                            foc.rho_prev = POLEPAIRS*angle_mech; // elec angle
                             if (angle_mech<-2.095 && angle_mech>-4.1866){foc.rho_prev = foc.rho_prev + 6.28;}
                             else  if(angle_mech<=-4.1886){foc.rho_prev = foc.rho_prev + 12.56;}
                         }
@@ -1135,6 +1121,7 @@ Last Changes:
 void FOC_FLUX_PI_CONTROL()
 {
             //PI loop flux current
+   
             foc.vd_ref = FLUX_PI_LOOP(foc.flux_current_ref,foc.flux_current_sense);//Flux Loop
             if(foc.vd_ref>VD_LIMIT){foc.vd_ref =VD_LIMIT;}
             if(foc.vd_ref<-VD_LIMIT){foc.vd_ref =-VD_LIMIT;}
