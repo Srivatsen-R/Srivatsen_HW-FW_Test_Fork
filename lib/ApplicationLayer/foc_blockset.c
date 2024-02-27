@@ -69,46 +69,65 @@ float CALCULATE_SLIP_SPEED(float iq_sen,float imr_ref)
 //Torque PI Control
 float TORQUE_PI_LOOP(float iq_ref,float iq_sen)
 {
-static float error;
-static float gain;
-static float intg;
-static float intg_prev;
-static float error_prev;  
-static float excess;
-float u;
-float limit;
-float out;
+    foc.limMaxVq = VQ_LIMIT;
+    foc.limMinVq = -VQ_LIMIT;
+    float error = 0.0f;
+    float proportional = 0.0f;
+    float output = 0.0f;
+    static float integration = 0.0f;
+    static float error_prev = 0.0f;
 
-#if REGEN_OFF
+    terminal.iq.ref = iq_ref * IQ_PU_TO_A;
 
-terminal.iq.ref  = iq_ref*IQ_PU_TO_A;
+    error = iq_ref - iq_sen;
 
-#endif
+    proportional = KP_IQ * error;
 
-error = iq_ref - iq_sen;
+    integration = integration + KI_IQ * T_S * 0.5f * (error + error_prev);
 
-gain = KP_IQ*error;
+    float intlimMax = 0.0f, intlimMin = 0.0f;
 
-if(gain > foc.speed_limit){gain = foc.speed_limit;}
-else if(gain < -foc.speed_limit){gain = -foc.speed_limit;}
+    if (foc.limMaxVq > proportional)
+    {
+        intlimMax = foc.limMaxVq - proportional;
+    }
+    else
+    {
+        intlimMax = 0.0f;
+    }
 
+    if (foc.limMinVq < proportional)
+    {
+        intlimMin = foc.limMinVq - proportional;
+    }
+    else
+    {
+        intlimMin = 0.0f;
+    }
 
-u = gain +intg;
+    if (integration > intlimMax)
+    {
+        integration = intlimMax;
+    }
+    else if (integration < intlimMin)
+    {
+        integration = intlimMin;
+    }
 
-if(u>foc.speed_limit){out = foc.speed_limit;}
-else if(u<-foc.speed_limit){out = -foc.speed_limit;}  
-else{out = u;}
+    error_prev = error;
 
+    output = integration + proportional;
 
-intg = intg_prev + ((IQ_INTG_CONST)*(error+error_prev));
+    if (output > foc.limMaxVq)
+    {
+        output = foc.limMaxVq;
+    }
+    else if (output < foc.limMinVq)
+    {
+        output = foc.limMinVq;
+    }
 
-if(intg > foc.speed_limit){intg = foc.speed_limit;}
-else if(intg < -foc.speed_limit){intg = -foc.speed_limit;}
-
-intg_prev = intg;
-error_prev = error;
-
-return out; 
+    return output; 
 }
 
 //PI LOOP 2
@@ -303,42 +322,65 @@ float  MAGNETISING_PI_LOOP(float imr_ref,float imr_sen) {
 //Flux Control PI Loop
 float FLUX_PI_LOOP(float id_ref,float id_sen)
 {
-static float error;
-static float gain;
-static float intg;
-static float intg_prev;
-static float error_prev;  
-static float excess;
-float u;
-float out;
+    foc.limMaxVd = VD_LIMIT;
+    foc.limMinVd = -VD_LIMIT;
+    float error = 0.0f;
+    float proportional = 0.0f;
+    float output = 0.0f;
+    static float integration = 0.0f;
+    static float error_prev = 0.0f;
 
-error = id_ref - id_sen;
+    terminal.id.ref = id_ref * ID_PU_TO_A;
 
-// terminal.id.err = error;
+    error = id_ref - id_sen;
 
-gain = KP_IQ*error;
+    proportional = KP_IQ * error;
 
-if(gain > VD_LIMIT){gain = VD_LIMIT;} 
-else if(gain < -VD_LIMIT){gain = -VD_LIMIT;}
+    integration = integration + KI_IQ * T_S * 0.5f * (error + error_prev);
 
-u = gain +intg;
+    float intlimMax = 0.0f, intlimMin = 0.0f;
 
-if(u>VD_LIMIT){out = VD_LIMIT;}
-else if(u<-VD_LIMIT){out = -VD_LIMIT;}  
-else{out = u;}
+    if (foc.limMaxVd > proportional)
+    {
+        intlimMax = foc.limMaxVd - proportional;
+    }
+    else
+    {
+        intlimMax = 0.0f;
+    }
 
-excess = u - out;
+    if (foc.limMinVd < proportional)
+    {
+        intlimMin = foc.limMinVd - proportional;
+    }
+    else
+    {
+        intlimMin = 0.0f;
+    }
 
-intg = intg_prev + ((ID_INTG_CONST)*(error+error_prev)) - (KC_W*excess);
+    if (integration > intlimMax)
+    {
+        integration = intlimMax;
+    }
+    else if (integration < intlimMin)
+    {
+        integration = intlimMin;
+    }
 
-if(intg > VD_LIMIT){intg = VD_LIMIT;}
-else if(intg < -VD_LIMIT){intg = -VD_LIMIT;}
+    error_prev = error;
 
-intg_prev = intg;
-error_prev = error;
+    output = integration + proportional;
 
-return out; 
+    if (output > foc.limMaxVd)
+    {
+        output = foc.limMaxVd;
+    }
+    else if (output < foc.limMinVd)
+    {
+        output = foc.limMinVd;
+    }
 
+    return output;
 }
 
 void SPWM(int p_a ,int p_b , int p_c) {

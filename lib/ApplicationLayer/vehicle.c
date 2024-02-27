@@ -98,7 +98,7 @@ void CAN_Logging()
                                   motorT, 
                                   motorControl, 
                                   analog, 
-                                  count_duty,
+                                  throttle_input,
                                   z_trig, 
                                   (float)odo_can, 
                                   (float)kmph_can, 

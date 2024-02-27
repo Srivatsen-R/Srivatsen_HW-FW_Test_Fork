@@ -123,7 +123,7 @@ void THROTTLE_PROFILE(int config)
 {
     if(config==1)
     {
-        foc.torque_current_ref = (0.95*foc.speed_ref);
+        foc.torque_current_ref = (0.84*foc.speed_ref);
     }
 }
 
@@ -474,8 +474,10 @@ void FOC_CLARK_PARK_TRANSFORM()
             foc.phase_V_current = b_current;
             foc.phase_W_current = 0.0 - foc.phase_U_current - foc.phase_V_current;//phase c current
             //Clark Transform
-            foc.alpha_current = foc.phase_U_current - 0.5*(foc.phase_V_current+foc.phase_W_current);//alpha current 
-            foc.beta_current  = 0.866*(foc.phase_V_current-foc.phase_W_current);//beta current
+            // foc.alpha_current = foc.phase_U_current - 0.5*(foc.phase_V_current+foc.phase_W_current);//alpha current 
+            // foc.beta_current  = 0.866*(foc.phase_V_current-foc.phase_W_current);//beta current
+            foc.alpha_current = foc.phase_U_current;
+            foc.beta_current = 0.577350269f * (foc.phase_U_current + 2.0f * foc.phase_V_current);
             //Park Transform
             foc.flux_current_sense     = (foc.cos_rho*foc.alpha_current) + (foc.sin_rho*foc.beta_current);//flux current
             if(foc.flux_current_sense>MAX_PU_CURRENT){foc.flux_current_sense = MAX_PU_CURRENT;}    
@@ -956,6 +958,7 @@ void FOC_ELECTRICAL_ANGLE_CALCULATION()
             {
 
                 //foc.rho_prev = PPR_TO_RAD_CONSTANT*motorControl.encoder.value;
+                foc.rho = 0.0;
                 foc.rho_prev = 0.0;
                 reset_flag=0;
             }
@@ -1049,41 +1052,44 @@ void FOC_FIELD_WEAKENING_AND_MTPA()
 {
             if(forward_flag)
             {
-                FW_AND_MTPA_CONFIG(1);
+                // FW_AND_MTPA_CONFIG(1);
+                foc.flux_current_ref = 0.0;
             }
 
             if(reverse_flag)
             {
-                if((foc.speed_sense*SPEED_PU_TO_RPM)<FW_RPM)
-                {       
-                    if(((foc.speed_sense*SPEED_PU_TO_RPM) >= D_CURRENT_DERATING_RPM_1) && ((foc.speed_sense*SPEED_PU_TO_RPM) <= D_CURRENT_DERATING_RPM_2))
-                     {foc.flux_current_ref = map(foc.speed_sense*SPEED_PU_TO_RPM, D_CURRENT_DERATING_RPM_1, D_CURRENT_DERATING_RPM_2, MTPA_MAX_CURRENT_PU, 0);}
-                    else if(((foc.speed_sense*SPEED_PU_TO_RPM) <D_CURRENT_DERATING_RPM_1))
-                     {foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200, 0.0, MTPA_MAX_CURRENT_PU);}
+                foc.flux_current_ref = 0.0;
+                // if((foc.speed_sense*SPEED_PU_TO_RPM)<FW_RPM)
+                // {       
+                //     if(((foc.speed_sense*SPEED_PU_TO_RPM) >= D_CURRENT_DERATING_RPM_1) && ((foc.speed_sense*SPEED_PU_TO_RPM) <= D_CURRENT_DERATING_RPM_2))
+                //      {foc.flux_current_ref = map(foc.speed_sense*SPEED_PU_TO_RPM, D_CURRENT_DERATING_RPM_1, D_CURRENT_DERATING_RPM_2, MTPA_MAX_CURRENT_PU, 0);}
+                //     else if(((foc.speed_sense*SPEED_PU_TO_RPM) <D_CURRENT_DERATING_RPM_1))
+                //      {foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200, 0.0, MTPA_MAX_CURRENT_PU);}
 
-                    if(foc.flux_current_ref >= MTPA_MAX_CURRENT_PU){foc.flux_current_ref = MTPA_MAX_CURRENT_PU;}
-                }
+                //     if(foc.flux_current_ref >= MTPA_MAX_CURRENT_PU){foc.flux_current_ref = MTPA_MAX_CURRENT_PU;}
+                // }
             }
 
             if(neutral_flag)
             {
                 if(motorControl.drive.fnr_status == 1)
                 {
-                    FW_AND_MTPA_CONFIG(1);
+                    // FW_AND_MTPA_CONFIG(1);
+                    foc.flux_current_ref = 0.0;
                 }
 
                 if(motorControl.drive.fnr_status == 2)
                 {
-                
-                    if((foc.speed_sense*SPEED_PU_TO_RPM)<FW_RPM)
-                    {       
-                        if(((foc.speed_sense*SPEED_PU_TO_RPM) >= D_CURRENT_DERATING_RPM_1) && ((foc.speed_sense*SPEED_PU_TO_RPM) <= D_CURRENT_DERATING_RPM_2))
-                        {foc.flux_current_ref = map(foc.speed_sense*SPEED_PU_TO_RPM, D_CURRENT_DERATING_RPM_1, D_CURRENT_DERATING_RPM_2, MTPA_MAX_CURRENT_PU, 0);}
-                        else if(((foc.speed_sense*SPEED_PU_TO_RPM) <D_CURRENT_DERATING_RPM_1))
-                        {foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200.0, 0.0, MTPA_MAX_CURRENT_PU);}
+                    foc.flux_current_ref = 0.0;
+                    // if((foc.speed_sense*SPEED_PU_TO_RPM)<FW_RPM)
+                    // {       
+                    //     if(((foc.speed_sense*SPEED_PU_TO_RPM) >= D_CURRENT_DERATING_RPM_1) && ((foc.speed_sense*SPEED_PU_TO_RPM) <= D_CURRENT_DERATING_RPM_2))
+                    //     {foc.flux_current_ref = map(foc.speed_sense*SPEED_PU_TO_RPM, D_CURRENT_DERATING_RPM_1, D_CURRENT_DERATING_RPM_2, MTPA_MAX_CURRENT_PU, 0);}
+                    //     else if(((foc.speed_sense*SPEED_PU_TO_RPM) <D_CURRENT_DERATING_RPM_1))
+                    //     {foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200.0, 0.0, MTPA_MAX_CURRENT_PU);}
 
-                        if(foc.flux_current_ref >= MTPA_MAX_CURRENT_PU){foc.flux_current_ref = MTPA_MAX_CURRENT_PU;}
-                    }
+                    //     if(foc.flux_current_ref >= MTPA_MAX_CURRENT_PU){foc.flux_current_ref = MTPA_MAX_CURRENT_PU;}
+                    // }
 
                 }
             }

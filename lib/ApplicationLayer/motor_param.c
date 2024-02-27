@@ -270,7 +270,7 @@ float Throttle_Control(int target_speed,float prev_output,int f_flag,int r_flag)
             if(foc.speed_sense*SPEED_PU_TO_RPM<100)
             {    
             //th_increment = ACCELERATION_CONST;
-            th_increment = 70.0;
+            th_increment = 40.0;
             
             } 
             else
@@ -289,8 +289,15 @@ float Throttle_Control(int target_speed,float prev_output,int f_flag,int r_flag)
         {
             deacc_flag = 1;
             acc_flag = 0;
-   
-            th_decrement =DEACCELERATION_CONST;
+            
+            if (foc.speed_sense * SPEED_PU_TO_RPM <= 1200.0)
+            {
+                th_decrement = 20.0;
+            }
+            else
+            {
+                th_decrement =DEACCELERATION_CONST;
+            }
 
             if(target_speed <= (prev_output - th_decrement)) prev_output -= th_decrement ;
             else prev_output = target_speed ;

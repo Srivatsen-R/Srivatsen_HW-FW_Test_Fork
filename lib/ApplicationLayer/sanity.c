@@ -361,4 +361,34 @@ void SAFETY_AND_ERRORS()
           motorControl.drive.check = DRIVE_DISABLE;
           fault.status = FAULT_DC_OVER_CURR;
         }
+
+        if (terminal.iq.sen >= 400.0 || terminal.iq.sen <= -400.0)
+        {
+            static uint8_t count_iq = 0;
+
+            if (count_iq >= 5)
+            {
+               fault.fault_code |= FAULT_OVER_CURRENT_HEX;
+               motorControl.drive.check = DRIVE_DISABLE;
+               fault.status = FAULT_OVER_CURRENT;
+               count_iq = 0;
+            }
+
+            count_iq++;
+        }
+
+        if (terminal.id.sen >= 400.0 || terminal.id.sen <= -400.0)
+        {
+            static uint8_t count_id = 0;
+
+            if (count_id >= 5)
+            {
+               fault.fault_code |= FAULT_OVER_CURRENT_HEX;
+               motorControl.drive.check = DRIVE_DISABLE;
+               fault.status = FAULT_OVER_CURRENT;
+               count_id = 0;
+            }
+
+            count_id++;
+        }
 }
