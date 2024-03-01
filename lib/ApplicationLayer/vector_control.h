@@ -131,14 +131,14 @@ typedef struct foc_t {
 #define POWER_MAPPING_LOWER_IQ_LIMIT_PU 11000.0
 #define VD_LIMIT                            10000.0
 #define VQ_LIMIT                            32767.0
-#define VQ_LIMIT_FACTOR                     1.2
+#define VQ_LIMIT_FACTOR                     0.84
 
 //#define ANGLE_OFFSET                        4.188//Proto -3 Ultron
 //#define ANGLE_OFFSET                        0.0//Proto -12 Ultron
 //#define ANGLE_OFFSET                        0.523//Nidec 6 pole.
 
-#define ANGLE_OFFSET_FW                            0.52359//Nidec 8 pole
-#define ANGLE_OFFSET_RW                           -1.07419//Nidec 8 pole
+#define ANGLE_OFFSET_FW                            0.523//V17
+#define ANGLE_OFFSET_RW                           -1.047//V17
 
 #define NIDEC_MOTOR_PWM             1
 #define ULTRON_MOTOR_PWM            0
@@ -166,12 +166,12 @@ typedef struct foc_t {
 #define T_F_ROTOR_SPEED                     0.03           // Constant to filter rotor speed
 #define MAGNETISING_CURRENT_REF             0.0//6000.0//6750.0
 #define OUTPUT_LIMIT                        29200.0//17000.0       // OUTPUT LIMIT VD VQ
-#define KP_W                                0.5//2.5//1.2//GAIN CONSTANT
-#define KI_W                                3.8//50.0//0.48//INTG CONSTANT
-#define KP_IQ                               0.5
-#define KI_IQ                               3.8
-#define KP_ID                               0.5
-#define KI_ID                               3.8
+#define KP_W                                1.2//2.5//1.2//GAIN CONSTANT
+#define KI_W                                4.2//50.0//0.48//INTG CONSTANT
+#define KP_IQ                               1.2
+#define KI_IQ                               4.2
+#define KP_ID                               1.2
+#define KI_ID                               4.2
 #define SLIP_LIMIT                          20.0
 #define FW_DIRECTION                        0
 #define RW_DIRECTION                        0

@@ -617,13 +617,13 @@ void FOC_TORQUE_PI_CONTROL()
             {    
                 foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR ;
                 if(foc.vq_ref>foc.speed_limit) {foc.vq_ref = foc.speed_limit;}
-                if(foc.vq_ref<-foc.speed_limit){foc.vq_ref = -foc.speed_limit;}
+                if(foc.vq_ref<0.0){foc.vq_ref = 0.0;}
             }
 
             if(reverse_flag)
             {    
                 foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR;    
-                if(foc.vq_ref>foc.speed_limit) {foc.vq_ref = foc.speed_limit;}
+                if(foc.vq_ref>0.0) {foc.vq_ref = 0.0;}
                 if(foc.vq_ref<-foc.speed_limit){foc.vq_ref = -foc.speed_limit;}
             }
 
@@ -633,13 +633,13 @@ void FOC_TORQUE_PI_CONTROL()
                 {
                     foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR;
                     if(foc.vq_ref>foc.speed_limit){foc.vq_ref = foc.speed_limit;}
-                    if(foc.vq_ref<-foc.speed_limit){foc.vq_ref = -foc.speed_limit;}
+                    if(foc.vq_ref<0.0){foc.vq_ref = 0.0;}
                 }
 
                 if(motorControl.drive.fnr_status == 2)
                 {
                     foc.speed_limit = foc.speed_ref*VQ_LIMIT_FACTOR;                    
-                    if(foc.vq_ref>foc.speed_limit) {foc.vq_ref = foc.speed_limit;}
+                    if(foc.vq_ref>0.0) {foc.vq_ref = 0.0;}
                     if(foc.vq_ref<-foc.speed_limit){foc.vq_ref = -foc.speed_limit;}
 
                 }
@@ -958,7 +958,7 @@ void FOC_ELECTRICAL_ANGLE_CALCULATION()
             {
 
                 //foc.rho_prev = PPR_TO_RAD_CONSTANT*motorControl.encoder.value;
-                foc.rho = 0.0;
+                // foc.rho = 0.0;
                 foc.rho_prev = 0.0;
                 reset_flag=0;
             }
@@ -1053,7 +1053,20 @@ void FOC_FIELD_WEAKENING_AND_MTPA()
             if(forward_flag)
             {
                 // FW_AND_MTPA_CONFIG(1);
-                foc.flux_current_ref = 0.0;
+                // foc.flux_current_ref = 0.0;
+                if (foc.speed_sense * SPEED_PU_TO_RPM >= 2200.0)
+                {
+                    foc.flux_current_ref = -map(foc.speed_ref, 0.0, 27305.0, 0.0, 3300.0);
+                }
+                else
+                {
+                    foc.flux_current_ref = 0.0;
+                }
+
+                if (foc.flux_current_ref <= -3300.0)
+                {
+                    foc.flux_current_ref = -3300.0;
+                }
             }
 
             if(reverse_flag)
@@ -1075,7 +1088,20 @@ void FOC_FIELD_WEAKENING_AND_MTPA()
                 if(motorControl.drive.fnr_status == 1)
                 {
                     // FW_AND_MTPA_CONFIG(1);
-                    foc.flux_current_ref = 0.0;
+                    // foc.flux_current_ref = 0.0;
+                    if (foc.speed_sense * SPEED_PU_TO_RPM >= 2200.0)
+                    {
+                        foc.flux_current_ref = -map(foc.speed_ref, 0.0, 27305.0, 0.0, 3300.0);
+                    }
+                    else
+                    {
+                        foc.flux_current_ref = 0.0;
+                    }
+
+                    if (foc.flux_current_ref <= -3300.0)
+                    {
+                        foc.flux_current_ref = -3300.0;
+                    }
                 }
 
                 if(motorControl.drive.fnr_status == 2)

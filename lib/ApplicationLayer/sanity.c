@@ -108,6 +108,13 @@ void RUN_SANITY(void)
          fault.status             = FAULT_CURRENT_SENSE;
     }
 
+    if (terminal.vq.ref >= 1000.0 || terminal.vq.ref <= -1000.0)
+    {
+      fault.fault_code |= FAULT_ABNORMAL_RUNNING_HEX;
+      motorControl.drive.check = DRIVE_DISABLE;
+      fault.status = FAULT_ABNORMAL_RUNNING;
+    }
+
    //Drive not neutral while sanity.
    // reverse_pin_state = HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_3);
    // forward_pin_state = HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_4);

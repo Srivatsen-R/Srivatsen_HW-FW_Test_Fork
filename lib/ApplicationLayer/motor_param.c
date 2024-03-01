@@ -267,17 +267,27 @@ float Throttle_Control(int target_speed,float prev_output,int f_flag,int r_flag)
             acc_flag = 1;
             deacc_flag = 0;
       
-            if(foc.speed_sense*SPEED_PU_TO_RPM<100)
+            if(foc.speed_sense*SPEED_PU_TO_RPM < 100)
             {    
-            //th_increment = ACCELERATION_CONST;
-            th_increment = 40.0;
+                th_increment = 60.0;
             
             } 
-            else
-            {    
-               th_increment = ACCELERATION_CONST; 
+            else if (foc.speed_sense * SPEED_PU_TO_RPM >= 100.0 && foc.speed_sense * SPEED_PU_TO_RPM < 600.0)
+            {
+                th_increment = 55.0;
             }
-
+            else if (foc.speed_sense * SPEED_PU_TO_RPM >= 600.0 && foc.speed_sense * SPEED_PU_TO_RPM < 1300.0)
+            {
+                th_increment = 55.0;
+            }
+            else if (foc.speed_sense * SPEED_PU_TO_RPM >= 1300.0 && foc.speed_sense * SPEED_PU_TO_RPM < 2650.0)
+            {
+                th_increment = 40.0;
+            }
+            else if (foc.speed_sense * SPEED_PU_TO_RPM >= 2650.0 && foc.speed_sense * SPEED_PU_TO_RPM < 4000.0)
+            {
+                th_increment = 40.0;
+            }
 
             if(target_speed >= prev_output)
             {
@@ -289,12 +299,23 @@ float Throttle_Control(int target_speed,float prev_output,int f_flag,int r_flag)
         {
             deacc_flag = 1;
             acc_flag = 0;
-            
-            if (foc.speed_sense * SPEED_PU_TO_RPM <= 1200.0)
+            if (foc.speed_sense * SPEED_PU_TO_RPM < 1000.0)
             {
-                th_decrement = 20.0;
+                th_decrement = 40.0;
             }
-            else
+            else if (foc.speed_sense * SPEED_PU_TO_RPM >= 1000.0 && foc.speed_sense * SPEED_PU_TO_RPM < 1650.0)
+            {
+                th_decrement = 55.0;
+            }
+            else if (foc.speed_sense * SPEED_PU_TO_RPM >= 1650.0 && foc.speed_sense * SPEED_PU_TO_RPM < 2000.0)
+            {
+                th_decrement = 75.0;
+            }
+            else if (foc.speed_sense * SPEED_PU_TO_RPM >= 2000.0 && foc.speed_sense * SPEED_PU_TO_RPM < 2650.0)
+            {
+                th_decrement = 95.0;
+            }
+            else if (foc.speed_sense * SPEED_PU_TO_RPM >= 2650.0)
             {
                 th_decrement =DEACCELERATION_CONST;
             }

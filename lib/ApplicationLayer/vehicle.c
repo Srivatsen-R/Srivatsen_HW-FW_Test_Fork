@@ -238,7 +238,7 @@ void READ_FNR()
         forward_pin_state = HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_3);
 
         //if speed less than 100 rpm
-          if(abs((int)terminal.w.sen) <= 100){
+          if(abs((int)terminal.w.sen) <= 100 && analog.bufferData[THROTTLE] <= 9000.0){
 
 
           if(forward_pin_state==FW_DIRECTION)
