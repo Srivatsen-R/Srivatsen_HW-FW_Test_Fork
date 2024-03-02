@@ -1058,7 +1058,27 @@ void FOC_FIELD_WEAKENING_AND_MTPA()
                 {
                     foc.flux_current_ref = -map(foc.speed_ref, 0.0, 27305.0, 0.0, 3300.0);
                 }
-                else
+                else if (foc.speed_sense * SPEED_PU_TO_RPM <= 1000.0)
+                {
+                    if (foc.speed_sense * SPEED_PU_TO_RPM > 400.0 && foc.speed_sense * SPEED_PU_TO_RPM <= 1000.0)
+                    {
+                        foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 400.0, 1000.0, 5000.0, 0.0);
+                    }
+                    else if (foc.speed_sense * SPEED_PU_TO_RPM >= 0.0 && foc.speed_sense <= 400.0)
+                    {
+                        foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 0.0, 400.0, 0.0, 5000.0);
+                    }
+
+                    if (foc.flux_current_ref >= 5000.0)
+                    {
+                        foc.flux_current_ref = 5000.0;
+                    }
+                    else if (foc.flux_current_ref <= 0.0)
+                    {
+                        foc.flux_current_ref = 0.0;
+                    }
+                }
+                else if (foc.speed_sense * SPEED_PU_TO_RPM > 1000.0 && foc.speed_sense * SPEED_PU_TO_RPM < 2200.0)
                 {
                     foc.flux_current_ref = 0.0;
                 }
@@ -1071,16 +1091,31 @@ void FOC_FIELD_WEAKENING_AND_MTPA()
 
             if(reverse_flag)
             {
-                foc.flux_current_ref = 0.0;
-                // if((foc.speed_sense*SPEED_PU_TO_RPM)<FW_RPM)
-                // {       
-                //     if(((foc.speed_sense*SPEED_PU_TO_RPM) >= D_CURRENT_DERATING_RPM_1) && ((foc.speed_sense*SPEED_PU_TO_RPM) <= D_CURRENT_DERATING_RPM_2))
-                //      {foc.flux_current_ref = map(foc.speed_sense*SPEED_PU_TO_RPM, D_CURRENT_DERATING_RPM_1, D_CURRENT_DERATING_RPM_2, MTPA_MAX_CURRENT_PU, 0);}
-                //     else if(((foc.speed_sense*SPEED_PU_TO_RPM) <D_CURRENT_DERATING_RPM_1))
-                //      {foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200, 0.0, MTPA_MAX_CURRENT_PU);}
+                // foc.flux_current_ref = 0.0;
+                if (foc.speed_sense * SPEED_PU_TO_RPM <= 1000.0)
+                {
+                    if (foc.speed_sense * SPEED_PU_TO_RPM > 400.0 && foc.speed_sense * SPEED_PU_TO_RPM <= 1000.0)
+                    {
+                        foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 400.0, 1000.0, 5000.0, 0.0);
+                    }
+                    else if (foc.speed_sense * SPEED_PU_TO_RPM >= 0.0 && foc.speed_sense <= 400.0)
+                    {
+                        foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 0.0, 400.0, 0.0, 5000.0);
+                    }
 
-                //     if(foc.flux_current_ref >= MTPA_MAX_CURRENT_PU){foc.flux_current_ref = MTPA_MAX_CURRENT_PU;}
-                // }
+                    if (foc.flux_current_ref >= 5000.0)
+                    {
+                        foc.flux_current_ref = 5000.0;
+                    }
+                    else if (foc.flux_current_ref <= 0.0)
+                    {
+                        foc.flux_current_ref = 0.0;
+                    }
+                }
+                else
+                {
+                    foc.flux_current_ref = 0.0;
+                }
             }
 
             if(neutral_flag)
@@ -1093,7 +1128,27 @@ void FOC_FIELD_WEAKENING_AND_MTPA()
                     {
                         foc.flux_current_ref = -map(foc.speed_ref, 0.0, 27305.0, 0.0, 3300.0);
                     }
-                    else
+                    else if (foc.speed_sense * SPEED_PU_TO_RPM <= 1000.0)
+                    {
+                        if (foc.speed_sense * SPEED_PU_TO_RPM > 400.0 && foc.speed_sense * SPEED_PU_TO_RPM <= 1000.0)
+                        {
+                            foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 400.0, 1000.0, 5000.0, 0.0);
+                        }
+                        else if (foc.speed_sense * SPEED_PU_TO_RPM >= 0.0 && foc.speed_sense <= 400.0)
+                        {
+                            foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 0.0, 400.0, 0.0, 5000.0);
+                        }
+
+                        if (foc.flux_current_ref >= 5000.0)
+                        {
+                            foc.flux_current_ref = 5000.0;
+                        }
+                        else if (foc.flux_current_ref <= 0.0)
+                        {
+                            foc.flux_current_ref = 0.0;
+                        }
+                    }
+                    else if (foc.speed_sense * SPEED_PU_TO_RPM > 1000.0 && foc.speed_sense * SPEED_PU_TO_RPM < 2200.0)
                     {
                         foc.flux_current_ref = 0.0;
                     }
@@ -1106,17 +1161,31 @@ void FOC_FIELD_WEAKENING_AND_MTPA()
 
                 if(motorControl.drive.fnr_status == 2)
                 {
-                    foc.flux_current_ref = 0.0;
-                    // if((foc.speed_sense*SPEED_PU_TO_RPM)<FW_RPM)
-                    // {       
-                    //     if(((foc.speed_sense*SPEED_PU_TO_RPM) >= D_CURRENT_DERATING_RPM_1) && ((foc.speed_sense*SPEED_PU_TO_RPM) <= D_CURRENT_DERATING_RPM_2))
-                    //     {foc.flux_current_ref = map(foc.speed_sense*SPEED_PU_TO_RPM, D_CURRENT_DERATING_RPM_1, D_CURRENT_DERATING_RPM_2, MTPA_MAX_CURRENT_PU, 0);}
-                    //     else if(((foc.speed_sense*SPEED_PU_TO_RPM) <D_CURRENT_DERATING_RPM_1))
-                    //     {foc.flux_current_ref = map(foc.speed_ref, 0.0, 1200.0, 0.0, MTPA_MAX_CURRENT_PU);}
+                    // foc.flux_current_ref = 0.0;
+                    if (foc.speed_sense * SPEED_PU_TO_RPM <= 1000.0)
+                    {
+                        if (foc.speed_sense * SPEED_PU_TO_RPM > 400.0 && foc.speed_sense * SPEED_PU_TO_RPM <= 1000.0)
+                        {
+                            foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 400.0, 1000.0, 5000.0, 0.0);
+                        }
+                        else if (foc.speed_sense * SPEED_PU_TO_RPM >= 0.0 && foc.speed_sense <= 400.0)
+                        {
+                            foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 0.0, 400.0, 0.0, 5000.0);
+                        }
 
-                    //     if(foc.flux_current_ref >= MTPA_MAX_CURRENT_PU){foc.flux_current_ref = MTPA_MAX_CURRENT_PU;}
-                    // }
-
+                        if (foc.flux_current_ref >= 5000.0)
+                        {
+                            foc.flux_current_ref = 5000.0;
+                        }
+                        else if (foc.flux_current_ref <= 0.0)
+                        {
+                            foc.flux_current_ref = 0.0;
+                        }
+                    }
+                    else
+                    {
+                        foc.flux_current_ref = 0.0;
+                    }
                 }
             }
 /*

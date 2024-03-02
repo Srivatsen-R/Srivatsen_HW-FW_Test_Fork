@@ -137,8 +137,8 @@ typedef struct foc_t {
 //#define ANGLE_OFFSET                        0.0//Proto -12 Ultron
 //#define ANGLE_OFFSET                        0.523//Nidec 6 pole.
 
-#define ANGLE_OFFSET_FW                            0.523//V17
-#define ANGLE_OFFSET_RW                           -1.047//V17
+#define ANGLE_OFFSET_FW                            2.46091//V17
+#define ANGLE_OFFSET_RW                            1.22173//V17
 
 #define NIDEC_MOTOR_PWM             1
 #define ULTRON_MOTOR_PWM            0
