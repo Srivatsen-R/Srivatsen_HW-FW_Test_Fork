@@ -15,6 +15,7 @@ typedef struct foc_t {
              float speed_limit;
              float speed_ref_output;
              float torque_current_ref;
+             float torque_current_ref_prev;
              float torque_current_max;
              float flux_current_ref;
              float imr_ref;
@@ -131,7 +132,7 @@ typedef struct foc_t {
 #define POWER_MAPPING_LOWER_IQ_LIMIT_PU 11000.0
 #define VD_LIMIT                            10000.0
 #define VQ_LIMIT                            32767.0
-#define VQ_LIMIT_FACTOR                     0.84
+#define VQ_LIMIT_FACTOR                     1.2
 
 //#define ANGLE_OFFSET                        4.188//Proto -3 Ultron
 //#define ANGLE_OFFSET                        0.0//Proto -12 Ultron
@@ -139,6 +140,10 @@ typedef struct foc_t {
 
 #define ANGLE_OFFSET_FW                            2.46091//V17
 #define ANGLE_OFFSET_RW                            1.22173//V17
+
+#define IQ_RATE_INC                                10.0
+#define IQ_RATE_DEC                                550.0
+#define IQ_RATE_REV_DEC                            10.0
 
 #define NIDEC_MOTOR_PWM             1
 #define ULTRON_MOTOR_PWM            0
@@ -166,12 +171,12 @@ typedef struct foc_t {
 #define T_F_ROTOR_SPEED                     0.03           // Constant to filter rotor speed
 #define MAGNETISING_CURRENT_REF             0.0//6000.0//6750.0
 #define OUTPUT_LIMIT                        29200.0//17000.0       // OUTPUT LIMIT VD VQ
-#define KP_W                                1.2//2.5//1.2//GAIN CONSTANT
-#define KI_W                                4.2//50.0//0.48//INTG CONSTANT
-#define KP_IQ                               1.2
-#define KI_IQ                               4.2
-#define KP_ID                               1.2
-#define KI_ID                               4.2
+#define KP_W                                0.3//2.5//1.2//GAIN CONSTANT
+#define KI_W                                3.8//50.0//0.48//INTG CONSTANT
+#define KP_IQ                               0.3
+#define KI_IQ                               3.8
+#define KP_ID                               0.3
+#define KI_ID                               3.8
 #define SLIP_LIMIT                          20.0
 #define FW_DIRECTION                        0
 #define RW_DIRECTION                        0
@@ -182,6 +187,7 @@ typedef struct foc_t {
 #define T_PRD                               2500.0         // PWM Period TIM1
 #define OFFSET_DUTY                         0.5            // DUTY OFFSET used in modulation.
 #define T_S                                 1.0/F_SW       // Sampling Time
+#define T_IQ                                2000.0/F_SW
 #define PU                                  32767.0        // PU unit calculation max. value
 #define LL                                  -1.0*PU        // LOWER LIMIT PU
 #define UL                                  1.0*PU         // UPPER LIMIT PU
@@ -225,7 +231,7 @@ typedef struct foc_t {
 
 #define DUTY_TO_RADIAN          ((2*PI)/100.0)
 
-#define SQ_MAX_PU_VOLTAGE          powf(30000.0, 2.0)
+#define SQ_MAX_PU_VOLTAGE          powf(32767.0, 2.0)
 
 
 #define MAX_PU_CURRENT              39321.0

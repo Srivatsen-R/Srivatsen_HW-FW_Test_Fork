@@ -18,7 +18,7 @@ typedef struct vehicle_t {
 
 void Calculate_OTS(uint32_t) ;
 void CAN_Logging(void);
-void CAN_Communication(uint32_t,float,float);
+void CAN_Communication(float,float,float);
 void READ_FNR();
 void READ_THROTTLE();
 void READ_MOTOR_PHASE_CURRENT();

@@ -40,7 +40,7 @@ extern uint8_t start_flag;
 
 static float kmph_can;
 static float trip_can;
-static uint32_t odo_can;
+static float odo_can;
 
 extern float avg_board_temp ;
 extern float v_rms ;
@@ -75,8 +75,8 @@ void  Calculate_OTS(uint32_t wheel_rpm)
   static int odo_prev;
 
   vehicle.speed = wheel_rpm*RPM_TO_KMPH;
-  vehicle.trip = vehicle.trip +(vehicle.speed*HOUR_TO_MS_100)/2.0;
-  vehicle.odometer = vehicle.odometer + (vehicle.speed*HOUR_TO_MS_100)/2.0;
+  vehicle.trip = vehicle.trip +(vehicle.speed*HOUR_TO_MS_100);
+  vehicle.odometer = vehicle.odometer + (vehicle.speed*HOUR_TO_MS_100);
   if((vehicle.odometer-odo_prev)>=1.0)
   {
     vehicle.odo_change_status = ODO_UPDATE;
@@ -89,8 +89,8 @@ void  Calculate_OTS(uint32_t wheel_rpm)
 void CAN_Logging()
 {
 
-    terminal.iq.sen = moving_Q_current_measured_fun(terminal.iq.sen,10);
-    terminal.id.sen = moving_D_current_measured_fun(terminal.id.sen,10);
+    // terminal.iq.sen = moving_Q_current_measured_fun(terminal.iq.sen,10);
+    // terminal.id.sen = moving_D_current_measured_fun(terminal.id.sen,10);
   //Logging CAN data.
     can.dataLoggingForPythonScript(terminal, 
                                   dc_current, 
@@ -107,11 +107,11 @@ void CAN_Logging()
                                   avg_board_temp, 
                                   v_rms);
                                   //angle, (float)odo_can, (float)kmph_can, (float)trip_can, (float)fault.fault_code, avg_board_temp, v_rms);
-    HAL_Delay(10);
+    // HAL_Delay(10);
 }
 
 
-void CAN_Communication(uint32_t odo, float trip, float kmph)
+void CAN_Communication(float odo, float trip, float kmph)
 {
   
       // odo = 54321;//0.1 scaling
@@ -120,7 +120,7 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
 
       kmph_can = kmph*KMPH_CAN_SCALING;
       odo_can = odo*ODO_CAN_SCALING;
-      trip_can =trip;
+      trip_can =trip*10.0;
 
   
       // 705
@@ -141,7 +141,7 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
       if(dc_current >= 0.0){can.txMsg[1][1] &= ~(1 << 2);}
       else if(dc_current < 0.0){can.txMsg[1][1] |= (1 << 2);}
 
-      if(terminal.rotor.angle < 44.0){can.txMsg[1][1] |= (1 << 3);}
+      if(busVoltage < 44.0){can.txMsg[1][1] |= (1 << 3);}
       else{can.txMsg[1][1] &= ~(1 << 3);}
 
       if(start_flag){can.txMsg[1][1] |= (1 << 5);}
@@ -162,14 +162,9 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
       if(fault.status == FAULT_TEMP_LOW){can.txMsg[1][3] |= (1 << 6);}
       else{can.txMsg[1][3] &= ~(1 << 6);}
 
-      if(kmph_can == 0.0){
-        can.txMsg[1][4] = ((uint16_t) (kmph_can));
-        can.txMsg[1][5] = ((uint16_t) (kmph_can)>>8);
-      }
-      else{
-        can.txMsg[1][4] = ((uint16_t) (kmph_can + 6.0));
-        can.txMsg[1][5] = ((uint16_t) (kmph_can + 6.0)>>8);
-      }
+      can.txMsg[1][4] = ((uint16_t) (kmph_can * 1.3));
+      can.txMsg[1][5] = ((uint16_t) (kmph_can * 1.3)>>8);
+
       can.txMsg[1][6] = ((uint16_t) (trip_can));
       can.txMsg[1][7] = ((uint16_t) (trip_can)>>8);
 
@@ -181,7 +176,7 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
       else{can.txMsg[2][1] &= ~(1 << 2);}
 
       //710
-      can.txMsg[3][0] = (uint8_t)((int)throttle_percent);
+      can.txMsg[3][0] = (uint8_t)(throttle_percent);
       can.txMsg[3][3] = (uint8_t)(throttle_adc_voltage*THROTTLE_CAN_ADC_SCALING);
 
       //715
@@ -190,8 +185,16 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
       can.txMsg[4][7] = (uint8_t)(((int)terminal.w.sen & 0xFF00) >> 8);
 
       //716
-      can.txMsg[5][6] = (uint8_t)((int)terminal.iq.sen & 0x00FF);
-      can.txMsg[5][7] = (uint8_t)(((int)terminal.iq.sen & 0xFF00) >> 8);
+      if(terminal.iq.sen >= -350.0 && terminal.iq.sen <= 350.0)
+      {
+        can.txMsg[5][6] = (uint8_t)((int)terminal.iq.sen & 0x00FF);
+        can.txMsg[5][7] = (uint8_t)(((int)terminal.iq.sen & 0xFF00) >> 8);
+      }
+      else
+      {
+        can.txMsg[5][6] = (uint8_t)(0);
+        can.txMsg[5][7] = (uint8_t)(0);
+      }
 
       //717
       can.txMsg[6][0] = (uint8_t)((int)freq_rpm & 0x00FF);
@@ -209,15 +212,15 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
       can.txMsg[8][2] = 0x04;
       can.txMsg[8][3] = 0x04;
       can.txMsg[8][4] = 0x01;
-      can.txMsg[8][5] = 0x00;
-      can.txMsg[8][6] = 0x02;
+      can.txMsg[8][5] = 0x01;
+      can.txMsg[8][6] = 0x00;
       can.txMsg[8][7] = 0x01;
 
       //7A0
       can.txMsg[9][0] = 0x03;
       can.txMsg[9][1] = 0x01;
-      can.txMsg[9][2] = 0x00;
-      can.txMsg[9][3] = 0x02;
+      can.txMsg[9][2] = 0x01;
+      can.txMsg[9][3] = 0x00;
       #if APP1
         can.txMsg[9][7] = 0x01;
       #endif
@@ -227,7 +230,7 @@ void CAN_Communication(uint32_t odo, float trip, float kmph)
 
       can.write();
 
-      HAL_Delay(10);
+      // HAL_Delay(10);
 
 }
 
