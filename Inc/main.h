@@ -9,8 +9,10 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32h7xx_hal.h"
+#include "stm32h743xx.h"
 #include <stdint.h>
 
+#define __IO volatile
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);

@@ -28,10 +28,10 @@ vehicle_t vehicle = {
                     };
 
 extern can_t can;
+extern foc_t foc;
 extern terminal_t terminal;
 extern __IO float dc_current;
 extern sanity_t fault;
-extern float motorT;
 extern motorControl_t motorControl;
 extern adc_t analog;
 extern float Duty;
@@ -63,7 +63,8 @@ float ref_output=0;
 __IO int a_current                = 0,
          b_current                = 0,
          throttle_input           = 0,
-         target_speed_reference   = 0;
+         target_speed_reference   = 0,
+         target_speed_reference_prev = 0;
 
 __IO float speed_filtered         = 0;         
 
@@ -75,8 +76,8 @@ void  Calculate_OTS(uint32_t wheel_rpm)
   static int odo_prev;
 
   vehicle.speed = wheel_rpm*RPM_TO_KMPH;
-  vehicle.trip = vehicle.trip +(vehicle.speed*HOUR_TO_MS_100);
-  vehicle.odometer = vehicle.odometer + (vehicle.speed*HOUR_TO_MS_100);
+  vehicle.trip = vehicle.trip + (vehicle.speed*(0.5/3600.0));
+  vehicle.odometer = vehicle.odometer + (vehicle.speed*(0.5/3600.0));
   if((vehicle.odometer-odo_prev)>=1.0)
   {
     vehicle.odo_change_status = ODO_UPDATE;
@@ -95,15 +96,15 @@ void CAN_Logging()
     can.dataLoggingForPythonScript(terminal, 
                                   dc_current, 
                                   fault.status, 
-                                  motorT, 
+                                  motorControl.temperature.motor, 
                                   motorControl, 
                                   analog, 
-                                  throttle_input,
+                                  Duty,
                                   z_trig, 
-                                  (float)odo_can, 
-                                  (float)kmph_can, 
-                                  (float)trip_can, 
-                                  (float)fault.fault_code, 
+                                  odo_can, 
+                                  kmph_can, 
+                                  trip_can, 
+                                  fault.fault_code, 
                                   avg_board_temp, 
                                   v_rms);
                                   //angle, (float)odo_can, (float)kmph_can, (float)trip_can, (float)fault.fault_code, avg_board_temp, v_rms);
@@ -113,67 +114,84 @@ void CAN_Logging()
 
 void CAN_Communication(float odo, float trip, float kmph)
 {
-  
-      // odo = 54321;//0.1 scaling
-      // trip = 200;//no scaling
-      // kmph = 365;//0.1 scaling
-
       kmph_can = kmph*KMPH_CAN_SCALING;
       odo_can = odo*ODO_CAN_SCALING;
       trip_can =trip*10.0;
 
   
       // 705
-      can.txMsg[0][0] = (uint8_t) (motorT + 50.0);
+      can.txMsg[0][0] = (uint8_t) (motorControl.temperature.motor + 50.0);
       can.txMsg[0][1] = (uint8_t) (avg_board_temp + 50.0);
-      if(dc_current < 0.0) {can.txMsg[0][2] = (uint8_t) ((dc_current/200.0) * 100.0);}
-      else {can.txMsg[0][2] = 0;}
-      can.txMsg[0][4] = ((uint32_t) odo_can & 0xFF);
+      can.txMsg[0][2] = (uint8_t)(35);
+      can.txMsg[0][4] = ((uint32_t) odo_can & 0x00FF);
       can.txMsg[0][5] = ((uint32_t) odo_can)>>8;
       can.txMsg[0][6] = ((uint32_t) odo_can)>>16;
       can.txMsg[0][7] = ((uint32_t) odo_can)>>24;
 
       // 706
-      if(forward_flag){can.txMsg[1][0] = 0x02;}
-      else if(reverse_flag){can.txMsg[1][0] = 0x04;}
-      else if(neutral_flag){can.txMsg[1][0] = 0x01;}
+      if(forward_pin_state == 0 && reverse_pin_state == 1){can.txMsg[1][0] = 0x02;}
+      else if(forward_pin_state == 1 && reverse_pin_state == 0){can.txMsg[1][0] = 0x04;}
+      else if(forward_pin_state == 1 && reverse_pin_state == 1){can.txMsg[1][0] = 0x01;}
 
-      if(dc_current >= 0.0){can.txMsg[1][1] &= ~(1 << 2);}
-      else if(dc_current < 0.0){can.txMsg[1][1] |= (1 << 2);}
+      if (forward_flag)
+      {
+        if (foc.torque_current_sense >= 0.0)
+        {
+          can.txMsg[1][1] = 0x00;
+        }
+        else if (foc.torque_current_sense < 0.0)
+        {
+          can.txMsg[1][1] = 0x01;
+        }
+      }
 
-      if(busVoltage < 44.0){can.txMsg[1][1] |= (1 << 3);}
-      else{can.txMsg[1][1] &= ~(1 << 3);}
+      if (reverse_flag)
+      {
+        if (foc.torque_current_sense <= 0.0)
+        {
+          can.txMsg[1][1] = 0x00;
+        }
+        else if (foc.torque_current_sense > 0.0)
+        {
+          can.txMsg[1][1] = 0x01;
+        }
+      }
 
-      if(start_flag){can.txMsg[1][1] |= (1 << 5);}
-      else{can.txMsg[1][1] &= ~(1 << 5);}
+      if (neutral_flag)
+      {
+        if (motorControl.drive.fnr_status == 1)
+        {
+          if (foc.torque_current_sense >= 0.0)
+          {
+            can.txMsg[1][1] = 0x00;
+          }
+          else if (foc.torque_current_sense < 0.0)
+          {
+            can.txMsg[1][1] = 0x01;
+          }
+        }
+        else if (motorControl.drive.fnr_status == 2)
+        {
+          if (foc.torque_current_sense <= 0.0)
+          {
+            can.txMsg[1][1] = 0x00;
+          }
+          else if (foc.torque_current_sense > 0.0)
+          {
+            can.txMsg[1][1] = 0x01;
+          }
+        }
+      }
 
       can.txMsg[1][2] = 0xFF;
 
-      if(fault.status == FAULT_OVER_SPEED){can.txMsg[1][3] |= (1 << 1);}
-      else{can.txMsg[1][3] &= ~(1 << 1);}
-      if(fault.status == FAULT_MOTOR_LOAD){can.txMsg[1][3] |= (1 << 2);}
-      else{can.txMsg[1][3] &= ~(1 << 2);}
-      if(fault.status == FAULT_MOTOR_TEMPERATURE){can.txMsg[1][3] |= (1 << 3);}
-      else{can.txMsg[1][3] &= ~(1 << 3);}
-      if(busVoltage > 75.0){can.txMsg[1][3] |= (1 << 4);}
-      else if(busVoltage >= 48.0 && busVoltage <= 75.0){can.txMsg[1][3] &= ~(1 << 4);}
-      if(busVoltage < 48.0){can.txMsg[1][3] |= (1 << 5);}
-      else if(busVoltage >= 48.0 && busVoltage <= 75.0){can.txMsg[1][3] &= ~(1 << 5);}
-      if(fault.status == FAULT_TEMP_LOW){can.txMsg[1][3] |= (1 << 6);}
-      else{can.txMsg[1][3] &= ~(1 << 6);}
+      can.txMsg[1][3] = (uint8_t)fault.status;
 
-      can.txMsg[1][4] = ((uint16_t) (kmph_can * 1.3));
-      can.txMsg[1][5] = ((uint16_t) (kmph_can * 1.3)>>8);
+      can.txMsg[1][4] = (uint8_t) ((uint16_t)(kmph_can * 1.1) & 0x00FF);
+      can.txMsg[1][5] = (uint8_t) (((uint16_t)(kmph_can * 1.1) & 0xFF00)>>8);
 
-      can.txMsg[1][6] = ((uint16_t) (trip_can));
-      can.txMsg[1][7] = ((uint16_t) (trip_can)>>8);
-
-      // 708
-      if(fault.status >= FAULT_MOTOR_TEMPERATURE && fault.status <= FAULT_DIRECTION_ERR){can.txMsg[2][0] |= (1 << fault.status);}
-      if(fault.status == FAULT_ENCODER){can.txMsg[2][1] |= (1 << 1);}
-      else{can.txMsg[2][1] &= ~(1 << 1);}
-      if(fault.status == FAULT_HARDWARE_OVER_VOLTAGE){can.txMsg[2][1] |= (1 << 2);}
-      else{can.txMsg[2][1] &= ~(1 << 2);}
+      can.txMsg[1][6] = (uint8_t) ((uint16_t)trip_can & 0x00FF);
+      can.txMsg[1][7] = (uint8_t) (((uint16_t)trip_can & 0xFF00)>>8);
 
       //710
       can.txMsg[3][0] = (uint8_t)(throttle_percent);
@@ -181,24 +199,17 @@ void CAN_Communication(float odo, float trip, float kmph)
 
       //715
       can.txMsg[4][4] = (uint8_t)busVoltage;
-      can.txMsg[4][6] = (uint8_t)((int)terminal.w.sen & 0x00FF);
-      can.txMsg[4][7] = (uint8_t)(((int)terminal.w.sen & 0xFF00) >> 8);
+      can.txMsg[4][6] = (uint8_t)((uint16_t)terminal.w.sen & 0x00FF);
+      can.txMsg[4][7] = (uint8_t)(((uint16_t)terminal.w.sen & 0xFF00) >> 8);
 
       //716
-      if(terminal.iq.sen >= -350.0 && terminal.iq.sen <= 350.0)
-      {
-        can.txMsg[5][6] = (uint8_t)((int)terminal.iq.sen & 0x00FF);
-        can.txMsg[5][7] = (uint8_t)(((int)terminal.iq.sen & 0xFF00) >> 8);
-      }
-      else
-      {
-        can.txMsg[5][6] = (uint8_t)(0);
-        can.txMsg[5][7] = (uint8_t)(0);
-      }
+      volatile float temp_current = terminal.iq.sen + 1000.0;
+      can.txMsg[5][6] = (uint8_t)(((uint16_t)(temp_current)) & 0x00FF);
+      can.txMsg[5][7] = (uint8_t)((((uint16_t)(temp_current)) & 0xFF00) >> 8);
 
       //717
-      can.txMsg[6][0] = (uint8_t)((int)freq_rpm & 0x00FF);
-      can.txMsg[6][1] = (uint8_t)(((int)freq_rpm & 0xFF00) >> 8);
+      can.txMsg[6][0] = (uint8_t)((uint16_t)freq_rpm & 0x00FF);
+      can.txMsg[6][1] = (uint8_t)(((uint16_t)freq_rpm & 0xFF00) >> 8);
 
       //724
       can.txMsg[7][0] = (uint8_t)(motorControl.temperature.u + 50.0);
@@ -213,14 +224,14 @@ void CAN_Communication(float odo, float trip, float kmph)
       can.txMsg[8][3] = 0x04;
       can.txMsg[8][4] = 0x01;
       can.txMsg[8][5] = 0x01;
-      can.txMsg[8][6] = 0x00;
-      can.txMsg[8][7] = 0x01;
+      can.txMsg[8][6] = 0x01;
+      can.txMsg[8][7] = 0x02;
 
       //7A0
       can.txMsg[9][0] = 0x03;
       can.txMsg[9][1] = 0x01;
       can.txMsg[9][2] = 0x01;
-      can.txMsg[9][3] = 0x00;
+      can.txMsg[9][3] = 0x01;
       #if APP1
         can.txMsg[9][7] = 0x01;
       #endif
@@ -302,7 +313,6 @@ void READ_THROTTLE()
           target_speed_reference  = Rpm_Target_Function(throttle_input); 
         }
 
-
         if(forward_pin_state == 0 && motorControl.drive.fnr_status==2)
         {
           target_speed_reference -= 5000;
@@ -314,20 +324,57 @@ void READ_THROTTLE()
           if(target_speed_reference <= 0){target_speed_reference = 0;} 
         }
         
-        // if(target_speed_reference<1000.0)
-        // {
-        //   // motorControl.drive.check == DRIVE_DISABLE;
-        //   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
-        // }
+        if (forward_flag)
+        {
+          if (foc.speed_sense * SPEED_PU_TO_RPM <= 1500.0)
+          {
+            if (target_speed_reference > target_speed_reference_prev + THR_RATE * T_THR)
+            {
+              target_speed_reference = target_speed_reference_prev + THR_RATE * T_THR;
+            }
+            else if (target_speed_reference < target_speed_reference_prev - THR_RATE_DEC * T_THR)
+            {
+              target_speed_reference = target_speed_reference_prev - THR_RATE_DEC * T_THR;
+            }
+          }
+          else
+          {
+            if (target_speed_reference > target_speed_reference_prev + THR_RATE * T_THR)
+            {
+              target_speed_reference = target_speed_reference_prev + THR_RATE * T_THR;
+            }
+            else if (target_speed_reference < target_speed_reference_prev - 220.0 * T_THR)
+            {
+              target_speed_reference = target_speed_reference_prev - 220.0 * T_THR;
+            }
+          }
+        }
+        else if (reverse_flag)
+        {
+          if (target_speed_reference > target_speed_reference_prev + 100.0 * T_THR)
+          {
+            target_speed_reference = target_speed_reference_prev + 100.0 * T_THR;
+          }
+          else if (target_speed_reference < target_speed_reference_prev - 80.0 * T_THR)
+          {
+            target_speed_reference = target_speed_reference_prev - 80.0 * T_THR;
+          }
+        }
+        else if (neutral_flag)
+        {
+          if (target_speed_reference > target_speed_reference_prev + 100.0 * T_THR)
+          {
+            target_speed_reference = target_speed_reference_prev + 100.0 * T_THR;
+          }
+          else if (target_speed_reference < target_speed_reference_prev - 100.0 * T_THR)
+          {
+            target_speed_reference = target_speed_reference_prev - 100.0 * T_THR;
+          }
+        }
+        // speed_filtered = Throttle_Control(target_speed_reference,speed_filtered,forward_flag,reverse_flag);                  
+        ref_output = target_speed_reference;
 
-        // else if (target_speed_reference >=1000.0 && fault.status==0)
-        // {
-        //   motorControl.drive.check == DRIVE_ENABLE;
-        //   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
-        // }
-        
-        speed_filtered = Throttle_Control(target_speed_reference,speed_filtered,forward_flag,reverse_flag);                  
-        ref_output = speed_filtered;
+        target_speed_reference_prev = target_speed_reference;
 
 }
 

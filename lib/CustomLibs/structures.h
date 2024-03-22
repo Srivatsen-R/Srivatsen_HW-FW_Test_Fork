@@ -10,6 +10,7 @@
 struct voltage_t {
        uint8_t under,
                over;
+       float  bus_volt;
 };
 
 struct rotor_t {
@@ -73,6 +74,7 @@ typedef struct terminal_t {
               struct speed_t  speed;
               struct clarke_t clarke;
               struct park_t   park;
+              struct voltage_t volt;
 }terminal_t;
 
 typedef struct __attribute__((__packed__))  temperature_t {

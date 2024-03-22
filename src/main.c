@@ -86,6 +86,10 @@ uint8_t interrupt_flag = 0;
 uint8_t start_flag = 0;
 uint8_t acc_flag = 0;
 uint8_t deacc_flag = 0;
+uint32_t can_log_timer_700_hex = 0;
+uint32_t can_log_timer_300_hex = 0;
+uint32_t odo_cal_timer = 0;
+uint32_t eeprom_write_timer = 0;
 
 int count_duty=0;
 int counter_100ms=0;
@@ -163,13 +167,33 @@ int main(void) {
   //while loop running on CLK frequency.
   while (1) 
   {
+      uint32_t tick_time = HAL_GetTick();
       //function to continously monitor mcu faults and errors.
       ANALOG_READING();
       FAULT_READING();
       //read fnr ,throttle
       READ_FNR();
       READ_THROTTLE();
-      HAL_Delay(1);
+
+      if (tick_time - can_log_timer_700_hex >= 500)
+      {
+        CAN_Communication(vehicle.odometer, vehicle.trip, vehicle.speed);
+        can_log_timer_700_hex = tick_time;
+      }
+
+      if (tick_time - can_log_timer_300_hex >= 100)
+      {
+        CAN_Logging();
+        can_log_timer_300_hex = tick_time;
+      }
+
+      if (tick_time - odo_cal_timer >= 500)
+      {
+        Calculate_OTS(terminal.w.sen);
+        EEPROM_Write_Data(vehicle.odometer);
+        odo_cal_timer = tick_time;
+      }
+      // HAL_Delay(1);
   }
 }
 
@@ -223,30 +247,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
   /* Prevent unused argument(s) compilation warning */
-  if(htim->Instance == TIM4)
-  {
-    CAN_Communication(vehicle.odometer,vehicle.trip,vehicle.speed);
-  }
-
-  if(htim->Instance == TIM15)
-  {
-    CAN_Logging();
-  }
-
-  if(htim->Instance == TIM16)
-  {
-    Calculate_OTS(terminal.w.sen);
-  }
-
-  if(htim->Instance == TIM8)
-  {
-    if(vehicle.odo_change_status == ODO_UPDATE)
-    {
-      EEPROM_Write_Data(vehicle.odometer);
-      vehicle.odo_change_status = NO_ODO_UPDATE;
-    }
-  }
-
   if(htim->Instance == TIM7)
   {
     motorControl.drive.check = DRIVE_DISABLE;
@@ -310,13 +310,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
 
           //main function for motor control operation.
           VECTOR_FOC_Control();
-          motorControl.encoder.previous = motorControl.encoder.value;
-          angle_prev = angle_curr;
-
-          counter_100ms++;
-          counter_current_ms++;
-          counter_encoder_ms++;
-          counter_abnormal_run++;
   }
 }
 

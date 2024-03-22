@@ -28,7 +28,10 @@
         "firmware_upgrade_app.h": "c",
         "crc32.h": "c",
         "stdint.h": "c",
-        "macros.h": "c"
+        "macros.h": "c",
+        "vector_control.h": "c",
+        "type_traits": "c",
+        "stm32h7xx_hal_conf.h": "c"
     },
     "cortex-debug.variableUseNaturalFormat": true
 }

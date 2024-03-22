@@ -269,7 +269,7 @@ float Throttle_Control(int target_speed,float prev_output,int f_flag,int r_flag)
       
             if(foc.speed_sense*SPEED_PU_TO_RPM < 100)
             {    
-                th_increment = 75.0;
+                th_increment = 60.0;
             
             } 
             else if (foc.speed_sense * SPEED_PU_TO_RPM >= 100.0 && foc.speed_sense * SPEED_PU_TO_RPM < 600.0)
@@ -278,19 +278,19 @@ float Throttle_Control(int target_speed,float prev_output,int f_flag,int r_flag)
             }
             else if (foc.speed_sense * SPEED_PU_TO_RPM >= 600.0 && foc.speed_sense * SPEED_PU_TO_RPM < 1300.0)
             {
-                th_increment = 55.0;
+                th_increment = 60.0;
             }
             else if (foc.speed_sense * SPEED_PU_TO_RPM >= 1300.0 && foc.speed_sense * SPEED_PU_TO_RPM < 2650.0)
             {
-                th_increment = 40.0;
+                th_increment = 60.0;
             }
             else if (foc.speed_sense * SPEED_PU_TO_RPM >= 2650.0 && foc.speed_sense * SPEED_PU_TO_RPM < 4300.0)
             {
-                th_increment = 40.0;
+                th_increment = 60.0;
             }
             else if (foc.speed_sense * SPEED_PU_TO_RPM >= 4300.0)
             {
-                th_increment = 40.0;
+                th_increment = 60.0;
             }
 
             if(target_speed >= prev_output)

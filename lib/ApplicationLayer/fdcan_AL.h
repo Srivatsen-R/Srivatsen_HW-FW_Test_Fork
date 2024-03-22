@@ -68,7 +68,7 @@ typedef struct can_t {
         FDCAN_RxHeaderTypeDef RxMessageBuf;
         void (*dataLoggingForPythonScript)(terminal_t terminal, float dcCurrent, uint8_t fault_status, 
                                       float motorTemperature, motorControl_t motorControllerTemperatures,
-									  adc_t phaseCurrent, float encoderAState, float encoderBState, float Ododmeter, float Speed, float Trip, float current, float avg_board_temp, float v_rms);
+									  adc_t phaseCurrent, float duty, float z_trigger, float Ododmeter, float Speed, float Trip, float current, float avg_board_temp, float v_rms);
 }can_t;
 
 void CAN_Filter_IDList(uint32_t U32_receiveCANid1, TypeofCANID U8_idType, FilterBanks_CAN2 U8_filterbank, FIFOs_CAN2 U8_fifo);

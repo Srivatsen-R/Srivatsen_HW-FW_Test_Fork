@@ -52,7 +52,7 @@
 #define ENCODER_TIMEOUT_LIMIT               60000
 
 #define RPM_TO_KMPH                         0.0083246
-#define HOUR_TO_MS_100                      0.277778
+#define HOUR_TO_MS_100                      0.000277778
 #define ODO_UPDATE                          1
 #define NO_ODO_UPDATE                       0
 #define KMPH_CAN_SCALING                    10
@@ -71,7 +71,7 @@
 #define THROTTLE_AVG                        1.0
 #define TEMP_AVG                            15.0
 #define VOLTAGE_AVG                         60.0
-#define ROOT2                               1.414
+#define ROOT3                               1.7320508
 
 
 

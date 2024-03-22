@@ -18,7 +18,7 @@ extern terminal_t terminal;
 extern motorControl_t motorControl;
 extern motor_t motor;
 float SOC_Data = 0.0, DCLI = 0.0, DCLO = 0.0;
-float Pack_V = 0.0, Pack_Ah = 0.0, Pack_C = 0.0;
+float Pack_V = 0.0, Pack_Ah = 0.0;
 extern float avg_board_temp;
 extern float v_rms;
 
@@ -209,10 +209,6 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 		if(can.RxMessageBuf.Identifier == rx_controller_112){
 			Pack_Ah = (float)((can.rxMsg[7]<<8 | can.rxMsg[6]) * 0.1);
 		}
-
-		if(can.RxMessageBuf.Identifier == rx_controller_110){
-			Pack_C = (float)((can.rxMsg[7] << 24 | can.rxMsg[6] << 16 | can.rxMsg[5] << 8 | can.rxMsg[0]) * 0.01);
-		}
 }
 
 void CAN_Write(void) {
@@ -316,8 +312,8 @@ static void __fdcan_transferMessagesOnID302(terminal_t terminal, float dcCurrent
 	   __fdcan->BufferForMessageToTransmit[1] = (__fdcan_addScalingFactorToMessage(dcCurrent)            & 0xFF00) >> 8;
 	   __fdcan->BufferForMessageToTransmit[2] = __fdcan_addScalingFactorToMessage(terminal.w.sen)        & 0x00FF; 
 	   __fdcan->BufferForMessageToTransmit[3] = (__fdcan_addScalingFactorToMessage(terminal.w.sen)       & 0xFF00) >> 8;
-	   __fdcan->BufferForMessageToTransmit[4] = __fdcan_addScalingFactorToMessage(terminal.rotor.angle)  & 0x00FF; 
-	   __fdcan->BufferForMessageToTransmit[5] = (__fdcan_addScalingFactorToMessage(terminal.rotor.angle) & 0xFF00) >> 8;
+	   __fdcan->BufferForMessageToTransmit[4] = __fdcan_addScalingFactorToMessage(terminal.volt.bus_volt)  & 0x00FF; 
+	   __fdcan->BufferForMessageToTransmit[5] = (__fdcan_addScalingFactorToMessage(terminal.volt.bus_volt) & 0xFF00) >> 8;
        __fdcan->BufferForMessageToTransmit[6] = __fdcan_addScalingFactorToMessage(motorTemperature)      & 0x00FF; 
 	   __fdcan->BufferForMessageToTransmit[7] = (__fdcan_addScalingFactorToMessage(motorTemperature)     & 0xFF00) >> 8;
 	   __fdcan->transmit(FDCAN_DEBUG_ID_302, S, __fdcan->BufferForMessageToTransmit, 8);
@@ -336,7 +332,7 @@ static void __fdcan_transferMessagesOnID303(motorControl_t motorController, char
 	   __fdcan->BufferForMessageToTransmit[4] = __fdcan_addScalingFactorToMessage(motorController.temperature.w)  & 0x00FF; 
 	   __fdcan->BufferForMessageToTransmit[5] = (__fdcan_addScalingFactorToMessage(motorController.temperature.w) & 0xFF00) >> 8;
        __fdcan->BufferForMessageToTransmit[6] = (uint8_t)fault_status; 
-	   __fdcan->BufferForMessageToTransmit[7] = 0;
+	   __fdcan->BufferForMessageToTransmit[7] = 0x00;
 	   __fdcan->transmit(FDCAN_DEBUG_ID_303, S, __fdcan->BufferForMessageToTransmit, 8);
 
 	   free(__fdcan);
@@ -353,8 +349,8 @@ static void __fdcan_transferMessagesOnID304(adc_t phaseCurrent, motorControl_t m
 	   __fdcan->BufferForMessageToTransmit[3] = (phaseCurrent.bufferData[PHASE_CURRENT_V] & 0xFF00) >> 8;
 	   __fdcan->BufferForMessageToTransmit[4] =  motorController.encoder.value            & 0x00FF; 
 	   __fdcan->BufferForMessageToTransmit[5] = (motorController.encoder.value            & 0xFF00) >> 8;
-	   __fdcan->BufferForMessageToTransmit[6] = ((uint32_t)Pack_C & 0x00FF);
-	   __fdcan->BufferForMessageToTransmit[7] = ((uint32_t)Pack_C & 0xFF00) >> 8;
+	   __fdcan->BufferForMessageToTransmit[6] = 0x00;
+	   __fdcan->BufferForMessageToTransmit[7] = 0x00;
 	   __fdcan->transmit(FDCAN_DEBUG_ID_304, S, __fdcan->BufferForMessageToTransmit, 8);
 
 	   free(__fdcan);
@@ -366,8 +362,8 @@ static void __fdcan_transferMessagesOnID305(terminal_t terminal, float encoderAS
 	   __fdcan->transmit = can.transmit;
 	   __fdcan->BufferForMessageToTransmit[0] = __fdcan_addScalingFactorToMessage(terminal.speed.slip)  & 0x00FF; 
 	   __fdcan->BufferForMessageToTransmit[1] = (__fdcan_addScalingFactorToMessage(terminal.speed.slip) & 0xFF00) >> 8;
-	   __fdcan->BufferForMessageToTransmit[2] = __fdcan_addScalingFactorToMessage(terminal.speed.sync)  & 0x00FF; 
-	   __fdcan->BufferForMessageToTransmit[3] = (__fdcan_addScalingFactorToMessage(terminal.speed.sync) & 0xFF00) >> 8;
+	   __fdcan->BufferForMessageToTransmit[2] = 0x00; 
+	   __fdcan->BufferForMessageToTransmit[3] = 0x00;
 	   __fdcan->BufferForMessageToTransmit[4] = __fdcan_addScalingFactorToMessage(encoderAState)        & 0x00FF; 
 	   __fdcan->BufferForMessageToTransmit[5] = (__fdcan_addScalingFactorToMessage(encoderAState)       & 0xFF00) >> 8;
        __fdcan->BufferForMessageToTransmit[6] = __fdcan_addScalingFactorToMessage(encoderBState)        & 0x00FF; 
@@ -441,15 +437,14 @@ void _fdcan_transmit_on_can(uint32_t arbitration_id, TypeofCANID format, uint8_t
 
 void FDCAN_dataLoggingForPythonScript(terminal_t terminal, float dcCurrent, uint8_t fault_status, 
                                       float motorTemperature, motorControl_t motorControllerTemperatures,
-									  adc_t phaseCurrent, float encoderAState, float encoderBState, float Odometer, float Speed, float Trip, float current, float avg_board_temp, float v_rms) {
-    //  dcCurrent *= 0.044;
+									  adc_t phaseCurrent, float duty, float z_trigger, float Odometer, float Speed, float Trip, float current, float avg_board_temp, float v_rms) {
      __motorController_calibrateTerminalReading(&terminal);
 	 __fdcan_transferMessagesOnID300(terminal);
 	 __fdcan_transferMessagesOnID301(terminal);
 	 __fdcan_transferMessagesOnID302(terminal, dcCurrent, motorTemperature);
      __fdcan_transferMessagesOnID303(motorControllerTemperatures, fault_status);
 	 __fdcan_transferMessagesOnID304(phaseCurrent, motorControllerTemperatures);
-	 __fdcan_transferMessagesOnID305(terminal, encoderAState, encoderBState);
+	 __fdcan_transferMessagesOnID305(terminal, duty, z_trigger);
 	 __fdcan_transferMessagesOnID306(Odometer, Speed, Trip, current);
 	 __fdcan_transferMessagesOnID307(avg_board_temp,v_rms,SOC_Data);
 }

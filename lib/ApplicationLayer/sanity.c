@@ -57,7 +57,6 @@ extern motorControl_t mControl;
 
 __IO float dc_current = 0.0; 
 extern __IO float speed_filtered;
-float motorT=0;
 float busVoltage=0;
 float avg_board_temp=0;
 float v_rms=0;
@@ -108,26 +107,19 @@ void RUN_SANITY(void)
          fault.status             = FAULT_CURRENT_SENSE;
     }
 
-    if (terminal.vq.ref >= 1000.0 || terminal.vq.ref <= -1000.0)
+    if (terminal.vd.ref >= 1000.0 || terminal.vd.ref <= -1000.0)
     {
       fault.fault_code |= FAULT_ABNORMAL_RUNNING_HEX;
       motorControl.drive.check = DRIVE_DISABLE;
       fault.status = FAULT_ABNORMAL_RUNNING;
     }
 
-   //Drive not neutral while sanity.
-   // reverse_pin_state = HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_3);
-   // forward_pin_state = HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_4);
-
-   //  if(forward_pin_state==0 || reverse_pin_state==0)
-   //  {
-   //     motorControl.drive.check      = DRIVE_DISABLE;
-   //     fault.status                  = FAULT_FNR;
-   //  }
-
-    //If encoder not connected   
-    //Encoder_Check(3);  
-
+    if (terminal.vq.ref >= 1000.0 || terminal.vq.ref <= -1000.0)
+    {
+      fault.fault_code |= FAULT_ABNORMAL_RUNNING_HEX;
+      motorControl.drive.check = DRIVE_DISABLE;
+      fault.status = FAULT_ABNORMAL_RUNNING;
+    }
 }
 
 
@@ -137,11 +129,9 @@ void FAULT_READING()
       fault.boardTemperature_u = Temperature_Fault_Controller((motorControl.temperature.u));
       fault.boardTemperature_v = Temperature_Fault_Controller((motorControl.temperature.v));
       fault.boardTemperature_w = Temperature_Fault_Controller((motorControl.temperature.w));
-      // fault.motorTemperature = Temperature_Fault(motorControl.temperature.motor);
+      fault.motorTemperature = Temperature_Fault(motorControl.temperature.motor);
       fault.busVoltage       = BUS_Voltage_OV_UV_Fault(busVoltage);
       fault.throttle         = Throttle_Fault(moving_Throttle_measured_fun(analog.bufferData[THROTTLE],THROTTLE_AVG));
-      fault.currentSensor    = Current_Sensor_Fault(analog.bufferData[PHASE_CURRENT_W],analog.bufferData[PHASE_CURRENT_V]);
-      fault.overCurrent      = Overcurrent_Fault(analog.bufferData[BUS_CURRENT_U]+analog.bufferData[BUS_CURRENT_V]+analog.bufferData[BUS_CURRENT_W]);
       
       //overvoltage/undervoltage fault
       if(busVoltage < UNDER_VOLT_LIMIT) {
@@ -177,13 +167,6 @@ void FAULT_READING()
          fault.status             = FAULT_THROTTLE;
       }
 
-      //can error fault - to be tested.
-      if((FDCAN_ERROR_BIT & 0x0000001) == 1 && (FDCAN_ERROR_BIT & 0x000001) == 0){
-        fault.fault_code |= FAULT_CAN_ERROR_HEX;
-        motorControl.drive.check = DRIVE_DISABLE;
-        fault.status = FAULT_CAN_ERROR;
-      }
-
       //over speed error fault.
       if(terminal.w.sen >= 7000.0){
         fault.fault_code |= FAULT_OVER_SPEED_HEX;
@@ -193,7 +176,6 @@ void FAULT_READING()
 
       if(terminal.w.sen >= 5500.0){
         fault.fault_code |= FAULT_OVER_SPEED_HEX;
-        // motorControl.drive.check = DRIVE_DISABLE;
         fault.status = FAULT_SPEED_LIMIT;
       }
 
@@ -201,9 +183,6 @@ void FAULT_READING()
 
 void ANALOG_READING()
 {
-     float current=0; 
-     float dcV=0;
-
      //controller temperature 
      motorControl.temperature.u     = moving_Temperature_measured_fun_u(mControl.temperature.read(analog.read(BOARD_TEMP_U)),TEMP_AVG);
      motorControl.temperature.v     = moving_Temperature_measured_fun_v(mControl.temperature.read(analog.read(BOARD_TEMP_V)),TEMP_AVG);
@@ -219,43 +198,21 @@ void ANALOG_READING()
      temp_K = 1.0/temp_K;
      temp_K -= KELVIN_TO_CELSIUS;
      motorControl.temperature.motor = moving_Temperature_measured_fun_M(temp_K, TEMP_AVG);
-     motorT = motorControl.temperature.motor;
 
      //bus voltage
-     dcV = moving_Batt_voltage_measured_fun(0.00211*analog.bufferData[BUS_VOLTAGE] +VBUS_OFFSET,VOLTAGE_AVG);
-     busVoltage = dcV; 
-     terminal.rotor.angle = busVoltage;
+     busVoltage = moving_Batt_voltage_measured_fun(0.00211*analog.bufferData[BUS_VOLTAGE] +VBUS_OFFSET,VOLTAGE_AVG); 
+     terminal.volt.bus_volt = busVoltage;
    
      //ac phase voltage    
      v_rms = 10*sqrt(terminal.vd.ref * terminal.vd.ref + terminal.vq.ref * terminal.vq.ref);
      v_rms /= 32767.0;
-     v_rms *= busVoltage/ROOT2;
+     v_rms *= busVoltage/ROOT3;
      v_rms = moving_AC_voltage_measured_fun(v_rms,VOLTAGE_AVG);
 
      //dc current  
-     current = (10*sqrt(terminal.vq.ref * terminal.vq.ref + terminal.vd.ref * terminal.vd.ref));
-     current /= 32767.0;
-
-     current *= terminal.iq.sen;
-     dc_current = current;
-
-   //   if(terminal.iq.sen<=0)
-   //   {
-   //   current = (10*sqrt(terminal.vq.ref * terminal.vq.ref + terminal.vd.ref * terminal.vd.ref));
-   //   current /= 32767.0;
-   //   current *= sqrt(terminal.iq.sen*terminal.iq.sen + terminal.id.sen*terminal.id.sen);
-   //   dc_current = current;
-   //   dc_current = -moving_Batt_current_measured_fun(dc_current,VOLTAGE_AVG);
-   //   }
-
-   //    if(terminal.iq.sen>0)
-   //   {
-   //   current = (10*sqrt(terminal.vq.ref * terminal.vq.ref + terminal.vd.ref * terminal.vd.ref));
-   //   current /= 32767.0;
-   //   current *= sqrt(terminal.iq.sen*terminal.iq.sen + terminal.id.sen*terminal.id.sen);
-   //   dc_current = current;
-   //   dc_current = moving_Batt_current_measured_fun(dc_current,VOLTAGE_AVG);
-   //   }
+     dc_current = (10*sqrt(terminal.vq.ref * terminal.vq.ref + terminal.vd.ref * terminal.vd.ref));
+     dc_current /= 32767.0;
+     dc_current *= terminal.iq.sen;
  
      throttle_adc_voltage = 2.0 * moving_Throttle_measured_fun(analog.bufferData[THROTTLE],THROTTLE_AVG) * (3.3/65535.0);
      //motor frequency 

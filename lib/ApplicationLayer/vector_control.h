@@ -100,6 +100,7 @@ typedef struct foc_t {
 
 }foc_t;
 
+#define __IO volatile
 
 
 //Motor-Controller Specific Parameters
@@ -138,12 +139,15 @@ typedef struct foc_t {
 //#define ANGLE_OFFSET                        0.0//Proto -12 Ultron
 //#define ANGLE_OFFSET                        0.523//Nidec 6 pole.
 
-#define ANGLE_OFFSET_FW                            2.46091//V17
-#define ANGLE_OFFSET_RW                            1.22173//V17
+#define ANGLE_OFFSET_FW                            0.610865//V10
+#define ANGLE_OFFSET_RW                           -1.047//V10
 
 #define IQ_RATE_INC                                10.0
 #define IQ_RATE_DEC                                550.0
 #define IQ_RATE_REV_DEC                            10.0
+
+#define THR_RATE                                   140.0
+#define THR_RATE_DEC                               118.0
 
 #define NIDEC_MOTOR_PWM             1
 #define ULTRON_MOTOR_PWM            0
@@ -171,12 +175,12 @@ typedef struct foc_t {
 #define T_F_ROTOR_SPEED                     0.03           // Constant to filter rotor speed
 #define MAGNETISING_CURRENT_REF             0.0//6000.0//6750.0
 #define OUTPUT_LIMIT                        29200.0//17000.0       // OUTPUT LIMIT VD VQ
-#define KP_W                                0.3//2.5//1.2//GAIN CONSTANT
-#define KI_W                                3.8//50.0//0.48//INTG CONSTANT
-#define KP_IQ                               0.3
-#define KI_IQ                               3.8
-#define KP_ID                               0.3
-#define KI_ID                               3.8
+#define KP_W                                0.15//2.5//1.2//GAIN CONSTANT
+#define KI_W                                5.0//50.0//0.48//INTG CONSTANT
+#define KP_IQ                               0.15
+#define KI_IQ                               5.0
+#define KP_ID                               0.15
+#define KI_ID                               5.0
 #define SLIP_LIMIT                          20.0
 #define FW_DIRECTION                        0
 #define RW_DIRECTION                        0
@@ -188,6 +192,7 @@ typedef struct foc_t {
 #define OFFSET_DUTY                         0.5            // DUTY OFFSET used in modulation.
 #define T_S                                 1.0/F_SW       // Sampling Time
 #define T_IQ                                2000.0/F_SW
+#define T_THR                               2000.0/F_SW
 #define PU                                  32767.0        // PU unit calculation max. value
 #define LL                                  -1.0*PU        // LOWER LIMIT PU
 #define UL                                  1.0*PU         // UPPER LIMIT PU

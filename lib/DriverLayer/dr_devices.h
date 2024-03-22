@@ -8,6 +8,7 @@
 #include "macros.h"
 #include "structures.h"
 
+#define __IO volatile
 
 typedef struct uart_t {
        uint8_t            bufferData[UART_BUFFER_SIZE];
