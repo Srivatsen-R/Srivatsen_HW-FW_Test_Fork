@@ -72,26 +72,14 @@ extern int count_duty;
 
 void  Calculate_OTS(uint32_t wheel_rpm)
 {
-
-  static int odo_prev;
-
   vehicle.speed = wheel_rpm*RPM_TO_KMPH;
   vehicle.trip = vehicle.trip + (vehicle.speed*(0.5/3600.0));
   vehicle.odometer = vehicle.odometer + (vehicle.speed*(0.5/3600.0));
-  if((vehicle.odometer-odo_prev)>=1.0)
-  {
-    vehicle.odo_change_status = ODO_UPDATE;
-
-  }
-  odo_prev = vehicle.odometer;
 }
 
 
 void CAN_Logging()
 {
-
-    // terminal.iq.sen = moving_Q_current_measured_fun(terminal.iq.sen,10);
-    // terminal.id.sen = moving_D_current_measured_fun(terminal.id.sen,10);
   //Logging CAN data.
     can.dataLoggingForPythonScript(terminal, 
                                   dc_current, 
@@ -107,8 +95,6 @@ void CAN_Logging()
                                   fault.fault_code, 
                                   avg_board_temp, 
                                   v_rms);
-                                  //angle, (float)odo_can, (float)kmph_can, (float)trip_can, (float)fault.fault_code, avg_board_temp, v_rms);
-    // HAL_Delay(10);
 }
 
 
@@ -135,11 +121,11 @@ void CAN_Communication(float odo, float trip, float kmph)
 
       if (forward_flag)
       {
-        if (foc.torque_current_sense >= 0.0)
+        if (terminal.iq.sen >= 0.0)
         {
           can.txMsg[1][1] = 0x00;
         }
-        else if (foc.torque_current_sense < 0.0)
+        else if (terminal.iq.sen < 0.0)
         {
           can.txMsg[1][1] = 0x01;
         }
@@ -147,11 +133,11 @@ void CAN_Communication(float odo, float trip, float kmph)
 
       if (reverse_flag)
       {
-        if (foc.torque_current_sense <= 0.0)
+        if (terminal.iq.sen <= 0.0)
         {
           can.txMsg[1][1] = 0x00;
         }
-        else if (foc.torque_current_sense > 0.0)
+        else if (terminal.iq.sen > 0.0)
         {
           can.txMsg[1][1] = 0x01;
         }
@@ -161,22 +147,22 @@ void CAN_Communication(float odo, float trip, float kmph)
       {
         if (motorControl.drive.fnr_status == 1)
         {
-          if (foc.torque_current_sense >= 0.0)
+          if (terminal.iq.sen >= 0.0)
           {
             can.txMsg[1][1] = 0x00;
           }
-          else if (foc.torque_current_sense < 0.0)
+          else if (terminal.iq.sen < 0.0)
           {
             can.txMsg[1][1] = 0x01;
           }
         }
         else if (motorControl.drive.fnr_status == 2)
         {
-          if (foc.torque_current_sense <= 0.0)
+          if (terminal.iq.sen <= 0.0)
           {
             can.txMsg[1][1] = 0x00;
           }
-          else if (foc.torque_current_sense > 0.0)
+          else if (terminal.iq.sen > 0.0)
           {
             can.txMsg[1][1] = 0x01;
           }
@@ -204,6 +190,9 @@ void CAN_Communication(float odo, float trip, float kmph)
 
       //716
       volatile float temp_current = terminal.iq.sen + 1000.0;
+      volatile float temp_current_dc = dc_current + 1000.0;
+      can.txMsg[5][4] = (uint8_t)(((uint16_t)(temp_current_dc)) & 0x00FF);
+      can.txMsg[5][5] = (uint8_t)(((uint16_t)(temp_current_dc) & 0xFF00) >> 8);
       can.txMsg[5][6] = (uint8_t)(((uint16_t)(temp_current)) & 0x00FF);
       can.txMsg[5][7] = (uint8_t)((((uint16_t)(temp_current)) & 0xFF00) >> 8);
 
@@ -218,20 +207,20 @@ void CAN_Communication(float odo, float trip, float kmph)
       can.txMsg[7][3] = (uint8_t)(v_rms);
 
       //726
-      can.txMsg[8][0] = 0x6E;
-      can.txMsg[8][1] = 0xE1;
-      can.txMsg[8][2] = 0x04;
-      can.txMsg[8][3] = 0x04;
+      can.txMsg[8][0] = 0x03;
+      can.txMsg[8][1] = 0x01;
+      can.txMsg[8][2] = 0x01;
+      can.txMsg[8][3] = 0x00;
       can.txMsg[8][4] = 0x01;
       can.txMsg[8][5] = 0x01;
-      can.txMsg[8][6] = 0x01;
-      can.txMsg[8][7] = 0x02;
+      can.txMsg[8][6] = 0x02;
+      can.txMsg[8][7] = 0x03;
 
       //7A0
       can.txMsg[9][0] = 0x03;
       can.txMsg[9][1] = 0x01;
       can.txMsg[9][2] = 0x01;
-      can.txMsg[9][3] = 0x01;
+      can.txMsg[9][3] = 0x02;
       #if APP1
         can.txMsg[9][7] = 0x01;
       #endif
@@ -252,9 +241,8 @@ void READ_FNR()
         forward_pin_state = HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_3);
 
         //if speed less than 100 rpm
-          if(abs((int)terminal.w.sen) <= 100 && analog.bufferData[THROTTLE] <= 9000.0){
-
-
+        if(abs((int)terminal.w.sen) <= 100 && analog.bufferData[THROTTLE] <= 9000.0)
+        {
           if(forward_pin_state==FW_DIRECTION)
           {
             forward_flag = 1;
@@ -290,7 +278,7 @@ void READ_FNR()
             forward_flag = 0;
             neutral_flag = 1;
             throttle_enable_flag = 0; 
-          }
+        }
 
 }
 void READ_THROTTLE()
@@ -328,47 +316,47 @@ void READ_THROTTLE()
         {
           if (foc.speed_sense * SPEED_PU_TO_RPM <= 1500.0)
           {
-            if (target_speed_reference > target_speed_reference_prev + THR_RATE * T_THR)
+            if (target_speed_reference > target_speed_reference_prev + 60.0 * T_THR)
             {
-              target_speed_reference = target_speed_reference_prev + THR_RATE * T_THR;
+              target_speed_reference = target_speed_reference_prev + 60.0 * T_THR;
             }
-            else if (target_speed_reference < target_speed_reference_prev - THR_RATE_DEC * T_THR)
+            else if (target_speed_reference < target_speed_reference_prev - 25.0 * T_THR)
             {
-              target_speed_reference = target_speed_reference_prev - THR_RATE_DEC * T_THR;
+              target_speed_reference = target_speed_reference_prev - 25.0 * T_THR;
             }
           }
           else
           {
-            if (target_speed_reference > target_speed_reference_prev + THR_RATE * T_THR)
+            if (target_speed_reference > target_speed_reference_prev + 60.0 * T_THR)
             {
-              target_speed_reference = target_speed_reference_prev + THR_RATE * T_THR;
+              target_speed_reference = target_speed_reference_prev + 60.0 * T_THR;
             }
-            else if (target_speed_reference < target_speed_reference_prev - 220.0 * T_THR)
+            else if (target_speed_reference < target_speed_reference_prev - 35.0 * T_THR)
             {
-              target_speed_reference = target_speed_reference_prev - 220.0 * T_THR;
+              target_speed_reference = target_speed_reference_prev - 35.0 * T_THR;
             }
           }
         }
         else if (reverse_flag)
         {
-          if (target_speed_reference > target_speed_reference_prev + 100.0 * T_THR)
+          if (target_speed_reference > target_speed_reference_prev + 60.0 * T_THR)
           {
-            target_speed_reference = target_speed_reference_prev + 100.0 * T_THR;
+            target_speed_reference = target_speed_reference_prev + 60.0 * T_THR;
           }
-          else if (target_speed_reference < target_speed_reference_prev - 80.0 * T_THR)
+          else if (target_speed_reference < target_speed_reference_prev - 20.0 * T_THR)
           {
-            target_speed_reference = target_speed_reference_prev - 80.0 * T_THR;
+            target_speed_reference = target_speed_reference_prev - 20.0 * T_THR;
           }
         }
         else if (neutral_flag)
         {
-          if (target_speed_reference > target_speed_reference_prev + 100.0 * T_THR)
+          if (target_speed_reference > target_speed_reference_prev + 60.0 * T_THR)
           {
-            target_speed_reference = target_speed_reference_prev + 100.0 * T_THR;
+            target_speed_reference = target_speed_reference_prev + 60.0 * T_THR;
           }
-          else if (target_speed_reference < target_speed_reference_prev - 100.0 * T_THR)
+          else if (target_speed_reference < target_speed_reference_prev - 20.0 * T_THR)
           {
-            target_speed_reference = target_speed_reference_prev - 100.0 * T_THR;
+            target_speed_reference = target_speed_reference_prev - 20.0 * T_THR;
           }
         }
         // speed_filtered = Throttle_Control(target_speed_reference,speed_filtered,forward_flag,reverse_flag);                  

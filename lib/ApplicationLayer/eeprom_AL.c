@@ -49,7 +49,7 @@ EEPROM_STATUS EEPROM_Read (I2C_HandleTypeDef* hi2c,
    return eepromStatus;
 }
 
-void EEPROM_Read_Data()
+void EEPROM_Read_Data_odo()
 {
       // Reading odometer data from EEPROM 
       e24lc02.status =  e24lc02.read(e24lc02.eepromI2C, e24lc02.devAddress, e24lc02.memAddress, (uint8_t*) &e24lc02.pData, e24lc02.size);
@@ -58,14 +58,36 @@ void EEPROM_Read_Data()
       vehicle.odometer = atof((char*) e24lc02.pData);
 }
 
+void EEPROM_Read_Data_trip()
+{
+      // Reading odometer data from EEPROM 
+      e24lc02.status =  e24lc02.read(e24lc02.eepromI2C, e24lc02.devAddress, 0x04, (uint8_t*) &e24lc02.pData, e24lc02.size);
+      if(e24lc02.status != EEPROM_OK) 
+      serial.print(serial.uart1, "Failed to read Odometer value in EEPROM");
+      vehicle.trip = atof((char*) e24lc02.pData);
+}
 
-void EEPROM_Write_Data(uint32_t odo)
+
+
+void EEPROM_Write_Data_odo(uint32_t odo)
 {
       // Writing odometer data to EEPROM
       char msg[12] ={0};
       sprintf(msg, "%lu", odo);
       e24lc02.size = strlen((char*) msg);
       e24lc02.status = e24lc02.write(e24lc02.eepromI2C, e24lc02.devAddress, e24lc02.memAddress, (uint8_t*)msg);
+      // e24lc02.status = e24lc02.write(e24lc02.eepromI2C, e24lc02.devAddress, e24lc02.memAddress, (uint8_t*)"        ");
+      if(e24lc02.status != EEPROM_OK) 
+      serial.print(serial.uart1, "Failed to write Odometer value to EEPROM");
+}
+
+void EEPROM_Write_Data_trip(uint32_t trip)
+{
+      // Writing odometer data to EEPROM
+      char msg[12] ={0};
+      sprintf(msg, "%lu", trip);
+      e24lc02.size = strlen((char*) msg);
+      e24lc02.status = e24lc02.write(e24lc02.eepromI2C, e24lc02.devAddress, 0x04, (uint8_t*)msg);
       // e24lc02.status = e24lc02.write(e24lc02.eepromI2C, e24lc02.devAddress, e24lc02.memAddress, (uint8_t*)"        ");
       if(e24lc02.status != EEPROM_OK) 
       serial.print(serial.uart1, "Failed to write Odometer value to EEPROM");

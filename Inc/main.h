@@ -21,6 +21,10 @@ void set_config_flag(uint8_t value);
 void set_interrupt_flag(uint8_t value);
 uint8_t get_interrupt_flag();
 void switch_partition_and_reset();
+void get_UIID(void);
+void send_on_6F0(uint8_t* UIID_Arr);
+void send_on_6F1(uint8_t* UIID_Arr);
+void send_on_6F2(uint8_t* UIID_Arr);
 
 /* Private defines -----------------------------------------------------------*/
 #define Ibus_U_Pin                GPIO_PIN_0

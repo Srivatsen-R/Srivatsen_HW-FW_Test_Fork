@@ -91,6 +91,12 @@ uint32_t can_log_timer_300_hex = 0;
 uint32_t odo_cal_timer = 0;
 uint32_t eeprom_write_timer = 0;
 
+uint32_t* first_4Bytes = ((uint32_t *)(UID_BASE));
+uint32_t* next_4Bytes = ((uint32_t *)(UID_BASE + 4));
+uint32_t* last_4Bytes = ((uint32_t *)(UID_BASE + 8));
+
+uint8_t UIID_Array[12];
+
 int count_duty=0;
 int counter_100ms=0;
 int counter_current_ms = 0;
@@ -135,6 +141,9 @@ int main(void) {
   //system clock init.
   SYSTEM_INIT();
 
+  //function to keep drive disable intially.
+  MotorControl_Init();
+
   //can init
   can.setup();
 
@@ -144,9 +153,6 @@ int main(void) {
   }
 
   HAL_Delay(5000);
-  
-  //function to keep drive disable intially.
-  MotorControl_Init();
   // HAL_Delay(100); //commented
   
   //function to perform sanity checks at ignition.
@@ -158,11 +164,18 @@ int main(void) {
   // HAL_Delay(100);  //commented
 
   //read previous odometer data.
-  EEPROM_Read_Data();
+  EEPROM_Read_Data_odo();
+  EEPROM_Read_Data_trip();
 
   bootup_config();
 
   start_flag = 1;
+
+  get_UIID();
+
+  send_on_6F0(UIID_Array);
+  send_on_6F1(UIID_Array);
+  send_on_6F2(UIID_Array);
   
   //while loop running on CLK frequency.
   while (1) 
@@ -173,7 +186,7 @@ int main(void) {
       FAULT_READING();
       //read fnr ,throttle
       READ_FNR();
-      READ_THROTTLE();
+      // READ_THROTTLE();
 
       if (tick_time - can_log_timer_700_hex >= 500)
       {
@@ -189,8 +202,9 @@ int main(void) {
 
       if (tick_time - odo_cal_timer >= 500)
       {
-        Calculate_OTS(terminal.w.sen);
-        EEPROM_Write_Data(vehicle.odometer);
+        // Calculate_OTS(terminal.w.sen);
+        EEPROM_Write_Data_odo(vehicle.odometer);
+        EEPROM_Write_Data_trip(vehicle.trip);
         odo_cal_timer = tick_time;
       }
       // HAL_Delay(1);
@@ -212,6 +226,65 @@ void set_config_flag(uint8_t value){
 
 void set_interrupt_flag(uint8_t value){
   interrupt_flag = value;
+}
+
+void send_on_6F0(uint8_t* UIID_Arr)
+{
+  uint8_t can_data[8] = {0};
+  can_data[0] = 0x03;
+  can_data[1] = 0x03;
+  can_data[2] = 0x01;
+  can_data[3] = 0x01;
+  can_data[4] = 0x01;
+  can_data[5] = 0x01;
+  can_data[6] = 0x02;
+  can_data[7] = UIID_Arr[0];
+  _fdcan_transmit_on_can(tx_Controller_6F0, S, can_data, FDCAN_DLC_BYTES);
+}
+
+void send_on_6F1(uint8_t* UIID_Arr)
+{
+  uint8_t can_data[8] = {0};
+  can_data[0] = 0x03;
+  can_data[1] = 0x03;
+  can_data[2] = 0x00;
+  can_data[3] = 0x00;
+  can_data[4] = UIID_Arr[1];
+  can_data[5] = UIID_Arr[2];
+  can_data[6] = UIID_Arr[3];
+  can_data[7] = UIID_Arr[4];
+  _fdcan_transmit_on_can(tx_Controller_6F1, S, can_data, FDCAN_DLC_BYTES);
+}
+
+void send_on_6F2(uint8_t* UIID_Arr)
+{
+  uint8_t can_data[8] = {0};
+  can_data[0] = 0x03;
+  can_data[1] = UIID_Arr[5];
+  can_data[2] = UIID_Arr[6];
+  can_data[3] = UIID_Arr[7];
+  can_data[4] = UIID_Arr[8];
+  can_data[5] = UIID_Arr[9];
+  can_data[6] = UIID_Arr[10];
+  can_data[7] = UIID_Arr[11];
+  _fdcan_transmit_on_can(tx_Controller_6F2, S, can_data, FDCAN_DLC_BYTES);
+}
+
+void get_UIID(){
+  UIID_Array[0] = (*first_4Bytes) & 0xFF;
+  UIID_Array[1] = (*first_4Bytes >> 8) & 0xFF;
+  UIID_Array[2] = (*first_4Bytes >> 16) & 0xFF;
+  UIID_Array[3] = (*first_4Bytes >> 24) & 0xFF;
+
+  UIID_Array[4] = (*next_4Bytes) & 0xFF;
+  UIID_Array[5] = (*next_4Bytes >> 8) & 0xFF;
+  UIID_Array[6] = (*next_4Bytes >> 16) & 0xFF;
+  UIID_Array[7] = (*next_4Bytes >> 24) & 0xFF;
+
+  UIID_Array[8] = (*last_4Bytes) & 0xFF;
+  UIID_Array[9] = (*last_4Bytes >> 8) & 0xFF;
+  UIID_Array[10] = (*last_4Bytes >> 16) & 0xFF;
+  UIID_Array[11] = (*last_4Bytes >> 24) & 0xFF;
 }
 
 /* USER CODE BEGIN 4 */
@@ -247,6 +320,17 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
   /* Prevent unused argument(s) compilation warning */
+
+  if (htim->Instance == TIM4)
+  {
+    READ_THROTTLE();
+  }
+
+  if (htim->Instance == TIM15)
+  {
+    Calculate_OTS(terminal.w.sen);
+  }
+
   if(htim->Instance == TIM7)
   {
     motorControl.drive.check = DRIVE_DISABLE;

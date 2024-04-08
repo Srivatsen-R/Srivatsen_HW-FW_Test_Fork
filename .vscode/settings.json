@@ -24,6 +24,7 @@
         "tim.h": "c",
         "stm32h7xx_it.h": "c",
         "stm32h7xx_hal.h": "c",
+        "stm32h7xx_hal_adc.h": "c",
         "string.h": "c",
         "firmware_upgrade_app.h": "c",
         "crc32.h": "c",
@@ -31,7 +32,8 @@
         "macros.h": "c",
         "vector_control.h": "c",
         "type_traits": "c",
-        "stm32h7xx_hal_conf.h": "c"
+        "stm32h7xx_hal_conf.h": "c",
+        "stm32h743xx.h": "c"
     },
     "cortex-debug.variableUseNaturalFormat": true
 }

@@ -14,7 +14,9 @@
 EEPROM_STATUS EEPROM_Write (I2C_HandleTypeDef* hi2c, uint16_t devAddress, uint16_t memAddress, uint8_t  *pData);
 EEPROM_STATUS EEPROM_Read (I2C_HandleTypeDef* hi2c,  uint16_t devAddress, uint16_t memAddress, uint8_t  *pData, uint16_t size);
 
-void EEPROM_Read_Data(void);
-void EEPROM_Write_Data(uint32_t);
+void EEPROM_Read_Data_odo(void);
+void EEPROM_Read_Data_trip(void);
+void EEPROM_Write_Data_odo(uint32_t);
+void EEPROM_Write_Data_trip(uint32_t);
 
 #endif

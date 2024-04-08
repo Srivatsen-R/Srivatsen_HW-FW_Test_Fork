@@ -124,7 +124,12 @@ void THROTTLE_PROFILE(int config)
 {
     if(config==1)
     {
-        foc.torque_current_ref = (0.84*foc.speed_ref);
+        foc.torque_current_ref = (0.70*foc.speed_ref);
+
+        if (foc.torque_current_ref >= 19114.0)
+        {
+            foc.torque_current_ref = 19114.0;
+        }
         // if (foc.torque_current_ref > foc.torque_current_ref_prev + IQ_RATE_INC * T_IQ)
         // {
         //     foc.torque_current_ref = foc.torque_current_ref_prev + IQ_RATE_INC * T_IQ;
@@ -790,16 +795,16 @@ void FOC_FIELD_WEAKENING_AND_MTPA()
                 {
                     if (foc.speed_sense * SPEED_PU_TO_RPM > 400.0 && foc.speed_sense * SPEED_PU_TO_RPM <= 1500.0)
                     {
-                        foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 400.0, 1500.0, 7000.0, 0.0);
+                        foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 400.0, 1500.0, 5000.0, 0.0);
                     }
-                    else if (foc.speed_sense * SPEED_PU_TO_RPM >= 0.0 && foc.speed_sense <= 400.0)
+                    else if (foc.speed_sense * SPEED_PU_TO_RPM >= 0.0 && foc.speed_sense * SPEED_PU_TO_RPM <= 400.0)
                     {
-                        foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 0.0, 400.0, 0.0, 7000.0);
+                        foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 0.0, 400.0, 0.0, 5000.0);
                     }
 
-                    if (foc.flux_current_ref >= 7000.0)
+                    if (foc.flux_current_ref >= 5000.0)
                     {
-                        foc.flux_current_ref = 7000.0;
+                        foc.flux_current_ref = 5000.0;
                     }
                     else if (foc.flux_current_ref <= 0.0)
                     {
@@ -824,16 +829,16 @@ void FOC_FIELD_WEAKENING_AND_MTPA()
                 {
                     if (foc.speed_sense * SPEED_PU_TO_RPM > 400.0 && foc.speed_sense * SPEED_PU_TO_RPM <= 1500.0)
                     {
-                        foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 400.0, 1500.0, 7000.0, 0.0);
+                        foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 400.0, 1500.0, 5000.0, 0.0);
                     }
-                    else if (foc.speed_sense * SPEED_PU_TO_RPM >= 0.0 && foc.speed_sense <= 400.0)
+                    else if (foc.speed_sense * SPEED_PU_TO_RPM >= 0.0 && foc.speed_sense * SPEED_PU_TO_RPM <= 400.0)
                     {
-                        foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 0.0, 400.0, 0.0, 7000.0);
+                        foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 0.0, 400.0, 0.0, 5000.0);
                     }
 
-                    if (foc.flux_current_ref >= 7000.0)
+                    if (foc.flux_current_ref >= 5000.0)
                     {
-                        foc.flux_current_ref = 7000.0;
+                        foc.flux_current_ref = 5000.0;
                     }
                     else if (foc.flux_current_ref <= 0.0)
                     {
@@ -860,16 +865,16 @@ void FOC_FIELD_WEAKENING_AND_MTPA()
                     {
                         if (foc.speed_sense * SPEED_PU_TO_RPM > 400.0 && foc.speed_sense * SPEED_PU_TO_RPM <= 1500.0)
                         {
-                            foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 400.0, 1500.0, 7000.0, 0.0);
+                            foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 400.0, 1500.0, 5000.0, 0.0);
                         }
-                        else if (foc.speed_sense * SPEED_PU_TO_RPM >= 0.0 && foc.speed_sense <= 400.0)
+                        else if (foc.speed_sense * SPEED_PU_TO_RPM >= 0.0 && foc.speed_sense * SPEED_PU_TO_RPM <= 400.0)
                         {
-                            foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 0.0, 400.0, 0.0, 7000.0);
+                            foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 0.0, 400.0, 0.0, 5000.0);
                         }
 
-                        if (foc.flux_current_ref >= 7000.0)
+                        if (foc.flux_current_ref >= 5000.0)
                         {
-                            foc.flux_current_ref = 7000.0;
+                            foc.flux_current_ref = 5000.0;
                         }
                         else if (foc.flux_current_ref <= 0.0)
                         {
@@ -894,16 +899,16 @@ void FOC_FIELD_WEAKENING_AND_MTPA()
                     {
                         if (foc.speed_sense * SPEED_PU_TO_RPM > 400.0 && foc.speed_sense * SPEED_PU_TO_RPM <= 1500.0)
                         {
-                            foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 400.0, 1500.0, 7000.0, 0.0);
+                            foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 400.0, 1500.0, 5000.0, 0.0);
                         }
-                        else if (foc.speed_sense * SPEED_PU_TO_RPM >= 0.0 && foc.speed_sense <= 400.0)
+                        else if (foc.speed_sense * SPEED_PU_TO_RPM >= 0.0 && foc.speed_sense * SPEED_PU_TO_RPM <= 400.0)
                         {
-                            foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 0.0, 400.0, 0.0, 7000.0);
+                            foc.flux_current_ref = map(foc.speed_sense * SPEED_PU_TO_RPM, 0.0, 400.0, 0.0, 5000.0);
                         }
 
-                        if (foc.flux_current_ref >= 7000.0)
+                        if (foc.flux_current_ref >= 5000.0)
                         {
-                            foc.flux_current_ref = 7000.0;
+                            foc.flux_current_ref = 5000.0;
                         }
                         else if (foc.flux_current_ref <= 0.0)
                         {
@@ -1100,8 +1105,6 @@ void VECTOR_FOC_Control(void) {
             terminal.vd.ref               = (foc.vd_ref)/10.0;
             terminal.vq.ref               = (foc.vq_ref)/10.0;
             terminal.imr.ref              = 0.0;
-            terminal.id.ref               = foc.flux_current_ref* ID_PU_TO_A;
-
 }
 
 

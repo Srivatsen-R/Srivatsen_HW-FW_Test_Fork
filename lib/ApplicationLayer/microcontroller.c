@@ -122,6 +122,8 @@ void SYSTEM_INIT()
   MX_TIM1_Init();
   MX_TIM17_Init();
   MX_TIM5_Init();
+  MX_TIM4_Init();
+  MX_TIM15_Init();
   MX_TIM7_Init();
   MX_I2C2_Init();
 
@@ -131,6 +133,8 @@ void SYSTEM_INIT()
 void ENABLE_PERIPHERALS()
 {
   HAL_TIM_Base_Start_IT(&htim17);//20kHz
+  HAL_TIM_Base_Start_IT(&htim4);
+  HAL_TIM_Base_Start_IT(&htim15);
   HAL_TIM_Encoder_Start_IT(&htim2, TIM_CHANNEL_ALL);//Encoder pulses
   HAL_TIM_IC_Start_IT(&htim5, TIM_CHANNEL_1);//PWM   
   HAL_TIM_IC_Start(&htim5, TIM_CHANNEL_2);//PWM

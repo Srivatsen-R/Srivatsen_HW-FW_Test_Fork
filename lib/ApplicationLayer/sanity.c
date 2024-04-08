@@ -325,11 +325,11 @@ void SAFETY_AND_ERRORS()
       //     fault.status = FAULT_DC_OVER_CURR;
       //   }
 
-        if (terminal.iq.sen >= 400.0 || terminal.iq.sen <= -400.0)
+        if ((terminal.iq.sen >= 295.0 || terminal.iq.sen <= -295.0) && terminal.w.sen >= 1500.0)
         {
             static uint8_t count_iq = 0;
 
-            if (count_iq >= 5)
+            if (count_iq >= 7)
             {
                fault.fault_code |= FAULT_OVER_CURRENT_HEX;
                motorControl.drive.check = DRIVE_DISABLE;
@@ -340,11 +340,11 @@ void SAFETY_AND_ERRORS()
             count_iq++;
         }
 
-        if (terminal.id.sen >= 400.0 || terminal.id.sen <= -400.0)
+        if ((terminal.id.sen >= 295.0 || terminal.id.sen <= -295.0) && terminal.w.sen >= 1500.0)
         {
             static uint8_t count_id = 0;
 
-            if (count_id >= 5)
+            if (count_id >= 7)
             {
                fault.fault_code |= FAULT_OVER_CURRENT_HEX;
                motorControl.drive.check = DRIVE_DISABLE;
@@ -353,5 +353,33 @@ void SAFETY_AND_ERRORS()
             }
 
             count_id++;
+        }
+
+        if (terminal.iq.sen >= 400.0 || terminal.iq.sen <= -400.0)
+        {
+            static uint8_t fault_count_iq = 0;
+
+            if (fault_count_iq >= 4)
+            {
+               fault.fault_code |= FAULT_HARD_OVER_CURRENT_HEX;
+               motorControl.drive.check = DRIVE_DISABLE;
+               fault.status = FAULT_HARD_OVER_CURRENT;
+            }
+
+            fault_count_iq++;
+        }
+
+        if (terminal.id.sen >= 400.0 || terminal.id.sen <= -400.0)
+        {
+            static uint8_t fault_count_id = 0;
+
+            if (fault_count_id >= 4)
+            {
+               fault.fault_code |= FAULT_HARD_OVER_CURRENT_HEX;
+               motorControl.drive.check = DRIVE_DISABLE;
+               fault.status = FAULT_HARD_OVER_CURRENT;
+            }
+
+            fault_count_id++;
         }
 }

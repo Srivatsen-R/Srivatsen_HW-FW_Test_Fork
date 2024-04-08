@@ -132,15 +132,20 @@ typedef struct foc_t {
 #define POWER_MAPPING_UPPER_IQ_LIMIT_PU 26054.75
 #define POWER_MAPPING_LOWER_IQ_LIMIT_PU 11000.0
 #define VD_LIMIT                            10000.0
-#define VQ_LIMIT                            32767.0
-#define VQ_LIMIT_FACTOR                     1.2
+#define VQ_LIMIT                            28670.25
+#define VQ_LIMIT_FACTOR                     1.05
 
-//#define ANGLE_OFFSET                        4.188//Proto -3 Ultron
-//#define ANGLE_OFFSET                        0.0//Proto -12 Ultron
-//#define ANGLE_OFFSET                        0.523//Nidec 6 pole.
+// #define ANGLE_OFFSET_FW                            0.610865//V10
+// #define ANGLE_OFFSET_RW                           -1.047//V10
 
-#define ANGLE_OFFSET_FW                            0.610865//V10
-#define ANGLE_OFFSET_RW                           -1.047//V10
+// #define ANGLE_OFFSET_FW                           -1.308996//V3
+// #define ANGLE_OFFSET_RW                            4.188790//V3
+
+#define ANGLE_OFFSET_FW                            4.572762//V1
+#define ANGLE_OFFSET_RW                           -3.071779//V1
+
+// #define ANGLE_OFFSET_FW                            2.44346//V3 LFP
+// #define ANGLE_OFFSET_RW                            1.22173//V3 LFP
 
 #define IQ_RATE_INC                                10.0
 #define IQ_RATE_DEC                                550.0
