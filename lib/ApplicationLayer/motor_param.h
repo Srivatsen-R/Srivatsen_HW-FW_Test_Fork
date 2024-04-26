@@ -7,7 +7,7 @@
 #define NTC_PULL_UP_RESISTOR                10000//NIDEC NTC VALUE
 //#define NTC_PULL_UP_RESISTOR                52600//ULTRON
 
-#define UNDER_VOLT_LIMIT                48.0   
+#define UNDER_VOLT_LIMIT                40.0   
 #define OVER_VOLT_LIMIT                 75.0//72 corresponds to 80V
 
 

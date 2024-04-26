@@ -139,11 +139,23 @@ void FAULT_READING()
          motorControl.drive.check = DRIVE_DISABLE;
          fault.status             = FAULT_UNDER_VOLTAGE;
       }
+      else if (busVoltage >= (UNDER_VOLT_LIMIT + 10.0) && busVoltage <= (OVER_VOLT_LIMIT - 10.0) && fault.status)
+      {
+         fault.fault_code &= (~FAULT_BUS_VOLTAGE_HEX);
+         motorControl.drive.check = DRIVE_ENABLE;
+         fault.status = 0;
+      }
 
       if(busVoltage > OVER_VOLT_LIMIT) {
          fault.fault_code |= FAULT_BUS_VOLTAGE_HEX;
          motorControl.drive.check = DRIVE_DISABLE;
          fault.status             = FAULT_HARDWARE_OVER_VOLTAGE;
+      }
+      else if (busVoltage >= (UNDER_VOLT_LIMIT + 10.0) && busVoltage <= (OVER_VOLT_LIMIT - 10.0) && fault.status)
+      {
+         fault.fault_code &= (~FAULT_BUS_VOLTAGE_HEX);
+         motorControl.drive.check = DRIVE_ENABLE;
+         fault.status = 0;
       }
 
       //controller temperature fault
