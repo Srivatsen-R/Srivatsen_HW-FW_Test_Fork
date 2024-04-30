@@ -214,7 +214,7 @@ void CAN_Communication(float odo, float trip, float kmph)
       can.txMsg[8][4] = 0x01;
       can.txMsg[8][5] = 0x01;
       can.txMsg[8][6] = 0x02;
-      can.txMsg[8][7] = 0x03;
+      can.txMsg[8][7] = 0x04;
 
       //7A0
       can.txMsg[9][0] = 0x03;

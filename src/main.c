@@ -246,7 +246,7 @@ void send_on_6F1(uint8_t* UIID_Arr)
 {
   uint8_t can_data[8] = {0};
   can_data[0] = 0x03;
-  can_data[1] = 0x03;
+  can_data[1] = 0x04;
   can_data[2] = 0x00;
   can_data[3] = 0x00;
   can_data[4] = UIID_Arr[1];
