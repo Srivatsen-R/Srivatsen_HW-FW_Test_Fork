@@ -54,6 +54,8 @@ HAL_GPIO_EXTI_Callback          : Contain code blocks for reseting position.
 #include "firmware_upgrade_app.h"
 #include "isotp/isotp_types.h"
 
+#include "Pegasus_MBD.h"
+#include "rtwtypes.h"
 
 /* Variable declaration ------------------------------------------------------*/
 
@@ -69,6 +71,8 @@ extern terminal_t     terminal;
 extern struct gpio    io;
 extern motorControl_t motorControl;
 extern vehicle_t vehicle;
+extern ExtU           rtU;
+extern ExtY           rtY;
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -153,61 +157,16 @@ int main(void) {
   }
 
   HAL_Delay(5000);
-  // HAL_Delay(100); //commented
-  
-  //function to perform sanity checks at ignition.
-  RUN_SANITY();
-  // HAL_Delay(9000); //commented
 
   //enabling motor control interrupts , ABZ+PWM sensing interrpts.
   ENABLE_PERIPHERALS();
-  // HAL_Delay(100);  //commented
 
-  //read previous odometer data.
-  EEPROM_Read_Data_odo();
-  EEPROM_Read_Data_trip();
-
-  bootup_config();
-
-  start_flag = 1;
-
-  get_UIID();
-
-  send_on_6F0(UIID_Array);
-  send_on_6F1(UIID_Array);
-  send_on_6F2(UIID_Array);
+  Pegasus_MBD_initialize();
   
   //while loop running on CLK frequency.
   while (1) 
   {
-      uint32_t tick_time = HAL_GetTick();
-      //function to continously monitor mcu faults and errors.
-      ANALOG_READING();
-      FAULT_READING();
-      //read fnr ,throttle
-      READ_FNR();
-      // READ_THROTTLE();
-
-      if (tick_time - can_log_timer_700_hex >= 500)
-      {
-        CAN_Communication(vehicle.odometer, vehicle.trip, vehicle.speed);
-        can_log_timer_700_hex = tick_time;
-      }
-
-      if (tick_time - can_log_timer_300_hex >= 100)
-      {
-        CAN_Logging();
-        can_log_timer_300_hex = tick_time;
-      }
-
-      if (tick_time - odo_cal_timer >= 500)
-      {
-        // Calculate_OTS(terminal.w.sen);
-        EEPROM_Write_Data_odo(vehicle.odometer);
-        EEPROM_Write_Data_trip(vehicle.trip);
-        odo_cal_timer = tick_time;
-      }
-      // HAL_Delay(1);
+    ANALOG_READING();
   }
 }
 
@@ -293,11 +252,6 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)  // If the interrupt is triggered by channel 1
 	{
-
-    count_duty++;
-
-    if(count_duty>=50){count_duty=1;}
-
 		// Read the IC value
 		ICValue = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
 
@@ -320,50 +274,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
   /* Prevent unused argument(s) compilation warning */
-
-  if (htim->Instance == TIM4)
-  {
-    READ_THROTTLE();
-  }
-
-  if (htim->Instance == TIM15)
-  {
-    Calculate_OTS(terminal.w.sen);
-  }
-
-  if(htim->Instance == TIM7)
-  {
-    motorControl.drive.check = DRIVE_DISABLE;
-    HAL_TIM_Base_Stop_IT(&htim17);
-    switch (upgrade_state)
-    {
-    case UPGRADE_INIT:
-      handle_upgrade_init();
-      break;
-    case UPGRADE_RECEIVE_DATA:
-      handle_rceive_data();
-      break;
-    case UPGRADE_PAUSE:
-      handle_upgrade_pause();
-      HAL_TIM_Base_Stop_IT(&htim7);
-      motorControl.drive.check = DRIVE_ENABLE;
-      HAL_TIM_Base_Start_IT(&htim17);
-      break;
-    case UPGRADE_RESUME:
-      handle_upgrade_resume();
-      break;
-    case UPGRADE_COMPLETE:
-      handle_upgrade_complete();
-      break;
-    case UPGRADE_FAILED:
-      HAL_TIM_Base_Stop_IT(&htim7);
-      motorControl.drive.check = DRIVE_ENABLE;
-      HAL_TIM_Base_Start_IT(&htim17);
-      break;
-    default:
-      break;
-    }
-  }
   
   if(htim->Instance==TIM17) {
 
@@ -385,15 +295,18 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
 
         }
 
+          rtU.Torque = map(analog.bufferData[THROTTLE], 8900.0, 40000.0, 0.0, 80.0);
+
           //motor angle,current
           READ_MOTOR_POSITION();
+
+          FOC_READ_MOTOR_POSITION();
+
           READ_MOTOR_PHASE_CURRENT();
 
-          //sanity checks to be perfomed at 20kHz
-          SAFETY_AND_ERRORS();
+          Pegasus_MBD_step();
 
-          //main function for motor control operation.
-          VECTOR_FOC_Control();
+          FOC_SPACE_VECTOR_MODULATION();
   }
 }
 

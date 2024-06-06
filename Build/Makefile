@@ -1033,6 +1033,33 @@ Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.s
 .PHONY : Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.s
 
+lib/ApplicationLayer/Pegasus_MBD.obj: lib/ApplicationLayer/Pegasus_MBD.c.obj
+.PHONY : lib/ApplicationLayer/Pegasus_MBD.obj
+
+# target to build an object file
+lib/ApplicationLayer/Pegasus_MBD.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Pegasus_MBD.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Pegasus_MBD.c.obj
+.PHONY : lib/ApplicationLayer/Pegasus_MBD.c.obj
+
+lib/ApplicationLayer/Pegasus_MBD.i: lib/ApplicationLayer/Pegasus_MBD.c.i
+.PHONY : lib/ApplicationLayer/Pegasus_MBD.i
+
+# target to preprocess a source file
+lib/ApplicationLayer/Pegasus_MBD.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Pegasus_MBD.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Pegasus_MBD.c.i
+.PHONY : lib/ApplicationLayer/Pegasus_MBD.c.i
+
+lib/ApplicationLayer/Pegasus_MBD.s: lib/ApplicationLayer/Pegasus_MBD.c.s
+.PHONY : lib/ApplicationLayer/Pegasus_MBD.s
+
+# target to generate assembly for a file
+lib/ApplicationLayer/Pegasus_MBD.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Pegasus_MBD.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Pegasus_MBD.c.s
+.PHONY : lib/ApplicationLayer/Pegasus_MBD.c.s
+
 lib/ApplicationLayer/adc_AL.obj: lib/ApplicationLayer/adc_AL.c.obj
 .PHONY : lib/ApplicationLayer/adc_AL.obj
 
@@ -2092,6 +2119,9 @@ help:
 	@echo ... Utility/can-tp-module-threadx/isotp-c/src/isotp/send.obj
 	@echo ... Utility/can-tp-module-threadx/isotp-c/src/isotp/send.i
 	@echo ... Utility/can-tp-module-threadx/isotp-c/src/isotp/send.s
+	@echo ... lib/ApplicationLayer/Pegasus_MBD.obj
+	@echo ... lib/ApplicationLayer/Pegasus_MBD.i
+	@echo ... lib/ApplicationLayer/Pegasus_MBD.s
 	@echo ... lib/ApplicationLayer/adc_AL.obj
 	@echo ... lib/ApplicationLayer/adc_AL.i
 	@echo ... lib/ApplicationLayer/adc_AL.s

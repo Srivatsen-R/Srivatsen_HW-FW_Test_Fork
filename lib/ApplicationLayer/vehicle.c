@@ -16,6 +16,8 @@ This file contains functions associated with vehicle such as throttle, FNR , CAN
 #include "vector_control.h"
 #include "fdcan_AL.h"
 #include "foc_blockset.h"
+#include "Pegasus_MBD.h"
+#include "rtwtypes.h"
 
 
 vehicle_t vehicle = {
@@ -28,6 +30,8 @@ vehicle_t vehicle = {
                     };
 
 extern can_t can;
+extern ExtU rtU;
+extern ExtY rtY;
 extern foc_t foc;
 extern terminal_t terminal;
 extern __IO float dc_current;
@@ -381,6 +385,10 @@ void READ_MOTOR_PHASE_CURRENT()
 
     a_current = temp_a/CURRENT_AVG_FACTOR;
     b_current = temp_b/CURRENT_AVG_FACTOR;
+
+    rtU.I_a = (a_current * 3.3 * 400.0) / 65535.0;
+    rtU.I_b = (b_current * 3.3 * 400.0) / 65535.0;
+    rtU.I_c = (-rtU.I_a) + (-rtU.I_b);
 
     temp_a=0;
     temp_b=0;

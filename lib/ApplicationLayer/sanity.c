@@ -219,19 +219,7 @@ void ANALOG_READING()
      v_rms = 10*sqrt(terminal.vd.ref * terminal.vd.ref + terminal.vq.ref * terminal.vq.ref);
      v_rms /= 32767.0;
      v_rms *= busVoltage/ROOT3;
-     v_rms = moving_AC_voltage_measured_fun(v_rms,VOLTAGE_AVG);
-
-     //dc current  
-     dc_current = (10*sqrt(terminal.vq.ref * terminal.vq.ref + terminal.vd.ref * terminal.vd.ref));
-     dc_current /= 32767.0;
-     dc_current *= terminal.iq.sen;
- 
-     throttle_adc_voltage = 2.0 * moving_Throttle_measured_fun(analog.bufferData[THROTTLE],THROTTLE_AVG) * (3.3/65535.0);
-     //motor frequency 
-     freq_rpm = terminal.w.sen * (POLEPAIRS*RPM_TO_FREQ);
-     //throttle percentage
-     throttle_percent = (terminal.w.ref*RPM_TO_THROTTLE_PERCENT);
-   
+     v_rms = moving_AC_voltage_measured_fun(v_rms,VOLTAGE_AVG);   
 }
 
 void Encoder_Check(int test_case) {

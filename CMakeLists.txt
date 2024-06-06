@@ -117,6 +117,7 @@ set(FIRMWARE_FILES
     lib/ApplicationLayer/v_f_control.c
     lib/ApplicationLayer/vector_control.c
     lib/ApplicationLayer/vehicle.c
+    lib/ApplicationLayer/Pegasus_MBD.c
 
     lib/CustomLibs/printf.c
     lib/CustomLibs/math_func.c

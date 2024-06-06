@@ -106,7 +106,7 @@ typedef struct foc_t {
 //Motor-Controller Specific Parameters
 
 
-#define PPR                     4096.0//NIDEC        
+#define PPR                     4095.0//NIDEC        
 //#define PPR                     2048.0//ULTRON    
 
 // #define POLEPAIRS               4.0// Nidec 14kg
@@ -260,6 +260,7 @@ typedef struct foc_t {
 void   VECTOR_FOC_Control(void) ;
 void   FOC_CLARK_PARK_TRANSFORM(void);
 void   FOC_READ_MOTOR_CURRENT(void);
+void   FOC_READ_MOTOR_POSITON(void);
 void   FOC_TORQUE_PI_CONTROL(void);
 void   FOC_ELECTRICAL_ANGLE_CALCULATION(void);
 void   FOC_FLUX_PI_CONTROL(void);
