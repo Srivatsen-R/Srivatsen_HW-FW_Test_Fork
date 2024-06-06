@@ -405,7 +405,7 @@ void Pegasus_MBD_initialize(void)
   rtU.Id = 5;
   rtU.Dd = 0.0010;
   rtU.FilterCoefficient = 20;
-  rtU.Thresholds.MaxBusVoltage_V = 58.0;
+  rtU.Thresholds.MaxBusVoltage_V = 65.0;
 }
 
 /*

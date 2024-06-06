@@ -1010,29 +1010,9 @@ Last status :
 void FOC_SPACE_VECTOR_MODULATION()
 {
             //PWM DUTY VARIABLES
-
-            foc.va_ref = (int)((rtY.Va / 58.0) * 32767.0);
-            foc.vb_ref = (int)((rtY.Vb / 58.0) * 32767.0);
-            foc.vc_ref = (int)((rtY.Vc / 58.0) * 32767.0);
-
-            if (foc.va_ref > UL)
-                foc.va_ref = UL;
-            else if (foc.va_ref < LL)
-                foc.vb_ref = LL;
-
-            if (foc.vb_ref > UL)
-                foc.vb_ref = UL;
-            else if (foc.vb_ref < LL)
-                foc.vb_ref = LL;
-
-            if (foc.vc_ref > UL)
-                foc.vc_ref = UL;
-            else if (foc.vc_ref < LL)
-                foc.vc_ref = LL;
-
-            foc.pwm_a = (PWM_CONST_2*foc.va_ref)  + PWM_CONST_1;
-            foc.pwm_b = (PWM_CONST_2*foc.vb_ref)  + PWM_CONST_1;
-            foc.pwm_c = (PWM_CONST_2*foc.vc_ref)  + PWM_CONST_1;   
+            foc.pwm_a = (PWM_CONST_2*(rtY.Va / 65.0))  + PWM_CONST_1;
+            foc.pwm_b = (PWM_CONST_2*(rtY.Vb / 65.0))  + PWM_CONST_1;
+            foc.pwm_c = (PWM_CONST_2*(rtY.Vc / 65.0))  + PWM_CONST_1;   
 
             //Modulation  Techniques
             //SPWM(foc.pwm_a,foc.pwm_b,foc.pwm_c);

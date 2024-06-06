@@ -207,7 +207,7 @@ typedef struct foc_t {
 #define SPEED_FILTER_CONSTANT_1             ((2.0*T_F_ROTOR_SPEED-T_S)/(2.0*T_F_ROTOR_SPEED+T_S)) // Constant to filter speed
 #define SPEED_FILTER_CONSTANT_2             (T_S/(2.0*T_F_ROTOR_SPEED+T_S)) // Constant to filter speed
 #define PWM_CONST_1                         0.5*T_PRD        // CONSTANT FOR PWM Modulation
-#define PWM_CONST_2                         (0.5*T_PRD)/(PU) // CONSTANT FOR PWM Modulation
+#define PWM_CONST_2                         (0.5*T_PRD) // CONSTANT FOR PWM Modulation
 #define ROTOR_TIME_CONSTANT_NEW             0.11             // ROTOR TIME CONSTANT L/R
 #define IMR_CONST1                          (2.0*ROTOR_TIME_CONSTANT_NEW-T_S)/(2.0*ROTOR_TIME_CONSTANT_NEW+T_S) // MAGNETIZING CURRENT CONSTANT
 #define IMR_CONST2                          T_S/(2.0*ROTOR_TIME_CONSTANT_NEW+T_S) // MAGNETIZING CURRENT CONSTANT
