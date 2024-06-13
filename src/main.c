@@ -65,6 +65,7 @@ HAL_GPIO_EXTI_Callback          : Contain code blocks for reseting position.
 
 /* externs -------------------------------------------------------------------*/
 extern led_t          led;
+extern foc_t          foc;
 extern can_t          can;
 extern adc_t          analog;
 extern terminal_t     terminal;
@@ -166,7 +167,27 @@ int main(void) {
   //while loop running on CLK frequency.
   while (1) 
   {
+    uint32_t time_count = HAL_GetTick();
+    static uint32_t prev_time = 0;
+    static uint32_t prev_thr_time = 0;
+
     ANALOG_READING();
+
+    if (time_count - prev_time >= 11.0)
+    {
+      send_on_300();
+      send_on_301();
+      send_on_302();
+
+      prev_time = time_count;
+    }
+
+    if (time_count - prev_thr_time >= 100)
+    {
+      rtU.Torque = map(analog.bufferData[THROTTLE], 8900.0, 40000.0, 0.0, 80.0);
+
+      prev_thr_time = time_count;
+    }
   }
 }
 
@@ -185,6 +206,45 @@ void set_config_flag(uint8_t value){
 
 void set_interrupt_flag(uint8_t value){
   interrupt_flag = value;
+}
+
+void send_on_300()
+{
+  uint8_t can_data[8] = {0};
+  can_data[0] = (uint8_t)(rtY.Va + 60.0);
+  can_data[1] = (uint8_t)(rtY.Vb + 60.0);
+  can_data[2] = (uint8_t)(rtY.Vc + 60.0);
+  can_data[3] = (uint8_t)rtY.Iq_Refer;
+  can_data[4] = (uint8_t)((uint16_t)(rtY.Vq_Calculated + 10000.0) & 0x00FF);
+  can_data[5] = (uint8_t)(((uint16_t)(rtY.Vq_Calculated + 10000.0) & 0xFF00) >> 8);
+  can_data[6] = (uint8_t)((uint16_t)(rtY.Vd_Calculated + 10000.0) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(rtY.Vd_Calculated + 10000.0) & 0xFF00) >> 8);
+  _fdcan_transmit_on_can(FDCAN_DEBUG_ID_300, S, can_data, FDCAN_DLC_BYTES);
+}
+
+void send_on_301()
+{
+  uint8_t can_data[8] = {0};
+  can_data[0] = (uint8_t)rtY.Id_Refer;
+  can_data[1] = (uint8_t)rtY.Iq_Calculated;
+  can_data[2] = (uint8_t)((uint16_t)(rtU.I_a + 400.0) & 0x00FF);
+  can_data[3] = (uint8_t)(((uint16_t)(rtU.I_a + 400.0) & 0xFF00) >> 8);
+  can_data[4] = (uint8_t)((uint16_t)(rtU.I_b + 400.0) & 0x00FF);
+  can_data[5] = (uint8_t)(((uint16_t)(rtU.I_b + 400.0) & 0xFF00) >> 8);
+  can_data[6] = (uint8_t)((uint16_t)(rtU.I_c + 400.0) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(rtU.I_c + 400.0) & 0xFF00) >> 8);
+  _fdcan_transmit_on_can(FDCAN_DEBUG_ID_301, S, can_data, FDCAN_DLC_BYTES); 
+}
+
+void send_on_302()
+{
+  uint8_t can_data[8] = {0};
+  can_data[0] = (uint8_t)((uint16_t)(rtU.MtrPos_rad * 100.0) & 0x00FF);
+  can_data[1] = (uint8_t)(((uint16_t)(rtU.MtrPos_rad * 100.0) & 0xFF00) >> 8);
+  can_data[2] = (uint8_t)rtU.Torque;
+  can_data[3] = (uint8_t)((uint16_t)(foc.speed_sense * SPEED_PU_TO_RPM) & 0x00FF);
+  can_data[4] = (uint8_t)(((uint16_t)(foc.speed_sense * SPEED_PU_TO_RPM) & 0xFF00) >> 8);
+  _fdcan_transmit_on_can(FDCAN_DEBUG_ID_302, S, can_data, FDCAN_DLC_BYTES);
 }
 
 void send_on_6F0(uint8_t* UIID_Arr)
@@ -276,37 +336,33 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
   /* Prevent unused argument(s) compilation warning */
   
   if(htim->Instance==TIM17) {
+  //turn led red/green depending on drive status
+    if(motorControl.drive.check == DRIVE_DISABLE) {
+      //rgb gpio
+      HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
+    }
+    else if(motorControl.drive.check == DRIVE_ENABLE) {
+      //  rgb gpio
+      HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
 
-        
-        //turn led red/green depending on drive status
-        if(motorControl.drive.check == DRIVE_DISABLE) {
-          //rgb gpio
-          HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_SET);
-          HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
-          HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
-        }
-        else if(motorControl.drive.check == DRIVE_ENABLE) {
-          //  rgb gpio
-          HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_RESET);
-          HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
-          HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
 
-          HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
+    }
 
-        }
+    //motor angle,current
+    READ_MOTOR_POSITION();
 
-          rtU.Torque = map(analog.bufferData[THROTTLE], 8900.0, 40000.0, 0.0, 80.0);
+    FOC_READ_MOTOR_POSITION();
 
-          //motor angle,current
-          READ_MOTOR_POSITION();
+    READ_MOTOR_PHASE_CURRENT();
 
-          FOC_READ_MOTOR_POSITION();
+    Pegasus_MBD_step();
 
-          READ_MOTOR_PHASE_CURRENT();
-
-          Pegasus_MBD_step();
-
-          FOC_SPACE_VECTOR_MODULATION();
+    FOC_SPACE_VECTOR_MODULATION();
   }
 }
 
