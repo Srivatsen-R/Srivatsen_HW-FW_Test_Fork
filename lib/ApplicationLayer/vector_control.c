@@ -128,7 +128,7 @@ void FOC_READ_MOTOR_POSITION(void)
     foc.rotor_angle =  READ_POSITION(motorControl.encoder.value);
     foc.rotor_speed =  READ_SPEED(foc.rotor_angle);
 
-    if(foc.rotor_speed<0.0){foc.rotor_speed=0.0;}
+    // if(foc.rotor_speed<0.0){foc.rotor_speed=0.0;}
     foc.rotor_speed_filtered = SPEED_FILTER(foc.rotor_speed,foc.rotor_speed_prev,foc.rotor_speed_filtered_prev); 
     foc.speed_sense = (foc.rotor_speed_filtered)*PU*1.0;
     if(foc.speed_sense>MAX_PU_SPEED){foc.speed_sense=MAX_PU_SPEED;} 
@@ -139,15 +139,15 @@ void FOC_READ_MOTOR_POSITION(void)
     //Synchronous Speed Calculation
     foc.sync_speed = CALCULATE_SYNC_SPEED(foc.slip_speed,foc.rotor_speed_filtered);//sync speed
 
-    // if(foc.speed_sense*SPEED_PU_TO_RPM<10.0)
-    // { 
-    //     angle_mech = (100-Duty)*DUTY_TO_RADIAN;
+    if((foc.speed_sense * -1.0 * SPEED_PU_TO_RPM)<10.0)
+    { 
+        angle_mech = (100-Duty)*DUTY_TO_RADIAN;
 
-    //     // angle_mech = (Duty)*DUTY_TO_RADIAN; //mech angle
-    //     foc.rho_prev = POLEPAIRS*angle_mech; // elec angle
-    //     if (angle_mech>2.095 && angle_mech<4.1866){foc.rho_prev = foc.rho_prev - 6.28;}
-    //     else  if(angle_mech>=4.1886){foc.rho_prev = foc.rho_prev - 12.56;}
-    // }
+        // angle_mech = (Duty)*DUTY_TO_RADIAN; //mech angle
+        foc.rho_prev = POLEPAIRS*angle_mech; // elec angle
+        if (angle_mech>2.095 && angle_mech<4.1866){foc.rho_prev = foc.rho_prev - 6.28;}
+        else  if(angle_mech>=4.1886){foc.rho_prev = foc.rho_prev - 12.56;}
+    }
 
     if(reset_flag == 1)
     {
@@ -160,7 +160,7 @@ void FOC_READ_MOTOR_POSITION(void)
     if (foc.rho>=6.28){foc.rho=0.0;} 
     else if (foc.rho<=-6.28){foc.rho=0.0;}
 
-    rtU.MtrPos_rad = foc.rho;
+    rtU.MtrPos_rad = foc.rho + ANGLE_OFFSET_FW;
 
     foc.rotor_speed_prev          = foc.rotor_speed;  
     foc.rotor_speed_filtered_prev = foc.rotor_speed_filtered;
@@ -171,9 +171,39 @@ void FOC_READ_MOTOR_POSITION(void)
 void FOC_SPACE_VECTOR_MODULATION()
 {
             //PWM DUTY VARIABLES
-            foc.pwm_a = (PWM_CONST_2*(rtY.Va / 65.0))  + PWM_CONST_1;
-            foc.pwm_b = (PWM_CONST_2*(rtY.Vb / 65.0))  + PWM_CONST_1;
-            foc.pwm_c = (PWM_CONST_2*(rtY.Vc / 65.0))  + PWM_CONST_1;   
+            if (rtY.FOC_Out.Normalized_Va > UL)
+                rtY.FOC_Out.Normalized_Va = UL;
+            else if (rtY.FOC_Out.Normalized_Va < LL)
+                rtY.FOC_Out.Normalized_Va = LL;
+            
+            if (rtY.FOC_Out.Normalized_Vb > UL)
+                rtY.FOC_Out.Normalized_Vb = UL;
+            else if (rtY.FOC_Out.Normalized_Vb < LL)
+                rtY.FOC_Out.Normalized_Vb = LL;
+
+            if (rtY.FOC_Out.Normalized_Vc > UL)
+                rtY.FOC_Out.Normalized_Vc = UL;
+            else if (rtY.FOC_Out.Normalized_Vc < LL)
+                rtY.FOC_Out.Normalized_Vc = LL;
+            
+            foc.pwm_a = (PWM_CONST_2*(rtY.FOC_Out.Normalized_Va))  + PWM_CONST_1;
+            foc.pwm_b = (PWM_CONST_2*(rtY.FOC_Out.Normalized_Vb))  + PWM_CONST_1;
+            foc.pwm_c = (PWM_CONST_2*(rtY.FOC_Out.Normalized_Vc))  + PWM_CONST_1;   
+
+            if (foc.pwm_a < 0)
+                foc.pwm_a = 0;
+            else if (foc.pwm_a > 2500)
+                foc.pwm_a = 2500;
+            
+            if (foc.pwm_b < 0)
+                foc.pwm_b = 0;
+            else if (foc.pwm_b > 2500)
+                foc.pwm_b = 2500;
+            
+            if (foc.pwm_c < 0)
+                foc.pwm_c = 0;
+            else if (foc.pwm_c > 2500)
+                foc.pwm_c = 2500;
 
             //Modulation  Techniques
             //SPWM(foc.pwm_a,foc.pwm_b,foc.pwm_c);

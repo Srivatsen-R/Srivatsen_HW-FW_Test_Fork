@@ -173,7 +173,7 @@ int main(void) {
 
     ANALOG_READING();
 
-    if (time_count - prev_time >= 11.0)
+    if (time_count - prev_time >= 500.0)
     {
       send_on_300();
       send_on_301();
@@ -185,6 +185,9 @@ int main(void) {
     if (time_count - prev_thr_time >= 100)
     {
       rtU.Torque = map(analog.bufferData[THROTTLE], 8900.0, 40000.0, 0.0, 80.0);
+
+      if (rtU.Torque < 0.0)
+        rtU.Torque = 0.0;
 
       prev_thr_time = time_count;
     }
@@ -211,22 +214,22 @@ void set_interrupt_flag(uint8_t value){
 void send_on_300()
 {
   uint8_t can_data[8] = {0};
-  can_data[0] = (uint8_t)(rtY.Va + 60.0);
-  can_data[1] = (uint8_t)(rtY.Vb + 60.0);
-  can_data[2] = (uint8_t)(rtY.Vc + 60.0);
-  can_data[3] = (uint8_t)rtY.Iq_Refer;
-  can_data[4] = (uint8_t)((uint16_t)(rtY.Vq_Calculated + 10000.0) & 0x00FF);
-  can_data[5] = (uint8_t)(((uint16_t)(rtY.Vq_Calculated + 10000.0) & 0xFF00) >> 8);
-  can_data[6] = (uint8_t)((uint16_t)(rtY.Vd_Calculated + 10000.0) & 0x00FF);
-  can_data[7] = (uint8_t)(((uint16_t)(rtY.Vd_Calculated + 10000.0) & 0xFF00) >> 8);
+  can_data[0] = (uint8_t)(rtY.FOC_Out.Va + 60.0);
+  can_data[1] = (uint8_t)(rtY.FOC_Out.Vb + 60.0);
+  can_data[2] = (uint8_t)(rtY.FOC_Out.Vc + 60.0);
+  can_data[3] = (uint8_t)rtY.FOC_Out.Iq_Refer;
+  can_data[4] = (uint8_t)((uint16_t)(rtY.FOC_Out.Vq_Calculated + 10000.0) & 0x00FF);
+  can_data[5] = (uint8_t)(((uint16_t)(rtY.FOC_Out.Vq_Calculated + 10000.0) & 0xFF00) >> 8);
+  can_data[6] = (uint8_t)((uint16_t)(rtY.FOC_Out.Vd_Calculated + 10000.0) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(rtY.FOC_Out.Vd_Calculated + 10000.0) & 0xFF00) >> 8);
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_300, S, can_data, FDCAN_DLC_BYTES);
 }
 
 void send_on_301()
 {
   uint8_t can_data[8] = {0};
-  can_data[0] = (uint8_t)rtY.Id_Refer;
-  can_data[1] = (uint8_t)rtY.Iq_Calculated;
+  can_data[0] = (uint8_t)rtY.FOC_Out.Id_Refer;
+  can_data[1] = (uint8_t)rtY.FOC_Out.Iq_Calculated;
   can_data[2] = (uint8_t)((uint16_t)(rtU.I_a + 400.0) & 0x00FF);
   can_data[3] = (uint8_t)(((uint16_t)(rtU.I_a + 400.0) & 0xFF00) >> 8);
   can_data[4] = (uint8_t)((uint16_t)(rtU.I_b + 400.0) & 0x00FF);
@@ -239,11 +242,13 @@ void send_on_301()
 void send_on_302()
 {
   uint8_t can_data[8] = {0};
-  can_data[0] = (uint8_t)((uint16_t)(rtU.MtrPos_rad * 100.0) & 0x00FF);
-  can_data[1] = (uint8_t)(((uint16_t)(rtU.MtrPos_rad * 100.0) & 0xFF00) >> 8);
+  can_data[0] = (uint8_t)((uint16_t)((foc.rho + 2 * PI) * 100.0) & 0x00FF);
+  can_data[1] = (uint8_t)(((uint16_t)((foc.rho + 2 * PI) * 100.0) & 0xFF00) >> 8);
   can_data[2] = (uint8_t)rtU.Torque;
-  can_data[3] = (uint8_t)((uint16_t)(foc.speed_sense * SPEED_PU_TO_RPM) & 0x00FF);
-  can_data[4] = (uint8_t)(((uint16_t)(foc.speed_sense * SPEED_PU_TO_RPM) & 0xFF00) >> 8);
+  can_data[3] = (uint8_t)((uint16_t)((foc.speed_sense * -1.0) * SPEED_PU_TO_RPM) & 0x00FF);
+  can_data[4] = (uint8_t)(((uint16_t)((foc.speed_sense * -1.0) * SPEED_PU_TO_RPM) & 0xFF00) >> 8);
+  can_data[5] = (uint8_t)(((uint16_t)(rtU.Thresholds.BusVoltage_V * 100.0)) & 0x00FF);
+  can_data[6] = (uint8_t)(((uint16_t)(rtU.Thresholds.BusVoltage_V * 100.0) & 0xFF00) >> 8);
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_302, S, can_data, FDCAN_DLC_BYTES);
 }
 

@@ -90,8 +90,8 @@ void READ_MOTOR_PHASE_CURRENT()
     a_current = temp_a/CURRENT_AVG_FACTOR;
     b_current = temp_b/CURRENT_AVG_FACTOR;
 
-    rtU.I_a = (a_current * 3.3 * 400.0) / 65535.0;
-    rtU.I_b = (b_current * 3.3 * 400.0) / 65535.0;
+    rtU.I_a = (a_current * 3.297 * 400.0) / 65535.0;
+    rtU.I_b = (b_current * 3.297 * 400.0) / 65535.0;
     rtU.I_c = (-rtU.I_a) + (-rtU.I_b);
 
     temp_a=0;
@@ -101,8 +101,6 @@ void READ_MOTOR_PHASE_CURRENT()
 void READ_MOTOR_POSITION()
 {
   motorControl.encoder.value =  TIM2->CNT;   // Encoder Count 
-  encoder_a_state = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_15);
-  encoder_b_state = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3);
 }
 
 

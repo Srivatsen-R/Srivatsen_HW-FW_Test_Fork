@@ -135,13 +135,13 @@ typedef struct foc_t {
 #define VQ_LIMIT                            28670.25
 #define VQ_LIMIT_FACTOR                     1.05
 
-#define ANGLE_OFFSET_FW                            0.610865//V10
-#define ANGLE_OFFSET_RW                           -1.047//V10
+// #define ANGLE_OFFSET_FW                            0.610865//V10
+// #define ANGLE_OFFSET_RW                           -1.047//V10
 
 // #define ANGLE_OFFSET_FW                           -1.308996//V3
 // #define ANGLE_OFFSET_RW                            4.188790//V3
 
-// #define ANGLE_OFFSET_FW                            4.572762//V1
+#define ANGLE_OFFSET_FW                               3.6633//V1
 // #define ANGLE_OFFSET_RW                           -3.071779//V1
 
 // #define ANGLE_OFFSET_FW                            2.44346//V8 LFP
@@ -207,7 +207,7 @@ typedef struct foc_t {
 #define SPEED_FILTER_CONSTANT_1             ((2.0*T_F_ROTOR_SPEED-T_S)/(2.0*T_F_ROTOR_SPEED+T_S)) // Constant to filter speed
 #define SPEED_FILTER_CONSTANT_2             (T_S/(2.0*T_F_ROTOR_SPEED+T_S)) // Constant to filter speed
 #define PWM_CONST_1                         0.5*T_PRD        // CONSTANT FOR PWM Modulation
-#define PWM_CONST_2                         (0.5*T_PRD) // CONSTANT FOR PWM Modulation
+#define PWM_CONST_2                         (0.5*T_PRD)/32767.0 // CONSTANT FOR PWM Modulation
 #define ROTOR_TIME_CONSTANT_NEW             0.11             // ROTOR TIME CONSTANT L/R
 #define IMR_CONST1                          (2.0*ROTOR_TIME_CONSTANT_NEW-T_S)/(2.0*ROTOR_TIME_CONSTANT_NEW+T_S) // MAGNETIZING CURRENT CONSTANT
 #define IMR_CONST2                          T_S/(2.0*ROTOR_TIME_CONSTANT_NEW+T_S) // MAGNETIZING CURRENT CONSTANT
@@ -219,7 +219,7 @@ typedef struct foc_t {
 #define PWM_DUTY_ADD                        (0.5 * T_PRD) // PWM MODULATION CONSTANT
 #define IMR_INCR                            0.016//0.0005*MAGNETISING_CURRENT_REF
 #define DIV_FACTOR_CURRENT                  1//8
-#define OFFSET_CURRENT                      32767/DIV_FACTOR_CURRENT             // ADC PHASE CURRENT OFFSET FOR 30000 ~ 1.5V
+#define OFFSET_CURRENT                      32202/DIV_FACTOR_CURRENT             // ADC PHASE CURRENT OFFSET FOR 30000 ~ 1.5V
 #define RAMP_UP                             0.05           // RAMP UP CONSTANT
 #define KP_IMR                              2.0           // GAIN CONSTANT
 #define KI_IMR                              20.0          // INTG CONSTANT

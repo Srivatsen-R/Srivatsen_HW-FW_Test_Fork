@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'Pegasus_MBD'.
  *
- * Model version                  : 1.137
+ * Model version                  : 1.168
  * Simulink Coder version         : 9.8 (R2022b) 13-May-2022
- * C/C++ source code generated on : Mon May 20 14:05:05 2024
+ * C/C++ source code generated on : Sun Jun 16 13:23:03 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM 7
@@ -17,9 +17,19 @@
  */
 
 #include "Pegasus_MBD.h"
-#include <math.h>
 #include "rtwtypes.h"
 #include "vector_control.h"
+#include <math.h>
+
+/* Named constants for Chart: '<S6>/Va_Saturation2' */
+#define IN_Lobby                       ((uint8_T)1U)
+#define IN_Lobby1                      ((uint8_T)2U)
+#define IN_Lobby2                      ((uint8_T)3U)
+
+/* Named constants for Chart: '<S6>/Iq_Refer_Saturation1' */
+#define IN_Lobby1_j                    ((uint8_T)2U)
+#define IN_Lobby2_f                    ((uint8_T)3U)
+#define IN_Lobby_k                     ((uint8_T)1U)
 
 /* Block signals and states (default storage) */
 DW rtDW;
@@ -30,35 +40,84 @@ ExtU rtU;
 /* External outputs (root outports fed by signals with default storage) */
 ExtY rtY;
 
+/* Real-time model */
+static RT_MODEL rtM_;
+RT_MODEL *const rtM = &rtM_;
+static void Va_Saturation2_Init(real32_T *rty_Out);
+static void Va_Saturation2(real32_T rtu_In, real32_T rtu_BusVoltage_V, real32_T *
+  rty_Out, DW_Va_Saturation2 *localDW);
+
+/*
+ * System initialize for atomic system:
+ *    '<S6>/Va_Saturation2'
+ *    '<S6>/Va_Saturation3'
+ *    '<S6>/Va_Saturation4'
+ */
+static void Va_Saturation2_Init(real32_T *rty_Out)
+{
+  *rty_Out = 0.0F;
+}
+
+/*
+ * Output and update for atomic system:
+ *    '<S6>/Va_Saturation2'
+ *    '<S6>/Va_Saturation3'
+ *    '<S6>/Va_Saturation4'
+ */
+static void Va_Saturation2(real32_T rtu_In, real32_T rtu_BusVoltage_V, real32_T *
+  rty_Out, DW_Va_Saturation2 *localDW)
+{
+  /* Chart: '<S6>/Va_Saturation2' */
+  if ((uint32_T)localDW->is_active_c1_Pegasus_MBD == 0U) {
+    localDW->is_active_c1_Pegasus_MBD = 1U;
+    localDW->is_c1_Pegasus_MBD = IN_Lobby;
+  } else {
+    switch (localDW->is_c1_Pegasus_MBD) {
+     case IN_Lobby:
+      if (rtu_In <= -rtu_BusVoltage_V) {
+        localDW->is_c1_Pegasus_MBD = IN_Lobby1;
+      } else if (rtu_In >= rtu_BusVoltage_V) {
+        localDW->is_c1_Pegasus_MBD = IN_Lobby2;
+      } else {
+        *rty_Out = rtu_In;
+      }
+      break;
+
+     case IN_Lobby1:
+      if (rtu_In > -rtu_BusVoltage_V) {
+        localDW->is_c1_Pegasus_MBD = IN_Lobby;
+      } else {
+        *rty_Out = -rtu_BusVoltage_V;
+      }
+      break;
+
+     default:
+      /* case IN_Lobby2: */
+      if (rtu_In < rtu_BusVoltage_V) {
+        localDW->is_c1_Pegasus_MBD = IN_Lobby;
+      } else {
+        *rty_Out = rtu_BusVoltage_V;
+      }
+      break;
+    }
+  }
+
+  /* End of Chart: '<S6>/Va_Saturation2' */
+}
+
 /* Model step function */
 void Pegasus_MBD_step(void)
 {
-  real_T rtb_NProdOut;
-  real_T rtb_NProdOut_n;
-  real_T rtb_Saturation2;
-  real_T rtb_Sum;
-  real_T rtb_Sum_b;
-  real_T rtb_Switch_idx_0;
-  real_T rtb_Switch_idx_1;
-  real_T rtb_Switch_k;
-  real_T tmp;
-  real32_T rtb_Add3;
-  real32_T rtb_DataTypeConversion7;
-  real32_T rtb_MtrPos_rad;
-  real32_T rtb_Saturation;
-  real32_T rtb_Sin_tmp;
-  real32_T rtb_Switch_n_idx_0;
-
-  /* Gain: '<S2>/Gain' incorporates:
-   *  Inport: '<Root>/MtrPos_rad'
-   */
-  rtb_MtrPos_rad = 3.0F * rtU.MtrPos_rad;
-
-  /* Trigonometry: '<S6>/Sin' incorporates:
-   *  BusCreator: '<S2>/Bus Creator1'
-   *  Trigonometry: '<S6>/Sin1'
-   */
-  rtb_Sin_tmp = sinf(rtb_MtrPos_rad);
+  real32_T rtb_Abs1;
+  real32_T rtb_Abs1_m;
+  real32_T rtb_Abs_h;
+  real32_T rtb_NProdOut;
+  real32_T rtb_NProdOut_n;
+  real32_T rtb_Product;
+  real32_T rtb_Sum;
+  real32_T rtb_Sum_b;
+  real32_T rtb_Switch_idx_0;
+  real32_T rtb_Switch_idx_1;
 
   /* Outputs for Atomic SubSystem: '<S6>/Clarke Transform' */
   /* Gain: '<S7>/one_by_sqrt3' incorporates:
@@ -66,111 +125,157 @@ void Pegasus_MBD_step(void)
    *  Inport: '<Root>/I_b'
    *  Sum: '<S7>/a_plus_2b'
    */
-  rtb_DataTypeConversion7 = (rtU.I_a + rtU.I_b + rtU.I_b) * 0.577350259F;
+  rtb_Abs_h = (rtU.I_a + rtU.I_b + rtU.I_b) * 0.577350259F;
 
   /* End of Outputs for SubSystem: '<S6>/Clarke Transform' */
 
+  /* Sum: '<S2>/Add' incorporates:
+   *  Constant: '<S2>/Constant'
+   *  Gain: '<S2>/Gain'
+   *  Inport: '<Root>/MtrPos_rad'
+   */
+  rtb_Abs1_m = (rtU.MtrPos_rad) - -3.14159274F;
+
+  /* Trigonometry: '<S6>/Sin' incorporates:
+   *  Trigonometry: '<S6>/Sin1'
+   */
+  rtb_Abs1 = sinf(rtb_Abs1_m);
+
   /* Trigonometry: '<S6>/Cos' incorporates:
-   *  BusCreator: '<S2>/Bus Creator1'
    *  Trigonometry: '<S6>/Cos1'
    */
-  rtb_MtrPos_rad = cosf(rtb_MtrPos_rad);
+  rtb_Abs1_m = cosf(rtb_Abs1_m);
 
   /* Outputs for Atomic SubSystem: '<S6>/Park Transform' */
   /* Outputs for Atomic SubSystem: '<S6>/Clarke Transform' */
-  /* Switch: '<S110>/Switch' incorporates:
+  /* Switch: '<S117>/Switch' incorporates:
    *  AlgorithmDescriptorDelegate generated from: '<S7>/a16'
    *  Inport: '<Root>/I_a'
-   *  Product: '<S12>/acos'
-   *  Product: '<S12>/asin'
-   *  Product: '<S12>/bcos'
-   *  Product: '<S12>/bsin'
-   *  Sum: '<S12>/sum_Ds'
-   *  Sum: '<S12>/sum_Qs'
+   *  Product: '<S16>/acos'
+   *  Product: '<S16>/asin'
+   *  Product: '<S16>/bcos'
+   *  Product: '<S16>/bsin'
+   *  Sum: '<S16>/sum_Ds'
+   *  Sum: '<S16>/sum_Qs'
    *  Trigonometry: '<S6>/Cos'
    *  Trigonometry: '<S6>/Sin'
    */
-  rtb_Switch_n_idx_0 = (rtU.I_a * rtb_MtrPos_rad) + (rtb_DataTypeConversion7 *
-    rtb_Sin_tmp);
-  rtb_DataTypeConversion7 = (rtb_DataTypeConversion7 * rtb_MtrPos_rad) -
-    (rtU.I_a * rtb_Sin_tmp);
+  rtb_Switch_idx_0 = (rtU.I_a * rtb_Abs1_m) + (rtb_Abs_h * rtb_Abs1);
+  rtb_Switch_idx_1 = (rtb_Abs_h * rtb_Abs1_m) - (rtU.I_a * rtb_Abs1);
 
   /* End of Outputs for SubSystem: '<S6>/Clarke Transform' */
 
-  /* Product: '<S96>/NProd Out' incorporates:
-   *  AlgorithmDescriptorDelegate generated from: '<S12>/a16'
+  /* BusCreator: '<S6>/Bus Creator' incorporates:
+   *  AlgorithmDescriptorDelegate generated from: '<S16>/a16'
+   *  Outport: '<Root>/FOC_Out'
+   */
+  rtY.FOC_Out.Id_Calculated = rtb_Switch_idx_0;
+  rtY.FOC_Out.Iq_Calculated = rtb_Switch_idx_1;
+
+  /* Sum: '<S6>/Add2' incorporates:
+   *  AlgorithmDescriptorDelegate generated from: '<S16>/a16'
    *  Constant: '<S6>/Constant3'
-   *  DiscreteIntegrator: '<S88>/Filter'
+   */
+  rtb_Abs_h = 0.0F - rtb_Switch_idx_0;
+
+  /* Product: '<S103>/NProd Out' incorporates:
+   *  AlgorithmDescriptorDelegate generated from: '<S16>/a16'
+   *  Constant: '<S6>/Constant3'
+   *  DiscreteIntegrator: '<S95>/Filter'
    *  Inport: '<Root>/FilterCoefficient'
    *  Inport: '<Root>/Gain_Dd'
-   *  Product: '<S87>/DProd Out'
+   *  Product: '<S94>/DProd Out'
    *  Sum: '<S6>/Add2'
-   *  Sum: '<S88>/SumD'
+   *  Sum: '<S95>/SumD'
    */
-  rtb_NProdOut = (((real_T)((real32_T)(0.0F - rtb_Switch_n_idx_0)) * rtU.Dd) -
-                  rtDW.Filter_DSTATE) * rtU.FilterCoefficient;
+  rtb_NProdOut = (((0.0F - rtb_Switch_idx_0) * rtU.Dd) - rtDW.Filter_DSTATE) *
+    rtU.FilterCoefficient;
 
-  /* Sum: '<S102>/Sum' incorporates:
-   *  AlgorithmDescriptorDelegate generated from: '<S12>/a16'
+  /* Sum: '<S109>/Sum' incorporates:
+   *  AlgorithmDescriptorDelegate generated from: '<S16>/a16'
    *  Constant: '<S6>/Constant3'
-   *  DiscreteIntegrator: '<S93>/Integrator'
+   *  DiscreteIntegrator: '<S100>/Integrator'
    *  Inport: '<Root>/Gain_Pd'
-   *  Product: '<S98>/PProd Out'
+   *  Product: '<S105>/PProd Out'
    *  Sum: '<S6>/Add2'
    */
-  rtb_Sum = ((real_T)((real32_T)(0.0F - rtb_Switch_n_idx_0)) * rtU.Pd) +
-    rtDW.Integrator_DSTATE + rtb_NProdOut;
+  rtb_Sum = ((0.0F - rtb_Switch_idx_0) * rtU.Pd) + rtDW.Integrator_DSTATE +
+    rtb_NProdOut;
 
   /* End of Outputs for SubSystem: '<S6>/Park Transform' */
-
-  /* Outport: '<Root>/Vd_Calculated' */
-  rtY.Vd_Calculated = rtb_Sum;
 
   /* Product: '<S6>/Product' incorporates:
    *  Inport: '<Root>/Iq_Torque_ratio'
    *  Inport: '<Root>/Torque'
    */
-  rtb_Saturation = rtU.Torque * rtU.Iq_Torque_ratio;
+  rtb_Product = rtU.Torque * rtU.Iq_Torque_ratio;
 
-  /* Saturate: '<S6>/Saturation' */
-  if (rtb_Saturation > 40.0F) {
-    rtb_Saturation = 40.0F;
-  } else if (rtb_Saturation < -40.0F) {
-    rtb_Saturation = -40.0F;
+  /* Chart: '<S6>/Iq_Refer_Saturation1' incorporates:
+   *  Inport: '<Root>/Thresholds'
+   */
+  if ((uint32_T)rtDW.is_active_c5_Pegasus_MBD == 0U) {
+    rtDW.is_active_c5_Pegasus_MBD = 1U;
+    rtDW.is_c5_Pegasus_MBD = IN_Lobby_k;
   } else {
-    /* no actions */
+    switch (rtDW.is_c5_Pegasus_MBD) {
+     case IN_Lobby_k:
+      if (rtb_Product <= rtU.Thresholds.Iq_min_limit_A) {
+        rtDW.is_c5_Pegasus_MBD = IN_Lobby1_j;
+      } else if (rtb_Product >= rtU.Thresholds.Iq_max_limit_A) {
+        rtDW.is_c5_Pegasus_MBD = IN_Lobby2_f;
+      } else {
+        rtDW.Out_m2 = rtb_Product;
+      }
+      break;
+
+     case IN_Lobby1_j:
+      if (rtb_Product > rtU.Thresholds.Iq_min_limit_A) {
+        rtDW.is_c5_Pegasus_MBD = IN_Lobby_k;
+      } else {
+        rtDW.Out_m2 = rtU.Thresholds.Iq_min_limit_A;
+      }
+      break;
+
+     default:
+      /* case IN_Lobby2: */
+      if (rtb_Product < rtU.Thresholds.Iq_max_limit_A) {
+        rtDW.is_c5_Pegasus_MBD = IN_Lobby_k;
+      } else {
+        rtDW.Out_m2 = rtU.Thresholds.Iq_max_limit_A;
+      }
+      break;
+    }
   }
 
-  /* End of Saturate: '<S6>/Saturation' */
+  /* End of Chart: '<S6>/Iq_Refer_Saturation1' */
 
   /* Outputs for Atomic SubSystem: '<S6>/Park Transform' */
   /* Sum: '<S6>/Add3' incorporates:
-   *  AlgorithmDescriptorDelegate generated from: '<S12>/a16'
+   *  AlgorithmDescriptorDelegate generated from: '<S16>/a16'
    */
-  rtb_Add3 = rtb_Saturation - rtb_DataTypeConversion7;
+  rtb_Product = rtDW.Out_m2 - rtb_Switch_idx_1;
 
   /* End of Outputs for SubSystem: '<S6>/Park Transform' */
 
-  /* Product: '<S48>/NProd Out' incorporates:
-   *  DiscreteIntegrator: '<S40>/Filter'
+  /* Product: '<S55>/NProd Out' incorporates:
+   *  DiscreteIntegrator: '<S47>/Filter'
    *  Inport: '<Root>/FilterCoefficient'
    *  Inport: '<Root>/Gain_Dq'
-   *  Product: '<S39>/DProd Out'
-   *  Sum: '<S40>/SumD'
+   *  Product: '<S46>/DProd Out'
+   *  Sum: '<S47>/SumD'
    */
-  rtb_NProdOut_n = (((real_T)rtb_Add3 * rtU.Dq) - rtDW.Filter_DSTATE_f) *
+  rtb_NProdOut_n = ((rtb_Product * rtU.Dq) - rtDW.Filter_DSTATE_f) *
     rtU.FilterCoefficient;
 
-  /* Sum: '<S54>/Sum' incorporates:
-   *  DiscreteIntegrator: '<S45>/Integrator'
+  /* Sum: '<S61>/Sum' incorporates:
+   *  DiscreteIntegrator: '<S52>/Integrator'
    *  Inport: '<Root>/Gain_Pq'
-   *  Product: '<S50>/PProd Out'
+   *  Product: '<S57>/PProd Out'
    */
-  rtb_Sum_b = ((real_T)rtb_Add3 * rtU.Pq) + rtDW.Integrator_DSTATE_e +
-    rtb_NProdOut_n;
+  rtb_Sum_b = (rtb_Product * rtU.Pq) + rtDW.Integrator_DSTATE_e + rtb_NProdOut_n;
 
   /* Outputs for Atomic SubSystem: '<S6>/Inverse Park Transform' */
-  /* Switch: '<S13>/Switch' incorporates:
+  /* Switch: '<S20>/Switch' incorporates:
    *  Product: '<S9>/dcos'
    *  Product: '<S9>/dsin'
    *  Product: '<S9>/qcos'
@@ -178,220 +283,205 @@ void Pegasus_MBD_step(void)
    *  Sum: '<S9>/sum_alpha'
    *  Sum: '<S9>/sum_beta'
    */
-  rtb_Switch_idx_0 = (rtb_Sum * (real_T)rtb_MtrPos_rad) - (rtb_Sum_b * (real_T)
-    rtb_Sin_tmp);
-  rtb_Switch_idx_1 = (rtb_Sum_b * (real_T)rtb_MtrPos_rad) + (rtb_Sum * (real_T)
-    rtb_Sin_tmp);
+  rtb_Switch_idx_0 = (rtb_Sum * rtb_Abs1_m) - (rtb_Sum_b * rtb_Abs1);
+  rtb_Switch_idx_1 = (rtb_Sum_b * rtb_Abs1_m) + (rtb_Sum * rtb_Abs1);
+
+  /* Chart: '<S6>/Va_Saturation2' incorporates:
+   *  AlgorithmDescriptorDelegate generated from: '<S9>/a16'
+   *  Inport: '<Root>/Thresholds'
+   */
+  Va_Saturation2(rtb_Switch_idx_0, rtU.Thresholds.BusVoltage_V, &rtDW.Out_d,
+                 &rtDW.sf_Va_Saturation2);
 
   /* Gain: '<S8>/one_by_two' incorporates:
    *  AlgorithmDescriptorDelegate generated from: '<S9>/a16'
    */
-  rtb_Sum = 0.5 * rtb_Switch_idx_0;
+  rtb_Abs1_m = 0.5F * rtb_Switch_idx_0;
 
   /* Gain: '<S8>/sqrt3_by_two' incorporates:
    *  AlgorithmDescriptorDelegate generated from: '<S9>/a16'
    */
-  rtb_Switch_idx_1 *= 0.8660254037844386;
+  rtb_Abs1 = 0.866025388F * rtb_Switch_idx_1;
 
-  /* Saturate: '<S6>/Saturation1' incorporates:
-   *  AlgorithmDescriptorDelegate generated from: '<S9>/a16'
-   */
-  if (rtb_Switch_idx_0 > 60.0) {
-    rtb_Switch_idx_0 = 60.0;
-  } else if (rtb_Switch_idx_0 < -60.0) {
-    rtb_Switch_idx_0 = -60.0;
-  } else {
-    /* no actions */
-  }
-
-  /* End of Saturate: '<S6>/Saturation1' */
   /* End of Outputs for SubSystem: '<S6>/Inverse Park Transform' */
 
-  /* Sum: '<S8>/add_b' */
-  rtb_Saturation2 = rtb_Switch_idx_1 - rtb_Sum;
-
-  /* Saturate: '<S6>/Saturation2' */
-  if (rtb_Saturation2 > 60.0) {
-    rtb_Saturation2 = 60.0;
-  } else if (rtb_Saturation2 < -60.0) {
-    rtb_Saturation2 = -60.0;
-  } else {
-    /* no actions */
-  }
-
-  /* End of Saturate: '<S6>/Saturation2' */
-
-  /* Outport: '<Root>/Vb' */
-  rtY.Vb = rtb_Saturation2;
-
-  /* Product: '<S4>/Divide' incorporates:
-   *  DataTypeConversion: '<S1>/Data Type Conversion7'
+  /* Chart: '<S6>/Va_Saturation3' incorporates:
    *  Inport: '<Root>/Thresholds'
+   *  Sum: '<S8>/add_b'
    */
-  rtb_Switch_k = rtb_Saturation2 / (real_T)((real32_T)
-    rtU.Thresholds.MaxBusVoltage_V);
+  Va_Saturation2(rtb_Abs1 - rtb_Abs1_m, rtU.Thresholds.BusVoltage_V, &rtDW.Out_m,
+                 &rtDW.sf_Va_Saturation3);
 
-  /* Switch: '<S4>/Switch' incorporates:
-   *  Constant: '<S4>/Zero'
-   */
-  if (rtb_Saturation2 > 0.0) {
-    tmp = rtb_Switch_k;
-  } else {
-    tmp = 0.0;
-  }
-
-  /* Outport: '<Root>/Duty_b+' incorporates:
-   *  Abs: '<S4>/Abs'
-   *  Switch: '<S4>/Switch'
-   */
-  rtY.Duty_b = fabs(tmp);
-
-  /* Switch: '<S4>/Switch1' incorporates:
-   *  Constant: '<S4>/Zero'
-   *  Gain: '<S4>/Gain'
-   */
-  if (-rtb_Saturation2 <= 0.0) {
-    rtb_Switch_k = 0.0;
-  }
-
-  /* Outport: '<Root>/Duty_b-' incorporates:
-   *  Abs: '<S4>/Abs1'
-   *  Switch: '<S4>/Switch1'
-   */
-  rtY.Duty_b_a = fabs(rtb_Switch_k);
-
-  /* Product: '<S3>/Divide' incorporates:
-   *  DataTypeConversion: '<S1>/Data Type Conversion7'
+  /* Chart: '<S6>/Va_Saturation4' incorporates:
    *  Inport: '<Root>/Thresholds'
+   *  Sum: '<S8>/add_c'
    */
-  rtb_Saturation2 = rtb_Switch_idx_0 / (real_T)((real32_T)
-    rtU.Thresholds.MaxBusVoltage_V);
+  Va_Saturation2(0.0F - rtb_Abs1_m - rtb_Abs1, rtU.Thresholds.BusVoltage_V,
+                 &rtDW.Out, &rtDW.sf_Va_Saturation4);
+
+  /* BusCreator: '<S6>/Bus Creator' incorporates:
+   *  Constant: '<S6>/Constant3'
+   *  Gain: '<S11>/Gain'
+   *  Gain: '<S12>/Gain'
+   *  Gain: '<S13>/Gain'
+   *  Inport: '<Root>/Thresholds'
+   *  Outport: '<Root>/FOC_Out'
+   *  Product: '<S11>/Divide'
+   *  Product: '<S12>/Divide'
+   *  Product: '<S13>/Divide'
+   */
+  rtY.FOC_Out.Id_Refer = 0.0F;
+  rtY.FOC_Out.Iq_Refer = rtDW.Out_m2;
+  rtY.FOC_Out.Vd_Calculated = rtb_Sum;
+  rtY.FOC_Out.Vq_Calculated = rtb_Sum_b;
+  rtY.FOC_Out.Va = rtDW.Out_d;
+  rtY.FOC_Out.Vb = rtDW.Out_m;
+  rtY.FOC_Out.Vc = rtDW.Out;
+  rtY.FOC_Out.Normalized_Va = (56754.1094F * rtDW.Out_d) /
+    rtU.Thresholds.BusVoltage_V;
+  rtY.FOC_Out.Normalized_Vb = (56754.1094F * rtDW.Out_m) /
+    rtU.Thresholds.BusVoltage_V;
+  rtY.FOC_Out.Normalized_Vc = (56754.1094F * rtDW.Out) /
+    rtU.Thresholds.BusVoltage_V;
+
+  /* Product: '<S5>/Divide' incorporates:
+   *  Inport: '<Root>/Thresholds'
+   *  Product: '<S3>/Divide'
+   *  Product: '<S4>/Divide'
+   */
+  rtb_Sum = 1.0F / rtU.Thresholds.BusVoltage_V;
+  rtb_Abs1 = rtb_Sum * rtDW.Out;
+
+  /* Product: '<S3>/Divide' */
+  rtb_Abs1_m = rtb_Sum * rtDW.Out_d;
+
+  /* Product: '<S4>/Divide' */
+  rtb_Sum *= rtDW.Out_m;
 
   /* Switch: '<S3>/Switch' incorporates:
    *  Constant: '<S3>/Zero'
    */
-  if (rtb_Switch_idx_0 > 0.0) {
-    tmp = rtb_Saturation2;
+  if (rtDW.Out_d > 0.0F) {
+    rtb_Switch_idx_0 = rtb_Abs1_m;
   } else {
-    tmp = 0.0;
+    rtb_Switch_idx_0 = 0.0F;
   }
 
-  /* Outport: '<Root>/Duty_a+' incorporates:
+  /* BusCreator: '<S1>/Bus Creator' incorporates:
    *  Abs: '<S3>/Abs'
+   *  Outport: '<Root>/DutyCylces'
    *  Switch: '<S3>/Switch'
    */
-  rtY.Duty_a = fabs(tmp);
+  rtY.DutyCylces.Duty_a_pos = fabsf(rtb_Switch_idx_0);
 
   /* Switch: '<S3>/Switch1' incorporates:
    *  Constant: '<S3>/Zero'
    *  Gain: '<S3>/Gain'
    */
-  if (-rtb_Switch_idx_0 <= 0.0) {
-    rtb_Saturation2 = 0.0;
+  if (!(-rtDW.Out_d > 0.0F)) {
+    rtb_Abs1_m = 0.0F;
   }
 
-  /* Outport: '<Root>/Duty_a-' incorporates:
+  /* BusCreator: '<S1>/Bus Creator' incorporates:
    *  Abs: '<S3>/Abs1'
+   *  Outport: '<Root>/DutyCylces'
    *  Switch: '<S3>/Switch1'
    */
-  rtY.Duty_a_f = fabs(rtb_Saturation2);
+  rtY.DutyCylces.Duty_a_neg = fabsf(rtb_Abs1_m);
 
-  /* Sum: '<S8>/add_c' */
-  rtb_Sum = 0.0 - rtb_Sum - rtb_Switch_idx_1;
-
-  /* Saturate: '<S6>/Saturation3' */
-  if (rtb_Sum > 60.0) {
-    rtb_Sum = 60.0;
-  } else if (rtb_Sum < -60.0) {
-    rtb_Sum = -60.0;
+  /* Switch: '<S4>/Switch' incorporates:
+   *  Constant: '<S4>/Zero'
+   */
+  if (rtDW.Out_m > 0.0F) {
+    rtb_Switch_idx_0 = rtb_Sum;
   } else {
-    /* no actions */
+    rtb_Switch_idx_0 = 0.0F;
   }
 
-  /* End of Saturate: '<S6>/Saturation3' */
-
-  /* Product: '<S5>/Divide' incorporates:
-   *  DataTypeConversion: '<S1>/Data Type Conversion7'
-   *  Inport: '<Root>/Thresholds'
+  /* BusCreator: '<S1>/Bus Creator' incorporates:
+   *  Abs: '<S4>/Abs'
+   *  Outport: '<Root>/DutyCylces'
+   *  Switch: '<S4>/Switch'
    */
-  rtb_Saturation2 = rtb_Sum / (real_T)((real32_T)rtU.Thresholds.MaxBusVoltage_V);
+  rtY.DutyCylces.Duty_b_pos = fabsf(rtb_Switch_idx_0);
+
+  /* Switch: '<S4>/Switch1' incorporates:
+   *  Constant: '<S4>/Zero'
+   *  Gain: '<S4>/Gain'
+   */
+  if (!(-rtDW.Out_m > 0.0F)) {
+    rtb_Sum = 0.0F;
+  }
+
+  /* BusCreator: '<S1>/Bus Creator' incorporates:
+   *  Abs: '<S4>/Abs1'
+   *  Outport: '<Root>/DutyCylces'
+   *  Switch: '<S4>/Switch1'
+   */
+  rtY.DutyCylces.Duty_b_neg = fabsf(rtb_Sum);
 
   /* Switch: '<S5>/Switch' incorporates:
    *  Constant: '<S5>/Zero'
    */
-  if (rtb_Sum > 0.0) {
-    tmp = rtb_Saturation2;
+  if (rtDW.Out > 0.0F) {
+    rtb_Switch_idx_0 = rtb_Abs1;
   } else {
-    tmp = 0.0;
+    rtb_Switch_idx_0 = 0.0F;
   }
 
-  /* Outport: '<Root>/Duty_c+' incorporates:
+  /* BusCreator: '<S1>/Bus Creator' incorporates:
    *  Abs: '<S5>/Abs'
+   *  Outport: '<Root>/DutyCylces'
    *  Switch: '<S5>/Switch'
    */
-  rtY.Duty_c = fabs(tmp);
+  rtY.DutyCylces.Duty_c_pos = fabsf(rtb_Switch_idx_0);
 
   /* Switch: '<S5>/Switch1' incorporates:
    *  Constant: '<S5>/Zero'
    *  Gain: '<S5>/Gain'
    */
-  if (-rtb_Sum <= 0.0) {
-    rtb_Saturation2 = 0.0;
+  if (!(-rtDW.Out > 0.0F)) {
+    rtb_Abs1 = 0.0F;
   }
 
-  /* Outport: '<Root>/Duty_c-' incorporates:
+  /* BusCreator: '<S1>/Bus Creator' incorporates:
    *  Abs: '<S5>/Abs1'
+   *  Outport: '<Root>/DutyCylces'
    *  Switch: '<S5>/Switch1'
    */
-  rtY.Duty_c_h = fabs(rtb_Saturation2);
+  rtY.DutyCylces.Duty_c_neg = fabsf(rtb_Abs1);
 
-  /* Outport: '<Root>/Vc' */
-  rtY.Vc = rtb_Sum;
-
-  /* Outport: '<Root>/Va' */
-  rtY.Va = rtb_Switch_idx_0;
-
-  /* Outport: '<Root>/Vq_Calculated' */
-  rtY.Vq_Calculated = rtb_Sum_b;
-
-  /* Outport: '<Root>/Iq_Refer' */
-  rtY.Iq_Refer = rtb_Saturation;
-
-  /* Outputs for Atomic SubSystem: '<S6>/Park Transform' */
-  /* Outport: '<Root>/Iq_Calculated' incorporates:
-   *  AlgorithmDescriptorDelegate generated from: '<S12>/a16'
-   */
-  rtY.Iq_Calculated = rtb_DataTypeConversion7;
-
-  /* Update for DiscreteIntegrator: '<S93>/Integrator' incorporates:
-   *  AlgorithmDescriptorDelegate generated from: '<S12>/a16'
-   *  Constant: '<S6>/Constant3'
+  /* Update for DiscreteIntegrator: '<S100>/Integrator' incorporates:
    *  Inport: '<Root>/Gain_Id'
-   *  Product: '<S90>/IProd Out'
-   *  Sum: '<S6>/Add2'
+   *  Product: '<S97>/IProd Out'
    */
-  rtDW.Integrator_DSTATE += ((real_T)((real32_T)(0.0F - rtb_Switch_n_idx_0)) *
-    rtU.Id) * 5.0E-5;
+  rtDW.Integrator_DSTATE += (rtb_Abs_h * rtU.Id) * 5.0E-5F;
 
-  /* End of Outputs for SubSystem: '<S6>/Park Transform' */
+  /* Update for DiscreteIntegrator: '<S95>/Filter' */
+  rtDW.Filter_DSTATE += 5.0E-5F * rtb_NProdOut;
 
-  /* Update for DiscreteIntegrator: '<S88>/Filter' */
-  rtDW.Filter_DSTATE += 5.0E-5 * rtb_NProdOut;
-
-  /* Update for DiscreteIntegrator: '<S45>/Integrator' incorporates:
+  /* Update for DiscreteIntegrator: '<S52>/Integrator' incorporates:
    *  Inport: '<Root>/Gain_Iq'
-   *  Product: '<S42>/IProd Out'
+   *  Product: '<S49>/IProd Out'
    */
-  rtDW.Integrator_DSTATE_e += ((real_T)rtb_Add3 * rtU.Iq) * 5.0E-5;
+  rtDW.Integrator_DSTATE_e += (rtb_Product * rtU.Iq) * 5.0E-5F;
 
-  /* Update for DiscreteIntegrator: '<S40>/Filter' */
-  rtDW.Filter_DSTATE_f += 5.0E-5 * rtb_NProdOut_n;
+  /* Update for DiscreteIntegrator: '<S47>/Filter' */
+  rtDW.Filter_DSTATE_f += 5.0E-5F * rtb_NProdOut_n;
 }
 
 /* Model initialize function */
 void Pegasus_MBD_initialize(void)
 {
-  /* (no initialization code required) */
+  /* SystemInitialize for Chart: '<S6>/Va_Saturation2' */
+  Va_Saturation2_Init(&rtDW.Out_d);
+
+  /* SystemInitialize for Chart: '<S6>/Va_Saturation3' */
+  Va_Saturation2_Init(&rtDW.Out_m);
+
+  /* SystemInitialize for Chart: '<S6>/Va_Saturation4' */
+  Va_Saturation2_Init(&rtDW.Out);
+
   rtU.Pole_pairs = POLEPAIRS;
   rtU.Rs = 0.0107;
   rtU.Ld = 0.000146;
@@ -405,7 +495,8 @@ void Pegasus_MBD_initialize(void)
   rtU.Id = 5;
   rtU.Dd = 0.0010;
   rtU.FilterCoefficient = 20;
-  rtU.Thresholds.MaxBusVoltage_V = 65.0;
+  rtU.Thresholds.Iq_max_limit_A = 20.0;
+  rtU.Thresholds.Iq_min_limit_A = -20.0;
 }
 
 /*
