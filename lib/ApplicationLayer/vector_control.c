@@ -170,43 +170,43 @@ void FOC_READ_MOTOR_POSITION(void)
 
 void FOC_SPACE_VECTOR_MODULATION()
 {
-            //PWM DUTY VARIABLES
-            if (rtY.FOC_Out.Normalized_Va > UL)
-                rtY.FOC_Out.Normalized_Va = UL;
-            else if (rtY.FOC_Out.Normalized_Va < LL)
-                rtY.FOC_Out.Normalized_Va = LL;
-            
-            if (rtY.FOC_Out.Normalized_Vb > UL)
-                rtY.FOC_Out.Normalized_Vb = UL;
-            else if (rtY.FOC_Out.Normalized_Vb < LL)
-                rtY.FOC_Out.Normalized_Vb = LL;
+    //PWM DUTY VARIABLES
+    if (rtY.FOC_Out.Normalized_Va > UL)
+        rtY.FOC_Out.Normalized_Va = UL;
+    else if (rtY.FOC_Out.Normalized_Va < LL)
+        rtY.FOC_Out.Normalized_Va = LL;
 
-            if (rtY.FOC_Out.Normalized_Vc > UL)
-                rtY.FOC_Out.Normalized_Vc = UL;
-            else if (rtY.FOC_Out.Normalized_Vc < LL)
-                rtY.FOC_Out.Normalized_Vc = LL;
-            
-            foc.pwm_a = (PWM_CONST_2*(rtY.FOC_Out.Normalized_Va))  + PWM_CONST_1;
-            foc.pwm_b = (PWM_CONST_2*(rtY.FOC_Out.Normalized_Vb))  + PWM_CONST_1;
-            foc.pwm_c = (PWM_CONST_2*(rtY.FOC_Out.Normalized_Vc))  + PWM_CONST_1;   
+    if (rtY.FOC_Out.Normalized_Vb > UL)
+        rtY.FOC_Out.Normalized_Vb = UL;
+    else if (rtY.FOC_Out.Normalized_Vb < LL)
+        rtY.FOC_Out.Normalized_Vb = LL;
 
-            if (foc.pwm_a < 0)
-                foc.pwm_a = 0;
-            else if (foc.pwm_a > 2500)
-                foc.pwm_a = 2500;
-            
-            if (foc.pwm_b < 0)
-                foc.pwm_b = 0;
-            else if (foc.pwm_b > 2500)
-                foc.pwm_b = 2500;
-            
-            if (foc.pwm_c < 0)
-                foc.pwm_c = 0;
-            else if (foc.pwm_c > 2500)
-                foc.pwm_c = 2500;
+    if (rtY.FOC_Out.Normalized_Vc > UL)
+        rtY.FOC_Out.Normalized_Vc = UL;
+    else if (rtY.FOC_Out.Normalized_Vc < LL)
+        rtY.FOC_Out.Normalized_Vc = LL;
 
-            //Modulation  Techniques
-            //SPWM(foc.pwm_a,foc.pwm_b,foc.pwm_c);
-            if(motorControl.drive.check == DRIVE_ENABLE) {SVPWM_MODE_DRIVE_FUNCTION(foc.pwm_a,foc.pwm_b,foc.pwm_c);}
-            else {DRIVE_STOP();}
+    foc.pwm_a = (PWM_CONST_2*(rtY.FOC_Out.Normalized_Va))  + PWM_CONST_1;
+    foc.pwm_b = (PWM_CONST_2*(rtY.FOC_Out.Normalized_Vb))  + PWM_CONST_1;
+    foc.pwm_c = (PWM_CONST_2*(rtY.FOC_Out.Normalized_Vc))  + PWM_CONST_1;   
+
+    if (foc.pwm_a < 0)
+        foc.pwm_a = 0;
+    else if (foc.pwm_a > 2500)
+        foc.pwm_a = 2500;
+
+    if (foc.pwm_b < 0)
+        foc.pwm_b = 0;
+    else if (foc.pwm_b > 2500)
+        foc.pwm_b = 2500;
+
+    if (foc.pwm_c < 0)
+        foc.pwm_c = 0;
+    else if (foc.pwm_c > 2500)
+        foc.pwm_c = 2500;
+
+    //Modulation  Techniques
+    //SPWM(foc.pwm_a,foc.pwm_b,foc.pwm_c);
+    if(motorControl.drive.check == DRIVE_ENABLE) {SVPWM_MODE_DRIVE_FUNCTION(foc.pwm_a,foc.pwm_b,foc.pwm_c);}
+    else {DRIVE_STOP();}
 }

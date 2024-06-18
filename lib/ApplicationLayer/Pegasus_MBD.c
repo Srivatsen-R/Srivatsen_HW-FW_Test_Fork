@@ -429,11 +429,11 @@ void Pegasus_MBD_step(void)
   rtY.FOC_Out.Va = rtDW.Out_d;
   rtY.FOC_Out.Vb = rtDW.Out_m;
   rtY.FOC_Out.Vc = rtDW.Out;
-  rtY.FOC_Out.Normalized_Va = (56754.1094F * rtDW.Out_d) /
+  rtY.FOC_Out.Normalized_Va = (32767.00F * rtDW.Out_d) /
     rtU.Thresholds.BusVoltage_V;
-  rtY.FOC_Out.Normalized_Vb = (56754.1094F * rtDW.Out_m) /
+  rtY.FOC_Out.Normalized_Vb = (32767.00F * rtDW.Out_m) /
     rtU.Thresholds.BusVoltage_V;
-  rtY.FOC_Out.Normalized_Vc = (56754.1094F * rtDW.Out) /
+  rtY.FOC_Out.Normalized_Vc = (32767.00F * rtDW.Out) /
     rtU.Thresholds.BusVoltage_V;
 
   /* Product: '<S5>/Divide' incorporates:
@@ -627,10 +627,8 @@ void Pegasus_MBD_initialize(void)
   rtU.FilterCoefficient = 20;
   rtU.Thresholds.Iq_max_limit_A = 20.0;
   rtU.Thresholds.Iq_min_limit_A = -20.0;
-  rtU.Thresholds.Vd_max_limit_V = 250.0;
-  rtU.Thresholds.Vd_min_limit_V = -250.0;
-  rtU.Thresholds.Vq_max_limit_V = 250.0;
-  rtU.Thresholds.Vq_min_limit_V = -250.0;
+  rtU.Thresholds.Vq_max_limit_V = 35.0;
+  rtU.Thresholds.Vq_min_limit_V = -35.0;
 }
 
 /*

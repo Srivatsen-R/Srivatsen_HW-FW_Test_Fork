@@ -32,7 +32,7 @@
 #define KP_FOR_DC_CURR_UP               0.001
 #define KP_FOR_DC_CURR_DOWN             0.001
 
-#define VBUS_OFFSET                      0.0   
+#define VBUS_OFFSET                      2.3   
 #define OVER_VOLT_HYS                    0.5   
 #define UNDER_VOLT_HYS                   0.5   
 #define BATT_CURRENT_ADC_OFFSET          0.0
