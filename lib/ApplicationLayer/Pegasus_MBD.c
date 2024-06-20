@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'Pegasus_MBD'.
  *
- * Model version                  : 1.174
+ * Model version                  : 1.190
  * Simulink Coder version         : 9.8 (R2022b) 13-May-2022
- * C/C++ source code generated on : Mon Jun 17 15:20:30 2024
+ * C/C++ source code generated on : Tue Jun 18 18:20:11 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM 7
@@ -19,30 +19,31 @@
 #include "Pegasus_MBD.h"
 #include "rtwtypes.h"
 #include "vector_control.h"
+#include "motor_param.h"
 #include <math.h>
 
-/* Named constants for Chart: '<S6>/Va_Saturation2' */
+/* Named constants for Chart: '<S6>/Va_Saturation' */
 #define IN_Lobby                       ((uint8_T)1U)
 #define IN_Lobby1                      ((uint8_T)2U)
 #define IN_Lobby2                      ((uint8_T)3U)
 
-/* Named constants for Chart: '<S6>/Iq_Refer_Saturation1' */
+/* Named constants for Chart: '<S6>/Iq_Refer_Saturation' */
 #define IN_Lobby1_j                    ((uint8_T)2U)
 #define IN_Lobby2_f                    ((uint8_T)3U)
 #define IN_Lobby_k                     ((uint8_T)1U)
 
-/* Private macros used by the generated code to access rtModel */
-#ifndef rtmIsMajorTimeStep
-#define rtmIsMajorTimeStep(rtm)        (((rtm)->Timing.simTimeStep) == MAJOR_TIME_STEP)
-#endif
-
-#ifndef rtmIsMinorTimeStep
-#define rtmIsMinorTimeStep(rtm)        (((rtm)->Timing.simTimeStep) == MINOR_TIME_STEP)
-#endif
-
-#ifndef rtmSetTPtr
-#define rtmSetTPtr(rtm, val)           ((rtm)->Timing.t = (val))
-#endif
+/* Named constants for Chart: '<S7>/Protection_States' */
+#define IN_CurrentSafe                 ((uint8_T)1U)
+#define IN_HighTempError               ((uint8_T)1U)
+#define IN_HighTempWarning             ((uint8_T)2U)
+#define IN_OC_Error                    ((uint8_T)2U)
+#define IN_OC_Warning                  ((uint8_T)3U)
+#define IN_OV_Error                    ((uint8_T)1U)
+#define IN_OV_Warning                  ((uint8_T)2U)
+#define IN_TempSafe                    ((uint8_T)3U)
+#define IN_UV_Error                    ((uint8_T)3U)
+#define IN_UV_Warning                  ((uint8_T)4U)
+#define IN_VoltageSafe                 ((uint8_T)5U)
 
 /* Block signals and states (default storage) */
 DW rtDW;
@@ -56,31 +57,34 @@ ExtY rtY;
 /* Real-time model */
 static RT_MODEL rtM_;
 RT_MODEL *const rtM = &rtM_;
-static void Va_Saturation2_Init(real32_T *rty_Out);
-static void Va_Saturation2(real32_T rtu_In, real32_T rtu_BusVoltage_V, real32_T *
-  rty_Out, DW_Va_Saturation2 *localDW);
+static void Va_Saturation_Init(real32_T *rty_Out);
+static void Va_Saturation(real32_T rtu_In, real32_T rtu_BusVoltage_V, real32_T
+  *rty_Out, DW_Va_Saturation *localDW);
+
+/* Forward declaration for local functions */
+static void VoltageProtection(const real32_T *Max1, const real32_T *Min1);
 
 /*
  * System initialize for atomic system:
- *    '<S6>/Va_Saturation2'
- *    '<S6>/Va_Saturation3'
- *    '<S6>/Va_Saturation4'
+ *    '<S6>/Va_Saturation'
+ *    '<S6>/Vb_Saturation'
+ *    '<S6>/Vc_Saturation'
  */
-static void Va_Saturation2_Init(real32_T *rty_Out)
+static void Va_Saturation_Init(real32_T *rty_Out)
 {
   *rty_Out = 0.0F;
 }
 
 /*
  * Output and update for atomic system:
- *    '<S6>/Va_Saturation2'
- *    '<S6>/Va_Saturation3'
- *    '<S6>/Va_Saturation4'
+ *    '<S6>/Va_Saturation'
+ *    '<S6>/Vb_Saturation'
+ *    '<S6>/Vc_Saturation'
  */
-static void Va_Saturation2(real32_T rtu_In, real32_T rtu_BusVoltage_V, real32_T *
-  rty_Out, DW_Va_Saturation2 *localDW)
+static void Va_Saturation(real32_T rtu_In, real32_T rtu_BusVoltage_V, real32_T
+  *rty_Out, DW_Va_Saturation *localDW)
 {
-  /* Chart: '<S6>/Va_Saturation2' */
+  /* Chart: '<S6>/Va_Saturation' */
   if ((uint32_T)localDW->is_active_c1_Pegasus_MBD == 0U) {
     localDW->is_active_c1_Pegasus_MBD = 1U;
     localDW->is_c1_Pegasus_MBD = IN_Lobby;
@@ -115,35 +119,235 @@ static void Va_Saturation2(real32_T rtu_In, real32_T rtu_BusVoltage_V, real32_T 
     }
   }
 
-  /* End of Chart: '<S6>/Va_Saturation2' */
+  /* End of Chart: '<S6>/Va_Saturation' */
+}
+
+/* Function for Chart: '<S7>/Protection_States' */
+static void VoltageProtection(const real32_T *Max1, const real32_T *Min1)
+{
+  switch (rtDW.is_VoltageProtection) {
+   case IN_OV_Error:
+    {
+      real_T tmp;
+
+      /* Outport: '<Root>/VoltageFlag' */
+      rtY.VoltageFlag = OV_Error;
+
+      /* Inport: '<Root>/Thresholds' */
+      /* Inport: '<Root>/Thresholds' */
+      if (!(*Max1 < rtU.Thresholds.OVWarningLimit_V)) {
+        rtDW.durationCounter_1_hz = 0;
+      }
+
+      tmp = (real_T)((real32_T)(rtU.Thresholds.VoltageProtectionTimeout_msec *
+        20.0F));
+      if ((real_T)rtDW.durationCounter_1_hz > tmp) {
+        rtDW.durationCounter_2_j2 = 0;
+        rtDW.durationCounter_1_j = 0;
+        rtDW.is_VoltageProtection = IN_VoltageSafe;
+
+        /* Outport: '<Root>/VoltageFlag' */
+        rtY.VoltageFlag = SafeVoltage;
+      } else {
+        if (!(*Max1 < rtU.Thresholds.OVErrorLimit_V)) {
+          rtDW.durationCounter_2_f = 0;
+        }
+
+        if ((real_T)rtDW.durationCounter_2_f > tmp) {
+          rtDW.durationCounter_2_h = 0;
+          rtDW.durationCounter_1_jg = 0;
+          rtDW.is_VoltageProtection = IN_OV_Warning;
+
+          /* Outport: '<Root>/VoltageFlag' */
+          rtY.VoltageFlag = OV_Warning;
+        }
+      }
+    }
+    break;
+
+   case IN_OV_Warning:
+    {
+      real_T tmp;
+
+      /* Outport: '<Root>/VoltageFlag' */
+      rtY.VoltageFlag = OV_Warning;
+
+      /* Inport: '<Root>/Thresholds' */
+      /* Inport: '<Root>/Thresholds' */
+      if (!(*Max1 > rtU.Thresholds.OVErrorLimit_V)) {
+        rtDW.durationCounter_2_h = 0;
+      }
+
+      tmp = (real_T)((real32_T)(rtU.Thresholds.VoltageProtectionTimeout_msec *
+        20.0F));
+      if ((real_T)rtDW.durationCounter_2_h > tmp) {
+        rtDW.durationCounter_2_f = 0;
+        rtDW.durationCounter_1_hz = 0;
+        rtDW.is_VoltageProtection = IN_OV_Error;
+
+        /* Outport: '<Root>/VoltageFlag' */
+        rtY.VoltageFlag = OV_Error;
+      } else {
+        if (!(*Max1 < rtU.Thresholds.OVWarningLimit_V)) {
+          rtDW.durationCounter_1_jg = 0;
+        }
+
+        if ((real_T)rtDW.durationCounter_1_jg > tmp) {
+          rtDW.durationCounter_2_j2 = 0;
+          rtDW.durationCounter_1_j = 0;
+          rtDW.is_VoltageProtection = IN_VoltageSafe;
+
+          /* Outport: '<Root>/VoltageFlag' */
+          rtY.VoltageFlag = SafeVoltage;
+        }
+      }
+    }
+    break;
+
+   case IN_UV_Error:
+    {
+      real_T tmp;
+
+      /* Outport: '<Root>/VoltageFlag' */
+      rtY.VoltageFlag = UV_Error;
+
+      /* Inport: '<Root>/Thresholds' */
+      /* Inport: '<Root>/Thresholds' */
+      if (!(*Min1 > rtU.Thresholds.UVErrorLimit_V)) {
+        rtDW.durationCounter_1_n = 0;
+      }
+
+      tmp = (real_T)((real32_T)(rtU.Thresholds.VoltageProtectionTimeout_msec *
+        20.0F));
+      if ((real_T)rtDW.durationCounter_1_n > tmp) {
+        rtDW.durationCounter_2_d = 0;
+        rtDW.durationCounter_1_h3 = 0;
+        rtDW.is_VoltageProtection = IN_UV_Warning;
+
+        /* Outport: '<Root>/VoltageFlag' */
+        rtY.VoltageFlag = UV_Warning;
+      } else {
+        if (!(*Min1 > rtU.Thresholds.UVWarningLimit_V)) {
+          rtDW.durationCounter_2_i = 0;
+        }
+
+        if ((real_T)rtDW.durationCounter_2_i > tmp) {
+          rtDW.durationCounter_2_j2 = 0;
+          rtDW.durationCounter_1_j = 0;
+          rtDW.is_VoltageProtection = IN_VoltageSafe;
+
+          /* Outport: '<Root>/VoltageFlag' */
+          rtY.VoltageFlag = SafeVoltage;
+        }
+      }
+    }
+    break;
+
+   case IN_UV_Warning:
+    {
+      real_T tmp;
+
+      /* Outport: '<Root>/VoltageFlag' */
+      rtY.VoltageFlag = UV_Warning;
+
+      /* Inport: '<Root>/Thresholds' */
+      /* Inport: '<Root>/Thresholds' */
+      if (!(*Min1 < rtU.Thresholds.UVErrorLimit_V)) {
+        rtDW.durationCounter_1_h3 = 0;
+      }
+
+      tmp = (real_T)((real32_T)(rtU.Thresholds.VoltageProtectionTimeout_msec *
+        20.0F));
+      if ((real_T)rtDW.durationCounter_1_h3 > tmp) {
+        rtDW.durationCounter_2_i = 0;
+        rtDW.durationCounter_1_n = 0;
+        rtDW.is_VoltageProtection = IN_UV_Error;
+
+        /* Outport: '<Root>/VoltageFlag' */
+        rtY.VoltageFlag = UV_Error;
+      } else {
+        if (!(*Min1 > rtU.Thresholds.UVWarningLimit_V)) {
+          rtDW.durationCounter_2_d = 0;
+        }
+
+        if ((real_T)rtDW.durationCounter_2_d > tmp) {
+          rtDW.durationCounter_2_j2 = 0;
+          rtDW.durationCounter_1_j = 0;
+          rtDW.is_VoltageProtection = IN_VoltageSafe;
+
+          /* Outport: '<Root>/VoltageFlag' */
+          rtY.VoltageFlag = SafeVoltage;
+        }
+      }
+    }
+    break;
+
+   default:
+    {
+      real_T tmp;
+
+      /* Outport: '<Root>/VoltageFlag' */
+      /* case IN_VoltageSafe: */
+      rtY.VoltageFlag = SafeVoltage;
+
+      /* Inport: '<Root>/Thresholds' */
+      /* Inport: '<Root>/Thresholds' */
+      if (!(*Max1 > rtU.Thresholds.OVWarningLimit_V)) {
+        rtDW.durationCounter_2_j2 = 0;
+      }
+
+      tmp = (real_T)((real32_T)(rtU.Thresholds.VoltageProtectionTimeout_msec *
+        20.0F));
+      if ((real_T)rtDW.durationCounter_2_j2 > tmp) {
+        rtDW.durationCounter_2_h = 0;
+        rtDW.durationCounter_1_jg = 0;
+        rtDW.is_VoltageProtection = IN_OV_Warning;
+
+        /* Outport: '<Root>/VoltageFlag' */
+        rtY.VoltageFlag = OV_Warning;
+      } else {
+        if (!(*Min1 < rtU.Thresholds.UVWarningLimit_V)) {
+          rtDW.durationCounter_1_j = 0;
+        }
+
+        if ((real_T)rtDW.durationCounter_1_j > tmp) {
+          rtDW.durationCounter_2_d = 0;
+          rtDW.durationCounter_1_h3 = 0;
+          rtDW.is_VoltageProtection = IN_UV_Warning;
+
+          /* Outport: '<Root>/VoltageFlag' */
+          rtY.VoltageFlag = UV_Warning;
+        }
+      }
+    }
+    break;
+  }
 }
 
 /* Model step function */
 void Pegasus_MBD_step(void)
 {
-  /* local block i/o variables */
-  real32_T rtb_NProdOut;
-  real32_T rtb_NProdOut_l;
-  real32_T rtb_IProdOut;
-  real32_T rtb_IProdOut_o;
   real32_T rtb_Abs1;
   real32_T rtb_Abs1_m;
   real32_T rtb_Abs_h;
+  real32_T rtb_NProdOut;
+  real32_T rtb_NProdOut_n;
   real32_T rtb_Sum;
   real32_T rtb_Switch_idx_0;
   real32_T rtb_Switch_idx_1;
 
   /* Outputs for Atomic SubSystem: '<S6>/Clarke Transform' */
-  /* Gain: '<S7>/one_by_sqrt3' incorporates:
+  /* Gain: '<S8>/one_by_sqrt3' incorporates:
    *  Inport: '<Root>/I_a'
    *  Inport: '<Root>/I_b'
-   *  Sum: '<S7>/a_plus_2b'
+   *  Sum: '<S8>/a_plus_2b'
    */
   rtb_Abs_h = (rtU.I_a + rtU.I_b + rtU.I_b) * 0.577350259F;
 
   /* End of Outputs for SubSystem: '<S6>/Clarke Transform' */
 
   /* Sum: '<S2>/Add' incorporates:
+   *  Constant: '<S2>/Constant'
    *  Gain: '<S2>/Gain'
    *  Inport: '<Root>/MtrPos_rad'
    */
@@ -161,15 +365,15 @@ void Pegasus_MBD_step(void)
 
   /* Outputs for Atomic SubSystem: '<S6>/Park Transform' */
   /* Outputs for Atomic SubSystem: '<S6>/Clarke Transform' */
-  /* Switch: '<S119>/Switch' incorporates:
-   *  AlgorithmDescriptorDelegate generated from: '<S7>/a16'
+  /* Switch: '<S120>/Switch' incorporates:
+   *  AlgorithmDescriptorDelegate generated from: '<S8>/a16'
    *  Inport: '<Root>/I_a'
-   *  Product: '<S18>/acos'
-   *  Product: '<S18>/asin'
-   *  Product: '<S18>/bcos'
-   *  Product: '<S18>/bsin'
-   *  Sum: '<S18>/sum_Ds'
-   *  Sum: '<S18>/sum_Qs'
+   *  Product: '<S17>/acos'
+   *  Product: '<S17>/asin'
+   *  Product: '<S17>/bcos'
+   *  Product: '<S17>/bsin'
+   *  Sum: '<S17>/sum_Ds'
+   *  Sum: '<S17>/sum_Qs'
    *  Trigonometry: '<S6>/Cos'
    *  Trigonometry: '<S6>/Sin'
    */
@@ -179,37 +383,37 @@ void Pegasus_MBD_step(void)
   /* End of Outputs for SubSystem: '<S6>/Clarke Transform' */
 
   /* BusCreator: '<S6>/Bus Creator' incorporates:
-   *  AlgorithmDescriptorDelegate generated from: '<S18>/a16'
+   *  AlgorithmDescriptorDelegate generated from: '<S17>/a16'
    *  Outport: '<Root>/FOC_Out'
    */
   rtY.FOC_Out.Id_Calculated = rtb_Switch_idx_0;
   rtY.FOC_Out.Iq_Calculated = rtb_Switch_idx_1;
 
   /* Sum: '<S6>/Add2' incorporates:
-   *  AlgorithmDescriptorDelegate generated from: '<S18>/a16'
+   *  AlgorithmDescriptorDelegate generated from: '<S17>/a16'
    *  Constant: '<S6>/Constant3'
    */
   rtb_Abs_h = 0.0F - rtb_Switch_idx_0;
 
-  /* Product: '<S105>/NProd Out' incorporates:
-   *  AlgorithmDescriptorDelegate generated from: '<S18>/a16'
+  /* Product: '<S106>/NProd Out' incorporates:
+   *  AlgorithmDescriptorDelegate generated from: '<S17>/a16'
    *  Constant: '<S6>/Constant3'
-   *  DiscreteIntegrator: '<S97>/Filter'
+   *  DiscreteIntegrator: '<S98>/Filter'
    *  Inport: '<Root>/FilterCoefficient'
    *  Inport: '<Root>/Gain_Dd'
-   *  Product: '<S96>/DProd Out'
+   *  Product: '<S97>/DProd Out'
    *  Sum: '<S6>/Add2'
-   *  Sum: '<S97>/SumD'
+   *  Sum: '<S98>/SumD'
    */
   rtb_NProdOut = (((0.0F - rtb_Switch_idx_0) * rtU.Dd) - rtDW.Filter_DSTATE) *
     rtU.FilterCoefficient;
 
-  /* Sum: '<S111>/Sum' incorporates:
-   *  AlgorithmDescriptorDelegate generated from: '<S18>/a16'
+  /* Sum: '<S112>/Sum' incorporates:
+   *  AlgorithmDescriptorDelegate generated from: '<S17>/a16'
    *  Constant: '<S6>/Constant3'
-   *  DiscreteIntegrator: '<S102>/Integrator'
+   *  DiscreteIntegrator: '<S103>/Integrator'
    *  Inport: '<Root>/Gain_Pd'
-   *  Product: '<S107>/PProd Out'
+   *  Product: '<S108>/PProd Out'
    *  Sum: '<S6>/Add2'
    */
   rtb_Sum = ((0.0F - rtb_Switch_idx_0) * rtU.Pd) + rtDW.Integrator_DSTATE +
@@ -217,7 +421,7 @@ void Pegasus_MBD_step(void)
 
   /* End of Outputs for SubSystem: '<S6>/Park Transform' */
 
-  /* Chart: '<S6>/Iq_Refer_Saturation3' incorporates:
+  /* Chart: '<S6>/Vd_Refer_Saturation' incorporates:
    *  Inport: '<Root>/Thresholds'
    */
   if ((uint32_T)rtDW.is_active_c6_Pegasus_MBD == 0U) {
@@ -254,7 +458,7 @@ void Pegasus_MBD_step(void)
     }
   }
 
-  /* End of Chart: '<S6>/Iq_Refer_Saturation3' */
+  /* End of Chart: '<S6>/Vd_Refer_Saturation' */
 
   /* Product: '<S6>/Product' incorporates:
    *  Inport: '<Root>/Iq_Torque_ratio'
@@ -262,7 +466,7 @@ void Pegasus_MBD_step(void)
    */
   rtb_Sum = rtU.Torque * rtU.Iq_Torque_ratio;
 
-  /* Chart: '<S6>/Iq_Refer_Saturation1' incorporates:
+  /* Chart: '<S6>/Iq_Refer_Saturation' incorporates:
    *  Inport: '<Root>/Thresholds'
    */
   if ((uint32_T)rtDW.is_active_c5_Pegasus_MBD == 0U) {
@@ -299,35 +503,35 @@ void Pegasus_MBD_step(void)
     }
   }
 
-  /* End of Chart: '<S6>/Iq_Refer_Saturation1' */
+  /* End of Chart: '<S6>/Iq_Refer_Saturation' */
 
   /* Outputs for Atomic SubSystem: '<S6>/Park Transform' */
   /* Sum: '<S6>/Add3' incorporates:
-   *  AlgorithmDescriptorDelegate generated from: '<S18>/a16'
+   *  AlgorithmDescriptorDelegate generated from: '<S17>/a16'
    */
   rtb_Sum = rtDW.Out_m2 - rtb_Switch_idx_1;
 
   /* End of Outputs for SubSystem: '<S6>/Park Transform' */
 
-  /* Product: '<S57>/NProd Out' incorporates:
-   *  DiscreteIntegrator: '<S49>/Filter'
+  /* Product: '<S58>/NProd Out' incorporates:
+   *  DiscreteIntegrator: '<S50>/Filter'
    *  Inport: '<Root>/FilterCoefficient'
    *  Inport: '<Root>/Gain_Dq'
-   *  Product: '<S48>/DProd Out'
-   *  Sum: '<S49>/SumD'
+   *  Product: '<S49>/DProd Out'
+   *  Sum: '<S50>/SumD'
    */
-  rtb_NProdOut_l = ((rtb_Sum * rtU.Dq) - rtDW.Filter_DSTATE_f) *
+  rtb_NProdOut_n = ((rtb_Sum * rtU.Dq) - rtDW.Filter_DSTATE_f) *
     rtU.FilterCoefficient;
 
-  /* Sum: '<S63>/Sum' incorporates:
-   *  DiscreteIntegrator: '<S54>/Integrator'
+  /* Sum: '<S64>/Sum' incorporates:
+   *  DiscreteIntegrator: '<S55>/Integrator'
    *  Inport: '<Root>/Gain_Pq'
-   *  Product: '<S59>/PProd Out'
+   *  Product: '<S60>/PProd Out'
    */
   rtb_Switch_idx_0 = (rtb_Sum * rtU.Pq) + rtDW.Integrator_DSTATE_e +
-    rtb_NProdOut_l;
+    rtb_NProdOut_n;
 
-  /* Chart: '<S6>/Iq_Refer_Saturation2' incorporates:
+  /* Chart: '<S6>/Vq_Refer_Saturation' incorporates:
    *  Inport: '<Root>/Thresholds'
    */
   if ((uint32_T)rtDW.is_active_c3_Pegasus_MBD == 0U) {
@@ -341,7 +545,7 @@ void Pegasus_MBD_step(void)
       } else if (rtb_Switch_idx_0 >= rtU.Thresholds.Vq_max_limit_V) {
         rtDW.is_c3_Pegasus_MBD = IN_Lobby2_f;
       } else {
-        rtDW.Out_h = rtb_Switch_idx_0;
+        rtDW.Out = rtb_Switch_idx_0;
       }
       break;
 
@@ -349,7 +553,7 @@ void Pegasus_MBD_step(void)
       if (rtb_Switch_idx_0 > rtU.Thresholds.Vq_min_limit_V) {
         rtDW.is_c3_Pegasus_MBD = IN_Lobby_k;
       } else {
-        rtDW.Out_h = rtU.Thresholds.Vq_min_limit_V;
+        rtDW.Out = rtU.Thresholds.Vq_min_limit_V;
       }
       break;
 
@@ -358,82 +562,82 @@ void Pegasus_MBD_step(void)
       if (rtb_Switch_idx_0 < rtU.Thresholds.Vq_max_limit_V) {
         rtDW.is_c3_Pegasus_MBD = IN_Lobby_k;
       } else {
-        rtDW.Out_h = rtU.Thresholds.Vq_max_limit_V;
+        rtDW.Out = rtU.Thresholds.Vq_max_limit_V;
       }
       break;
     }
   }
 
-  /* End of Chart: '<S6>/Iq_Refer_Saturation2' */
+  /* End of Chart: '<S6>/Vq_Refer_Saturation' */
 
   /* Outputs for Atomic SubSystem: '<S6>/Inverse Park Transform' */
-  /* Switch: '<S22>/Switch' incorporates:
-   *  Product: '<S9>/dcos'
-   *  Product: '<S9>/dsin'
-   *  Product: '<S9>/qcos'
-   *  Product: '<S9>/qsin'
-   *  Sum: '<S9>/sum_alpha'
-   *  Sum: '<S9>/sum_beta'
+  /* Switch: '<S23>/Switch' incorporates:
+   *  Product: '<S10>/dcos'
+   *  Product: '<S10>/dsin'
+   *  Product: '<S10>/qcos'
+   *  Product: '<S10>/qsin'
+   *  Sum: '<S10>/sum_alpha'
+   *  Sum: '<S10>/sum_beta'
    */
-  rtb_Switch_idx_0 = (rtDW.Out_o * rtb_Abs1_m) - (rtDW.Out_h * rtb_Abs1);
-  rtb_Switch_idx_1 = (rtDW.Out_h * rtb_Abs1_m) + (rtDW.Out_o * rtb_Abs1);
+  rtb_Switch_idx_0 = (rtDW.Out_o * rtb_Abs1_m) - (rtDW.Out * rtb_Abs1);
+  rtb_Switch_idx_1 = (rtDW.Out * rtb_Abs1_m) + (rtDW.Out_o * rtb_Abs1);
 
-  /* Chart: '<S6>/Va_Saturation2' incorporates:
-   *  AlgorithmDescriptorDelegate generated from: '<S9>/a16'
+  /* Chart: '<S6>/Va_Saturation' incorporates:
+   *  AlgorithmDescriptorDelegate generated from: '<S10>/a16'
    *  Inport: '<Root>/Thresholds'
    */
-  Va_Saturation2(rtb_Switch_idx_0, rtU.Thresholds.BusVoltage_V, &rtDW.Out_d,
-                 &rtDW.sf_Va_Saturation2);
+  Va_Saturation(rtb_Switch_idx_0, rtU.Thresholds.BusVoltage_V / ROOT2, &rtDW.Out_d,
+                &rtDW.sf_Va_Saturation);
 
-  /* Gain: '<S8>/one_by_two' incorporates:
-   *  AlgorithmDescriptorDelegate generated from: '<S9>/a16'
+  /* Gain: '<S9>/one_by_two' incorporates:
+   *  AlgorithmDescriptorDelegate generated from: '<S10>/a16'
    */
   rtb_Abs1_m = 0.5F * rtb_Switch_idx_0;
 
-  /* Gain: '<S8>/sqrt3_by_two' incorporates:
-   *  AlgorithmDescriptorDelegate generated from: '<S9>/a16'
+  /* Gain: '<S9>/sqrt3_by_two' incorporates:
+   *  AlgorithmDescriptorDelegate generated from: '<S10>/a16'
    */
   rtb_Abs1 = 0.866025388F * rtb_Switch_idx_1;
 
   /* End of Outputs for SubSystem: '<S6>/Inverse Park Transform' */
 
-  /* Chart: '<S6>/Va_Saturation3' incorporates:
+  /* Chart: '<S6>/Vb_Saturation' incorporates:
    *  Inport: '<Root>/Thresholds'
-   *  Sum: '<S8>/add_b'
+   *  Sum: '<S9>/add_b'
    */
-  Va_Saturation2(rtb_Abs1 - rtb_Abs1_m, rtU.Thresholds.BusVoltage_V, &rtDW.Out_m,
-                 &rtDW.sf_Va_Saturation3);
+  Va_Saturation(rtb_Abs1 - rtb_Abs1_m, rtU.Thresholds.BusVoltage_V / ROOT2, &rtDW.Out_m,
+                &rtDW.sf_Vb_Saturation);
 
-  /* Chart: '<S6>/Va_Saturation4' incorporates:
+  /* Chart: '<S6>/Vc_Saturation' incorporates:
    *  Inport: '<Root>/Thresholds'
-   *  Sum: '<S8>/add_c'
+   *  Sum: '<S9>/add_c'
    */
-  Va_Saturation2(0.0F - rtb_Abs1_m - rtb_Abs1, rtU.Thresholds.BusVoltage_V,
-                 &rtDW.Out, &rtDW.sf_Va_Saturation4);
+  Va_Saturation(0.0F - rtb_Abs1_m - rtb_Abs1, rtU.Thresholds.BusVoltage_V / ROOT2,
+                &rtDW.Out_e, &rtDW.sf_Vc_Saturation);
 
   /* BusCreator: '<S6>/Bus Creator' incorporates:
    *  Constant: '<S6>/Constant3'
+   *  Gain: '<S12>/Gain'
    *  Gain: '<S13>/Gain'
    *  Gain: '<S14>/Gain'
-   *  Gain: '<S15>/Gain'
    *  Inport: '<Root>/Thresholds'
    *  Outport: '<Root>/FOC_Out'
+   *  Product: '<S12>/Divide'
    *  Product: '<S13>/Divide'
    *  Product: '<S14>/Divide'
-   *  Product: '<S15>/Divide'
    */
   rtY.FOC_Out.Id_Refer = 0.0F;
   rtY.FOC_Out.Iq_Refer = rtDW.Out_m2;
   rtY.FOC_Out.Vd_Calculated = rtDW.Out_o;
-  rtY.FOC_Out.Vq_Calculated = rtDW.Out_h;
+  rtY.FOC_Out.Vq_Calculated = rtDW.Out;
   rtY.FOC_Out.Va = rtDW.Out_d;
   rtY.FOC_Out.Vb = rtDW.Out_m;
-  rtY.FOC_Out.Vc = rtDW.Out;
-  rtY.FOC_Out.Normalized_Va = (32767.00F * rtDW.Out_d) /
+  rtY.FOC_Out.Vc = rtDW.Out_e;
+  rtY.FOC_Out.Normalized_Va = (32767.0F * rtDW.Out_d) /
     rtU.Thresholds.BusVoltage_V;
-  rtY.FOC_Out.Normalized_Vb = (32767.00F * rtDW.Out_m) /
+  rtY.FOC_Out.Normalized_Vb = (32767.0F * rtDW.Out_m) /
     rtU.Thresholds.BusVoltage_V;
-  rtY.FOC_Out.Normalized_Vc = (32767.00F * rtDW.Out) /
+  rtY.FOC_Out.Normalized_Vc = (32767.0F * rtDW.Out_e) /
     rtU.Thresholds.BusVoltage_V;
 
   /* Product: '<S5>/Divide' incorporates:
@@ -442,7 +646,7 @@ void Pegasus_MBD_step(void)
    *  Product: '<S4>/Divide'
    */
   rtb_Switch_idx_0 = 1.0F / rtU.Thresholds.BusVoltage_V;
-  rtb_Abs1 = rtb_Switch_idx_0 * rtDW.Out;
+  rtb_Abs1 = rtb_Switch_idx_0 * rtDW.Out_e;
 
   /* Product: '<S3>/Divide' */
   rtb_Abs1_m = rtb_Switch_idx_0 * rtDW.Out_d;
@@ -515,7 +719,7 @@ void Pegasus_MBD_step(void)
   /* Switch: '<S5>/Switch' incorporates:
    *  Constant: '<S5>/Zero'
    */
-  if (rtDW.Out > 0.0F) {
+  if (rtDW.Out_e > 0.0F) {
     rtb_Switch_idx_1 = rtb_Abs1;
   } else {
     rtb_Switch_idx_1 = 0.0F;
@@ -532,7 +736,7 @@ void Pegasus_MBD_step(void)
    *  Constant: '<S5>/Zero'
    *  Gain: '<S5>/Gain'
    */
-  if (!(-rtDW.Out > 0.0F)) {
+  if (!(-rtDW.Out_e > 0.0F)) {
     rtb_Abs1 = 0.0F;
   }
 
@@ -543,74 +747,348 @@ void Pegasus_MBD_step(void)
    */
   rtY.DutyCylces.Duty_c_neg = fabsf(rtb_Abs1);
 
-  /* Product: '<S51>/IProd Out' incorporates:
-   *  Inport: '<Root>/Gain_Iq'
-   */
-  rtb_IProdOut = rtb_Sum * rtU.Iq;
+  /* MinMax: '<S7>/Max1' */
+  rtb_Abs1 = fmaxf(fmaxf(rtDW.Out_d, rtDW.Out_m), rtDW.Out_e);
 
-  /* Product: '<S99>/IProd Out' incorporates:
+  /* MinMax: '<S7>/Max' incorporates:
+   *  Inport: '<Root>/I_a'
+   *  Inport: '<Root>/I_b'
+   *  Inport: '<Root>/I_c'
+   */
+  rtb_Abs1_m = fmaxf(fmaxf(rtU.I_a, rtU.I_b), rtU.I_c);
+
+  /* MinMax: '<S7>/Min1' */
+  rtb_Switch_idx_0 = fminf(fminf(rtDW.Out_d, rtDW.Out_m), rtDW.Out_e);
+
+  /* Chart: '<S7>/Protection_States' incorporates:
+   *  Inport: '<Root>/MotorControllerTemperature'
+   *  Inport: '<Root>/Thresholds'
+   */
+  if ((uint32_T)rtDW.is_active_c7_Pegasus_MBD == 0U) {
+    rtDW.is_active_c7_Pegasus_MBD = 1U;
+    rtDW.durationCounter_1 = 0;
+    rtDW.is_TemperatureProtection = IN_TempSafe;
+
+    /* Outport: '<Root>/MCTempFlag' */
+    rtY.MCTempFlag = SafeTemperature;
+    rtDW.durationCounter_2_j2 = 0;
+    rtDW.durationCounter_1_j = 0;
+    rtDW.is_VoltageProtection = IN_VoltageSafe;
+
+    /* Outport: '<Root>/VoltageFlag' */
+    rtY.VoltageFlag = SafeVoltage;
+    rtDW.durationCounter_1_kl = 0;
+    rtDW.is_CurrentProtection = IN_CurrentSafe;
+
+    /* Outport: '<Root>/CurrentFlag' */
+    rtY.CurrentFlag = SafeCurrent;
+  } else {
+    real_T tmp;
+    switch (rtDW.is_TemperatureProtection) {
+     case IN_HighTempError:
+      /* Outport: '<Root>/MCTempFlag' */
+      rtY.MCTempFlag = OT_Error;
+      if (!(rtU.MotorControllerTemperature < rtU.Thresholds.OTWarningLimit_C)) {
+        rtDW.durationCounter_1_k = 0;
+      }
+
+      tmp = (real_T)((real32_T)(rtU.Thresholds.TempProtectionTimeout_msec *
+        20.0F));
+      if ((real_T)rtDW.durationCounter_1_k > tmp) {
+        rtDW.durationCounter_1 = 0;
+        rtDW.is_TemperatureProtection = IN_TempSafe;
+
+        /* Outport: '<Root>/MCTempFlag' */
+        rtY.MCTempFlag = SafeTemperature;
+      } else {
+        if (!(rtU.MotorControllerTemperature < rtU.Thresholds.OTErrorLimit_C)) {
+          rtDW.durationCounter_2 = 0;
+        }
+
+        if ((real_T)rtDW.durationCounter_2 > tmp) {
+          rtDW.durationCounter_2_j = 0;
+          rtDW.durationCounter_1_h = 0;
+          rtDW.is_TemperatureProtection = IN_HighTempWarning;
+
+          /* Outport: '<Root>/MCTempFlag' */
+          rtY.MCTempFlag = OT_Warning;
+        }
+      }
+      break;
+
+     case IN_HighTempWarning:
+      /* Outport: '<Root>/MCTempFlag' */
+      rtY.MCTempFlag = OT_Warning;
+      if (!(rtU.MotorControllerTemperature > rtU.Thresholds.OTErrorLimit_C)) {
+        rtDW.durationCounter_2_j = 0;
+      }
+
+      tmp = (real_T)((real32_T)(rtU.Thresholds.TempProtectionTimeout_msec *
+        20.0F));
+      if ((real_T)rtDW.durationCounter_2_j > tmp) {
+        rtDW.durationCounter_2 = 0;
+        rtDW.durationCounter_1_k = 0;
+        rtDW.is_TemperatureProtection = IN_HighTempError;
+
+        /* Outport: '<Root>/MCTempFlag' */
+        rtY.MCTempFlag = OT_Error;
+      } else {
+        if (!(rtU.MotorControllerTemperature < rtU.Thresholds.OTWarningLimit_C))
+        {
+          rtDW.durationCounter_1_h = 0;
+        }
+
+        if ((real_T)rtDW.durationCounter_1_h > tmp) {
+          rtDW.durationCounter_1 = 0;
+          rtDW.is_TemperatureProtection = IN_TempSafe;
+
+          /* Outport: '<Root>/MCTempFlag' */
+          rtY.MCTempFlag = SafeTemperature;
+        }
+      }
+      break;
+
+     default:
+      /* Outport: '<Root>/MCTempFlag' */
+      /* case IN_TempSafe: */
+      rtY.MCTempFlag = SafeTemperature;
+      if (!(rtU.MotorControllerTemperature > rtU.Thresholds.OTWarningLimit_C)) {
+        rtDW.durationCounter_1 = 0;
+      }
+
+      if ((real_T)rtDW.durationCounter_1 > (real_T)((real32_T)
+           (rtU.Thresholds.TempProtectionTimeout_msec * 20.0F))) {
+        rtDW.durationCounter_2_j = 0;
+        rtDW.durationCounter_1_h = 0;
+        rtDW.is_TemperatureProtection = IN_HighTempWarning;
+
+        /* Outport: '<Root>/MCTempFlag' */
+        rtY.MCTempFlag = OT_Warning;
+      }
+      break;
+    }
+
+    VoltageProtection(&rtb_Abs1, &rtb_Switch_idx_0);
+    switch (rtDW.is_CurrentProtection) {
+     case IN_CurrentSafe:
+      /* Outport: '<Root>/CurrentFlag' */
+      rtY.CurrentFlag = SafeCurrent;
+      if (!(rtb_Abs1_m > rtU.Thresholds.OCWarningLimit_A)) {
+        rtDW.durationCounter_1_kl = 0;
+      }
+
+      if ((real_T)rtDW.durationCounter_1_kl > (real_T)((real32_T)
+           (rtU.Thresholds.CurrentProtectionTimeout_msec * 20.0F))) {
+        rtDW.durationCounter_2_f0 = 0;
+        rtDW.durationCounter_1_g = 0;
+        rtDW.is_CurrentProtection = IN_OC_Warning;
+
+        /* Outport: '<Root>/CurrentFlag' */
+        rtY.CurrentFlag = OC_Warning;
+      }
+      break;
+
+     case IN_OC_Error:
+      /* Outport: '<Root>/CurrentFlag' */
+      rtY.CurrentFlag = OC_Error;
+      if (!(rtb_Abs1_m < rtU.Thresholds.OCWarningLimit_A)) {
+        rtDW.durationCounter_1_f = 0;
+      }
+
+      tmp = (real_T)((real32_T)(rtU.Thresholds.CurrentProtectionTimeout_msec *
+        20.0F));
+      if ((real_T)rtDW.durationCounter_1_f > tmp) {
+        rtDW.durationCounter_1_kl = 0;
+        rtDW.is_CurrentProtection = IN_CurrentSafe;
+
+        /* Outport: '<Root>/CurrentFlag' */
+        rtY.CurrentFlag = SafeCurrent;
+      } else {
+        if (!(rtb_Abs1_m < rtU.Thresholds.OCErrorLimit_A)) {
+          rtDW.durationCounter_2_g = 0;
+        }
+
+        if ((real_T)rtDW.durationCounter_2_g > tmp) {
+          rtDW.durationCounter_2_f0 = 0;
+          rtDW.durationCounter_1_g = 0;
+          rtDW.is_CurrentProtection = IN_OC_Warning;
+
+          /* Outport: '<Root>/CurrentFlag' */
+          rtY.CurrentFlag = OC_Warning;
+        }
+      }
+      break;
+
+     default:
+      /* Outport: '<Root>/CurrentFlag' */
+      /* case IN_OC_Warning: */
+      rtY.CurrentFlag = OC_Warning;
+      if (!(rtb_Abs1_m > rtU.Thresholds.OCErrorLimit_A)) {
+        rtDW.durationCounter_2_f0 = 0;
+      }
+
+      tmp = (real_T)((real32_T)(rtU.Thresholds.CurrentProtectionTimeout_msec *
+        20.0F));
+      if ((real_T)rtDW.durationCounter_2_f0 > tmp) {
+        rtDW.durationCounter_2_g = 0;
+        rtDW.durationCounter_1_f = 0;
+        rtDW.is_CurrentProtection = IN_OC_Error;
+
+        /* Outport: '<Root>/CurrentFlag' */
+        rtY.CurrentFlag = OC_Error;
+      } else {
+        if (!(rtb_Abs1_m < rtU.Thresholds.OCWarningLimit_A)) {
+          rtDW.durationCounter_1_g = 0;
+        }
+
+        if ((real_T)rtDW.durationCounter_1_g > tmp) {
+          rtDW.durationCounter_1_kl = 0;
+          rtDW.is_CurrentProtection = IN_CurrentSafe;
+
+          /* Outport: '<Root>/CurrentFlag' */
+          rtY.CurrentFlag = SafeCurrent;
+        }
+      }
+      break;
+    }
+  }
+
+  if (rtU.MotorControllerTemperature > rtU.Thresholds.OTWarningLimit_C) {
+    rtDW.durationCounter_1++;
+  } else {
+    rtDW.durationCounter_1 = 0;
+  }
+
+  if (rtU.MotorControllerTemperature < rtU.Thresholds.OTWarningLimit_C) {
+    rtDW.durationCounter_1_k++;
+    rtDW.durationCounter_1_h++;
+  } else {
+    rtDW.durationCounter_1_k = 0;
+    rtDW.durationCounter_1_h = 0;
+  }
+
+  if (rtU.MotorControllerTemperature < rtU.Thresholds.OTErrorLimit_C) {
+    rtDW.durationCounter_2++;
+  } else {
+    rtDW.durationCounter_2 = 0;
+  }
+
+  if (rtU.MotorControllerTemperature > rtU.Thresholds.OTErrorLimit_C) {
+    rtDW.durationCounter_2_j++;
+  } else {
+    rtDW.durationCounter_2_j = 0;
+  }
+
+  if (rtb_Switch_idx_0 > rtU.Thresholds.UVErrorLimit_V) {
+    rtDW.durationCounter_1_n++;
+  } else {
+    rtDW.durationCounter_1_n = 0;
+  }
+
+  if (rtb_Switch_idx_0 < rtU.Thresholds.UVErrorLimit_V) {
+    rtDW.durationCounter_1_h3++;
+  } else {
+    rtDW.durationCounter_1_h3 = 0;
+  }
+
+  if (rtb_Switch_idx_0 < rtU.Thresholds.UVWarningLimit_V) {
+    rtDW.durationCounter_1_j++;
+  } else {
+    rtDW.durationCounter_1_j = 0;
+  }
+
+  if (rtb_Switch_idx_0 > rtU.Thresholds.UVWarningLimit_V) {
+    rtDW.durationCounter_2_d++;
+    rtDW.durationCounter_2_i++;
+  } else {
+    rtDW.durationCounter_2_d = 0;
+    rtDW.durationCounter_2_i = 0;
+  }
+
+  if (rtb_Abs1 > rtU.Thresholds.OVWarningLimit_V) {
+    rtDW.durationCounter_2_j2++;
+  } else {
+    rtDW.durationCounter_2_j2 = 0;
+  }
+
+  if (rtb_Abs1 < rtU.Thresholds.OVWarningLimit_V) {
+    rtDW.durationCounter_1_hz++;
+    rtDW.durationCounter_1_jg++;
+  } else {
+    rtDW.durationCounter_1_hz = 0;
+    rtDW.durationCounter_1_jg = 0;
+  }
+
+  if (rtb_Abs1 < rtU.Thresholds.OVErrorLimit_V) {
+    rtDW.durationCounter_2_f++;
+  } else {
+    rtDW.durationCounter_2_f = 0;
+  }
+
+  if (rtb_Abs1 > rtU.Thresholds.OVErrorLimit_V) {
+    rtDW.durationCounter_2_h++;
+  } else {
+    rtDW.durationCounter_2_h = 0;
+  }
+
+  if (rtb_Abs1_m > rtU.Thresholds.OCWarningLimit_A) {
+    rtDW.durationCounter_1_kl++;
+  } else {
+    rtDW.durationCounter_1_kl = 0;
+  }
+
+  if (rtb_Abs1_m < rtU.Thresholds.OCWarningLimit_A) {
+    rtDW.durationCounter_1_f++;
+    rtDW.durationCounter_1_g++;
+  } else {
+    rtDW.durationCounter_1_f = 0;
+    rtDW.durationCounter_1_g = 0;
+  }
+
+  if (rtb_Abs1_m < rtU.Thresholds.OCErrorLimit_A) {
+    rtDW.durationCounter_2_g++;
+  } else {
+    rtDW.durationCounter_2_g = 0;
+  }
+
+  if (rtb_Abs1_m > rtU.Thresholds.OCErrorLimit_A) {
+    rtDW.durationCounter_2_f0++;
+  } else {
+    rtDW.durationCounter_2_f0 = 0;
+  }
+
+  /* End of Chart: '<S7>/Protection_States' */
+
+  /* Update for DiscreteIntegrator: '<S103>/Integrator' incorporates:
    *  Inport: '<Root>/Gain_Id'
+   *  Product: '<S100>/IProd Out'
    */
-  rtb_IProdOut_o = rtb_Abs_h * rtU.Id;
+  rtDW.Integrator_DSTATE += (rtb_Abs_h * rtU.Id) * 5.0E-5F;
 
-  /* Update for DiscreteIntegrator: '<S102>/Integrator' */
-  rtDW.Integrator_DSTATE += 5.0E-5F * rtb_IProdOut_o;
-
-  /* Update for DiscreteIntegrator: '<S97>/Filter' */
+  /* Update for DiscreteIntegrator: '<S98>/Filter' */
   rtDW.Filter_DSTATE += 5.0E-5F * rtb_NProdOut;
 
-  /* Update for DiscreteIntegrator: '<S54>/Integrator' */
-  rtDW.Integrator_DSTATE_e += 5.0E-5F * rtb_IProdOut;
-
-  /* Update for DiscreteIntegrator: '<S49>/Filter' */
-  rtDW.Filter_DSTATE_f += 5.0E-5F * rtb_NProdOut_l;
-
-  /* Update absolute time for base rate */
-  /* The "clockTick0" counts the number of times the code of this task has
-   * been executed. The absolute time is the multiplication of "clockTick0"
-   * and "Timing.stepSize0". Size of "clockTick0" ensures timer will not
-   * overflow during the application lifespan selected.
+  /* Update for DiscreteIntegrator: '<S55>/Integrator' incorporates:
+   *  Inport: '<Root>/Gain_Iq'
+   *  Product: '<S52>/IProd Out'
    */
-  rtM->Timing.t[0] =
-    ((time_T)(++rtM->Timing.clockTick0)) * rtM->Timing.stepSize0;
+  rtDW.Integrator_DSTATE_e += (rtb_Sum * rtU.Iq) * 5.0E-5F;
 
-  {
-    /* Update absolute timer for sample time: [5.0E-5s, 0.0s] */
-    /* The "clockTick1" counts the number of times the code of this task has
-     * been executed. The resolution of this integer timer is 5.0E-5, which is the step size
-     * of the task. Size of "clockTick1" ensures timer will not overflow during the
-     * application lifespan selected.
-     */
-    rtM->Timing.clockTick1++;
-  }
+  /* Update for DiscreteIntegrator: '<S50>/Filter' */
+  rtDW.Filter_DSTATE_f += 5.0E-5F * rtb_NProdOut_n;
 }
 
 /* Model initialize function */
 void Pegasus_MBD_initialize(void)
 {
-  /* Registration code */
-  {
-    /* Setup solver object */
-    rtsiSetSimTimeStepPtr(&rtM->solverInfo, &rtM->Timing.simTimeStep);
-    rtsiSetTPtr(&rtM->solverInfo, &rtmGetTPtr(rtM));
-    rtsiSetStepSizePtr(&rtM->solverInfo, &rtM->Timing.stepSize0);
-    rtsiSetErrorStatusPtr(&rtM->solverInfo, (&rtmGetErrorStatus(rtM)));
-    rtsiSetRTModelPtr(&rtM->solverInfo, rtM);
-  }
+  /* SystemInitialize for Chart: '<S6>/Va_Saturation' */
+  Va_Saturation_Init(&rtDW.Out_d);
 
-  rtsiSetSimTimeStep(&rtM->solverInfo, MAJOR_TIME_STEP);
-  rtsiSetSolverName(&rtM->solverInfo,"FixedStepDiscrete");
-  rtmSetTPtr(rtM, &rtM->Timing.tArray[0]);
-  rtM->Timing.stepSize0 = 5.0E-5;
+  /* SystemInitialize for Chart: '<S6>/Vb_Saturation' */
+  Va_Saturation_Init(&rtDW.Out_m);
 
-  /* SystemInitialize for Chart: '<S6>/Va_Saturation2' */
-  Va_Saturation2_Init(&rtDW.Out_d);
-
-  /* SystemInitialize for Chart: '<S6>/Va_Saturation3' */
-  Va_Saturation2_Init(&rtDW.Out_m);
-
-  /* SystemInitialize for Chart: '<S6>/Va_Saturation4' */
-  Va_Saturation2_Init(&rtDW.Out);
+  /* SystemInitialize for Chart: '<S6>/Vc_Saturation' */
+  Va_Saturation_Init(&rtDW.Out_e);
 
   rtU.Pole_pairs = POLEPAIRS;
   rtU.Rs = 0.0107;
@@ -618,17 +1096,32 @@ void Pegasus_MBD_initialize(void)
   rtU.Lq = 0.000387;
   rtU.Lambda_m = 0.0263;
   rtU.Iq_Torque_ratio = 4.424;
-  rtU.Pq = 7;
-  rtU.Iq = 8;
-  rtU.Dq = 0.0010;
-  rtU.Pd = 5;
-  rtU.Id = 5;
-  rtU.Dd = 0.0010;
-  rtU.FilterCoefficient = 20;
-  rtU.Thresholds.Iq_max_limit_A = 20.0;
-  rtU.Thresholds.Iq_min_limit_A = -20.0;
+  rtU.Pq = 0.005;
+  rtU.Iq = 8.0;
+  rtU.Dq = 0.01;
+  rtU.Pd = 0.005;
+  rtU.Id = 8.0;
+  rtU.Dd = 0.01;
+  rtU.FilterCoefficient = 10.0;
+  rtU.Thresholds.Iq_max_limit_A = 140.0;
+  rtU.Thresholds.Iq_min_limit_A = -140.0;
   rtU.Thresholds.Vq_max_limit_V = 35.0;
   rtU.Thresholds.Vq_min_limit_V = -35.0;
+  rtU.Thresholds.Vd_max_limit_V = 35.0;
+  rtU.Thresholds.Vd_min_limit_V = -35.0;
+  rtU.Thresholds.MaxCurrentLimit_A = 140.0;
+  rtU.Thresholds.OTWarningLimit_C = 80.0;
+  rtU.Thresholds.OTErrorLimit_C = 100.0;
+  rtU.Thresholds.UVWarningLimit_V = 45.0;
+  rtU.Thresholds.UVErrorLimit_V = 40.0;
+  rtU.Thresholds.OVWarningLimit_V = 65.0;
+  rtU.Thresholds.OVErrorLimit_V = 70.0;
+  rtU.Thresholds.OCWarningLimit_A = 70.0;
+  rtU.Thresholds.OCErrorLimit_A = 140.0;
+  rtU.Thresholds.WarningSpeedLimit_rpm = 3200.0;
+  rtU.Thresholds.VoltageProtectionTimeout_msec = 10.0;
+  rtU.Thresholds.TempProtectionTimeout_msec = 10.0;
+  rtU.Thresholds.CurrentProtectionTimeout_msec = 1.0;
 }
 
 /*

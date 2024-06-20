@@ -72,6 +72,7 @@
 #define TEMP_AVG                            15.0
 #define VOLTAGE_AVG                         60.0
 #define ROOT3                               1.7320508
+#define ROOT2                               1.4142135
 
 
 

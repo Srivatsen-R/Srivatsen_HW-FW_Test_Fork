@@ -178,6 +178,7 @@ int main(void) {
       send_on_300();
       send_on_301();
       send_on_302();
+      send_on_303();
 
       prev_time = time_count;
     }
@@ -217,7 +218,7 @@ void send_on_300()
   can_data[0] = (uint8_t)(rtY.FOC_Out.Va + 60.0);
   can_data[1] = (uint8_t)(rtY.FOC_Out.Vb + 60.0);
   can_data[2] = (uint8_t)(rtY.FOC_Out.Vc + 60.0);
-  can_data[3] = (uint8_t)rtY.FOC_Out.Iq_Refer;
+  can_data[3] = (uint8_t)(rtY.FOC_Out.Iq_Refer);
   can_data[4] = (uint8_t)((uint16_t)(rtY.FOC_Out.Vq_Calculated + 10000.0) & 0x00FF);
   can_data[5] = (uint8_t)(((uint16_t)(rtY.FOC_Out.Vq_Calculated + 10000.0) & 0xFF00) >> 8);
   can_data[6] = (uint8_t)((uint16_t)(rtY.FOC_Out.Vd_Calculated + 10000.0) & 0x00FF);
@@ -228,8 +229,8 @@ void send_on_300()
 void send_on_301()
 {
   uint8_t can_data[8] = {0};
-  can_data[0] = (uint8_t)rtY.FOC_Out.Id_Refer;
-  can_data[1] = (uint8_t)rtY.FOC_Out.Iq_Calculated;
+  can_data[0] = (uint8_t)(rtY.FOC_Out.Id_Refer);
+  can_data[1] = (uint8_t)(rtY.FOC_Out.Iq_Calculated);
   can_data[2] = (uint8_t)((uint16_t)(rtU.I_a + 400.0) & 0x00FF);
   can_data[3] = (uint8_t)(((uint16_t)(rtU.I_a + 400.0) & 0xFF00) >> 8);
   can_data[4] = (uint8_t)((uint16_t)(rtU.I_b + 400.0) & 0x00FF);
@@ -247,10 +248,20 @@ void send_on_302()
   can_data[2] = (uint8_t)rtU.Torque;
   can_data[3] = (uint8_t)((uint16_t)((foc.speed_sense * -1.0) * SPEED_PU_TO_RPM) & 0x00FF);
   can_data[4] = (uint8_t)(((uint16_t)((foc.speed_sense * -1.0) * SPEED_PU_TO_RPM) & 0xFF00) >> 8);
-  can_data[5] = (uint8_t)(((uint16_t)(terminal.volt.bus_volt * 100.0)) & 0x00FF);
-  can_data[6] = (uint8_t)(((uint16_t)(terminal.volt.bus_volt * 100.0) & 0xFF00) >> 8);
+  can_data[5] = (uint8_t)(((uint16_t)(rtU.Thresholds.BusVoltage_V * 100.0)) & 0x00FF);
+  can_data[6] = (uint8_t)(((uint16_t)(rtU.Thresholds.BusVoltage_V * 100.0) & 0xFF00) >> 8);
   can_data[7] = (uint8_t)((uint16_t)(motorControl.temperature.motor));
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_302, S, can_data, FDCAN_DLC_BYTES);
+}
+
+void send_on_303()
+{
+  uint8_t can_data[8] = {0};
+  can_data[0] = (uint8_t)((uint16_t)(rtU.MotorControllerTemperature));
+  can_data[1] = (uint8_t)(rtY.CurrentFlag);
+  can_data[2] = (uint8_t)(rtY.MCTempFlag);
+  can_data[3] = (uint8_t)(rtY.VoltageFlag);
+  _fdcan_transmit_on_can(FDCAN_DEBUG_ID_303, S, can_data, FDCAN_DLC_BYTES);
 }
 
 void send_on_6F0(uint8_t* UIID_Arr)
@@ -360,8 +371,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
     }
 
     //motor angle,current
-    BUS_VOLTAGE_VD_VQ_LIMIT_SET();
-    
     READ_MOTOR_POSITION();
 
     FOC_READ_MOTOR_POSITION();

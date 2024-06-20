@@ -25,6 +25,7 @@ void get_UIID(void);
 void send_on_300(void);
 void send_on_301(void);
 void send_on_302(void);
+void send_on_303(void);
 void send_on_6F0(uint8_t* UIID_Arr);
 void send_on_6F1(uint8_t* UIID_Arr);
 void send_on_6F2(uint8_t* UIID_Arr);

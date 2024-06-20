@@ -82,16 +82,6 @@ extern int count_duty;
 extern int forward_flag;
 extern int reverse_flag;
 
-void BUS_VOLTAGE_VD_VQ_LIMIT_SET()
-{
-     rtU.Thresholds.BusVoltage_V = busVoltage / 1.414;
-
-     float limit_Vd_max = sqrt(powf(rtU.Thresholds.BusVoltage_V, 2.0) - powf(rtY.FOC_Out.Vq_Calculated, 2.0));
-
-     rtU.Thresholds.Vd_max_limit_V = limit_Vd_max;
-     rtU.Thresholds.Vd_min_limit_V = -limit_Vd_max;
-}
-
 void ANALOG_READING()
 {
      //controller temperature 
@@ -110,13 +100,11 @@ void ANALOG_READING()
      temp_K -= KELVIN_TO_CELSIUS;
      motorControl.temperature.motor = moving_Temperature_measured_fun_M(temp_K, TEMP_AVG);
 
+     rtU.MotorControllerTemperature = avg_board_temp;
+
      //bus voltage
      busVoltage = moving_Batt_voltage_measured_fun(0.00211*analog.bufferData[BUS_VOLTAGE] +VBUS_OFFSET,VOLTAGE_AVG); 
-     terminal.volt.bus_volt = busVoltage;
-   
-     //ac phase voltage    
-     v_rms = 10*sqrt(terminal.vd.ref * terminal.vd.ref + terminal.vq.ref * terminal.vq.ref);
-     v_rms /= 32767.0;
-     v_rms *= busVoltage/ROOT3;
-     v_rms = moving_AC_voltage_measured_fun(v_rms,VOLTAGE_AVG);   
+     terminal.volt.bus_volt = busVoltage; 
+
+     rtU.Thresholds.BusVoltage_V = busVoltage;
 }

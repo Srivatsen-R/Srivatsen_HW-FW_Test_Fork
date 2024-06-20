@@ -139,7 +139,7 @@ void FOC_READ_MOTOR_POSITION(void)
     //Synchronous Speed Calculation
     foc.sync_speed = CALCULATE_SYNC_SPEED(foc.slip_speed,foc.rotor_speed_filtered);//sync speed
 
-    if((foc.speed_sense * -1.0 * SPEED_PU_TO_RPM)<10.0)
+    if((foc.speed_sense * -1.0 * SPEED_PU_TO_RPM)<10.0 && duty_state)
     { 
         angle_mech = (100-Duty)*DUTY_TO_RADIAN;
 
@@ -147,12 +147,18 @@ void FOC_READ_MOTOR_POSITION(void)
         foc.rho_prev = POLEPAIRS*angle_mech; // elec angle
         if (angle_mech>2.095 && angle_mech<4.1866){foc.rho_prev = foc.rho_prev - 6.28;}
         else  if(angle_mech>=4.1886){foc.rho_prev = foc.rho_prev - 12.56;}
+        duty_state = 0;
     }
 
     if(reset_flag == 1)
     {
         foc.rho_prev = 0.0;
         reset_flag=0;
+    }
+
+    if((foc.speed_sense * SPEED_PU_TO_RPM * -1.0) <= 0.0)
+    {
+        duty_state = 1;
     }
 
     foc.rho = READ_ROTOR_ANGLE(foc.rho_prev,foc.sync_speed,foc.sync_speed_prev);//electrical angle
@@ -186,9 +192,9 @@ void FOC_SPACE_VECTOR_MODULATION()
     else if (rtY.FOC_Out.Normalized_Vc < LL)
         rtY.FOC_Out.Normalized_Vc = LL;
 
-    foc.pwm_a = (PWM_CONST_2*(rtY.FOC_Out.Normalized_Va))  + PWM_CONST_1;
-    foc.pwm_b = (PWM_CONST_2*(rtY.FOC_Out.Normalized_Vb))  + PWM_CONST_1;
-    foc.pwm_c = (PWM_CONST_2*(rtY.FOC_Out.Normalized_Vc))  + PWM_CONST_1;   
+    foc.pwm_a = (uint16_t)((PWM_CONST_2*(rtY.FOC_Out.Normalized_Va))  + PWM_CONST_1);
+    foc.pwm_b = (uint16_t)((PWM_CONST_2*(rtY.FOC_Out.Normalized_Vb))  + PWM_CONST_1);
+    foc.pwm_c = (uint16_t)((PWM_CONST_2*(rtY.FOC_Out.Normalized_Vc))  + PWM_CONST_1);   
 
     if (foc.pwm_a < 0)
         foc.pwm_a = 0;

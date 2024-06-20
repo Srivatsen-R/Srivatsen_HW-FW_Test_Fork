@@ -55,7 +55,6 @@ void FAULT_READING(void);
 int  Encoder_Fault(int,int);
 void Encoder_Check(int);
 void SAFETY_AND_ERRORS(void);
-void BUS_VOLTAGE_VD_VQ_LIMIT_SET(void);
 
 
 #endif 

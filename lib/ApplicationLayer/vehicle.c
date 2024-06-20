@@ -102,8 +102,3 @@ void READ_MOTOR_POSITION()
 {
   motorControl.encoder.value =  TIM2->CNT;   // Encoder Count 
 }
-
-
-
-
-
