@@ -133,6 +133,8 @@ void FOC_READ_MOTOR_POSITION(void)
     foc.speed_sense = (foc.rotor_speed_filtered)*PU*1.0;
     if(foc.speed_sense>MAX_PU_SPEED){foc.speed_sense=MAX_PU_SPEED;} 
 
+    rtU.Speed_rpm_fb = (foc.speed_sense * SPEED_PU_TO_RPM * -1.0);
+
     static float angle_mech;
 
     foc.slip_speed = 0.0;

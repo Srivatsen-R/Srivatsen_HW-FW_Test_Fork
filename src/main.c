@@ -185,10 +185,10 @@ int main(void) {
 
     if (time_count - prev_thr_time >= 100)
     {
-      rtU.Torque = map(analog.bufferData[THROTTLE], 8900.0, 40000.0, 0.0, 80.0);
+      rtU.Speed_rpm = map(analog.bufferData[THROTTLE], 8900.0, 40000.0, 0.0, 1000.0);
 
-      if (rtU.Torque < 0.0)
-        rtU.Torque = 0.0;
+      if (rtU.Speed_rpm < 0.0)
+        rtU.Speed_rpm = 0.0;
 
       prev_thr_time = time_count;
     }
@@ -245,22 +245,23 @@ void send_on_302()
   uint8_t can_data[8] = {0};
   can_data[0] = (uint8_t)((uint16_t)((foc.rho + 2 * PI) * 100.0) & 0x00FF);
   can_data[1] = (uint8_t)(((uint16_t)((foc.rho + 2 * PI) * 100.0) & 0xFF00) >> 8);
-  can_data[2] = (uint8_t)rtU.Torque;
-  can_data[3] = (uint8_t)((uint16_t)((foc.speed_sense * -1.0) * SPEED_PU_TO_RPM) & 0x00FF);
-  can_data[4] = (uint8_t)(((uint16_t)((foc.speed_sense * -1.0) * SPEED_PU_TO_RPM) & 0xFF00) >> 8);
-  can_data[5] = (uint8_t)(((uint16_t)(rtU.Thresholds.BusVoltage_V * 100.0)) & 0x00FF);
-  can_data[6] = (uint8_t)(((uint16_t)(rtU.Thresholds.BusVoltage_V * 100.0) & 0xFF00) >> 8);
-  can_data[7] = (uint8_t)((uint16_t)(motorControl.temperature.motor));
+  can_data[2] = (uint8_t)((uint16_t)(rtU.Speed_rpm) & 0x00FF);
+  can_data[3] = (uint8_t)(((uint16_t)(rtU.Speed_rpm) & 0xFF00) >> 8);
+  can_data[4] = (uint8_t)((uint16_t)((foc.speed_sense * -1.0) * SPEED_PU_TO_RPM) & 0x00FF);
+  can_data[5] = (uint8_t)(((uint16_t)((foc.speed_sense * -1.0) * SPEED_PU_TO_RPM) & 0xFF00) >> 8);
+  can_data[6] = (uint8_t)(((uint16_t)(rtU.BusVoltage_V * 100.0)) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(rtU.BusVoltage_V * 100.0) & 0xFF00) >> 8);
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_302, S, can_data, FDCAN_DLC_BYTES);
 }
 
 void send_on_303()
 {
   uint8_t can_data[8] = {0};
-  can_data[0] = (uint8_t)((uint16_t)(rtU.MotorControllerTemperature));
-  can_data[1] = (uint8_t)(rtY.CurrentFlag);
-  can_data[2] = (uint8_t)(rtY.MCTempFlag);
-  can_data[3] = (uint8_t)(rtY.VoltageFlag);
+  can_data[0] = (uint8_t)((uint16_t)(rtU.MotorTemperature_C));
+  can_data[1] = (uint8_t)((uint16_t)(rtU.MotorControllerTemperature_C));
+  can_data[2] = (uint8_t)(rtY.CurrentFlag);
+  can_data[3] = (uint8_t)(rtY.MCTempFlag);
+  can_data[4] = (uint8_t)(rtY.VoltageFlag);
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_303, S, can_data, FDCAN_DLC_BYTES);
 }
 

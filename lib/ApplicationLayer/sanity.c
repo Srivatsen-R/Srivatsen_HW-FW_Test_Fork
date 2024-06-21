@@ -100,11 +100,12 @@ void ANALOG_READING()
      temp_K -= KELVIN_TO_CELSIUS;
      motorControl.temperature.motor = moving_Temperature_measured_fun_M(temp_K, TEMP_AVG);
 
-     rtU.MotorControllerTemperature = avg_board_temp;
+     rtU.MotorControllerTemperature_C = avg_board_temp;
+     rtU.MotorTemperature_C = motorControl.temperature.motor;
 
      //bus voltage
      busVoltage = moving_Batt_voltage_measured_fun(0.00211*analog.bufferData[BUS_VOLTAGE] +VBUS_OFFSET,VOLTAGE_AVG); 
      terminal.volt.bus_volt = busVoltage; 
 
-     rtU.Thresholds.BusVoltage_V = busVoltage;
+     rtU.BusVoltage_V = busVoltage;
 }
