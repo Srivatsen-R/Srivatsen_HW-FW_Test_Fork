@@ -82,6 +82,64 @@ extern int count_duty;
 extern int forward_flag;
 extern int reverse_flag;
 
+void FAULT_DETECTION()
+{
+        if (rtY.CurrentFlag == OC_Warning)
+        {
+                if (motorControl.drive.check == DRIVE_DISABLE)
+                {
+                        motorControl.drive.check = DRIVE_ENABLE;
+                }
+        }
+        else if (rtY.CurrentFlag == OC_Error)
+        {
+                motorControl.drive.check = DRIVE_DISABLE;
+        }
+
+        if (rtU.MotorTemperature_C >= 130.0)
+        {
+                motorControl.drive.check = DRIVE_DISABLE;
+        }
+        else if (rtU.MotorTemperature_C < 100.0)
+        {
+                if (motorControl.drive.check == DRIVE_DISABLE)
+                {
+                        motorControl.drive.check = DRIVE_ENABLE;
+                }
+        }
+
+        // if (rtY.VoltageFlag == OV_Warning)
+        // {
+        //         if (motorControl.drive.check == DRIVE_DISABLE)
+        //         {
+        //                 motorControl.drive.check = DRIVE_ENABLE; 
+        //         }
+        // }
+        // else if (rtY.VoltageFlag == OV_Error)
+        // {
+        //         motorControl.drive.check = DRIVE_DISABLE;
+        // }
+
+        // if (rtY.MCTempFlag == OT_Warning)
+        // {
+        //         if (motorControl.drive.check == DRIVE_DISABLE)
+        //         {
+        //                 motorControl.drive.check = DRIVE_ENABLE;
+        //         }
+        // }
+        // else if (rtY.MCTempFlag == OT_Error)
+        // {
+        //         motorControl.drive.check = DRIVE_DISABLE;
+        // }
+
+        // float V_max = sqrtf(powf(rtY.FOC_Out.Vq_Calculated, 2.0f) + powf(rtY.FOC_Out.Vd_Calculated, 2.0f));
+
+        // if (V_max >= rtU.BusVoltage_V)
+        // {
+        //         motorControl.drive.check = DRIVE_DISABLE;
+        // }
+}
+
 void ANALOG_READING()
 {
      //controller temperature 
@@ -107,5 +165,5 @@ void ANALOG_READING()
      busVoltage = moving_Batt_voltage_measured_fun(0.00211*analog.bufferData[BUS_VOLTAGE] +VBUS_OFFSET,VOLTAGE_AVG); 
      terminal.volt.bus_volt = busVoltage; 
 
-     rtU.BusVoltage_V = busVoltage;
+     rtU.BusVoltage_V = 63.0;
 }

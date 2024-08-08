@@ -418,17 +418,17 @@ void SVPWM_MODE_DRIVE_FUNCTION(int A_Duty_Svpwm_iq15 , int B_Duty_Svpwm_iq15  , 
 
    A_Duty_Svpwm_Temp_iq15 = A_Duty_Svpwm_iq15 ;
    A_Duty_Svpwm_Temp_iq15 -= OFF_Duty_Spwm_iq15 ;
-   A_Duty_Svpwm_Temp_iq15 = A_Duty_Svpwm_Temp_iq15*(1.0) ;
+   A_Duty_Svpwm_Temp_iq15 = A_Duty_Svpwm_Temp_iq15*(1.1547) ;
    A_Duty_Svpwm_Temp_iq15 += (PWM_DUTY_ADD) ;
 
    B_Duty_Svpwm_Temp_iq15 = B_Duty_Svpwm_iq15 ;
    B_Duty_Svpwm_Temp_iq15 -= OFF_Duty_Spwm_iq15 ;
-   B_Duty_Svpwm_Temp_iq15 = (B_Duty_Svpwm_Temp_iq15*(1.0)) ;
+   B_Duty_Svpwm_Temp_iq15 = (B_Duty_Svpwm_Temp_iq15*(1.1547)) ;
    B_Duty_Svpwm_Temp_iq15 += (PWM_DUTY_ADD) ;
 
    C_Duty_Svpwm_Temp_iq15 = C_Duty_Svpwm_iq15 ;
    C_Duty_Svpwm_Temp_iq15 -= OFF_Duty_Spwm_iq15 ;
-   C_Duty_Svpwm_Temp_iq15 = C_Duty_Svpwm_Temp_iq15*(1.0) ;
+   C_Duty_Svpwm_Temp_iq15 = C_Duty_Svpwm_Temp_iq15*(1.1547) ;
    C_Duty_Svpwm_Temp_iq15 += (PWM_DUTY_ADD) ;
 
    __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,A_Duty_Svpwm_Temp_iq15);
@@ -447,12 +447,18 @@ void MotorControl_Init (void) {
         if(HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3) != HAL_OK) Error_Handler();
       	if(HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2) != HAL_OK) Error_Handler();
         if(HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1) != HAL_OK) Error_Handler();
-			
-        DRIVE_STOP();	
 }
 
 void DRIVE_STOP(void) { 
     HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
+
+    HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1);
+    HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_2);
+    HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_3);
+
+    HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
+    HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_2);
+    HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_3);
 }
 
 

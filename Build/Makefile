@@ -1060,6 +1060,60 @@ lib/ApplicationLayer/Pegasus_MBD.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Pegasus_MBD.c.s
 .PHONY : lib/ApplicationLayer/Pegasus_MBD.c.s
 
+lib/ApplicationLayer/Position_Calculation.obj: lib/ApplicationLayer/Position_Calculation.c.obj
+.PHONY : lib/ApplicationLayer/Position_Calculation.obj
+
+# target to build an object file
+lib/ApplicationLayer/Position_Calculation.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Position_Calculation.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Position_Calculation.c.obj
+.PHONY : lib/ApplicationLayer/Position_Calculation.c.obj
+
+lib/ApplicationLayer/Position_Calculation.i: lib/ApplicationLayer/Position_Calculation.c.i
+.PHONY : lib/ApplicationLayer/Position_Calculation.i
+
+# target to preprocess a source file
+lib/ApplicationLayer/Position_Calculation.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Position_Calculation.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Position_Calculation.c.i
+.PHONY : lib/ApplicationLayer/Position_Calculation.c.i
+
+lib/ApplicationLayer/Position_Calculation.s: lib/ApplicationLayer/Position_Calculation.c.s
+.PHONY : lib/ApplicationLayer/Position_Calculation.s
+
+# target to generate assembly for a file
+lib/ApplicationLayer/Position_Calculation.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Position_Calculation.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Position_Calculation.c.s
+.PHONY : lib/ApplicationLayer/Position_Calculation.c.s
+
+lib/ApplicationLayer/Position_Calculation_data.obj: lib/ApplicationLayer/Position_Calculation_data.c.obj
+.PHONY : lib/ApplicationLayer/Position_Calculation_data.obj
+
+# target to build an object file
+lib/ApplicationLayer/Position_Calculation_data.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Position_Calculation_data.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Position_Calculation_data.c.obj
+.PHONY : lib/ApplicationLayer/Position_Calculation_data.c.obj
+
+lib/ApplicationLayer/Position_Calculation_data.i: lib/ApplicationLayer/Position_Calculation_data.c.i
+.PHONY : lib/ApplicationLayer/Position_Calculation_data.i
+
+# target to preprocess a source file
+lib/ApplicationLayer/Position_Calculation_data.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Position_Calculation_data.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Position_Calculation_data.c.i
+.PHONY : lib/ApplicationLayer/Position_Calculation_data.c.i
+
+lib/ApplicationLayer/Position_Calculation_data.s: lib/ApplicationLayer/Position_Calculation_data.c.s
+.PHONY : lib/ApplicationLayer/Position_Calculation_data.s
+
+# target to generate assembly for a file
+lib/ApplicationLayer/Position_Calculation_data.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Position_Calculation_data.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Position_Calculation_data.c.s
+.PHONY : lib/ApplicationLayer/Position_Calculation_data.c.s
+
 lib/ApplicationLayer/adc_AL.obj: lib/ApplicationLayer/adc_AL.c.obj
 .PHONY : lib/ApplicationLayer/adc_AL.obj
 
@@ -2122,6 +2176,12 @@ help:
 	@echo ... lib/ApplicationLayer/Pegasus_MBD.obj
 	@echo ... lib/ApplicationLayer/Pegasus_MBD.i
 	@echo ... lib/ApplicationLayer/Pegasus_MBD.s
+	@echo ... lib/ApplicationLayer/Position_Calculation.obj
+	@echo ... lib/ApplicationLayer/Position_Calculation.i
+	@echo ... lib/ApplicationLayer/Position_Calculation.s
+	@echo ... lib/ApplicationLayer/Position_Calculation_data.obj
+	@echo ... lib/ApplicationLayer/Position_Calculation_data.i
+	@echo ... lib/ApplicationLayer/Position_Calculation_data.s
 	@echo ... lib/ApplicationLayer/adc_AL.obj
 	@echo ... lib/ApplicationLayer/adc_AL.i
 	@echo ... lib/ApplicationLayer/adc_AL.s

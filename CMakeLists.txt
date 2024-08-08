@@ -118,6 +118,8 @@ set(FIRMWARE_FILES
     lib/ApplicationLayer/vector_control.c
     lib/ApplicationLayer/vehicle.c
     lib/ApplicationLayer/Pegasus_MBD.c
+    lib/ApplicationLayer/Position_Calculation.c
+    lib/ApplicationLayer/Position_Calculation_data.c
 
     lib/CustomLibs/printf.c
     lib/CustomLibs/math_func.c

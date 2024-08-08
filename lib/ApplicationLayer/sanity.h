@@ -55,6 +55,6 @@ void FAULT_READING(void);
 int  Encoder_Fault(int,int);
 void Encoder_Check(int);
 void SAFETY_AND_ERRORS(void);
-
+void FAULT_DETECTION(void);
 
 #endif 

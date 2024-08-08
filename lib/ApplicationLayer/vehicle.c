@@ -17,6 +17,7 @@ This file contains functions associated with vehicle such as throttle, FNR , CAN
 #include "fdcan_AL.h"
 #include "foc_blockset.h"
 #include "Pegasus_MBD.h"
+#include "Position_Calculation.h"
 #include "rtwtypes.h"
 
 
@@ -32,6 +33,8 @@ vehicle_t vehicle = {
 extern can_t can;
 extern ExtU rtU;
 extern ExtY rtY;
+extern ExtU_Angle rtU_Angle;
+extern ExtY_Angle rtY_Angle;
 extern foc_t foc;
 extern terminal_t terminal;
 extern __IO float dc_current;
@@ -101,4 +104,5 @@ void READ_MOTOR_PHASE_CURRENT()
 void READ_MOTOR_POSITION()
 {
   motorControl.encoder.value =  TIM2->CNT;   // Encoder Count 
+  rtU_Angle.Encoder_Cnt = motorControl.encoder.value;
 }

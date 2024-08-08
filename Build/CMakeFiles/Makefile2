@@ -84,12 +84,12 @@ clean: CMakeFiles/Pegasus3.1v-app2.elf.dir/clean
 CMakeFiles/Pegasus3.1v-bootloader.elf.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\Pegasus_Code\Build\CMakeFiles --progress-num=77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100 "Built target Pegasus3.1v-bootloader.elf"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\Pegasus_Code\Build\CMakeFiles --progress-num=78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100 "Built target Pegasus3.1v-bootloader.elf"
 .PHONY : CMakeFiles/Pegasus3.1v-bootloader.elf.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/Pegasus3.1v-bootloader.elf.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\Pegasus_Code\Build\CMakeFiles 24
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\Pegasus_Code\Build\CMakeFiles 23
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/Pegasus3.1v-bootloader.elf.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start D:\Pegasus_Code\Build\CMakeFiles 0
 .PHONY : CMakeFiles/Pegasus3.1v-bootloader.elf.dir/rule
@@ -136,12 +136,12 @@ CMakeFiles/Pegasus3.1v-app1.elf.dir/clean:
 CMakeFiles/Pegasus3.1v-app2.elf.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\Pegasus_Code\Build\CMakeFiles --progress-num=39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76 "Built target Pegasus3.1v-app2.elf"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\Pegasus_Code\Build\CMakeFiles --progress-num=39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77 "Built target Pegasus3.1v-app2.elf"
 .PHONY : CMakeFiles/Pegasus3.1v-app2.elf.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/Pegasus3.1v-app2.elf.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\Pegasus_Code\Build\CMakeFiles 38
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\Pegasus_Code\Build\CMakeFiles 39
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/Pegasus3.1v-app2.elf.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start D:\Pegasus_Code\Build\CMakeFiles 0
 .PHONY : CMakeFiles/Pegasus3.1v-app2.elf.dir/rule

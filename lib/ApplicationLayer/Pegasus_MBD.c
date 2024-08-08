@@ -640,7 +640,7 @@ void Pegasus_MBD_step(void)
    *  AlgorithmDescriptorDelegate generated from: '<S10>/a16'
    *  Inport: '<Root>/BusVoltage_V'
    */
-  Va_Saturation(rtb_Switch_idx_0, rtU.BusVoltage_V / ROOT2, &rtDW.Out_d,
+  Va_Saturation(rtb_Switch_idx_0, rtU.BusVoltage_V, &rtDW.Out_d,
                 &rtDW.sf_Va_Saturation);
 
   /* Gain: '<S9>/one_by_two' incorporates:
@@ -659,14 +659,14 @@ void Pegasus_MBD_step(void)
    *  Inport: '<Root>/BusVoltage_V'
    *  Sum: '<S9>/add_b'
    */
-  Va_Saturation(rtb_Abs_l - rtb_Abs1_j, rtU.BusVoltage_V / ROOT2, &rtDW.Out_m,
+  Va_Saturation(rtb_Abs_l - rtb_Abs1_j, rtU.BusVoltage_V, &rtDW.Out_m,
                 &rtDW.sf_Vb_Saturation);
 
   /* Chart: '<S6>/Vc_Saturation' incorporates:
    *  Inport: '<Root>/BusVoltage_V'
    *  Sum: '<S9>/add_c'
    */
-  Va_Saturation(0.0F - rtb_Abs1_j - rtb_Abs_l, rtU.BusVoltage_V / ROOT2, &rtDW.Out_e,
+  Va_Saturation(0.0F - rtb_Abs1_j - rtb_Abs_l, rtU.BusVoltage_V, &rtDW.Out_e,
                 &rtDW.sf_Vc_Saturation);
 
   /* Product: '<S12>/Divide' incorporates:
@@ -1178,27 +1178,27 @@ void Pegasus_MBD_initialize(void)
   rtU.Dd = 0.01;
   rtU.Prpm = 1;
   rtU.Irpm = 5;
-  rtU.Drpm = 0;
+  rtU.Drpm = 0.01;
   rtU.FilterCoefficient = 10.0;
   rtU.FilterCoefficient_n = 10.0;
-  rtU.FilterCoefficient_k = 20.0;
-  rtU.Thresholds.Iq_max_limit_A = 180.0;
-  rtU.Thresholds.Iq_min_limit_A = -180.0;
-  rtU.Thresholds.Vq_max_limit_V = 35.0;
-  rtU.Thresholds.Vq_min_limit_V = -35.0;
-  rtU.Thresholds.Vd_max_limit_V = 35.0;
-  rtU.Thresholds.Vd_min_limit_V = -35.0;
-  rtU.Thresholds.MaxCurrentLimit_A = 180.0;
+  rtU.FilterCoefficient_k = 10.0;
+  rtU.Thresholds.Iq_max_limit_A = 550.0;
+  rtU.Thresholds.Iq_min_limit_A = -550.0;
+  rtU.Thresholds.Vq_max_limit_V = 49.0;
+  rtU.Thresholds.Vq_min_limit_V = -49.0;
+  rtU.Thresholds.Vd_max_limit_V = 49.0;
+  rtU.Thresholds.Vd_min_limit_V = -49.0;
+  rtU.Thresholds.MaxCurrentLimit_A = 550.0;
   rtU.Thresholds.OTWarningLimit_C = 80.0;
   rtU.Thresholds.OTErrorLimit_C = 100.0;
   rtU.Thresholds.UVWarningLimit_V = 45.0;
   rtU.Thresholds.UVErrorLimit_V = 40.0;
   rtU.Thresholds.OVWarningLimit_V = 65.0;
   rtU.Thresholds.OVErrorLimit_V = 70.0;
-  rtU.Thresholds.OCWarningLimit_A = 70.0;
-  rtU.Thresholds.OCErrorLimit_A = 180.0;
+  rtU.Thresholds.OCWarningLimit_A = 500.0;
+  rtU.Thresholds.OCErrorLimit_A = 550.0;
   rtU.Thresholds.WarningSpeedLimit_rpm = 3200.0;
-  rtU.Thresholds.VoltageProtectionTimeout_msec = 10.0;
+  rtU.Thresholds.VoltageProtectionTimeout_msec = 1.0;
   rtU.Thresholds.TempProtectionTimeout_msec = 10.0;
   rtU.Thresholds.CurrentProtectionTimeout_msec = 1.0;
 }

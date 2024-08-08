@@ -127,6 +127,7 @@ void SYSTEM_INIT()
   // MX_TIM7_Init();
   MX_I2C2_Init();
 
+  DRIVE_STOP();
 }
 
 

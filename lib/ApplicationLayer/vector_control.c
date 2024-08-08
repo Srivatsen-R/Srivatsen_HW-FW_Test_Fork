@@ -48,6 +48,7 @@ duty cycle values that generate the desired voltage vector.
 #include <stdint.h>
 #include "motor_param.h"
 #include "Pegasus_MBD.h"
+#include "Position_Calculation.h"
 #include "rtwtypes.h"
 
 extern int a_current;
@@ -132,6 +133,7 @@ void FOC_READ_MOTOR_POSITION(void)
     foc.rotor_speed_filtered = SPEED_FILTER(foc.rotor_speed,foc.rotor_speed_prev,foc.rotor_speed_filtered_prev); 
     foc.speed_sense = (foc.rotor_speed_filtered)*PU*1.0;
     if(foc.speed_sense>MAX_PU_SPEED){foc.speed_sense=MAX_PU_SPEED;} 
+    else if (foc.speed_sense<-MAX_PU_SPEED){foc.speed_sense=-MAX_PU_SPEED;}
 
     rtU.Speed_rpm_fb = (foc.speed_sense * SPEED_PU_TO_RPM * -1.0);
 
@@ -164,6 +166,7 @@ void FOC_READ_MOTOR_POSITION(void)
     }
 
     foc.rho = READ_ROTOR_ANGLE(foc.rho_prev,foc.sync_speed,foc.sync_speed_prev);//electrical angle
+    Position_Calculation_step();
 
     if (foc.rho>=6.28){foc.rho=0.0;} 
     else if (foc.rho<=-6.28){foc.rho=0.0;}

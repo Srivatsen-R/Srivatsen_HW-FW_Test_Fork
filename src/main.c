@@ -55,6 +55,7 @@ HAL_GPIO_EXTI_Callback          : Contain code blocks for reseting position.
 #include "isotp/isotp_types.h"
 
 #include "Pegasus_MBD.h"
+#include "Position_Calculation.h"
 #include "rtwtypes.h"
 
 /* Variable declaration ------------------------------------------------------*/
@@ -74,6 +75,8 @@ extern motorControl_t motorControl;
 extern vehicle_t vehicle;
 extern ExtU           rtU;
 extern ExtY           rtY;
+extern ExtU_Angle     rtU_Angle;
+extern ExtY_Angle     rtY_Angle;
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -172,20 +175,26 @@ int main(void) {
     static uint32_t prev_thr_time = 0;
 
     ANALOG_READING();
+    FAULT_DETECTION();
 
-    if (time_count - prev_time >= 500.0)
+    if (time_count - prev_time >= 10.0)
     {
       send_on_300();
       send_on_301();
       send_on_302();
       send_on_303();
+      send_on_304();
 
       prev_time = time_count;
     }
 
-    if (time_count - prev_thr_time >= 100)
+    if (time_count - prev_thr_time >= 500)
     {
-      rtU.Speed_rpm = map(analog.bufferData[THROTTLE], 8900.0, 40000.0, 0.0, 1000.0);
+      if (rtU.Speed_rpm < 3000.0)
+        rtU.Speed_rpm += 10.0;
+
+      if (rtU.Speed_rpm > 3000.0)
+        rtU.Speed_rpm = 3000.0;
 
       if (rtU.Speed_rpm < 0.0)
         rtU.Speed_rpm = 0.0;
@@ -243,26 +252,44 @@ void send_on_301()
 void send_on_302()
 {
   uint8_t can_data[8] = {0};
-  can_data[0] = (uint8_t)((uint16_t)((foc.rho + 2 * PI) * 100.0) & 0x00FF);
-  can_data[1] = (uint8_t)(((uint16_t)((foc.rho + 2 * PI) * 100.0) & 0xFF00) >> 8);
+  float can_log_rh = foc.rho * -100.0;
+  can_data[0] = (uint8_t)((uint16_t)((can_log_rh)) & 0x00FF);
+  can_data[1] = (uint8_t)(((uint16_t)((can_log_rh)) & 0xFF00) >> 8);
   can_data[2] = (uint8_t)((uint16_t)(rtU.Speed_rpm) & 0x00FF);
   can_data[3] = (uint8_t)(((uint16_t)(rtU.Speed_rpm) & 0xFF00) >> 8);
   can_data[4] = (uint8_t)((uint16_t)((foc.speed_sense * -1.0) * SPEED_PU_TO_RPM) & 0x00FF);
   can_data[5] = (uint8_t)(((uint16_t)((foc.speed_sense * -1.0) * SPEED_PU_TO_RPM) & 0xFF00) >> 8);
-  can_data[6] = (uint8_t)(((uint16_t)(rtU.BusVoltage_V * 100.0)) & 0x00FF);
-  can_data[7] = (uint8_t)(((uint16_t)(rtU.BusVoltage_V * 100.0) & 0xFF00) >> 8);
+  can_data[6] = (uint8_t)(((uint16_t)(motorControl.encoder.value)) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(motorControl.encoder.value) & 0xFF00) >> 8);
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_302, S, can_data, FDCAN_DLC_BYTES);
 }
 
 void send_on_303()
 {
   uint8_t can_data[8] = {0};
+  float can_log_mbd_elec_rh = (rtY_Angle.Elec_Angle_rad) * 100.0;
   can_data[0] = (uint8_t)((uint16_t)(rtU.MotorTemperature_C));
   can_data[1] = (uint8_t)((uint16_t)(rtU.MotorControllerTemperature_C));
   can_data[2] = (uint8_t)(rtY.CurrentFlag);
   can_data[3] = (uint8_t)(rtY.MCTempFlag);
   can_data[4] = (uint8_t)(rtY.VoltageFlag);
+  can_data[5] = (uint8_t)(z_trig);
+  can_data[6] = (uint8_t)((uint16_t)(can_log_mbd_elec_rh) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(can_log_mbd_elec_rh) & 0xFF00) >> 8);
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_303, S, can_data, FDCAN_DLC_BYTES);
+}
+
+void send_on_304()
+{
+  uint8_t can_data[8] = {0};
+  float can_log_mbd_mech_rh = rtY_Angle.Mech_Angle_rad * 100.0;
+  float can_log_mbd_speed = rtY_Angle.Speed_rpm;
+  float can_log_offset = rtU_Angle.Offset_rad * 100.0;
+  can_data[0] = (uint8_t)((uint16_t)(can_log_mbd_mech_rh) & 0x00FF);
+  can_data[1] = (uint8_t)(((uint16_t)(can_log_mbd_mech_rh) & 0xFF00) >> 8);
+  can_data[2] = (uint8_t)((uint16_t)(can_log_mbd_speed) & 0x00FF);
+  can_data[3] = (uint8_t)(((uint16_t)(can_log_mbd_speed) & 0xFF00) >> 8);
+  _fdcan_transmit_on_can(FDCAN_DEBUG_ID_304, S, can_data, FDCAN_DLC_BYTES);
 }
 
 void send_on_6F0(uint8_t* UIID_Arr)
@@ -345,8 +372,15 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
     if(GPIO_Pin == GPIO_PIN_7) // If The INT Source Is EXTI Line9_5 (PE7 Pin)
     {
+      TIM2->CNT = 0;
+      motorControl.encoder.value = 0;
+      rtU_Angle.Encoder_Cnt = 0;
+      rtY_Angle.Elec_Angle_rad = 0;
+      foc.rho = 0;
+      foc.rho_prev = 0;
       reset_flag = 1;
       z_trig += 1;
+      rtU_Angle.Z_Cnt = z_trig;
     }
 }
 
@@ -360,6 +394,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
       HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_SET);
       HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
       HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
+
+      DRIVE_STOP();
     }
     else if(motorControl.drive.check == DRIVE_ENABLE) {
       //  rgb gpio
