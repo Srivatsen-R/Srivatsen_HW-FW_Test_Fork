@@ -121,6 +121,7 @@ void SYSTEM_INIT()
   MX_TIM3_Init();
   MX_TIM1_Init();
   MX_TIM5_Init();
+  HAL_Delay(1000);
   MX_TIM17_Init();
   // MX_TIM4_Init();
   // MX_TIM15_Init();

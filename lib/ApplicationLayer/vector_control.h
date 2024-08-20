@@ -142,7 +142,7 @@ typedef struct foc_t {
 // #define ANGLE_OFFSET_RW                            4.188790//V3
 
 #define ANGLE_OFFSET_FW                               1.076868148//V1
-// #define ANGLE_OFFSET_RW                           -3.071779//V1
+#define ANGLE_OFFSET_RW                               2.0647245051//V1
 
 // #define ANGLE_OFFSET_FW                            2.44346//V8 LFP
 // #define ANGLE_OFFSET_RW                            1.22173//V8 LFP

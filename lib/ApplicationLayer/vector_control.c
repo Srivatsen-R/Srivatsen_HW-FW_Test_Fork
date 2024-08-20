@@ -64,6 +64,8 @@ extern int reverse_flag;
 extern int neutral_flag;
 extern float Duty;
 extern uint8_t reset_flag;
+extern uint8_t forward_set;
+extern uint8_t reverse_set;
 uint8_t duty_state=1;
 uint8_t speed_fix_flag=0;
 extern uint8_t acc_flag;
@@ -135,7 +137,10 @@ void FOC_READ_MOTOR_POSITION(void)
     if(foc.speed_sense>MAX_PU_SPEED){foc.speed_sense=MAX_PU_SPEED;} 
     else if (foc.speed_sense<-MAX_PU_SPEED){foc.speed_sense=-MAX_PU_SPEED;}
 
-    rtU.Speed_rpm_fb = (foc.speed_sense * SPEED_PU_TO_RPM * -1.0);
+    if (forward_set)
+        rtU.Speed_rpm_fb = (foc.speed_sense * SPEED_PU_TO_RPM * 1.0);
+    else if (reverse_set)
+        rtU.Speed_rpm_fb = (foc.speed_sense * SPEED_PU_TO_RPM * -1.0);
 
     static float angle_mech;
 
@@ -143,35 +148,66 @@ void FOC_READ_MOTOR_POSITION(void)
     //Synchronous Speed Calculation
     foc.sync_speed = CALCULATE_SYNC_SPEED(foc.slip_speed,foc.rotor_speed_filtered);//sync speed
 
-    if((foc.speed_sense * -1.0 * SPEED_PU_TO_RPM)<10.0 && duty_state)
-    { 
-        angle_mech = (100-Duty)*DUTY_TO_RADIAN;
+    if (forward_set)
+    {
+        if((foc.speed_sense * 1.0 * SPEED_PU_TO_RPM)<10.0 && duty_state)
+        { 
+            angle_mech = (100-Duty)*DUTY_TO_RADIAN;
 
-        // angle_mech = (Duty)*DUTY_TO_RADIAN; //mech angle
-        foc.rho_prev = POLEPAIRS*angle_mech; // elec angle
-        if (angle_mech>2.095 && angle_mech<4.1866){foc.rho_prev = foc.rho_prev - 6.28;}
-        else  if(angle_mech>=4.1886){foc.rho_prev = foc.rho_prev - 12.56;}
-        duty_state = 0;
+            // angle_mech = (Duty)*DUTY_TO_RADIAN; //mech angle
+            foc.rho_prev = POLEPAIRS*angle_mech; // elec angle
+            if (angle_mech>2.095 && angle_mech<4.1866){foc.rho_prev = foc.rho_prev - 6.28;}
+            else  if(angle_mech>=4.1886){foc.rho_prev = foc.rho_prev - 12.56;}
+            duty_state = 0;
+        }
+    }
+    else if (reverse_set)
+    {
+        if((foc.speed_sense * -1.0 * SPEED_PU_TO_RPM)<10.0 && duty_state)
+        { 
+            angle_mech = (100-Duty)*DUTY_TO_RADIAN;
+
+            // angle_mech = (Duty)*DUTY_TO_RADIAN; //mech angle
+            foc.rho_prev = POLEPAIRS*angle_mech; // elec angle
+            if (angle_mech>2.095 && angle_mech<4.1866){foc.rho_prev = foc.rho_prev - 6.28;}
+            else  if(angle_mech>=4.1886){foc.rho_prev = foc.rho_prev - 12.56;}
+            duty_state = 0;
+        }
     }
 
     if(reset_flag == 1)
     {
+        motorControl.encoder.value = 0;
+        rtY_Angle.Mech_Angle_rad = 0;
+        rtU_Angle.Encoder_Cnt = 0;
+        rtY_Angle.Elec_Angle_rad = 0;
+        foc.rho = 0.0;
         foc.rho_prev = 0.0;
         reset_flag=0;
     }
 
-    if((foc.speed_sense * SPEED_PU_TO_RPM * -1.0) <= 0.0)
+    if (forward_set)
     {
-        duty_state = 1;
+        if((foc.speed_sense * SPEED_PU_TO_RPM * 1.0) <= 0.0)
+        {
+            duty_state = 1;
+        }
+    }
+    else if (reverse_set)
+    {
+        if((foc.speed_sense * SPEED_PU_TO_RPM * -1.0) <= 0.0)
+        {
+            duty_state = 1;
+        }
     }
 
     foc.rho = READ_ROTOR_ANGLE(foc.rho_prev,foc.sync_speed,foc.sync_speed_prev);//electrical angle
     Position_Calculation_step();
 
-    if (foc.rho>=6.28){foc.rho=0.0;} 
-    else if (foc.rho<=-6.28){foc.rho=0.0;}
-
-    rtU.MtrPos_rad = foc.rho + ANGLE_OFFSET_FW;
+    if (forward_set)
+        rtU.MtrPos_rad = foc.rho + ANGLE_OFFSET_RW;
+    else if (reverse_set)
+        rtU.MtrPos_rad = foc.rho + ANGLE_OFFSET_FW;
 
     foc.rotor_speed_prev          = foc.rotor_speed;  
     foc.rotor_speed_filtered_prev = foc.rotor_speed_filtered;

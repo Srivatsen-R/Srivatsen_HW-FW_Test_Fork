@@ -45,6 +45,9 @@
 #define IN_UV_Warning                  ((uint8_T)4U)
 #define IN_VoltageSafe                 ((uint8_T)5U)
 
+extern uint8_t forward_set;
+extern uint8_t reverse_set;
+
 /* Block signals and states (default storage) */
 DW rtDW;
 
@@ -388,7 +391,10 @@ void Pegasus_MBD_step(void)
    *  Gain: '<S2>/Gain'
    *  Inport: '<Root>/MtrPos_rad'
    */
-  rtb_Abs1_j = (rtU.MtrPos_rad) - -3.14159274F;
+  if (forward_set)
+    rtb_Abs1_j = (rtU.MtrPos_rad);
+  else if (reverse_set)
+    rtb_Abs1_j = (rtU.MtrPos_rad) - -3.14159274F;
 
   /* Trigonometry: '<S6>/Sin' incorporates:
    *  Trigonometry: '<S6>/Sin1'

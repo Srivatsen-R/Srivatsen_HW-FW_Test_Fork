@@ -91,6 +91,8 @@ uint8_t reset_flag = 0;
 uint8_t app_version = 0;
 uint8_t cantp_config_flag = 0;
 uint8_t interrupt_flag = 0;
+uint8_t forward_set = 0;
+uint8_t reverse_set = 0;
 uint8_t start_flag = 0;
 uint8_t acc_flag = 0;
 uint8_t deacc_flag = 0;
@@ -177,6 +179,9 @@ int main(void) {
     ANALOG_READING();
     FAULT_DETECTION();
 
+    reverse_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_2);
+    forward_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
+
     if (time_count - prev_time >= 10.0)
     {
       send_on_300();
@@ -190,11 +195,11 @@ int main(void) {
 
     if (time_count - prev_thr_time >= 500)
     {
-      if (rtU.Speed_rpm < 3000.0)
+      if (rtU.Speed_rpm < 3300.0)
         rtU.Speed_rpm += 10.0;
 
-      if (rtU.Speed_rpm > 3000.0)
-        rtU.Speed_rpm = 3000.0;
+      if (rtU.Speed_rpm > 3300.0)
+        rtU.Speed_rpm = 3300.0;
 
       if (rtU.Speed_rpm < 0.0)
         rtU.Speed_rpm = 0.0;
@@ -252,13 +257,34 @@ void send_on_301()
 void send_on_302()
 {
   uint8_t can_data[8] = {0};
-  float can_log_rh = foc.rho * -100.0;
+
+  float can_log_rh;
+  if (forward_set)
+  {
+    can_log_rh = foc.rho * 100.0;
+  }
+  else if (reverse_set)
+  {
+    can_log_rh = foc.rho * -100.0;
+  }
+
   can_data[0] = (uint8_t)((uint16_t)((can_log_rh)) & 0x00FF);
   can_data[1] = (uint8_t)(((uint16_t)((can_log_rh)) & 0xFF00) >> 8);
+
   can_data[2] = (uint8_t)((uint16_t)(rtU.Speed_rpm) & 0x00FF);
   can_data[3] = (uint8_t)(((uint16_t)(rtU.Speed_rpm) & 0xFF00) >> 8);
-  can_data[4] = (uint8_t)((uint16_t)((foc.speed_sense * -1.0) * SPEED_PU_TO_RPM) & 0x00FF);
-  can_data[5] = (uint8_t)(((uint16_t)((foc.speed_sense * -1.0) * SPEED_PU_TO_RPM) & 0xFF00) >> 8);
+
+  if (forward_set)
+  {
+    can_data[4] = (uint8_t)((uint16_t)((foc.speed_sense * 1.0) * SPEED_PU_TO_RPM) & 0x00FF);
+    can_data[5] = (uint8_t)(((uint16_t)((foc.speed_sense * 1.0) * SPEED_PU_TO_RPM) & 0xFF00) >> 8);
+  }
+  else if (reverse_set)
+  {
+    can_data[4] = (uint8_t)((uint16_t)((foc.speed_sense * -1.0) * SPEED_PU_TO_RPM) & 0x00FF);
+    can_data[5] = (uint8_t)(((uint16_t)((foc.speed_sense * -1.0) * SPEED_PU_TO_RPM) & 0xFF00) >> 8);
+  }
+
   can_data[6] = (uint8_t)(((uint16_t)(motorControl.encoder.value)) & 0x00FF);
   can_data[7] = (uint8_t)(((uint16_t)(motorControl.encoder.value) & 0xFF00) >> 8);
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_302, S, can_data, FDCAN_DLC_BYTES);
@@ -283,8 +309,17 @@ void send_on_304()
 {
   uint8_t can_data[8] = {0};
   float can_log_mbd_mech_rh = rtY_Angle.Mech_Angle_rad * 100.0;
-  float can_log_mbd_speed = rtY_Angle.Speed_rpm;
-  float can_log_offset = rtU_Angle.Offset_rad * 100.0;
+  float can_log_mbd_speed;
+
+  if (forward_set)
+  {
+    can_log_mbd_speed = rtY_Angle.Speed_rpm * -1.0f;
+  }
+  else if (reverse_set)
+  {
+    can_log_mbd_speed = rtY_Angle.Speed_rpm;
+  }
+
   can_data[0] = (uint8_t)((uint16_t)(can_log_mbd_mech_rh) & 0x00FF);
   can_data[1] = (uint8_t)(((uint16_t)(can_log_mbd_mech_rh) & 0xFF00) >> 8);
   can_data[2] = (uint8_t)((uint16_t)(can_log_mbd_speed) & 0x00FF);
@@ -372,12 +407,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
     if(GPIO_Pin == GPIO_PIN_7) // If The INT Source Is EXTI Line9_5 (PE7 Pin)
     {
-      TIM2->CNT = 0;
-      motorControl.encoder.value = 0;
-      rtU_Angle.Encoder_Cnt = 0;
-      rtY_Angle.Elec_Angle_rad = 0;
-      foc.rho = 0;
-      foc.rho_prev = 0;
       reset_flag = 1;
       z_trig += 1;
       rtU_Angle.Z_Cnt = z_trig;
