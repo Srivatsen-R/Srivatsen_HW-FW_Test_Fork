@@ -189,17 +189,18 @@ int main(void) {
       send_on_302();
       send_on_303();
       send_on_304();
+      send_on_305();
 
       prev_time = time_count;
     }
 
     if (time_count - prev_thr_time >= 500)
     {
-      if (rtU.Speed_rpm < 3300.0)
+      if (rtU.Speed_rpm < 500.0)
         rtU.Speed_rpm += 10.0;
 
-      if (rtU.Speed_rpm > 3300.0)
-        rtU.Speed_rpm = 3300.0;
+      if (rtU.Speed_rpm > 500.0)
+        rtU.Speed_rpm = 500.0;
 
       if (rtU.Speed_rpm < 0.0)
         rtU.Speed_rpm = 0.0;
@@ -232,7 +233,7 @@ void send_on_300()
   can_data[0] = (uint8_t)(rtY.FOC_Out.Va + 60.0);
   can_data[1] = (uint8_t)(rtY.FOC_Out.Vb + 60.0);
   can_data[2] = (uint8_t)(rtY.FOC_Out.Vc + 60.0);
-  can_data[3] = (uint8_t)(rtY.FOC_Out.Iq_Refer);
+  can_data[3] = 0;
   can_data[4] = (uint8_t)((uint16_t)(rtY.FOC_Out.Vq_Calculated + 10000.0) & 0x00FF);
   can_data[5] = (uint8_t)(((uint16_t)(rtY.FOC_Out.Vq_Calculated + 10000.0) & 0xFF00) >> 8);
   can_data[6] = (uint8_t)((uint16_t)(rtY.FOC_Out.Vd_Calculated + 10000.0) & 0x00FF);
@@ -243,8 +244,8 @@ void send_on_300()
 void send_on_301()
 {
   uint8_t can_data[8] = {0};
-  can_data[0] = (uint8_t)(rtY.FOC_Out.Id_Refer);
-  can_data[1] = (uint8_t)(rtY.FOC_Out.Iq_Calculated);
+  can_data[0] = 0;
+  can_data[1] = 0;
   can_data[2] = (uint8_t)((uint16_t)(rtU.I_a + 400.0) & 0x00FF);
   can_data[3] = (uint8_t)(((uint16_t)(rtU.I_a + 400.0) & 0xFF00) >> 8);
   can_data[4] = (uint8_t)((uint16_t)(rtU.I_b + 400.0) & 0x00FF);
@@ -324,7 +325,21 @@ void send_on_304()
   can_data[1] = (uint8_t)(((uint16_t)(can_log_mbd_mech_rh) & 0xFF00) >> 8);
   can_data[2] = (uint8_t)((uint16_t)(can_log_mbd_speed) & 0x00FF);
   can_data[3] = (uint8_t)(((uint16_t)(can_log_mbd_speed) & 0xFF00) >> 8);
+  can_data[4] = (uint8_t)((uint16_t)(rtY.FOC_Out.Id_Calculated + 10000.0) & 0x00FF);
+  can_data[5] = (uint8_t)(((uint16_t)(rtY.FOC_Out.Id_Calculated + 10000.0) & 0xFF00) >> 8);
+  can_data[6] = (uint8_t)((uint16_t)(rtY.FOC_Out.Iq_Calculated + 10000.0) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(rtY.FOC_Out.Iq_Calculated + 10000.0) & 0xFF00) >> 8);
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_304, S, can_data, FDCAN_DLC_BYTES);
+}
+
+void send_on_305()
+{
+  uint8_t can_data[8] = {0};
+  can_data[0] = (uint8_t)((uint16_t)(rtY.FOC_Out.Id_Refer + 10000.0) & 0x00FF);
+  can_data[1] = (uint8_t)(((uint16_t)(rtY.FOC_Out.Id_Refer + 10000.0) & 0xFF00) >> 8);
+  can_data[2] = (uint8_t)((uint16_t)(rtY.FOC_Out.Iq_Refer + 10000.0) & 0x00FF);
+  can_data[3] = (uint8_t)(((uint16_t)(rtY.FOC_Out.Iq_Refer + 10000.0) & 0xFF00) >> 8);
+  _fdcan_transmit_on_can(FDCAN_DEBUG_ID_305, S, can_data, FDCAN_DLC_BYTES);
 }
 
 void send_on_6F0(uint8_t* UIID_Arr)
@@ -407,6 +422,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
     if(GPIO_Pin == GPIO_PIN_7) // If The INT Source Is EXTI Line9_5 (PE7 Pin)
     {
+      motorControl.encoder.value = 0;
+      rtY_Angle.Mech_Angle_rad = 0;
+      rtU_Angle.Encoder_Cnt = 0;
+      rtY_Angle.Elec_Angle_rad = 0;
+      foc.rho = 0.0;
+      foc.rho_prev = 0.0;
       reset_flag = 1;
       z_trig += 1;
       rtU_Angle.Z_Cnt = z_trig;

@@ -177,12 +177,6 @@ void FOC_READ_MOTOR_POSITION(void)
 
     if(reset_flag == 1)
     {
-        motorControl.encoder.value = 0;
-        rtY_Angle.Mech_Angle_rad = 0;
-        rtU_Angle.Encoder_Cnt = 0;
-        rtY_Angle.Elec_Angle_rad = 0;
-        foc.rho = 0.0;
-        foc.rho_prev = 0.0;
         reset_flag=0;
     }
 

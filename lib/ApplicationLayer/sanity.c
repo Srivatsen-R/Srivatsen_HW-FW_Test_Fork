@@ -165,5 +165,5 @@ void ANALOG_READING()
      busVoltage = moving_Batt_voltage_measured_fun(0.00211*analog.bufferData[BUS_VOLTAGE] +VBUS_OFFSET,VOLTAGE_AVG); 
      terminal.volt.bus_volt = busVoltage; 
 
-     rtU.BusVoltage_V = 63.0;
+     rtU.BusVoltage_V = 57.0;
 }
