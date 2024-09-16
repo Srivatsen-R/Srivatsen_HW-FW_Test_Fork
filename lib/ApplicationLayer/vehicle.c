@@ -77,28 +77,26 @@ __IO float speed_filtered         = 0;
 
 extern int count_duty;
 
+float lowPassFilter(float input, float prevFilteredValue) {
+    // Apply the exponential moving average (EMA) filter
+    prevFilteredValue = (ALPHA * input) + ((1.0 - ALPHA) * (prevFilteredValue));
+    return prevFilteredValue;
+}
+
 void READ_MOTOR_PHASE_CURRENT()
 {
+  volatile float filteredValue_a = 0.0;
+  volatile float filteredValue_b = 0.0;
 
-    int temp_a=0;
-    int temp_b=0;
-    int count=0;
-  
-    for (count=0;count<20;count++)
-    {
-      temp_a  = temp_a + ((analog.bufferData[PHASE_CURRENT_W]/DIV_FACTOR_CURRENT) - OFFSET_CURRENT);
-      temp_b  = temp_b + ((analog.bufferData[PHASE_CURRENT_V]/DIV_FACTOR_CURRENT) - OFFSET_CURRENT);
-    }    
+  for (uint8_t i = 0; i < 10; i++)
+  {
+    filteredValue_a = lowPassFilter((float)(analog.bufferData[PHASE_CURRENT_W] - OFFSET_CURRENT), filteredValue_a);
+    filteredValue_b = lowPassFilter((float)(analog.bufferData[PHASE_CURRENT_V] - OFFSET_CURRENT), filteredValue_b);
+  }
 
-    a_current = temp_a/CURRENT_AVG_FACTOR;
-    b_current = temp_b/CURRENT_AVG_FACTOR;
-
-    rtU.I_a = (a_current * 3.297 * 400.0) / 65535.0;
-    rtU.I_b = (b_current * 3.297 * 400.0) / 65535.0;
-    rtU.I_c = (-rtU.I_a) + (-rtU.I_b);
-
-    temp_a=0;
-    temp_b=0;
+  rtU.I_a = (filteredValue_a * 3.297 * 400.0) / 65535.0;
+  rtU.I_b = (filteredValue_b * 3.297 * 400.0) / 65535.0;
+  rtU.I_c = (-rtU.I_a) + (-rtU.I_b);
 
 }
 void READ_MOTOR_POSITION()

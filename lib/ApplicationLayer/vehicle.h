@@ -23,6 +23,6 @@ void READ_FNR();
 void READ_THROTTLE();
 void READ_MOTOR_PHASE_CURRENT();
 void READ_MOTOR_POSITION();
-
+float lowPassFilter(float input, float prevFilteredValue);
 
 #endif 

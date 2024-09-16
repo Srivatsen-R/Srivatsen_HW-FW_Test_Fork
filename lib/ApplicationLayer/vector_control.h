@@ -109,6 +109,8 @@ typedef struct foc_t {
 #define PPR                     4095.0//NIDEC        
 //#define PPR                     2048.0//ULTRON    
 
+#define ALPHA                   0.1
+
 // #define POLEPAIRS               4.0// Nidec 14kg
 #define POLEPAIRS               3.0// Nidec 22kg & ULTRON
 

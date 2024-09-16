@@ -108,6 +108,18 @@ void FAULT_DETECTION()
                 }
         }
 
+        if (rtU.MotorControllerTemperature_C >= 100.0)
+        {
+                motorControl.drive.check = DRIVE_DISABLE;
+        }
+        else if (rtU.MotorControllerTemperature_C < 100.0)
+        {
+                if (motorControl.drive.check == DRIVE_DISABLE)
+                {
+                        motorControl.drive.check = DRIVE_ENABLE;
+                }
+        }
+
         // if (rtY.VoltageFlag == OV_Warning)
         // {
         //         if (motorControl.drive.check == DRIVE_DISABLE)
