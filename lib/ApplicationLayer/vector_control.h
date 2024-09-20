@@ -104,7 +104,7 @@ typedef struct foc_t {
 
 
 //Motor-Controller Specific Parameters
-
+#define RATE_LIMIT 50.0
 
 #define PPR                     4095.0//NIDEC        
 //#define PPR                     2048.0//ULTRON    

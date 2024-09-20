@@ -21,6 +21,7 @@ void set_config_flag(uint8_t value);
 void set_interrupt_flag(uint8_t value);
 uint8_t get_interrupt_flag();
 void switch_partition_and_reset();
+float rate_limiter(float target_rpm);
 void get_UIID(void);
 void send_on_300(void);
 void send_on_301(void);

@@ -12,7 +12,7 @@
 
 
 #define TORQUE_MODE                     1.0
-#define SPEED_LIMIT                     5000.0
+#define SPEED_LIMIT                     500.0
 #define SPORTS_MODE                     0.0
 #define ECO_MODE                        0.0
 
@@ -97,7 +97,7 @@ int Temperature_Fault(int);
 int Temperature_Fault_Controller(int);
 int BUS_Voltage_OV_UV_Fault(float);
 int Motor_Stall_Fault();
-float Throttle_Control(int,float,int,int);
+float Throttle_Control(int,float);
 int Rpm_Target_Function(int);
 int Throttle_Switching_ON_OFF(int);
 int Throttle_Fault(int);

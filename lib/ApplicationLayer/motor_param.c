@@ -258,40 +258,13 @@ int BUS_Voltage_OV_UV_Fault(float measure_Vbus_temp)
    }
 
 
-float Throttle_Control(int target_speed,float prev_output,int f_flag,int r_flag){
+float Throttle_Control(int target_speed,float prev_output){
     
     float th_increment,th_decrement;
 
         if(target_speed >= prev_output)
         {
-            acc_flag = 1;
-            deacc_flag = 0;
-      
-            if(foc.speed_sense*SPEED_PU_TO_RPM < 100)
-            {    
-                th_increment = 60.0;
-            
-            } 
-            else if (foc.speed_sense * SPEED_PU_TO_RPM >= 100.0 && foc.speed_sense * SPEED_PU_TO_RPM < 600.0)
-            {
-                th_increment = 60.0;
-            }
-            else if (foc.speed_sense * SPEED_PU_TO_RPM >= 600.0 && foc.speed_sense * SPEED_PU_TO_RPM < 1300.0)
-            {
-                th_increment = 60.0;
-            }
-            else if (foc.speed_sense * SPEED_PU_TO_RPM >= 1300.0 && foc.speed_sense * SPEED_PU_TO_RPM < 2650.0)
-            {
-                th_increment = 60.0;
-            }
-            else if (foc.speed_sense * SPEED_PU_TO_RPM >= 2650.0 && foc.speed_sense * SPEED_PU_TO_RPM < 4300.0)
-            {
-                th_increment = 60.0;
-            }
-            else if (foc.speed_sense * SPEED_PU_TO_RPM >= 4300.0)
-            {
-                th_increment = 60.0;
-            }
+            th_increment = 0.5;
 
             if(target_speed >= prev_output)
             {
@@ -301,28 +274,7 @@ float Throttle_Control(int target_speed,float prev_output,int f_flag,int r_flag)
         }
         else
         {
-            deacc_flag = 1;
-            acc_flag = 0;
-            if (foc.speed_sense * SPEED_PU_TO_RPM < 1000.0)
-            {
-                th_decrement = 40.0;
-            }
-            else if (foc.speed_sense * SPEED_PU_TO_RPM >= 1000.0 && foc.speed_sense * SPEED_PU_TO_RPM < 1650.0)
-            {
-                th_decrement = 55.0;
-            }
-            else if (foc.speed_sense * SPEED_PU_TO_RPM >= 1650.0 && foc.speed_sense * SPEED_PU_TO_RPM < 2000.0)
-            {
-                th_decrement = 75.0;
-            }
-            else if (foc.speed_sense * SPEED_PU_TO_RPM >= 2000.0 && foc.speed_sense * SPEED_PU_TO_RPM < 2650.0)
-            {
-                th_decrement = 95.0;
-            }
-            else if (foc.speed_sense * SPEED_PU_TO_RPM >= 2650.0)
-            {
-                th_decrement =DEACCELERATION_CONST;
-            }
+            th_decrement = 0.5;
 
             if(target_speed <= (prev_output - th_decrement)) prev_output -= th_decrement ;
             else prev_output = target_speed ;
@@ -400,7 +352,7 @@ int Overcurrent_Fault (int Current)
 int Read_Throttle(int adc_data)
 {
 
-    adc_data  = adc_data - 7300 ;
+    adc_data  = adc_data - 8500 ;
  
     if(adc_data<0)
     {

@@ -80,9 +80,18 @@ extern ExtY_Angle     rtY_Angle;
 
 /* Private function prototypes -----------------------------------------------*/
 
+// Global variables for filtering
+static float prev_rpm = 0;      // Initialize previous RPM for rate limiting
+
 float Duty;
 float freq_rpm = 0.0;
 float throttle_percent = 0.0;
+
+volatile uint8_t forward_flag_thr = 0;
+volatile uint8_t reverse_flag_thr = 0;
+uint8_t neutral_set;
+uint8_t check = 0;
+
 volatile uint32_t ICValue;
 volatile uint32_t angle_curr = 0, angle_prev = 0;
 uint32_t z_count=50;
@@ -194,19 +203,26 @@ int main(void) {
       prev_time = time_count;
     }
 
-    if (time_count - prev_thr_time >= 500)
+    rtU.Speed_rpm = Throttle_Control(Rpm_Target_Function(moving_Throttle_measured_fun(Read_Throttle(analog.bufferData[THROTTLE]), 1.0)) * SPEED_PU_TO_RPM, rtU.Speed_rpm);
+
+    if (rtU.Speed_rpm <= 0.0)
     {
-      if (rtU.Speed_rpm < 500.0)
-        rtU.Speed_rpm += 10.0;
-
-      if (rtU.Speed_rpm > 500.0)
-        rtU.Speed_rpm = 500.0;
-
-      if (rtU.Speed_rpm < 0.0)
-        rtU.Speed_rpm = 0.0;
-
-      prev_thr_time = time_count;
+      rtU.Speed_rpm = 0.0;
     }
+
+    // if (time_count - prev_thr_time >= 500)
+    // {
+    //   if (rtU.Speed_rpm_ref < 500.0)
+    //     rtU.Speed_rpm_ref += 10.0;
+
+      // if (rtU.Speed_rpm_ref > 500.0)
+      //   rtU.Speed_rpm_ref = 500.0;
+
+      // if (rtU.Speed_rpm_ref < 0.0)
+      //   rtU.Speed_rpm_ref = 0.0;
+
+    //   prev_thr_time = time_count;
+    // }
   }
 }
 
@@ -399,6 +415,20 @@ void get_UIID(){
   UIID_Array[9] = (*last_4Bytes >> 8) & 0xFF;
   UIID_Array[10] = (*last_4Bytes >> 16) & 0xFF;
   UIID_Array[11] = (*last_4Bytes >> 24) & 0xFF;
+}
+
+// Rate limiter to smooth RPM changes
+float rate_limiter(float target_rpm) {
+    float rpm_change = target_rpm - prev_rpm;
+
+    if (rpm_change > RATE_LIMIT) {
+        target_rpm = prev_rpm + RATE_LIMIT;  // Limit the increase
+    } else if (rpm_change < -RATE_LIMIT) {
+        target_rpm = prev_rpm - RATE_LIMIT;  // Limit the decrease
+    }
+
+    prev_rpm = target_rpm;  // Update previous RPM for the next iteration
+    return target_rpm;
 }
 
 /* USER CODE BEGIN 4 */
