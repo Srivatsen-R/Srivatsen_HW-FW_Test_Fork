@@ -173,8 +173,16 @@ int main(void) {
 
   HAL_Delay(5000);
 
+  bootup_config();
+
   //enabling motor control interrupts , ABZ+PWM sensing interrpts.
   ENABLE_PERIPHERALS();
+
+  get_UIID();
+
+  send_on_6F0(UIID_Array);
+  send_on_6F1(UIID_Array);
+  send_on_6F2(UIID_Array);
 
   Pegasus_MBD_initialize();
   
@@ -355,6 +363,12 @@ void send_on_305()
   can_data[1] = (uint8_t)(((uint16_t)(rtY.FOC_Out.Id_Refer + 10000.0) & 0xFF00) >> 8);
   can_data[2] = (uint8_t)((uint16_t)(rtY.FOC_Out.Iq_Refer + 10000.0) & 0x00FF);
   can_data[3] = (uint8_t)(((uint16_t)(rtY.FOC_Out.Iq_Refer + 10000.0) & 0xFF00) >> 8);
+  #if APP1
+  can_data[4] = (uint8_t)(0x01);
+  #endif
+  #if APP2
+  can_data[4] = (uint8_t)(0x02);
+  #endif
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_305, S, can_data, FDCAN_DLC_BYTES);
 }
 
@@ -467,6 +481,40 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
   /* Prevent unused argument(s) compilation warning */
   
+  if(htim->Instance == TIM7)
+  {
+    motorControl.drive.check = DRIVE_DISABLE;
+    HAL_TIM_Base_Stop_IT(&htim17);
+    switch (upgrade_state)
+    {
+    case UPGRADE_INIT:
+      handle_upgrade_init();
+      break;
+    case UPGRADE_RECEIVE_DATA:
+      handle_rceive_data();
+      break;
+    case UPGRADE_PAUSE:
+      handle_upgrade_pause();
+      HAL_TIM_Base_Stop_IT(&htim7);
+      motorControl.drive.check = DRIVE_ENABLE;
+      HAL_TIM_Base_Start_IT(&htim17);
+      break;
+    case UPGRADE_RESUME:
+      handle_upgrade_resume();
+      break;
+    case UPGRADE_COMPLETE:
+      handle_upgrade_complete();
+      break;
+    case UPGRADE_FAILED:
+      HAL_TIM_Base_Stop_IT(&htim7);
+      motorControl.drive.check = DRIVE_ENABLE;
+      HAL_TIM_Base_Start_IT(&htim17);
+      break;
+    default:
+      break;
+    }
+  }
+
   if(htim->Instance==TIM17) {
   //turn led red/green depending on drive status
     if(motorControl.drive.check == DRIVE_DISABLE) {
