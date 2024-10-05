@@ -109,7 +109,7 @@ typedef struct foc_t {
 #define PPR                     4095.0//NIDEC        
 //#define PPR                     2048.0//ULTRON    
 
-#define ALPHA                   0.3
+#define ALPHA                   0.35
 
 // #define POLEPAIRS               4.0// Nidec 14kg
 #define POLEPAIRS               3.0// Nidec 22kg & ULTRON
@@ -194,7 +194,7 @@ typedef struct foc_t {
 #define RPM_IMR_CONST1                      0.0004251// (1-0.001)/(5000-2650)
 
 
-#define F_SW                                20000.0//FCLK/(PSCR*ARR) //100MHz/(10*1000)         // ISR Sampling frequency
+#define F_SW                                10000.0//FCLK/(PSCR*ARR) //100MHz/(10*1000)         // ISR Sampling frequency
 #define T_PRD                               2500.0         // PWM Period TIM1
 #define OFFSET_DUTY                         0.5            // DUTY OFFSET used in modulation.
 #define T_S                                 1.0/F_SW       // Sampling Time

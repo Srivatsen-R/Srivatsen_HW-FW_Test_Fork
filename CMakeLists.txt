@@ -32,6 +32,7 @@ set(COMMON_INCLUDE
     lib/ApplicationLayer/
     lib/CustomLibs/
     lib/DriverLayer/
+    lib/ApplicationLayer/Common/
 
     lib/Bootloader/
     lib/Memory/
@@ -117,9 +118,16 @@ set(FIRMWARE_FILES
     lib/ApplicationLayer/v_f_control.c
     lib/ApplicationLayer/vector_control.c
     lib/ApplicationLayer/vehicle.c
+    lib/ApplicationLayer/FOC.c
     lib/ApplicationLayer/Pegasus_MBD.c
     lib/ApplicationLayer/Position_Calculation.c
     lib/ApplicationLayer/Position_Calculation_data.c
+    
+    lib/ApplicationLayer/Common/rt_nonfinite.c
+    lib/ApplicationLayer/Common/rt_zcfcn.c
+    lib/ApplicationLayer/Common/rtGetInf.c
+    lib/ApplicationLayer/Common/rtGetNaN.c
+    lib/ApplicationLayer/Common/rt_logging.c
 
     lib/CustomLibs/printf.c
     lib/CustomLibs/math_func.c

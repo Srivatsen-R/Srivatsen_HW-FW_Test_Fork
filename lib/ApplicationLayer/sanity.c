@@ -17,6 +17,7 @@ This file contains functions associated with sanity checks for vehicle.
 #include "adc_AL.h"
 #include "dr_devices.h"
 #include "Pegasus_MBD.h"
+#include "FOC.h"
 #include "rtwtypes.h"
 
 #define FDCAN_ERROR_BIT (0x4000A400 + 0x0044)
@@ -55,6 +56,8 @@ motorControl_t motorControl = {
 
 extern adc_t          analog;
 extern ExtU           rtU;
+extern ExtU_FOC_T     FOC_U;
+extern ExtY_FOC_T     FOC_Y;
 extern terminal_t     terminal;
 extern motorControl_t mControl;
 
@@ -84,72 +87,72 @@ extern int reverse_flag;
 
 void FAULT_DETECTION()
 {
-        if (rtY.CurrentFlag == OC_Warning)
-        {
-                if (motorControl.drive.check == DRIVE_DISABLE)
-                {
-                        motorControl.drive.check = DRIVE_ENABLE;
-                }
-        }
-        else if (rtY.CurrentFlag == OC_Error)
-        {
-                motorControl.drive.check = DRIVE_DISABLE;
-        }
-
-        if (rtU.MotorTemperature_C >= 130.0)
-        {
-                motorControl.drive.check = DRIVE_DISABLE;
-        }
-        else if (rtU.MotorTemperature_C < 100.0)
-        {
-                if (motorControl.drive.check == DRIVE_DISABLE)
-                {
-                        motorControl.drive.check = DRIVE_ENABLE;
-                }
-        }
-
-        if (rtU.MotorControllerTemperature_C >= 100.0)
-        {
-                motorControl.drive.check = DRIVE_DISABLE;
-        }
-        else if (rtU.MotorControllerTemperature_C < 100.0)
-        {
-                if (motorControl.drive.check == DRIVE_DISABLE)
-                {
-                        motorControl.drive.check = DRIVE_ENABLE;
-                }
-        }
-
-        // if (rtY.VoltageFlag == OV_Warning)
-        // {
-        //         if (motorControl.drive.check == DRIVE_DISABLE)
-        //         {
-        //                 motorControl.drive.check = DRIVE_ENABLE; 
-        //         }
-        // }
-        // else if (rtY.VoltageFlag == OV_Error)
-        // {
-        //         motorControl.drive.check = DRIVE_DISABLE;
-        // }
-
-        // if (rtY.MCTempFlag == OT_Warning)
+        // if (rtY.CurrentFlag == OC_Warning)
         // {
         //         if (motorControl.drive.check == DRIVE_DISABLE)
         //         {
         //                 motorControl.drive.check = DRIVE_ENABLE;
         //         }
         // }
-        // else if (rtY.MCTempFlag == OT_Error)
+        // else if (rtY.CurrentFlag == OC_Error)
         // {
         //         motorControl.drive.check = DRIVE_DISABLE;
         // }
 
-        // float V_max = sqrtf(powf(rtY.FOC_Out.Vq_Calculated, 2.0f) + powf(rtY.FOC_Out.Vd_Calculated, 2.0f));
-
-        // if (V_max >= rtU.BusVoltage_V)
+        // if (rtU.MotorTemperature_C >= 130.0)
         // {
         //         motorControl.drive.check = DRIVE_DISABLE;
         // }
+        // else if (rtU.MotorTemperature_C < 100.0)
+        // {
+        //         if (motorControl.drive.check == DRIVE_DISABLE)
+        //         {
+        //                 motorControl.drive.check = DRIVE_ENABLE;
+        //         }
+        // }
+
+        // if (rtU.MotorControllerTemperature_C >= 100.0)
+        // {
+        //         motorControl.drive.check = DRIVE_DISABLE;
+        // }
+        // else if (rtU.MotorControllerTemperature_C < 100.0)
+        // {
+        //         if (motorControl.drive.check == DRIVE_DISABLE)
+        //         {
+        //                 motorControl.drive.check = DRIVE_ENABLE;
+        //         }
+        // }
+
+        // // if (rtY.VoltageFlag == OV_Warning)
+        // // {
+        // //         if (motorControl.drive.check == DRIVE_DISABLE)
+        // //         {
+        // //                 motorControl.drive.check = DRIVE_ENABLE; 
+        // //         }
+        // // }
+        // // else if (rtY.VoltageFlag == OV_Error)
+        // // {
+        // //         motorControl.drive.check = DRIVE_DISABLE;
+        // // }
+
+        // // if (rtY.MCTempFlag == OT_Warning)
+        // // {
+        // //         if (motorControl.drive.check == DRIVE_DISABLE)
+        // //         {
+        // //                 motorControl.drive.check = DRIVE_ENABLE;
+        // //         }
+        // // }
+        // // else if (rtY.MCTempFlag == OT_Error)
+        // // {
+        // //         motorControl.drive.check = DRIVE_DISABLE;
+        // // }
+
+        // // float V_max = sqrtf(powf(rtY.FOC_Out.Vq_Calculated, 2.0f) + powf(rtY.FOC_Out.Vd_Calculated, 2.0f));
+
+        // // if (V_max >= rtU.BusVoltage_V)
+        // // {
+        // //         motorControl.drive.check = DRIVE_DISABLE;
+        // // }
 }
 
 void ANALOG_READING()
@@ -170,12 +173,12 @@ void ANALOG_READING()
      temp_K -= KELVIN_TO_CELSIUS;
      motorControl.temperature.motor = moving_Temperature_measured_fun_M(temp_K, TEMP_AVG);
 
-     rtU.MotorControllerTemperature_C = avg_board_temp;
-     rtU.MotorTemperature_C = motorControl.temperature.motor;
+//      rtU.MotorControllerTemperature_C = avg_board_temp;
+//      rtU.MotorTemperature_C = motorControl.temperature.motor;
 
      //bus voltage
      busVoltage = moving_Batt_voltage_measured_fun(0.00211*analog.bufferData[BUS_VOLTAGE] +VBUS_OFFSET,VOLTAGE_AVG); 
      terminal.volt.bus_volt = busVoltage; 
 
-     rtU.BusVoltage_V = 57.4;
+//      rtU.BusVoltage_V = 57.4;
 }

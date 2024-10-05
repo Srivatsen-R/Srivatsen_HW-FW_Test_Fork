@@ -34,7 +34,13 @@
         "type_traits": "c",
         "stm32h7xx_hal_conf.h": "c",
         "stm32h743xx.h": "c",
-        "pegasus_mbd.h": "c"
+        "pegasus_mbd.h": "c",
+        "foc.h": "c",
+        "rt_nonfinite.h": "c",
+        "microcontroller.h": "c",
+        "rtwtypes.h": "c",
+        "foc_private.h": "c",
+        "rt_logging.h": "c"
     },
     "cortex-debug.variableUseNaturalFormat": true
 }

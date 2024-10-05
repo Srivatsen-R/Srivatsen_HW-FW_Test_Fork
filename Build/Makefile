@@ -1033,6 +1033,168 @@ Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.s
 .PHONY : Utility/can-tp-module-threadx/isotp-c/src/isotp/send.c.s
 
+lib/ApplicationLayer/Common/rtGetInf.obj: lib/ApplicationLayer/Common/rtGetInf.c.obj
+.PHONY : lib/ApplicationLayer/Common/rtGetInf.obj
+
+# target to build an object file
+lib/ApplicationLayer/Common/rtGetInf.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Common/rtGetInf.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Common/rtGetInf.c.obj
+.PHONY : lib/ApplicationLayer/Common/rtGetInf.c.obj
+
+lib/ApplicationLayer/Common/rtGetInf.i: lib/ApplicationLayer/Common/rtGetInf.c.i
+.PHONY : lib/ApplicationLayer/Common/rtGetInf.i
+
+# target to preprocess a source file
+lib/ApplicationLayer/Common/rtGetInf.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Common/rtGetInf.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Common/rtGetInf.c.i
+.PHONY : lib/ApplicationLayer/Common/rtGetInf.c.i
+
+lib/ApplicationLayer/Common/rtGetInf.s: lib/ApplicationLayer/Common/rtGetInf.c.s
+.PHONY : lib/ApplicationLayer/Common/rtGetInf.s
+
+# target to generate assembly for a file
+lib/ApplicationLayer/Common/rtGetInf.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Common/rtGetInf.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Common/rtGetInf.c.s
+.PHONY : lib/ApplicationLayer/Common/rtGetInf.c.s
+
+lib/ApplicationLayer/Common/rtGetNaN.obj: lib/ApplicationLayer/Common/rtGetNaN.c.obj
+.PHONY : lib/ApplicationLayer/Common/rtGetNaN.obj
+
+# target to build an object file
+lib/ApplicationLayer/Common/rtGetNaN.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Common/rtGetNaN.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Common/rtGetNaN.c.obj
+.PHONY : lib/ApplicationLayer/Common/rtGetNaN.c.obj
+
+lib/ApplicationLayer/Common/rtGetNaN.i: lib/ApplicationLayer/Common/rtGetNaN.c.i
+.PHONY : lib/ApplicationLayer/Common/rtGetNaN.i
+
+# target to preprocess a source file
+lib/ApplicationLayer/Common/rtGetNaN.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Common/rtGetNaN.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Common/rtGetNaN.c.i
+.PHONY : lib/ApplicationLayer/Common/rtGetNaN.c.i
+
+lib/ApplicationLayer/Common/rtGetNaN.s: lib/ApplicationLayer/Common/rtGetNaN.c.s
+.PHONY : lib/ApplicationLayer/Common/rtGetNaN.s
+
+# target to generate assembly for a file
+lib/ApplicationLayer/Common/rtGetNaN.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Common/rtGetNaN.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Common/rtGetNaN.c.s
+.PHONY : lib/ApplicationLayer/Common/rtGetNaN.c.s
+
+lib/ApplicationLayer/Common/rt_logging.obj: lib/ApplicationLayer/Common/rt_logging.c.obj
+.PHONY : lib/ApplicationLayer/Common/rt_logging.obj
+
+# target to build an object file
+lib/ApplicationLayer/Common/rt_logging.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Common/rt_logging.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Common/rt_logging.c.obj
+.PHONY : lib/ApplicationLayer/Common/rt_logging.c.obj
+
+lib/ApplicationLayer/Common/rt_logging.i: lib/ApplicationLayer/Common/rt_logging.c.i
+.PHONY : lib/ApplicationLayer/Common/rt_logging.i
+
+# target to preprocess a source file
+lib/ApplicationLayer/Common/rt_logging.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Common/rt_logging.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Common/rt_logging.c.i
+.PHONY : lib/ApplicationLayer/Common/rt_logging.c.i
+
+lib/ApplicationLayer/Common/rt_logging.s: lib/ApplicationLayer/Common/rt_logging.c.s
+.PHONY : lib/ApplicationLayer/Common/rt_logging.s
+
+# target to generate assembly for a file
+lib/ApplicationLayer/Common/rt_logging.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Common/rt_logging.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Common/rt_logging.c.s
+.PHONY : lib/ApplicationLayer/Common/rt_logging.c.s
+
+lib/ApplicationLayer/Common/rt_nonfinite.obj: lib/ApplicationLayer/Common/rt_nonfinite.c.obj
+.PHONY : lib/ApplicationLayer/Common/rt_nonfinite.obj
+
+# target to build an object file
+lib/ApplicationLayer/Common/rt_nonfinite.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Common/rt_nonfinite.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Common/rt_nonfinite.c.obj
+.PHONY : lib/ApplicationLayer/Common/rt_nonfinite.c.obj
+
+lib/ApplicationLayer/Common/rt_nonfinite.i: lib/ApplicationLayer/Common/rt_nonfinite.c.i
+.PHONY : lib/ApplicationLayer/Common/rt_nonfinite.i
+
+# target to preprocess a source file
+lib/ApplicationLayer/Common/rt_nonfinite.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Common/rt_nonfinite.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Common/rt_nonfinite.c.i
+.PHONY : lib/ApplicationLayer/Common/rt_nonfinite.c.i
+
+lib/ApplicationLayer/Common/rt_nonfinite.s: lib/ApplicationLayer/Common/rt_nonfinite.c.s
+.PHONY : lib/ApplicationLayer/Common/rt_nonfinite.s
+
+# target to generate assembly for a file
+lib/ApplicationLayer/Common/rt_nonfinite.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Common/rt_nonfinite.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Common/rt_nonfinite.c.s
+.PHONY : lib/ApplicationLayer/Common/rt_nonfinite.c.s
+
+lib/ApplicationLayer/Common/rt_zcfcn.obj: lib/ApplicationLayer/Common/rt_zcfcn.c.obj
+.PHONY : lib/ApplicationLayer/Common/rt_zcfcn.obj
+
+# target to build an object file
+lib/ApplicationLayer/Common/rt_zcfcn.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Common/rt_zcfcn.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Common/rt_zcfcn.c.obj
+.PHONY : lib/ApplicationLayer/Common/rt_zcfcn.c.obj
+
+lib/ApplicationLayer/Common/rt_zcfcn.i: lib/ApplicationLayer/Common/rt_zcfcn.c.i
+.PHONY : lib/ApplicationLayer/Common/rt_zcfcn.i
+
+# target to preprocess a source file
+lib/ApplicationLayer/Common/rt_zcfcn.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Common/rt_zcfcn.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Common/rt_zcfcn.c.i
+.PHONY : lib/ApplicationLayer/Common/rt_zcfcn.c.i
+
+lib/ApplicationLayer/Common/rt_zcfcn.s: lib/ApplicationLayer/Common/rt_zcfcn.c.s
+.PHONY : lib/ApplicationLayer/Common/rt_zcfcn.s
+
+# target to generate assembly for a file
+lib/ApplicationLayer/Common/rt_zcfcn.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Common/rt_zcfcn.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Common/rt_zcfcn.c.s
+.PHONY : lib/ApplicationLayer/Common/rt_zcfcn.c.s
+
+lib/ApplicationLayer/FOC.obj: lib/ApplicationLayer/FOC.c.obj
+.PHONY : lib/ApplicationLayer/FOC.obj
+
+# target to build an object file
+lib/ApplicationLayer/FOC.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/FOC.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/FOC.c.obj
+.PHONY : lib/ApplicationLayer/FOC.c.obj
+
+lib/ApplicationLayer/FOC.i: lib/ApplicationLayer/FOC.c.i
+.PHONY : lib/ApplicationLayer/FOC.i
+
+# target to preprocess a source file
+lib/ApplicationLayer/FOC.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/FOC.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/FOC.c.i
+.PHONY : lib/ApplicationLayer/FOC.c.i
+
+lib/ApplicationLayer/FOC.s: lib/ApplicationLayer/FOC.c.s
+.PHONY : lib/ApplicationLayer/FOC.s
+
+# target to generate assembly for a file
+lib/ApplicationLayer/FOC.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/FOC.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/FOC.c.s
+.PHONY : lib/ApplicationLayer/FOC.c.s
+
 lib/ApplicationLayer/Pegasus_MBD.obj: lib/ApplicationLayer/Pegasus_MBD.c.obj
 .PHONY : lib/ApplicationLayer/Pegasus_MBD.obj
 
@@ -2173,6 +2335,24 @@ help:
 	@echo ... Utility/can-tp-module-threadx/isotp-c/src/isotp/send.obj
 	@echo ... Utility/can-tp-module-threadx/isotp-c/src/isotp/send.i
 	@echo ... Utility/can-tp-module-threadx/isotp-c/src/isotp/send.s
+	@echo ... lib/ApplicationLayer/Common/rtGetInf.obj
+	@echo ... lib/ApplicationLayer/Common/rtGetInf.i
+	@echo ... lib/ApplicationLayer/Common/rtGetInf.s
+	@echo ... lib/ApplicationLayer/Common/rtGetNaN.obj
+	@echo ... lib/ApplicationLayer/Common/rtGetNaN.i
+	@echo ... lib/ApplicationLayer/Common/rtGetNaN.s
+	@echo ... lib/ApplicationLayer/Common/rt_logging.obj
+	@echo ... lib/ApplicationLayer/Common/rt_logging.i
+	@echo ... lib/ApplicationLayer/Common/rt_logging.s
+	@echo ... lib/ApplicationLayer/Common/rt_nonfinite.obj
+	@echo ... lib/ApplicationLayer/Common/rt_nonfinite.i
+	@echo ... lib/ApplicationLayer/Common/rt_nonfinite.s
+	@echo ... lib/ApplicationLayer/Common/rt_zcfcn.obj
+	@echo ... lib/ApplicationLayer/Common/rt_zcfcn.i
+	@echo ... lib/ApplicationLayer/Common/rt_zcfcn.s
+	@echo ... lib/ApplicationLayer/FOC.obj
+	@echo ... lib/ApplicationLayer/FOC.i
+	@echo ... lib/ApplicationLayer/FOC.s
 	@echo ... lib/ApplicationLayer/Pegasus_MBD.obj
 	@echo ... lib/ApplicationLayer/Pegasus_MBD.i
 	@echo ... lib/ApplicationLayer/Pegasus_MBD.s

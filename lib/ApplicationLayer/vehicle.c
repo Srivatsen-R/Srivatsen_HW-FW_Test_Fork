@@ -18,6 +18,7 @@ This file contains functions associated with vehicle such as throttle, FNR , CAN
 #include "foc_blockset.h"
 #include "Pegasus_MBD.h"
 #include "Position_Calculation.h"
+#include "FOC.h"
 #include "rtwtypes.h"
 
 
@@ -31,8 +32,13 @@ vehicle_t vehicle = {
                     };
 
 extern can_t can;
+
 extern ExtU rtU;
 extern ExtY rtY;
+
+extern ExtU_FOC_T FOC_U;
+extern ExtY_FOC_T FOC_Y;
+
 extern ExtU_Angle rtU_Angle;
 extern ExtY_Angle rtY_Angle;
 extern foc_t foc;
@@ -94,9 +100,9 @@ void READ_MOTOR_PHASE_CURRENT()
     filteredValue_b = lowPassFilter((float)(analog.bufferData[PHASE_CURRENT_V] - OFFSET_CURRENT), filteredValue_b);
   }
 
-  rtU.I_a = (filteredValue_a * 3.297 * 400.0) / 65535.0;
-  rtU.I_b = (filteredValue_b * 3.297 * 400.0) / 65535.0;
-  rtU.I_c = (-rtU.I_a) + (-rtU.I_b);
+  FOC_U.PhaseCurrent[0] = (filteredValue_a * 3.297 * 400.0) / 65535.0;
+  FOC_U.PhaseCurrent[1] = (filteredValue_b * 3.297 * 400.0) / 65535.0;
+  FOC_U.PhaseCurrent[2] = (-FOC_U.PhaseCurrent[0]) + (-FOC_U.PhaseCurrent[1]);
 
 }
 void READ_MOTOR_POSITION()

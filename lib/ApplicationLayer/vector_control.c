@@ -49,6 +49,7 @@ duty cycle values that generate the desired voltage vector.
 #include "motor_param.h"
 #include "Pegasus_MBD.h"
 #include "Position_Calculation.h"
+#include "FOC.h"
 #include "rtwtypes.h"
 
 extern int a_current;
@@ -77,6 +78,9 @@ extern motorControl_t motorControl;
 
 extern ExtU rtU;
 extern ExtY rtY;
+
+extern ExtU_FOC_T FOC_U;
+extern ExtY_FOC_T FOC_Y;
 
 int state=0;
 
@@ -138,9 +142,9 @@ void FOC_READ_MOTOR_POSITION(void)
     else if (foc.speed_sense<-MAX_PU_SPEED){foc.speed_sense=-MAX_PU_SPEED;}
 
     if (forward_set)
-        rtU.Speed_rpm_fb = (foc.speed_sense * SPEED_PU_TO_RPM * 1.0);
+        FOC_U.ActualSpeed = (foc.speed_sense * SPEED_PU_TO_RPM * 1.0) * 0.1047;
     else if (reverse_set)
-        rtU.Speed_rpm_fb = (foc.speed_sense * SPEED_PU_TO_RPM * -1.0);
+        FOC_U.ActualSpeed = (foc.speed_sense * SPEED_PU_TO_RPM * -1.0) * 0.1047;
 
     static float angle_mech;
 
@@ -150,7 +154,7 @@ void FOC_READ_MOTOR_POSITION(void)
 
     if (forward_set)
     {
-        if((foc.speed_sense * 1.0 * SPEED_PU_TO_RPM)<10.0 && duty_state)
+        if((foc.speed_sense * 1.0 * SPEED_PU_TO_RPM * 0.1047)<10.0 && duty_state)
         { 
             angle_mech = (100-Duty)*DUTY_TO_RADIAN;
 
@@ -163,7 +167,7 @@ void FOC_READ_MOTOR_POSITION(void)
     }
     else if (reverse_set)
     {
-        if((foc.speed_sense * -1.0 * SPEED_PU_TO_RPM)<10.0 && duty_state)
+        if((foc.speed_sense * -1.0 * SPEED_PU_TO_RPM * 0.1047)<10.0 && duty_state)
         { 
             angle_mech = (100-Duty)*DUTY_TO_RADIAN;
 
@@ -182,14 +186,14 @@ void FOC_READ_MOTOR_POSITION(void)
 
     if (forward_set)
     {
-        if((foc.speed_sense * SPEED_PU_TO_RPM * 1.0) <= 0.0)
+        if((foc.speed_sense * SPEED_PU_TO_RPM * 1.0 * 0.1047) <= 0.0)
         {
             duty_state = 1;
         }
     }
     else if (reverse_set)
     {
-        if((foc.speed_sense * SPEED_PU_TO_RPM * -1.0) <= 0.0)
+        if((foc.speed_sense * SPEED_PU_TO_RPM * -1.0 * 0.1047) <= 0.0)
         {
             duty_state = 1;
         }
@@ -199,9 +203,9 @@ void FOC_READ_MOTOR_POSITION(void)
     Position_Calculation_step();
 
     if (forward_set)
-        rtU.MtrPos_rad = foc.rho + ANGLE_OFFSET_RW;
+        FOC_U.angle = foc.rho + ANGLE_OFFSET_RW;
     else if (reverse_set)
-        rtU.MtrPos_rad = foc.rho + ANGLE_OFFSET_FW;
+        FOC_U.angle = foc.rho + ANGLE_OFFSET_FW;
 
     foc.rotor_speed_prev          = foc.rotor_speed;  
     foc.rotor_speed_filtered_prev = foc.rotor_speed_filtered;
@@ -211,25 +215,25 @@ void FOC_READ_MOTOR_POSITION(void)
 
 void FOC_SPACE_VECTOR_MODULATION()
 {
-    //PWM DUTY VARIABLES
-    if (rtY.FOC_Out.Normalized_Va > UL)
-        rtY.FOC_Out.Normalized_Va = UL;
-    else if (rtY.FOC_Out.Normalized_Va < LL)
-        rtY.FOC_Out.Normalized_Va = LL;
+    // //PWM DUTY VARIABLES
+    // if (rtY.FOC_Out.Normalized_Va > UL)
+    //     rtY.FOC_Out.Normalized_Va = UL;
+    // else if (rtY.FOC_Out.Normalized_Va < LL)
+    //     rtY.FOC_Out.Normalized_Va = LL;
 
-    if (rtY.FOC_Out.Normalized_Vb > UL)
-        rtY.FOC_Out.Normalized_Vb = UL;
-    else if (rtY.FOC_Out.Normalized_Vb < LL)
-        rtY.FOC_Out.Normalized_Vb = LL;
+    // if (rtY.FOC_Out.Normalized_Vb > UL)
+    //     rtY.FOC_Out.Normalized_Vb = UL;
+    // else if (rtY.FOC_Out.Normalized_Vb < LL)
+    //     rtY.FOC_Out.Normalized_Vb = LL;
 
-    if (rtY.FOC_Out.Normalized_Vc > UL)
-        rtY.FOC_Out.Normalized_Vc = UL;
-    else if (rtY.FOC_Out.Normalized_Vc < LL)
-        rtY.FOC_Out.Normalized_Vc = LL;
+    // if (rtY.FOC_Out.Normalized_Vc > UL)
+    //     rtY.FOC_Out.Normalized_Vc = UL;
+    // else if (rtY.FOC_Out.Normalized_Vc < LL)
+    //     rtY.FOC_Out.Normalized_Vc = LL;
 
-    foc.pwm_a = (uint16_t)((PWM_CONST_2*(rtY.FOC_Out.Normalized_Va))  + PWM_CONST_1);
-    foc.pwm_b = (uint16_t)((PWM_CONST_2*(rtY.FOC_Out.Normalized_Vb))  + PWM_CONST_1);
-    foc.pwm_c = (uint16_t)((PWM_CONST_2*(rtY.FOC_Out.Normalized_Vc))  + PWM_CONST_1);   
+    foc.pwm_a = (uint16_t)((PWM_CONST_2*((FOC_Y.Va / 59.0) * 32767.0))  + PWM_CONST_1);
+    foc.pwm_b = (uint16_t)((PWM_CONST_2*((FOC_Y.Vb / 59.0) * 32767.0))  + PWM_CONST_1);
+    foc.pwm_c = (uint16_t)((PWM_CONST_2*((FOC_Y.Vc / 59.0) * 32767.0))  + PWM_CONST_1);   
 
     if (foc.pwm_a < 0)
         foc.pwm_a = 0;

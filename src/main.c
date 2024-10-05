@@ -56,6 +56,7 @@ HAL_GPIO_EXTI_Callback          : Contain code blocks for reseting position.
 
 #include "Pegasus_MBD.h"
 #include "Position_Calculation.h"
+#include "FOC.h"
 #include "rtwtypes.h"
 
 /* Variable declaration ------------------------------------------------------*/
@@ -77,6 +78,8 @@ extern ExtU           rtU;
 extern ExtY           rtY;
 extern ExtU_Angle     rtU_Angle;
 extern ExtY_Angle     rtY_Angle;
+extern ExtU_FOC_T     FOC_U;
+extern ExtY_FOC_T     FOC_Y;
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -184,7 +187,8 @@ int main(void) {
   send_on_6F1(UIID_Array);
   send_on_6F2(UIID_Array);
 
-  Pegasus_MBD_initialize();
+  // Pegasus_MBD_initialize();
+  FOC_initialize();
   
   //while loop running on CLK frequency.
   while (1) 
@@ -211,26 +215,26 @@ int main(void) {
       prev_time = time_count;
     }
 
-    rtU.Speed_rpm = Throttle_Control(Rpm_Target_Function(moving_Throttle_measured_fun(Read_Throttle(analog.bufferData[THROTTLE]), 1.0)) * SPEED_PU_TO_RPM, rtU.Speed_rpm);
+    // rtU.Speed_rpm = Throttle_Control(Rpm_Target_Function(moving_Throttle_measured_fun(Read_Throttle(analog.bufferData[THROTTLE]), 1.0)) * SPEED_PU_TO_RPM, rtU.Speed_rpm);
 
-    if (rtU.Speed_rpm <= 0.0)
-    {
-      rtU.Speed_rpm = 0.0;
-    }
-
-    // if (time_count - prev_thr_time >= 500)
+    // if (rtU.Speed_rpm <= 0.0)
     // {
-    //   if (rtU.Speed_rpm_ref < 500.0)
-    //     rtU.Speed_rpm_ref += 10.0;
-
-      // if (rtU.Speed_rpm_ref > 500.0)
-      //   rtU.Speed_rpm_ref = 500.0;
-
-      // if (rtU.Speed_rpm_ref < 0.0)
-      //   rtU.Speed_rpm_ref = 0.0;
-
-    //   prev_thr_time = time_count;
+    //   rtU.Speed_rpm = 0.0;
     // }
+
+    if (time_count - prev_thr_time >= 500)
+    {
+      if (FOC_U.RefSpeed < (2650.0 * 0.1047))
+        FOC_U.RefSpeed += 5.0;
+
+      if (FOC_U.RefSpeed > (2650.0 * 0.1047))
+        FOC_U.RefSpeed = (2650.0 * 0.1047);
+
+      if (FOC_U.RefSpeed < 0.0)
+        FOC_U.RefSpeed = 0.0;
+
+      prev_thr_time = time_count;
+    }
   }
 }
 
@@ -254,9 +258,9 @@ void set_interrupt_flag(uint8_t value){
 void send_on_300()
 {
   uint8_t can_data[8] = {0};
-  can_data[0] = (uint8_t)(rtY.FOC_Out.Va + 60.0);
-  can_data[1] = (uint8_t)(rtY.FOC_Out.Vb + 60.0);
-  can_data[2] = (uint8_t)(rtY.FOC_Out.Vc + 60.0);
+  can_data[0] = (uint8_t)(FOC_Y.Va + 60.0);
+  can_data[1] = (uint8_t)(FOC_Y.Vb + 60.0);
+  can_data[2] = (uint8_t)(FOC_Y.Vc + 60.0);
   can_data[3] = 0;
   can_data[4] = (uint8_t)((uint16_t)(rtY.FOC_Out.Vq_Calculated + 10000.0) & 0x00FF);
   can_data[5] = (uint8_t)(((uint16_t)(rtY.FOC_Out.Vq_Calculated + 10000.0) & 0xFF00) >> 8);
@@ -270,12 +274,12 @@ void send_on_301()
   uint8_t can_data[8] = {0};
   can_data[0] = 0;
   can_data[1] = 0;
-  can_data[2] = (uint8_t)((uint16_t)(rtU.I_a + 400.0) & 0x00FF);
-  can_data[3] = (uint8_t)(((uint16_t)(rtU.I_a + 400.0) & 0xFF00) >> 8);
-  can_data[4] = (uint8_t)((uint16_t)(rtU.I_b + 400.0) & 0x00FF);
-  can_data[5] = (uint8_t)(((uint16_t)(rtU.I_b + 400.0) & 0xFF00) >> 8);
-  can_data[6] = (uint8_t)((uint16_t)(rtU.I_c + 400.0) & 0x00FF);
-  can_data[7] = (uint8_t)(((uint16_t)(rtU.I_c + 400.0) & 0xFF00) >> 8);
+  can_data[2] = (uint8_t)((uint16_t)(FOC_U.PhaseCurrent[0] + 400.0) & 0x00FF);
+  can_data[3] = (uint8_t)(((uint16_t)(FOC_U.PhaseCurrent[0] + 400.0) & 0xFF00) >> 8);
+  can_data[4] = (uint8_t)((uint16_t)(FOC_U.PhaseCurrent[1] + 400.0) & 0x00FF);
+  can_data[5] = (uint8_t)(((uint16_t)(FOC_U.PhaseCurrent[1] + 400.0) & 0xFF00) >> 8);
+  can_data[6] = (uint8_t)((uint16_t)(FOC_U.PhaseCurrent[2] + 400.0) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(FOC_U.PhaseCurrent[2] + 400.0) & 0xFF00) >> 8);
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_301, S, can_data, FDCAN_DLC_BYTES); 
 }
 
@@ -296,8 +300,8 @@ void send_on_302()
   can_data[0] = (uint8_t)((uint16_t)((can_log_rh)) & 0x00FF);
   can_data[1] = (uint8_t)(((uint16_t)((can_log_rh)) & 0xFF00) >> 8);
 
-  can_data[2] = (uint8_t)((uint16_t)(rtU.Speed_rpm) & 0x00FF);
-  can_data[3] = (uint8_t)(((uint16_t)(rtU.Speed_rpm) & 0xFF00) >> 8);
+  can_data[2] = (uint8_t)((uint16_t)(FOC_U.RefSpeed / 0.1047) & 0x00FF);
+  can_data[3] = (uint8_t)(((uint16_t)(FOC_U.RefSpeed / 0.1047) & 0xFF00) >> 8);
 
   if (forward_set)
   {
@@ -318,7 +322,7 @@ void send_on_302()
 void send_on_303()
 {
   uint8_t can_data[8] = {0};
-  float can_log_mbd_elec_rh = (rtY_Angle.Elec_Angle_rad) * 100.0;
+  float can_log_mbd_elec_rh = (FOC_U.angle) * 100.0;
   can_data[0] = (uint8_t)((uint16_t)(rtU.MotorTemperature_C));
   can_data[1] = (uint8_t)((uint16_t)(rtU.MotorControllerTemperature_C));
   can_data[2] = (uint8_t)(rtY.CurrentFlag);
@@ -333,16 +337,16 @@ void send_on_303()
 void send_on_304()
 {
   uint8_t can_data[8] = {0};
-  float can_log_mbd_mech_rh = rtY_Angle.Mech_Angle_rad * 100.0;
+  float can_log_mbd_mech_rh = (FOC_U.angle / 3.0) * 100.0;
   float can_log_mbd_speed;
 
   if (forward_set)
   {
-    can_log_mbd_speed = rtY_Angle.Speed_rpm * -1.0f;
+    can_log_mbd_speed = (FOC_U.ActualSpeed / 0.1047) * -1.0f;
   }
   else if (reverse_set)
   {
-    can_log_mbd_speed = rtY_Angle.Speed_rpm;
+    can_log_mbd_speed = (FOC_U.ActualSpeed / 0.1047);
   }
 
   can_data[0] = (uint8_t)((uint16_t)(can_log_mbd_mech_rh) & 0x00FF);
@@ -542,7 +546,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
 
     READ_MOTOR_PHASE_CURRENT();
 
-    Pegasus_MBD_step();
+    FOC_step();
 
     FOC_SPACE_VECTOR_MODULATION();
   }
