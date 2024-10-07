@@ -646,7 +646,7 @@ void FOC_initialize(void)
   /* InitializeConditions for DiscreteIntegrator: '<S169>/Filter' */
   FOC_DW.Filter_DSTATE_d = 0.0;
 
-  FOC_U.Kp_speed_PID = 1;
+  FOC_U.Kp_speed_PID = 2;
   FOC_U.Ki_speed_PID = 8;
   FOC_U.Kd_speed_PID = 0.01;
   FOC_U.Filter_speed_PID = 10.0;
