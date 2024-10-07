@@ -383,18 +383,19 @@ float FLUX_PI_LOOP(float id_ref,float id_sen)
     return output;
 }
 
-void SPWM(int p_a ,int p_b , int p_c) {
-    		__HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,p_a);
-			HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-			HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
-				
-			__HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,p_b);
-			HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
-			HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
-			
-			__HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_3,p_c);
-			HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
-			HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
+void SPWM(int p_a ,int p_b , int p_c) 
+{
+    __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,p_a);
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+        
+    __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,p_b);
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
+    
+    __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_3,p_c);
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
 }
 
 void SVPWM_MODE_DRIVE_FUNCTION(int A_Duty_Svpwm_iq15 , int B_Duty_Svpwm_iq15  , int C_Duty_Svpwm_iq15 ) {
@@ -434,22 +435,22 @@ void SVPWM_MODE_DRIVE_FUNCTION(int A_Duty_Svpwm_iq15 , int B_Duty_Svpwm_iq15  , 
    __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,A_Duty_Svpwm_Temp_iq15);
    __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,B_Duty_Svpwm_Temp_iq15);
    __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_3,C_Duty_Svpwm_Temp_iq15);
-		
 }
 
 
-void MotorControl_Init (void) {
+void MotorControl_Init (void) 
+{
+    if(HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3) != HAL_OK) Error_Handler();
+    if(HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2) != HAL_OK) Error_Handler();
+    if(HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1) != HAL_OK) Error_Handler();
 
-        if(HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3) != HAL_OK) Error_Handler();
-        if(HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2) != HAL_OK) Error_Handler();
-        if(HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1) != HAL_OK) Error_Handler();
-
-        if(HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3) != HAL_OK) Error_Handler();
-      	if(HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2) != HAL_OK) Error_Handler();
-        if(HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1) != HAL_OK) Error_Handler();
+    if(HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3) != HAL_OK) Error_Handler();
+    if(HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2) != HAL_OK) Error_Handler();
+    if(HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1) != HAL_OK) Error_Handler();
 }
 
-void DRIVE_STOP(void) { 
+void DRIVE_STOP(void) 
+{ 
     HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
 
     HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1);

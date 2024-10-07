@@ -10,6 +10,7 @@ This file contains functions associated with CAN/Logging.
 #include "fdcan_AL.h"
 #include "sanity.h"
 #include "can_tp_app.h"
+#include "FOC.h"
 
 void FDCAN_dataLoggingForPythonScript(terminal_t, float, uint8_t, float, motorControl_t, adc_t, float, float, float, float, float, float, float, float);
 
@@ -17,6 +18,7 @@ extern gpio_t  io;
 extern terminal_t terminal;
 extern motorControl_t motorControl;
 extern motor_t motor;
+extern ExtU_FOC_T FOC_U;
 float SOC_Data = 0.0, DCLI = 0.0, DCLO = 0.0;
 float Pack_V = 0.0, Pack_Ah = 0.0;
 extern float avg_board_temp;
@@ -196,19 +198,42 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 			CAN_TP_Receive_interrupt(rx_Controller_7FE, (uint8_t *)can.rxMsg, can.RxMessageBuf.DataLength >> 16, &firmware_up_recv_shim, &firmware_up_recv_message, &firmware_up_recv_handle);
 		}
 
-		if(can.RxMessageBuf.Identifier == rx_Controller_109){
-			SOC_Data = (float)(((can.rxMsg[1]<<8) | can.rxMsg[0]) * 0.01);
-			Pack_V = (float)((can.rxMsg[7]<<8 | can.rxMsg[6]) * 0.1);
-		}
+		// if(can.RxMessageBuf.Identifier == rx_Controller_100)
+		// {
+		// 	FOC_U.Kp_flux_PID = (float)(can.rxMsg[0]) / 10.0;
+		// 	FOC_U.Ki_flux_PID = (float)(can.rxMsg[1]);
+		// 	FOC_U.Kd_flux_PID = (float)(can.rxMsg[2]) / 100.0;
 
-		if(can.RxMessageBuf.Identifier == rx_controller_12A){
-			DCLI = (float)(((can.rxMsg[1]<<8 | can.rxMsg[0])) * 0.1);
-			DCLO = (float)(((can.rxMsg[3]<<8 | can.rxMsg[2])) * 0.1);
-		}
+		// 	FOC_U.Kp_torque_PID = (float)(can.rxMsg[3]) / 10.0;
+		// 	FOC_U.Ki_torque_PID = (float)(can.rxMsg[4]);
+		// 	FOC_U.Kd_torque_PID = (float)(can.rxMsg[5]) / 100.0;
 
-		if(can.RxMessageBuf.Identifier == rx_controller_112){
-			Pack_Ah = (float)((can.rxMsg[7]<<8 | can.rxMsg[6]) * 0.1);
-		}
+		// 	FOC_U.Kp_speed_PID = (float)(can.rxMsg[6]) / 100.0;
+		// 	FOC_U.Ki_speed_PID = (float)(can.rxMsg[7]);
+		// }
+
+		// if (can.RxMessageBuf.Identifier == rx_Controller_101)
+		// {
+		// 	FOC_U.Kd_speed_PID = (float)(can.rxMsg[0]) / 10.0;
+			
+		// 	FOC_U.Filter_flux_PID = (float)(can.rxMsg[1]);
+		// 	FOC_U.Filter_torque_PID = (float)(can.rxMsg[2]);
+		// 	FOC_U.Filter_speed_PID = (float)(can.rxMsg[3]);
+		// }
+
+		// if(can.RxMessageBuf.Identifier == rx_Controller_109){
+		// 	SOC_Data = (float)(((can.rxMsg[1]<<8) | can.rxMsg[0]) * 0.01);
+		// 	Pack_V = (float)((can.rxMsg[7]<<8 | can.rxMsg[6]) * 0.1);
+		// }
+
+		// if(can.RxMessageBuf.Identifier == rx_controller_12A){
+		// 	DCLI = (float)(((can.rxMsg[1]<<8 | can.rxMsg[0])) * 0.1);
+		// 	DCLO = (float)(((can.rxMsg[3]<<8 | can.rxMsg[2])) * 0.1);
+		// }
+
+		// if(can.RxMessageBuf.Identifier == rx_controller_112){
+		// 	Pack_Ah = (float)((can.rxMsg[7]<<8 | can.rxMsg[6]) * 0.1);
+		// }
 }
 
 void CAN_Write(void) {
@@ -237,17 +262,20 @@ FDCAN_STATUS isFDCAN_Available(void) {
 void FDCAN_ApplicationSetup (void) {
 
   /* Configure Rx filter */
-  CAN_Filter_IDList(rx_Controller_6FA, S, FBANK0, FIFO0_CAN2);
-  CAN_Filter_IDList(rx_Controller_7FE, S, FBANK1, FIFO0_CAN2);
-  CAN_Filter_IDList(rx_Controller_109, S, FBANK2, FIFO0_CAN2);
-  CAN_Filter_IDList(rx_controller_12A, S, FBANK3, FIFO0_CAN2);
-  CAN_Filter_IDList(rx_controller_112, S, FBANK4, FIFO0_CAN2);
-  CAN_Filter_IDList(rx_controller_110, S, FBANK5, FIFO0_CAN2);
+//   CAN_Filter_IDList(rx_Controller_6FA, S, FBANK0, FIFO0_CAN2);
+//   CAN_Filter_IDList(rx_Controller_7FE, S, FBANK1, FIFO0_CAN2);
+//   CAN_Filter_IDList(rx_Controller_109, S, FBANK2, FIFO0_CAN2);
+//   CAN_Filter_IDList(rx_controller_12A, S, FBANK3, FIFO0_CAN2);
+//   CAN_Filter_IDList(rx_controller_112, S, FBANK4, FIFO0_CAN2);
+//   CAN_Filter_IDList(rx_controller_110, S, FBANK5, FIFO0_CAN2);
 
-  /* Start the FDCAN module */
-  if(HAL_FDCAN_Start(&hfdcan2) != HAL_OK) {
-	  Error_Handler();
-  };
+	CAN_Filter_IDList(rx_Controller_100, S, FBANK0, FIFO0_CAN2);
+	CAN_Filter_IDList(rx_Controller_101, S, FBANK1, FIFO0_CAN2);
+
+	/* Start the FDCAN module */
+	if(HAL_FDCAN_Start(&hfdcan2) != HAL_OK) {
+		Error_Handler();
+	};
 }
 
 static void __motorController_calibrateTerminalReading(terminal_t *terminal) {

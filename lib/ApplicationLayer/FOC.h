@@ -3,15 +3,15 @@
  *
  * Code generation for model "FOC".
  *
- * Model version              : 18.0
+ * Model version              : 18.7
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C source code generated on : Fri Oct  4 14:16:40 2024
+ * C source code generated on : Sat Oct  5 13:15:42 2024
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
- * Embedded hardware selection: Intel->x86-64 (Windows64)
+ * Embedded hardware selection: ARM Compatible->ARM Cortex
  * Code generation objectives: Unspecified
- * Validation result: Passed (11), Warning (1), Error (0)
+ * Validation result: Not run
  */
 
 #ifndef FOC_h_
@@ -27,7 +27,6 @@
 #endif                                 /* FOC_COMMON_INCLUDES_ */
 
 #include "FOC_types.h"
-#include "rtGetInf.h"
 #include <float.h>
 #include <string.h>
 #include <stddef.h>
@@ -75,24 +74,31 @@
 
 /* Block signals (default storage) */
 typedef struct {
+  char_T Iq_OL_Flag;
+  char_T dcV_OV_Flag;
+  char_T dcV_UV_Flag;
+  char_T Vd_Vq_OL_Flag;
+  char_T OT_Cont_Flag;
+} FOC_Flag_T;
+
+typedef struct {
   real_T Add1;                         /* '<S19>/Add1' */
-  real_T IProdOut;                     /* '<S112>/IProd Out' */
-  real_T DeadZone;                     /* '<S107>/DeadZone' */
-  real_T IProdOut_e;                   /* '<S58>/IProd Out' */
-  real_T NProdOut;                     /* '<S118>/NProd Out' */
-  real_T Saturation;                   /* '<S122>/Saturation' */
-  real_T DeadZone_b;                   /* '<S53>/DeadZone' */
-  real_T IProdOut_j;                   /* '<S166>/IProd Out' */
+  real_T IProdOut;                     /* '<S115>/IProd Out' */
+  real_T NProdOut;                     /* '<S121>/NProd Out' */
+  real_T Sum;                          /* '<S128>/Sum' */
+  real_T IProdOut_e;                   /* '<S59>/IProd Out' */
+  real_T NProdOut_k;                   /* '<S65>/NProd Out' */
+  real_T Sum_f;                        /* '<S72>/Sum' */
 } B_FOC_T;
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
-  real_T Integrator_DSTATE;            /* '<S115>/Integrator' */
-  real_T Filter_DSTATE;                /* '<S110>/Filter' */
-  real_T Integrator_DSTATE_g;          /* '<S61>/Integrator' */
-  real_T Filter_DSTATE_c;              /* '<S56>/Filter' */
-  real_T Integrator_DSTATE_h;          /* '<S169>/Integrator' */
-  real_T Filter_DSTATE_d;              /* '<S164>/Filter' */
+  real_T Integrator_DSTATE;            /* '<S118>/Integrator' */
+  real_T Filter_DSTATE;                /* '<S113>/Filter' */
+  real_T Integrator_DSTATE_g;          /* '<S62>/Integrator' */
+  real_T Filter_DSTATE_c;              /* '<S57>/Filter' */
+  real_T Integrator_DSTATE_h;          /* '<S174>/Integrator' */
+  real_T Filter_DSTATE_d;              /* '<S169>/Filter' */
 } DW_FOC_T;
 
 /* External inputs (root inport signals with default storage) */
@@ -101,9 +107,24 @@ typedef struct {
   real_T RefSpeed;                     /* '<Root>/Ref Speed' */
   real_T angle;                        /* '<Root>/angle' */
   real_T PhaseCurrent[3];              /* '<Root>/Phase Current' */
-  real_T PID_Vd[4];                    /* '<Root>/PID_Vd' */
-  real_T PID_Id[4];                    /* '<Root>/PID_Id' */
-  real_T PID_Vq[4];                    /* '<Root>/PID_Vq' */
+  real_T Kp_flux_PID;                  /* '<Root>/Kp_flux_PID' */
+  real_T Ki_flux_PID;                  /* '<Root>/Ki_flux_PID' */
+  real_T Kd_flux_PID;                  /* '<Root>/Kd_flux_PID' */
+  real_T Filter_flux_PID;              /* '<Root>/Filter_flux_PID' */
+  real_T Up_Limit_flux_PID;            /* '<Root>/Up_Limit_flux_PID' */
+  real_T Low_Limit_flux_PID;           /* '<Root>/Low_Limit_flux_PID' */
+  real_T Kp_speed_PID;                 /* '<Root>/Kp_speed_PID' */
+  real_T Ki_speed_PID;                 /* '<Root>/Ki_speed_PID' */
+  real_T Kd_speed_PID;                 /* '<Root>/Kd_speed_PID' */
+  real_T Filter_speed_PID;             /* '<Root>/Filter_speed_PID' */
+  real_T Up_Limit_speed_PID;           /* '<Root>/Up_Limit_speed_PID' */
+  real_T Low_Limit_speed_PID;          /* '<Root>/Low_Limit_speed_PID' */
+  real_T Kp_torque_PID;                /* '<Root>/Kp_torque_PID' */
+  real_T Ki_torque_PID;                /* '<Root>/Ki_torque_PID' */
+  real_T Kd_torque_PID;                /* '<Root>/Kd_torque_PID' */
+  real_T Filter_torque_PID;            /* '<Root>/Filter_torque_PID' */
+  real_T Up_Limit_torque_PID;          /* '<Root>/Up_Limit_torque_PID' */
+  real_T Low_Limit_torque_PID;         /* '<Root>/Low_Limit_torque_PID' */
 } ExtU_FOC_T;
 
 /* External outputs (root outports fed by signals with default storage) */
@@ -111,6 +132,10 @@ typedef struct {
   real_T Va;                           /* '<Root>/Va' */
   real_T Vb;                           /* '<Root>/Vb' */
   real_T Vc;                           /* '<Root>/Vc' */
+  real_T Id;                           /* '<Root>/Id' */
+  real_T Iq;                           /* '<Root>/Iq' */
+  real_T Vd;                           /* '<Root>/Vd' */
+  real_T Vq;                           /* '<Root>/Vq' */
 } ExtY_FOC_T;
 
 /* Real-time Model Data Structure */
@@ -145,6 +170,8 @@ extern ExtU_FOC_T FOC_U;
 /* External outputs (root outports fed by signals with default storage) */
 extern ExtY_FOC_T FOC_Y;
 
+extern FOC_Flag_T FOC_F_T;
+
 /* Model entry point functions */
 extern void FOC_initialize(void);
 extern void FOC_step(void);
@@ -163,12 +190,17 @@ extern RT_MODEL_FOC_T *const FOC_M;
  * Block '<S15>/Data Type Duplicate' : Unused code path elimination
  * Block '<S15>/Data Type Duplicate1' : Unused code path elimination
  * Block '<S13>/Data Type Duplicate' : Unused code path elimination
+ * Block '<S70>/Data Type Duplicate' : Unused code path elimination
+ * Block '<S70>/Data Type Propagation' : Unused code path elimination
+ * Block '<S126>/Data Type Duplicate' : Unused code path elimination
+ * Block '<S126>/Data Type Propagation' : Unused code path elimination
+ * Block '<S182>/Data Type Duplicate' : Unused code path elimination
+ * Block '<S182>/Data Type Propagation' : Unused code path elimination
  * Block '<S7>/Kalpha' : Eliminated nontunable gain of 1
  * Block '<S7>/Kbeta' : Eliminated nontunable gain of 1
  * Block '<S14>/Ka' : Eliminated nontunable gain of 1
  * Block '<S14>/Kb' : Eliminated nontunable gain of 1
  * Block '<S14>/Kc' : Eliminated nontunable gain of 1
- * Block '<S68>/Saturation' : Eliminated Saturate block
  * Block '<S10>/Offset' : Unused code path elimination
  * Block '<S10>/Unary_Minus' : Unused code path elimination
  * Block '<S16>/Offset' : Unused code path elimination
@@ -245,139 +277,145 @@ extern RT_MODEL_FOC_T *const FOC_M;
  * '<S50>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/preSat Signal'
  * '<S51>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Anti-windup/Disc. Clamping Parallel'
  * '<S52>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Anti-windup/Disc. Clamping Parallel/Dead Zone'
- * '<S53>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Anti-windup/Disc. Clamping Parallel/Dead Zone/Enabled'
- * '<S54>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/D Gain/External Parameters'
- * '<S55>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/External Derivative/Error'
- * '<S56>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Filter/Disc. Forward Euler Filter'
- * '<S57>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Filter ICs/Internal IC - Filter'
- * '<S58>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/I Gain/External Parameters'
- * '<S59>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Ideal P Gain/Passthrough'
- * '<S60>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Ideal P Gain Fdbk/Disabled'
- * '<S61>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Integrator/Discrete'
- * '<S62>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Integrator ICs/Internal IC'
- * '<S63>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/N Copy/Disabled'
- * '<S64>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/N Gain/External Parameters'
- * '<S65>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/P Copy/Disabled'
- * '<S66>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Parallel P Gain/External Parameters'
- * '<S67>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Reset Signal/Disabled'
- * '<S68>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Saturation/Enabled'
- * '<S69>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Saturation Fdbk/Disabled'
- * '<S70>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Sum/Sum_PID'
- * '<S71>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Sum Fdbk/Disabled'
- * '<S72>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Tracking Mode/Disabled'
- * '<S73>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Tracking Mode Sum/Passthrough'
- * '<S74>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Tsamp - Integral/TsSignalSpecification'
- * '<S75>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Tsamp - Ngain/Passthrough'
- * '<S76>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/postSat Signal/Forward_Path'
- * '<S77>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/preInt Signal/Internal PreInt'
- * '<S78>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/preSat Signal/Forward_Path'
- * '<S79>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Anti-windup'
- * '<S80>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/D Gain'
- * '<S81>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/External Derivative'
- * '<S82>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Filter'
- * '<S83>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Filter ICs'
- * '<S84>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/I Gain'
- * '<S85>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Ideal P Gain'
- * '<S86>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Ideal P Gain Fdbk'
- * '<S87>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Integrator'
- * '<S88>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Integrator ICs'
- * '<S89>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/N Copy'
- * '<S90>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/N Gain'
- * '<S91>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/P Copy'
- * '<S92>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Parallel P Gain'
- * '<S93>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Reset Signal'
- * '<S94>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Saturation'
- * '<S95>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Saturation Fdbk'
- * '<S96>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Sum'
- * '<S97>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Sum Fdbk'
- * '<S98>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Tracking Mode'
- * '<S99>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Tracking Mode Sum'
- * '<S100>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Tsamp - Integral'
- * '<S101>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Tsamp - Ngain'
- * '<S102>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/postSat Signal'
- * '<S103>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/preInt Signal'
- * '<S104>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/preSat Signal'
- * '<S105>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Anti-windup/Disc. Clamping Parallel'
- * '<S106>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Anti-windup/Disc. Clamping Parallel/Dead Zone'
- * '<S107>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Anti-windup/Disc. Clamping Parallel/Dead Zone/Enabled'
- * '<S108>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/D Gain/External Parameters'
- * '<S109>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/External Derivative/Error'
- * '<S110>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Filter/Disc. Forward Euler Filter'
- * '<S111>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Filter ICs/Internal IC - Filter'
- * '<S112>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/I Gain/External Parameters'
- * '<S113>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Ideal P Gain/Passthrough'
- * '<S114>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Ideal P Gain Fdbk/Disabled'
- * '<S115>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Integrator/Discrete'
- * '<S116>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Integrator ICs/Internal IC'
- * '<S117>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/N Copy/Disabled'
- * '<S118>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/N Gain/External Parameters'
- * '<S119>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/P Copy/Disabled'
- * '<S120>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Parallel P Gain/External Parameters'
- * '<S121>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Reset Signal/Disabled'
- * '<S122>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Saturation/Enabled'
- * '<S123>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Saturation Fdbk/Disabled'
- * '<S124>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Sum/Sum_PID'
- * '<S125>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Sum Fdbk/Disabled'
- * '<S126>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Tracking Mode/Disabled'
- * '<S127>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Tracking Mode Sum/Passthrough'
- * '<S128>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Tsamp - Integral/TsSignalSpecification'
- * '<S129>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Tsamp - Ngain/Passthrough'
- * '<S130>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/postSat Signal/Forward_Path'
- * '<S131>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/preInt Signal/Internal PreInt'
- * '<S132>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/preSat Signal/Forward_Path'
- * '<S133>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Anti-windup'
- * '<S134>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/D Gain'
- * '<S135>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/External Derivative'
- * '<S136>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Filter'
- * '<S137>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Filter ICs'
- * '<S138>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/I Gain'
- * '<S139>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Ideal P Gain'
- * '<S140>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Ideal P Gain Fdbk'
- * '<S141>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Integrator'
- * '<S142>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Integrator ICs'
- * '<S143>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/N Copy'
- * '<S144>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/N Gain'
- * '<S145>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/P Copy'
- * '<S146>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Parallel P Gain'
- * '<S147>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Reset Signal'
- * '<S148>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Saturation'
- * '<S149>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Saturation Fdbk'
- * '<S150>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Sum'
- * '<S151>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Sum Fdbk'
- * '<S152>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Tracking Mode'
- * '<S153>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Tracking Mode Sum'
- * '<S154>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Tsamp - Integral'
- * '<S155>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Tsamp - Ngain'
- * '<S156>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/postSat Signal'
- * '<S157>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/preInt Signal'
- * '<S158>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/preSat Signal'
- * '<S159>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Anti-windup/Disc. Clamping Parallel'
- * '<S160>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Anti-windup/Disc. Clamping Parallel/Dead Zone'
- * '<S161>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Anti-windup/Disc. Clamping Parallel/Dead Zone/Enabled'
- * '<S162>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/D Gain/External Parameters'
- * '<S163>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/External Derivative/Error'
- * '<S164>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Filter/Disc. Forward Euler Filter'
- * '<S165>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Filter ICs/Internal IC - Filter'
- * '<S166>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/I Gain/External Parameters'
- * '<S167>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Ideal P Gain/Passthrough'
- * '<S168>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Ideal P Gain Fdbk/Disabled'
- * '<S169>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Integrator/Discrete'
- * '<S170>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Integrator ICs/Internal IC'
- * '<S171>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/N Copy/Disabled'
- * '<S172>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/N Gain/External Parameters'
- * '<S173>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/P Copy/Disabled'
- * '<S174>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Parallel P Gain/External Parameters'
- * '<S175>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Reset Signal/Disabled'
- * '<S176>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Saturation/Enabled'
- * '<S177>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Saturation Fdbk/Disabled'
- * '<S178>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Sum/Sum_PID'
- * '<S179>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Sum Fdbk/Disabled'
- * '<S180>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Tracking Mode/Disabled'
- * '<S181>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Tracking Mode Sum/Passthrough'
- * '<S182>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Tsamp - Integral/TsSignalSpecification'
- * '<S183>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Tsamp - Ngain/Passthrough'
- * '<S184>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/postSat Signal/Forward_Path'
- * '<S185>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/preInt Signal/Internal PreInt'
- * '<S186>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/preSat Signal/Forward_Path'
+ * '<S53>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Anti-windup/Disc. Clamping Parallel/Dead Zone/External'
+ * '<S54>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Anti-windup/Disc. Clamping Parallel/Dead Zone/External/Dead Zone Dynamic'
+ * '<S55>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/D Gain/External Parameters'
+ * '<S56>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/External Derivative/Error'
+ * '<S57>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Filter/Disc. Forward Euler Filter'
+ * '<S58>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Filter ICs/Internal IC - Filter'
+ * '<S59>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/I Gain/External Parameters'
+ * '<S60>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Ideal P Gain/Passthrough'
+ * '<S61>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Ideal P Gain Fdbk/Disabled'
+ * '<S62>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Integrator/Discrete'
+ * '<S63>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Integrator ICs/Internal IC'
+ * '<S64>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/N Copy/Disabled'
+ * '<S65>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/N Gain/External Parameters'
+ * '<S66>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/P Copy/Disabled'
+ * '<S67>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Parallel P Gain/External Parameters'
+ * '<S68>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Reset Signal/Disabled'
+ * '<S69>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Saturation/External'
+ * '<S70>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Saturation/External/Saturation Dynamic'
+ * '<S71>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Saturation Fdbk/Disabled'
+ * '<S72>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Sum/Sum_PID'
+ * '<S73>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Sum Fdbk/Disabled'
+ * '<S74>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Tracking Mode/Disabled'
+ * '<S75>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Tracking Mode Sum/Passthrough'
+ * '<S76>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Tsamp - Integral/TsSignalSpecification'
+ * '<S77>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/Tsamp - Ngain/Passthrough'
+ * '<S78>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/postSat Signal/Forward_Path'
+ * '<S79>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/preInt Signal/Internal PreInt'
+ * '<S80>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Iq/preSat Signal/Forward_Path'
+ * '<S81>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Anti-windup'
+ * '<S82>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/D Gain'
+ * '<S83>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/External Derivative'
+ * '<S84>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Filter'
+ * '<S85>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Filter ICs'
+ * '<S86>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/I Gain'
+ * '<S87>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Ideal P Gain'
+ * '<S88>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Ideal P Gain Fdbk'
+ * '<S89>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Integrator'
+ * '<S90>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Integrator ICs'
+ * '<S91>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/N Copy'
+ * '<S92>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/N Gain'
+ * '<S93>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/P Copy'
+ * '<S94>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Parallel P Gain'
+ * '<S95>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Reset Signal'
+ * '<S96>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Saturation'
+ * '<S97>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Saturation Fdbk'
+ * '<S98>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Sum'
+ * '<S99>'  : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Sum Fdbk'
+ * '<S100>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Tracking Mode'
+ * '<S101>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Tracking Mode Sum'
+ * '<S102>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Tsamp - Integral'
+ * '<S103>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Tsamp - Ngain'
+ * '<S104>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/postSat Signal'
+ * '<S105>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/preInt Signal'
+ * '<S106>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/preSat Signal'
+ * '<S107>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Anti-windup/Disc. Clamping Parallel'
+ * '<S108>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Anti-windup/Disc. Clamping Parallel/Dead Zone'
+ * '<S109>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Anti-windup/Disc. Clamping Parallel/Dead Zone/External'
+ * '<S110>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Anti-windup/Disc. Clamping Parallel/Dead Zone/External/Dead Zone Dynamic'
+ * '<S111>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/D Gain/External Parameters'
+ * '<S112>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/External Derivative/Error'
+ * '<S113>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Filter/Disc. Forward Euler Filter'
+ * '<S114>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Filter ICs/Internal IC - Filter'
+ * '<S115>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/I Gain/External Parameters'
+ * '<S116>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Ideal P Gain/Passthrough'
+ * '<S117>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Ideal P Gain Fdbk/Disabled'
+ * '<S118>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Integrator/Discrete'
+ * '<S119>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Integrator ICs/Internal IC'
+ * '<S120>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/N Copy/Disabled'
+ * '<S121>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/N Gain/External Parameters'
+ * '<S122>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/P Copy/Disabled'
+ * '<S123>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Parallel P Gain/External Parameters'
+ * '<S124>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Reset Signal/Disabled'
+ * '<S125>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Saturation/External'
+ * '<S126>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Saturation/External/Saturation Dynamic'
+ * '<S127>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Saturation Fdbk/Disabled'
+ * '<S128>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Sum/Sum_PID'
+ * '<S129>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Sum Fdbk/Disabled'
+ * '<S130>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Tracking Mode/Disabled'
+ * '<S131>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Tracking Mode Sum/Passthrough'
+ * '<S132>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Tsamp - Integral/TsSignalSpecification'
+ * '<S133>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/Tsamp - Ngain/Passthrough'
+ * '<S134>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/postSat Signal/Forward_Path'
+ * '<S135>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/preInt Signal/Internal PreInt'
+ * '<S136>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vd/preSat Signal/Forward_Path'
+ * '<S137>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Anti-windup'
+ * '<S138>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/D Gain'
+ * '<S139>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/External Derivative'
+ * '<S140>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Filter'
+ * '<S141>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Filter ICs'
+ * '<S142>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/I Gain'
+ * '<S143>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Ideal P Gain'
+ * '<S144>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Ideal P Gain Fdbk'
+ * '<S145>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Integrator'
+ * '<S146>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Integrator ICs'
+ * '<S147>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/N Copy'
+ * '<S148>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/N Gain'
+ * '<S149>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/P Copy'
+ * '<S150>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Parallel P Gain'
+ * '<S151>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Reset Signal'
+ * '<S152>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Saturation'
+ * '<S153>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Saturation Fdbk'
+ * '<S154>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Sum'
+ * '<S155>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Sum Fdbk'
+ * '<S156>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Tracking Mode'
+ * '<S157>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Tracking Mode Sum'
+ * '<S158>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Tsamp - Integral'
+ * '<S159>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Tsamp - Ngain'
+ * '<S160>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/postSat Signal'
+ * '<S161>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/preInt Signal'
+ * '<S162>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/preSat Signal'
+ * '<S163>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Anti-windup/Disc. Clamping Parallel'
+ * '<S164>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Anti-windup/Disc. Clamping Parallel/Dead Zone'
+ * '<S165>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Anti-windup/Disc. Clamping Parallel/Dead Zone/External'
+ * '<S166>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Anti-windup/Disc. Clamping Parallel/Dead Zone/External/Dead Zone Dynamic'
+ * '<S167>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/D Gain/External Parameters'
+ * '<S168>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/External Derivative/Error'
+ * '<S169>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Filter/Disc. Forward Euler Filter'
+ * '<S170>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Filter ICs/Internal IC - Filter'
+ * '<S171>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/I Gain/External Parameters'
+ * '<S172>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Ideal P Gain/Passthrough'
+ * '<S173>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Ideal P Gain Fdbk/Disabled'
+ * '<S174>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Integrator/Discrete'
+ * '<S175>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Integrator ICs/Internal IC'
+ * '<S176>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/N Copy/Disabled'
+ * '<S177>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/N Gain/External Parameters'
+ * '<S178>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/P Copy/Disabled'
+ * '<S179>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Parallel P Gain/External Parameters'
+ * '<S180>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Reset Signal/Disabled'
+ * '<S181>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Saturation/External'
+ * '<S182>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Saturation/External/Saturation Dynamic'
+ * '<S183>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Saturation Fdbk/Disabled'
+ * '<S184>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Sum/Sum_PID'
+ * '<S185>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Sum Fdbk/Disabled'
+ * '<S186>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Tracking Mode/Disabled'
+ * '<S187>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Tracking Mode Sum/Passthrough'
+ * '<S188>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Tsamp - Integral/TsSignalSpecification'
+ * '<S189>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/Tsamp - Ngain/Passthrough'
+ * '<S190>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/postSat Signal/Forward_Path'
+ * '<S191>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/preInt Signal/Internal PreInt'
+ * '<S192>' : 'IPMSM_motor_discrete_try_SVM_test_PID_code_gen_1/FOC/PID/PI Vq/preSat Signal/Forward_Path'
  */
 #endif                                 /* FOC_h_ */

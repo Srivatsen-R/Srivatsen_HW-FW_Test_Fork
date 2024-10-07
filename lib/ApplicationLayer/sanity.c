@@ -57,6 +57,7 @@ motorControl_t motorControl = {
 extern adc_t          analog;
 extern ExtU           rtU;
 extern ExtU_FOC_T     FOC_U;
+extern FOC_Flag_T     FOC_F_T;
 extern ExtY_FOC_T     FOC_Y;
 extern terminal_t     terminal;
 extern motorControl_t mControl;
@@ -87,6 +88,63 @@ extern int reverse_flag;
 
 void FAULT_DETECTION()
 {
+        uint32_t time_tick_count = HAL_GetTick();
+        static uint32_t prev_count_iq = 0;
+        static uint32_t prev_count_dcV_UV = 0;
+        static uint32_t prev_count_dcV_OV = 0;
+        static uint32_t prev_count_temp_OT = 0;
+        static uint32_t prev_count_Vd_Vq = 0;
+
+        if (FOC_Y.Iq > 150.0)
+        {
+                if (time_tick_count - prev_count_iq >= 10)
+                {
+                        FOC_F_T.Iq_OL_Flag = 1;
+                        motorControl.drive.check = DRIVE_DISABLE;
+                        prev_count_iq = time_tick_count;
+                }
+        }
+
+        if (busVoltage > 65.0)
+        {
+                if (time_tick_count - prev_count_dcV_OV >= 10)
+                {
+                        FOC_F_T.dcV_OV_Flag = 1;
+                        motorControl.drive.check = DRIVE_DISABLE;
+                        prev_count_dcV_OV = time_tick_count;
+                }
+        }
+
+        if (busVoltage < 40.0)
+        {
+                if (time_tick_count - prev_count_dcV_UV >= 10)
+                {
+                        FOC_F_T.dcV_UV_Flag = 1;
+                        motorControl.drive.check = DRIVE_DISABLE;
+                        prev_count_dcV_UV = time_tick_count;
+                }
+        }
+
+        if (avg_board_temp >= 80.0)
+        {
+                if (time_tick_count - prev_count_temp_OT >= 10)
+                {
+                        FOC_F_T.OT_Cont_Flag = 1;
+                        motorControl.drive.check = DRIVE_DISABLE;
+                        prev_count_temp_OT = time_tick_count;
+                }
+        }
+
+        // if ((FOC_Y.Vd >= 58.0 || FOC_Y.Vd <= -58.0) || (FOC_Y.Vq >= 58.0 || FOC_Y.Vq <= -58.0))
+        // {
+        //         if (time_tick_count - prev_count_Vd_Vq >= 10)
+        //         {
+        //                 FOC_F_T.Vd_Vq_OL_Flag = 1;
+        //                 motorControl.drive.check = DRIVE_DISABLE;
+        //                 prev_count_Vd_Vq = time_tick_count;
+        //         }
+        // }
+
         // if (rtY.CurrentFlag == OC_Warning)
         // {
         //         if (motorControl.drive.check == DRIVE_DISABLE)

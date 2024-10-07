@@ -80,6 +80,7 @@ extern ExtU_Angle     rtU_Angle;
 extern ExtY_Angle     rtY_Angle;
 extern ExtU_FOC_T     FOC_U;
 extern ExtY_FOC_T     FOC_Y;
+extern FOC_Flag_T     FOC_F_T;
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -94,6 +95,8 @@ volatile uint8_t forward_flag_thr = 0;
 volatile uint8_t reverse_flag_thr = 0;
 uint8_t neutral_set;
 uint8_t check = 0;
+
+extern float avg_board_temp;
 
 volatile uint32_t ICValue;
 volatile uint32_t angle_curr = 0, angle_prev = 0;
@@ -198,7 +201,7 @@ int main(void) {
     static uint32_t prev_thr_time = 0;
 
     ANALOG_READING();
-    FAULT_DETECTION();
+    // FAULT_DETECTION();
 
     reverse_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_2);
     forward_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
@@ -262,10 +265,10 @@ void send_on_300()
   can_data[1] = (uint8_t)(FOC_Y.Vb + 60.0);
   can_data[2] = (uint8_t)(FOC_Y.Vc + 60.0);
   can_data[3] = 0;
-  can_data[4] = (uint8_t)((uint16_t)(rtY.FOC_Out.Vq_Calculated + 10000.0) & 0x00FF);
-  can_data[5] = (uint8_t)(((uint16_t)(rtY.FOC_Out.Vq_Calculated + 10000.0) & 0xFF00) >> 8);
-  can_data[6] = (uint8_t)((uint16_t)(rtY.FOC_Out.Vd_Calculated + 10000.0) & 0x00FF);
-  can_data[7] = (uint8_t)(((uint16_t)(rtY.FOC_Out.Vd_Calculated + 10000.0) & 0xFF00) >> 8);
+  can_data[4] = (uint8_t)((uint16_t)(FOC_Y.Vq + 10000.0) & 0x00FF);
+  can_data[5] = (uint8_t)(((uint16_t)(FOC_Y.Vq + 10000.0) & 0xFF00) >> 8);
+  can_data[6] = (uint8_t)((uint16_t)(FOC_Y.Vd + 10000.0) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(FOC_Y.Vd + 10000.0) & 0xFF00) >> 8);
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_300, S, can_data, FDCAN_DLC_BYTES);
 }
 
@@ -323,11 +326,11 @@ void send_on_303()
 {
   uint8_t can_data[8] = {0};
   float can_log_mbd_elec_rh = (FOC_U.angle) * 100.0;
-  can_data[0] = (uint8_t)((uint16_t)(rtU.MotorTemperature_C));
-  can_data[1] = (uint8_t)((uint16_t)(rtU.MotorControllerTemperature_C));
-  can_data[2] = (uint8_t)(rtY.CurrentFlag);
-  can_data[3] = (uint8_t)(rtY.MCTempFlag);
-  can_data[4] = (uint8_t)(rtY.VoltageFlag);
+  can_data[0] = (uint8_t)((uint16_t)(motorControl.temperature.motor));
+  can_data[1] = (uint8_t)((uint16_t)(avg_board_temp));
+  can_data[2] = (uint8_t)(FOC_F_T.Iq_OL_Flag);
+  can_data[3] = (uint8_t)(FOC_F_T.OT_Cont_Flag);
+  can_data[4] = (uint8_t)(FOC_F_T.dcV_OV_Flag);
   can_data[5] = (uint8_t)(z_trig);
   can_data[6] = (uint8_t)((uint16_t)(can_log_mbd_elec_rh) & 0x00FF);
   can_data[7] = (uint8_t)(((uint16_t)(can_log_mbd_elec_rh) & 0xFF00) >> 8);
@@ -353,10 +356,10 @@ void send_on_304()
   can_data[1] = (uint8_t)(((uint16_t)(can_log_mbd_mech_rh) & 0xFF00) >> 8);
   can_data[2] = (uint8_t)((uint16_t)(can_log_mbd_speed) & 0x00FF);
   can_data[3] = (uint8_t)(((uint16_t)(can_log_mbd_speed) & 0xFF00) >> 8);
-  can_data[4] = (uint8_t)((uint16_t)(rtY.FOC_Out.Id_Calculated + 10000.0) & 0x00FF);
-  can_data[5] = (uint8_t)(((uint16_t)(rtY.FOC_Out.Id_Calculated + 10000.0) & 0xFF00) >> 8);
-  can_data[6] = (uint8_t)((uint16_t)(rtY.FOC_Out.Iq_Calculated + 10000.0) & 0x00FF);
-  can_data[7] = (uint8_t)(((uint16_t)(rtY.FOC_Out.Iq_Calculated + 10000.0) & 0xFF00) >> 8);
+  can_data[4] = (uint8_t)((uint16_t)(FOC_Y.Id + 10000.0) & 0x00FF);
+  can_data[5] = (uint8_t)(((uint16_t)(FOC_Y.Id + 10000.0) & 0xFF00) >> 8);
+  can_data[6] = (uint8_t)((uint16_t)(FOC_Y.Iq + 10000.0) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(FOC_Y.Iq + 10000.0) & 0xFF00) >> 8);
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_304, S, can_data, FDCAN_DLC_BYTES);
 }
 
