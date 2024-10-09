@@ -400,41 +400,41 @@ void SPWM(int p_a ,int p_b , int p_c)
 
 void SVPWM_MODE_DRIVE_FUNCTION(int A_Duty_Svpwm_iq15 , int B_Duty_Svpwm_iq15  , int C_Duty_Svpwm_iq15 ) {
 
-    int MAX_Duty_Svpwm_iq15 , MIN_Duty_Svpwm_iq15 , OFF_Duty_Spwm_iq15;
-    int A_Duty_Svpwm_Temp_iq15 , B_Duty_Svpwm_Temp_iq15 ,  C_Duty_Svpwm_Temp_iq15 ;
+//     int MAX_Duty_Svpwm_iq15 , MIN_Duty_Svpwm_iq15 , OFF_Duty_Spwm_iq15;
+//     int A_Duty_Svpwm_Temp_iq15 , B_Duty_Svpwm_Temp_iq15 ,  C_Duty_Svpwm_Temp_iq15 ;
 
-     //*******   MAX Value CAlculate ********//
-    if(A_Duty_Svpwm_iq15 > B_Duty_Svpwm_iq15) MAX_Duty_Svpwm_iq15 = A_Duty_Svpwm_iq15 ;
-    else MAX_Duty_Svpwm_iq15 = B_Duty_Svpwm_iq15 ;
-    if(MAX_Duty_Svpwm_iq15 < C_Duty_Svpwm_iq15) MAX_Duty_Svpwm_iq15 = C_Duty_Svpwm_iq15 ;
+//      //*******   MAX Value CAlculate ********//
+//     if(A_Duty_Svpwm_iq15 > B_Duty_Svpwm_iq15) MAX_Duty_Svpwm_iq15 = A_Duty_Svpwm_iq15 ;
+//     else MAX_Duty_Svpwm_iq15 = B_Duty_Svpwm_iq15 ;
+//     if(MAX_Duty_Svpwm_iq15 < C_Duty_Svpwm_iq15) MAX_Duty_Svpwm_iq15 = C_Duty_Svpwm_iq15 ;
 
-    //*******   MIN Value CAlculate ********//
-   if(A_Duty_Svpwm_iq15 < B_Duty_Svpwm_iq15) MIN_Duty_Svpwm_iq15 = A_Duty_Svpwm_iq15 ;
-   else MIN_Duty_Svpwm_iq15 = B_Duty_Svpwm_iq15 ;
-   if(MIN_Duty_Svpwm_iq15 > C_Duty_Svpwm_iq15) MIN_Duty_Svpwm_iq15 = C_Duty_Svpwm_iq15 ;
+//     //*******   MIN Value CAlculate ********//
+//    if(A_Duty_Svpwm_iq15 < B_Duty_Svpwm_iq15) MIN_Duty_Svpwm_iq15 = A_Duty_Svpwm_iq15 ;
+//    else MIN_Duty_Svpwm_iq15 = B_Duty_Svpwm_iq15 ;
+//    if(MIN_Duty_Svpwm_iq15 > C_Duty_Svpwm_iq15) MIN_Duty_Svpwm_iq15 = C_Duty_Svpwm_iq15 ;
 
-   OFF_Duty_Spwm_iq15 =  MAX_Duty_Svpwm_iq15 ;
-   OFF_Duty_Spwm_iq15 += MIN_Duty_Svpwm_iq15 ;
-   OFF_Duty_Spwm_iq15 = OFF_Duty_Spwm_iq15*0.50;
+//    OFF_Duty_Spwm_iq15 =  MAX_Duty_Svpwm_iq15 ;
+//    OFF_Duty_Spwm_iq15 += MIN_Duty_Svpwm_iq15 ;
+//    OFF_Duty_Spwm_iq15 = OFF_Duty_Spwm_iq15*0.50;
 
-   A_Duty_Svpwm_Temp_iq15 = A_Duty_Svpwm_iq15 ;
-   A_Duty_Svpwm_Temp_iq15 -= OFF_Duty_Spwm_iq15 ;
-   A_Duty_Svpwm_Temp_iq15 = A_Duty_Svpwm_Temp_iq15*(1.1547) ;
-   A_Duty_Svpwm_Temp_iq15 += (PWM_DUTY_ADD) ;
+//    A_Duty_Svpwm_Temp_iq15 = A_Duty_Svpwm_iq15 ;
+//    A_Duty_Svpwm_Temp_iq15 -= OFF_Duty_Spwm_iq15 ;
+//    A_Duty_Svpwm_Temp_iq15 = A_Duty_Svpwm_Temp_iq15*(1.1547) ;
+//    A_Duty_Svpwm_Temp_iq15 += (PWM_DUTY_ADD) ;
 
-   B_Duty_Svpwm_Temp_iq15 = B_Duty_Svpwm_iq15 ;
-   B_Duty_Svpwm_Temp_iq15 -= OFF_Duty_Spwm_iq15 ;
-   B_Duty_Svpwm_Temp_iq15 = (B_Duty_Svpwm_Temp_iq15*(1.1547)) ;
-   B_Duty_Svpwm_Temp_iq15 += (PWM_DUTY_ADD) ;
+//    B_Duty_Svpwm_Temp_iq15 = B_Duty_Svpwm_iq15 ;
+//    B_Duty_Svpwm_Temp_iq15 -= OFF_Duty_Spwm_iq15 ;
+//    B_Duty_Svpwm_Temp_iq15 = (B_Duty_Svpwm_Temp_iq15*(1.1547)) ;
+//    B_Duty_Svpwm_Temp_iq15 += (PWM_DUTY_ADD) ;
 
-   C_Duty_Svpwm_Temp_iq15 = C_Duty_Svpwm_iq15 ;
-   C_Duty_Svpwm_Temp_iq15 -= OFF_Duty_Spwm_iq15 ;
-   C_Duty_Svpwm_Temp_iq15 = C_Duty_Svpwm_Temp_iq15*(1.1547) ;
-   C_Duty_Svpwm_Temp_iq15 += (PWM_DUTY_ADD) ;
+//    C_Duty_Svpwm_Temp_iq15 = C_Duty_Svpwm_iq15 ;
+//    C_Duty_Svpwm_Temp_iq15 -= OFF_Duty_Spwm_iq15 ;
+//    C_Duty_Svpwm_Temp_iq15 = C_Duty_Svpwm_Temp_iq15*(1.1547) ;
+//    C_Duty_Svpwm_Temp_iq15 += (PWM_DUTY_ADD) ;
 
-   __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,A_Duty_Svpwm_Temp_iq15);
-   __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,B_Duty_Svpwm_Temp_iq15);
-   __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_3,C_Duty_Svpwm_Temp_iq15);
+   __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,A_Duty_Svpwm_iq15);
+   __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,B_Duty_Svpwm_iq15);
+   __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_3,C_Duty_Svpwm_iq15);
 }
 
 

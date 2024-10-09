@@ -650,17 +650,17 @@ void FOC_initialize(void)
   FOC_U.Ki_speed_PID = 8;
   FOC_U.Kd_speed_PID = 0.01;
   FOC_U.Filter_speed_PID = 10.0;
-  FOC_U.Up_Limit_speed_PID = 150.0;
+  FOC_U.Up_Limit_speed_PID = 250.0;
   FOC_U.Low_Limit_speed_PID = 0.0;
 
-  FOC_U.Kp_flux_PID = 0.1;
+  FOC_U.Kp_flux_PID = 0.5;
   FOC_U.Ki_flux_PID = 8;
   FOC_U.Kd_flux_PID = 0.01;
   FOC_U.Filter_flux_PID = 10.0;
   FOC_U.Up_Limit_flux_PID = 60.0;
   FOC_U.Low_Limit_flux_PID = -60.0;
 
-  FOC_U.Kp_torque_PID = 0.1;
+  FOC_U.Kp_torque_PID = 0.5;
   FOC_U.Ki_torque_PID = 8;
   FOC_U.Kd_torque_PID = 0.01;
   FOC_U.Filter_torque_PID = 10.0;
