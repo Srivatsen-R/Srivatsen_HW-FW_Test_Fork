@@ -227,11 +227,11 @@ int main(void) {
 
     if (time_count - prev_thr_time >= 500)
     {
-      if (FOC_U.RefSpeed < (2000.0 * 0.1047))
+      if (FOC_U.RefSpeed < (500.0 * 0.1047))
         FOC_U.RefSpeed += 5.0;
 
-      if (FOC_U.RefSpeed > (2000.0 * 0.1047))
-        FOC_U.RefSpeed = (2000.0 * 0.1047);
+      if (FOC_U.RefSpeed > (500.0 * 0.1047))
+        FOC_U.RefSpeed = (500.0 * 0.1047);
 
       if (FOC_U.RefSpeed < 0.0)
         FOC_U.RefSpeed = 0.0;

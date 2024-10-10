@@ -231,9 +231,9 @@ void FOC_SPACE_VECTOR_MODULATION()
     // else if (rtY.FOC_Out.Normalized_Vc < LL)
     //     rtY.FOC_Out.Normalized_Vc = LL;
 
-    foc.pwm_a = (uint16_t)((PWM_CONST_2*((FOC_Y.Va / 60.0) * 32767.0))  + PWM_CONST_1);
-    foc.pwm_b = (uint16_t)((PWM_CONST_2*((FOC_Y.Vb / 60.0) * 32767.0))  + PWM_CONST_1);
-    foc.pwm_c = (uint16_t)((PWM_CONST_2*((FOC_Y.Vc / 60.0) * 32767.0))  + PWM_CONST_1);   
+    foc.pwm_a = (uint16_t)((PWM_CONST_2*((FOC_Y.Va / 57.4) * 32767.0))  + PWM_CONST_1);
+    foc.pwm_b = (uint16_t)((PWM_CONST_2*((FOC_Y.Vb / 57.4) * 32767.0))  + PWM_CONST_1);
+    foc.pwm_c = (uint16_t)((PWM_CONST_2*((FOC_Y.Vc / 57.4) * 32767.0))  + PWM_CONST_1);   
 
     if (foc.pwm_a < 0)
         foc.pwm_a = 0;
