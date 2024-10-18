@@ -23,6 +23,7 @@ float SOC_Data = 0.0, DCLI = 0.0, DCLO = 0.0;
 float Pack_V = 0.0, Pack_Ah = 0.0;
 extern float avg_board_temp;
 extern float v_rms;
+extern float speed_set;
 
 extern IsoTpShims firmware_up_recv_shim;
 extern IsoTpReceiveHandle firmware_up_recv_handle;
@@ -198,42 +199,38 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 			CAN_TP_Receive_interrupt(rx_Controller_7FE, (uint8_t *)can.rxMsg, can.RxMessageBuf.DataLength >> 16, &firmware_up_recv_shim, &firmware_up_recv_message, &firmware_up_recv_handle);
 		}
 
-		// if(can.RxMessageBuf.Identifier == rx_Controller_100)
-		// {
-		// 	FOC_U.Kp_flux_PID = (float)(can.rxMsg[0]) / 10.0;
-		// 	FOC_U.Ki_flux_PID = (float)(can.rxMsg[1]);
-		// 	FOC_U.Kd_flux_PID = (float)(can.rxMsg[2]) / 100.0;
+		if(can.RxMessageBuf.Identifier == 0x400)
+		{
+			FOC_U.Kp_speed_PID = can.rxMsg[0];
+			FOC_U.Ki_speed_PID = can.rxMsg[1];
+			FOC_U.Kd_speed_PID = can.rxMsg[2] / 1000.0;
+			FOC_U.Filter_speed_PID = can.rxMsg[3];
 
-		// 	FOC_U.Kp_torque_PID = (float)(can.rxMsg[3]) / 10.0;
-		// 	FOC_U.Ki_torque_PID = (float)(can.rxMsg[4]);
-		// 	FOC_U.Kd_torque_PID = (float)(can.rxMsg[5]) / 100.0;
+			FOC_U.Kp_flux_PID = can.rxMsg[4] / 10.0;
+			FOC_U.Ki_flux_PID = can.rxMsg[5];
+			FOC_U.Kd_flux_PID = can.rxMsg[6] / 1000.0;
+			FOC_U.Filter_flux_PID = can.rxMsg[7];
+		}
 
-		// 	FOC_U.Kp_speed_PID = (float)(can.rxMsg[6]) / 100.0;
-		// 	FOC_U.Ki_speed_PID = (float)(can.rxMsg[7]);
-		// }
+		if(can.RxMessageBuf.Identifier == 0x401)
+		{
+			FOC_U.Kp_torque_PID = can.rxMsg[0] / 10.0;
+			FOC_U.Ki_torque_PID = can.rxMsg[1];
+			FOC_U.Kd_torque_PID = can.rxMsg[2] / 1000.0;
+			FOC_U.Filter_torque_PID = can.rxMsg[3];
 
-		// if (can.RxMessageBuf.Identifier == rx_Controller_101)
-		// {
-		// 	FOC_U.Kd_speed_PID = (float)(can.rxMsg[0]) / 10.0;
-			
-		// 	FOC_U.Filter_flux_PID = (float)(can.rxMsg[1]);
-		// 	FOC_U.Filter_torque_PID = (float)(can.rxMsg[2]);
-		// 	FOC_U.Filter_speed_PID = (float)(can.rxMsg[3]);
-		// }
+			FOC_U.Up_Limit_speed_PID = can.rxMsg[4];
+			FOC_U.Up_Limit_flux_PID = can.rxMsg[5];
+			FOC_U.Low_Limit_flux_PID = can.rxMsg[6] - 60.0;
+			FOC_U.Up_Limit_torque_PID = can.rxMsg[7];
+		}
 
-		// if(can.RxMessageBuf.Identifier == rx_Controller_109){
-		// 	SOC_Data = (float)(((can.rxMsg[1]<<8) | can.rxMsg[0]) * 0.01);
-		// 	Pack_V = (float)((can.rxMsg[7]<<8 | can.rxMsg[6]) * 0.1);
-		// }
+		if(can.RxMessageBuf.Identifier == 0x402)
+		{
+			FOC_U.Low_Limit_torque_PID = can.rxMsg[0] - 60.0;
 
-		// if(can.RxMessageBuf.Identifier == rx_controller_12A){
-		// 	DCLI = (float)(((can.rxMsg[1]<<8 | can.rxMsg[0])) * 0.1);
-		// 	DCLO = (float)(((can.rxMsg[3]<<8 | can.rxMsg[2])) * 0.1);
-		// }
-
-		// if(can.RxMessageBuf.Identifier == rx_controller_112){
-		// 	Pack_Ah = (float)((can.rxMsg[7]<<8 | can.rxMsg[6]) * 0.1);
-		// }
+			speed_set = (float)(can.rxMsg[2] << 8 | can.rxMsg[1]);
+		}
 }
 
 void CAN_Write(void) {
@@ -269,8 +266,9 @@ void FDCAN_ApplicationSetup (void) {
 //   CAN_Filter_IDList(rx_controller_112, S, FBANK4, FIFO0_CAN2);
 //   CAN_Filter_IDList(rx_controller_110, S, FBANK5, FIFO0_CAN2);
 
-	CAN_Filter_IDList(rx_Controller_100, S, FBANK0, FIFO0_CAN2);
-	CAN_Filter_IDList(rx_Controller_101, S, FBANK1, FIFO0_CAN2);
+	CAN_Filter_IDList(0x400, S, FBANK0, FIFO0_CAN2);
+	CAN_Filter_IDList(0x401, S, FBANK1, FIFO0_CAN2);
+	CAN_Filter_IDList(0x402, S, FBANK2, FIFO0_CAN2);
 
 	/* Start the FDCAN module */
 	if(HAL_FDCAN_Start(&hfdcan2) != HAL_OK) {

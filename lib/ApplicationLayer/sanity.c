@@ -90,127 +90,56 @@ void FAULT_DETECTION()
 {
         uint32_t time_tick_count = HAL_GetTick();
         static uint32_t prev_count_iq = 0;
-        static uint32_t prev_count_dcV_UV = 0;
-        static uint32_t prev_count_dcV_OV = 0;
         static uint32_t prev_count_temp_OT = 0;
-        static uint32_t prev_count_Vd_Vq = 0;
+        static uint32_t prev_count_phase_curr = 0;
+        static uint8_t count_iq = 0;
+        static uint8_t count_OT = 0;
+        static uint8_t count_phase_Curr = 0;
 
-        if (FOC_Y.Iq > 150.0)
+        if (time_tick_count - prev_count_iq >= 10)
         {
-                if (time_tick_count - prev_count_iq >= 10)
+                if (FOC_Y.Iq >= 500.0)
+                        count_iq++;
+
+                if (count_iq >= 2.0)
                 {
+                        count_iq = 0;
                         FOC_F_T.Iq_OL_Flag = 1;
                         motorControl.drive.check = DRIVE_DISABLE;
-                        prev_count_iq = time_tick_count;
                 }
+
+                prev_count_iq = time_tick_count;
         }
 
-        if (busVoltage > 65.0)
+        if (time_tick_count - prev_count_temp_OT >= 10)
         {
-                if (time_tick_count - prev_count_dcV_OV >= 10)
-                {
-                        FOC_F_T.dcV_OV_Flag = 1;
-                        motorControl.drive.check = DRIVE_DISABLE;
-                        prev_count_dcV_OV = time_tick_count;
-                }
-        }
+                if (avg_board_temp >= 100.0 || motorControl.temperature.motor >= 120.0)
+                        count_OT++;
 
-        if (busVoltage < 40.0)
-        {
-                if (time_tick_count - prev_count_dcV_UV >= 10)
+                if (count_OT >= 5.0)
                 {
-                        FOC_F_T.dcV_UV_Flag = 1;
-                        motorControl.drive.check = DRIVE_DISABLE;
-                        prev_count_dcV_UV = time_tick_count;
-                }
-        }
-
-        if (avg_board_temp >= 80.0)
-        {
-                if (time_tick_count - prev_count_temp_OT >= 10)
-                {
+                        count_OT = 0;
                         FOC_F_T.OT_Cont_Flag = 1;
                         motorControl.drive.check = DRIVE_DISABLE;
-                        prev_count_temp_OT = time_tick_count;
                 }
+
+                prev_count_temp_OT = time_tick_count;
         }
 
-        // if ((FOC_Y.Vd >= 58.0 || FOC_Y.Vd <= -58.0) || (FOC_Y.Vq >= 58.0 || FOC_Y.Vq <= -58.0))
-        // {
-        //         if (time_tick_count - prev_count_Vd_Vq >= 10)
-        //         {
-        //                 FOC_F_T.Vd_Vq_OL_Flag = 1;
-        //                 motorControl.drive.check = DRIVE_DISABLE;
-        //                 prev_count_Vd_Vq = time_tick_count;
-        //         }
-        // }
+        if (time_tick_count - prev_count_phase_curr >= 10)
+        {
+                if ((FOC_U.PhaseCurrent[0] >= 500.0 || FOC_U.PhaseCurrent[0] <= -500.0) || (FOC_U.PhaseCurrent[1] >= 500.0 || FOC_U.PhaseCurrent[1] <= -500.0) || (FOC_U.PhaseCurrent[2] >= 500.0 || FOC_U.PhaseCurrent[2] <= -500.0))
+                        count_phase_Curr++;
 
-        // if (rtY.CurrentFlag == OC_Warning)
-        // {
-        //         if (motorControl.drive.check == DRIVE_DISABLE)
-        //         {
-        //                 motorControl.drive.check = DRIVE_ENABLE;
-        //         }
-        // }
-        // else if (rtY.CurrentFlag == OC_Error)
-        // {
-        //         motorControl.drive.check = DRIVE_DISABLE;
-        // }
+                if (count_phase_Curr >= 2.0)
+                {
+                        count_phase_Curr = 0;
+                        FOC_F_T.Ph_OC_Flag = 1;
+                        motorControl.drive.check = DRIVE_DISABLE;
+                }
 
-        // if (rtU.MotorTemperature_C >= 130.0)
-        // {
-        //         motorControl.drive.check = DRIVE_DISABLE;
-        // }
-        // else if (rtU.MotorTemperature_C < 100.0)
-        // {
-        //         if (motorControl.drive.check == DRIVE_DISABLE)
-        //         {
-        //                 motorControl.drive.check = DRIVE_ENABLE;
-        //         }
-        // }
-
-        // if (rtU.MotorControllerTemperature_C >= 100.0)
-        // {
-        //         motorControl.drive.check = DRIVE_DISABLE;
-        // }
-        // else if (rtU.MotorControllerTemperature_C < 100.0)
-        // {
-        //         if (motorControl.drive.check == DRIVE_DISABLE)
-        //         {
-        //                 motorControl.drive.check = DRIVE_ENABLE;
-        //         }
-        // }
-
-        // // if (rtY.VoltageFlag == OV_Warning)
-        // // {
-        // //         if (motorControl.drive.check == DRIVE_DISABLE)
-        // //         {
-        // //                 motorControl.drive.check = DRIVE_ENABLE; 
-        // //         }
-        // // }
-        // // else if (rtY.VoltageFlag == OV_Error)
-        // // {
-        // //         motorControl.drive.check = DRIVE_DISABLE;
-        // // }
-
-        // // if (rtY.MCTempFlag == OT_Warning)
-        // // {
-        // //         if (motorControl.drive.check == DRIVE_DISABLE)
-        // //         {
-        // //                 motorControl.drive.check = DRIVE_ENABLE;
-        // //         }
-        // // }
-        // // else if (rtY.MCTempFlag == OT_Error)
-        // // {
-        // //         motorControl.drive.check = DRIVE_DISABLE;
-        // // }
-
-        // // float V_max = sqrtf(powf(rtY.FOC_Out.Vq_Calculated, 2.0f) + powf(rtY.FOC_Out.Vd_Calculated, 2.0f));
-
-        // // if (V_max >= rtU.BusVoltage_V)
-        // // {
-        // //         motorControl.drive.check = DRIVE_DISABLE;
-        // // }
+                prev_count_phase_curr = time_tick_count;
+        }
 }
 
 void ANALOG_READING()
@@ -235,7 +164,7 @@ void ANALOG_READING()
 //      rtU.MotorTemperature_C = motorControl.temperature.motor;
 
      //bus voltage
-     busVoltage = moving_Batt_voltage_measured_fun(0.00211*analog.bufferData[BUS_VOLTAGE] +VBUS_OFFSET,VOLTAGE_AVG); 
+     busVoltage = moving_Batt_voltage_measured_fun(0.00211*analog.bufferData[BUS_VOLTAGE],VOLTAGE_AVG); 
      terminal.volt.bus_volt = busVoltage; 
 
 //      rtU.BusVoltage_V = 57.4;

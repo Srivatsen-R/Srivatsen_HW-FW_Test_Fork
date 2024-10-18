@@ -109,7 +109,11 @@ typedef struct foc_t {
 #define PPR                     4095.0//NIDEC        
 //#define PPR                     2048.0//ULTRON    
 
-#define ALPHA                   0.35
+#define ALPHA                   0.4
+
+#define THROTTLE_CNTRL          0
+
+#define RAMP_CNTRL              1
 
 // #define POLEPAIRS               4.0// Nidec 14kg
 #define POLEPAIRS               3.0// Nidec 22kg & ULTRON
@@ -120,7 +124,7 @@ typedef struct foc_t {
 #define FW_MAX_CURRENT_PU       6800.0 //58V system
 //#define FW_MAX_CURRENT_PU       1800.0 //72V system
 
-#define TIM1_PSCLR              3
+#define TIM1_PSCLR              4
 #define TIM1_PERIOD             2500// frequency = 200MHz/(2*(TIM1_PSCLR+1)*TIM1_PERIOD)
 #define TIM1_DEADTIME           185
 #define MAX_RPM                 5000.0

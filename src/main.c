@@ -90,6 +90,8 @@ static float prev_rpm = 0;      // Initialize previous RPM for rate limiting
 float Duty;
 float freq_rpm = 0.0;
 float throttle_percent = 0.0;
+float speed_set = 0.0;
+float speed_ref_temp = 0.0;
 
 volatile uint8_t forward_flag_thr = 0;
 volatile uint8_t reverse_flag_thr = 0;
@@ -201,7 +203,7 @@ int main(void) {
     static uint32_t prev_thr_time = 0;
 
     ANALOG_READING();
-    // FAULT_DETECTION();
+    FAULT_DETECTION();
 
     reverse_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_2);
     forward_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
@@ -218,13 +220,18 @@ int main(void) {
       prev_time = time_count;
     }
 
-    // rtU.Speed_rpm = Throttle_Control(Rpm_Target_Function(moving_Throttle_measured_fun(Read_Throttle(analog.bufferData[THROTTLE]), 1.0)) * SPEED_PU_TO_RPM, rtU.Speed_rpm);
+    #if THROTTLE_CNTRL
+    speed_ref_temp = Throttle_Control(Rpm_Target_Function(moving_Throttle_measured_fun(Read_Throttle(analog.bufferData[THROTTLE]), 1.0)) * SPEED_PU_TO_RPM, speed_ref_temp);
+    FOC_U.RefSpeed = speed_ref_temp * 0.1047;
 
-    // if (rtU.Speed_rpm <= 0.0)
-    // {
-    //   rtU.Speed_rpm = 0.0;
-    // }
+    if (FOC_U.RefSpeed <= 0.0)
+    {
+      FOC_U.RefSpeed = 0.0;
+    }
 
+    #endif
+
+    #if RAMP_CNTRL
     if (time_count - prev_thr_time >= 500)
     {
       if (FOC_U.RefSpeed < (500.0 * 0.1047))
@@ -238,6 +245,7 @@ int main(void) {
 
       prev_thr_time = time_count;
     }
+    #endif
   }
 }
 
@@ -330,7 +338,7 @@ void send_on_303()
   can_data[1] = (uint8_t)((uint16_t)(avg_board_temp));
   can_data[2] = (uint8_t)(FOC_F_T.Iq_OL_Flag);
   can_data[3] = (uint8_t)(FOC_F_T.OT_Cont_Flag);
-  can_data[4] = (uint8_t)(FOC_F_T.dcV_OV_Flag);
+  can_data[4] = (uint8_t)(FOC_F_T.Ph_OC_Flag);
   can_data[5] = (uint8_t)(z_trig);
   can_data[6] = (uint8_t)((uint16_t)(can_log_mbd_elec_rh) & 0x00FF);
   can_data[7] = (uint8_t)(((uint16_t)(can_log_mbd_elec_rh) & 0xFF00) >> 8);
@@ -376,6 +384,8 @@ void send_on_305()
   #if APP2
   can_data[4] = (uint8_t)(0x02);
   #endif
+  can_data[5] = (uint8_t)((uint16_t)(terminal.volt.bus_volt) & 0x00FF);
+  can_data[6] = (uint8_t)(((uint16_t)(terminal.volt.bus_volt) & 0xFF00) >> 8);
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_305, S, can_data, FDCAN_DLC_BYTES);
 }
 

@@ -77,7 +77,7 @@ typedef struct {
   char_T Iq_OL_Flag;
   char_T dcV_OV_Flag;
   char_T dcV_UV_Flag;
-  char_T Vd_Vq_OL_Flag;
+  char_T Ph_OC_Flag;
   char_T OT_Cont_Flag;
 } FOC_Flag_T;
 
@@ -125,6 +125,9 @@ typedef struct {
   real_T Filter_torque_PID;            /* '<Root>/Filter_torque_PID' */
   real_T Up_Limit_torque_PID;          /* '<Root>/Up_Limit_torque_PID' */
   real_T Low_Limit_torque_PID;         /* '<Root>/Low_Limit_torque_PID' */
+  real_T Lq;
+  real_T Ld;
+  real_T Lamda;
 } ExtU_FOC_T;
 
 /* External outputs (root outports fed by signals with default storage) */

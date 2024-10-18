@@ -269,7 +269,10 @@ void FOC_step(void)
     FOC_Y.Vq = rtb_Sum_eh;
   }
 
-  real_T Vq_ref_max = sqrtf((58.0f*58.0f) - (FOC_Y.Vd * FOC_Y.Vd));
+  FOC_Y.Vq = FOC_Y.Vq - FOC_U.ActualSpeed * FOC_U.Ld * FOC_Y.Id;
+  FOC_Y.Vd = FOC_Y.Vd + FOC_U.ActualSpeed * FOC_U.Lq * FOC_Y.Iq;
+
+  real_T Vq_ref_max = sqrtf((57.0f*57.0f) - (FOC_Y.Vd * FOC_Y.Vd));
 
   if (FOC_Y.Vq > Vq_ref_max)
     FOC_Y.Vq = Vq_ref_max;
@@ -651,26 +654,26 @@ void FOC_initialize(void)
   /* InitializeConditions for DiscreteIntegrator: '<S169>/Filter' */
   FOC_DW.Filter_DSTATE_d = 0.0;
 
-  FOC_U.Kp_speed_PID = 4;
-  FOC_U.Ki_speed_PID = 10;
-  FOC_U.Kd_speed_PID = 0.02;
-  FOC_U.Filter_speed_PID = 10.0;
-  FOC_U.Up_Limit_speed_PID = 350.0;
+  FOC_U.Kp_speed_PID = 5;
+  FOC_U.Ki_speed_PID = 8;
+  FOC_U.Kd_speed_PID = 0.0002;
+  FOC_U.Filter_speed_PID = 100.0;
+  FOC_U.Up_Limit_speed_PID = 500.0;
   FOC_U.Low_Limit_speed_PID = 0.0;
 
-  FOC_U.Kp_flux_PID = 0.7;
-  FOC_U.Ki_flux_PID = 6;
-  FOC_U.Kd_flux_PID = 0.02;
-  FOC_U.Filter_flux_PID = 10.0;
-  FOC_U.Up_Limit_flux_PID = 60.0;
-  FOC_U.Low_Limit_flux_PID = -60.0;
+  FOC_U.Kp_flux_PID = 0.0287;
+  FOC_U.Ki_flux_PID = 6.66;
+  FOC_U.Kd_flux_PID = 0.00021;
+  FOC_U.Filter_flux_PID = 100.0;
+  FOC_U.Up_Limit_flux_PID = 57.0;
+  FOC_U.Low_Limit_flux_PID = -57.0;
 
-  FOC_U.Kp_torque_PID = 0.8;
-  FOC_U.Ki_torque_PID = 8;
-  FOC_U.Kd_torque_PID = 0.02;
-  FOC_U.Filter_torque_PID = 10.0;
-  FOC_U.Up_Limit_torque_PID = 60.0;
-  FOC_U.Low_Limit_torque_PID = -60.0;
+  FOC_U.Kp_torque_PID = 0.0825;
+  FOC_U.Ki_torque_PID = 8.44;
+  FOC_U.Kd_torque_PID = 0.000251;
+  FOC_U.Filter_torque_PID = 100.0;
+  FOC_U.Up_Limit_torque_PID = 57.0;
+  FOC_U.Low_Limit_torque_PID = -57.0;
 
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
 }
