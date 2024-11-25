@@ -125,10 +125,10 @@ typedef struct {
   real_T Filter_torque_PID;            /* '<Root>/Filter_torque_PID' */
   real_T Up_Limit_torque_PID;          /* '<Root>/Up_Limit_torque_PID' */
   real_T Low_Limit_torque_PID;         /* '<Root>/Low_Limit_torque_PID' */
-  real_T Lq;
-  real_T Ld;
-  real_T Lamda;
-  real_T Rs;
+  real_T Lq;                           /* '<Root>/Quadrature Axis Inductance' */
+  real_T Ld;                           /* '<Root>/Direct Axis Inductance' */
+  real_T Lamda;                        /* '<Root>/Magnetic Flux Linkage' */
+  real_T Rs;                           /* '<Root>/Motor Resistance' */
 } ExtU_FOC_T;
 
 /* External outputs (root outports fed by signals with default storage) */
@@ -138,6 +138,8 @@ typedef struct {
   real_T Vc;                           /* '<Root>/Vc' */
   real_T Id;                           /* '<Root>/Id' */
   real_T Iq;                           /* '<Root>/Iq' */
+  real_T Iq_refer;                     /* '<Root>/Iq_refer' */
+  real_T Id_refer;                     /* '<Root>/Id_refer' */
   real_T Vd;                           /* '<Root>/Vd' */
   real_T Vq;                           /* '<Root>/Vq' */
 } ExtY_FOC_T;

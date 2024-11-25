@@ -221,6 +221,8 @@ void FOC_step(void)
     rtb_Diff = FOC_B.Sum_f;
   }
 
+  FOC_Y.Iq_refer = rtb_Diff;
+
   /* Outputs for Atomic SubSystem: '<S6>/Two inputs CRL' */
   /* Sum: '<S4>/Sum2' incorporates:
    *  AlgorithmDescriptorDelegate generated from: '<S9>/a16'
@@ -659,6 +661,8 @@ void FOC_initialize(void)
   FOC_U.Ld = 0.000147;
   FOC_U.Lamda = 0.0263;
   FOC_U.Rs = 0.0107;
+
+  FOC_Y.Id_refer = -15.0f;
 
   FOC_U.Kp_speed_PID = 5;
   FOC_U.Ki_speed_PID = 10;

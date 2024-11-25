@@ -99,6 +99,7 @@ uint8_t neutral_set;
 uint8_t check = 0;
 
 extern float avg_board_temp;
+extern float torque_calc;
 
 volatile uint32_t ICValue;
 volatile uint32_t angle_curr = 0, angle_prev = 0;
@@ -374,10 +375,10 @@ void send_on_304()
 void send_on_305()
 {
   uint8_t can_data[8] = {0};
-  can_data[0] = (uint8_t)((uint16_t)(rtY.FOC_Out.Id_Refer + 10000.0) & 0x00FF);
-  can_data[1] = (uint8_t)(((uint16_t)(rtY.FOC_Out.Id_Refer + 10000.0) & 0xFF00) >> 8);
-  can_data[2] = (uint8_t)((uint16_t)(rtY.FOC_Out.Iq_Refer + 10000.0) & 0x00FF);
-  can_data[3] = (uint8_t)(((uint16_t)(rtY.FOC_Out.Iq_Refer + 10000.0) & 0xFF00) >> 8);
+  can_data[0] = (uint8_t)((uint16_t)(FOC_Y.Id_refer + 10000.0) & 0x00FF);
+  can_data[1] = (uint8_t)(((uint16_t)(FOC_Y.Id_refer + 10000.0) & 0xFF00) >> 8);
+  can_data[2] = (uint8_t)((uint16_t)(FOC_Y.Iq_refer + 10000.0) & 0x00FF);
+  can_data[3] = (uint8_t)(((uint16_t)(FOC_Y.Iq_refer + 10000.0) & 0xFF00) >> 8);
   #if APP1
   can_data[4] = (uint8_t)(0x01);
   #endif
@@ -386,6 +387,7 @@ void send_on_305()
   #endif
   can_data[5] = (uint8_t)((uint16_t)(terminal.volt.bus_volt) & 0x00FF);
   can_data[6] = (uint8_t)(((uint16_t)(terminal.volt.bus_volt) & 0xFF00) >> 8);
+  can_data[7] = (uint8_t)((uint16_t)(torque_calc));
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_305, S, can_data, FDCAN_DLC_BYTES);
 }
 

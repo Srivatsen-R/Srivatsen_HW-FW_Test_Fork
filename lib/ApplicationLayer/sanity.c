@@ -67,6 +67,7 @@ extern __IO float speed_filtered;
 float busVoltage=0;
 float avg_board_temp=0;
 float v_rms=0;
+float torque_calc = 0.0f;
 
 extern float encoder_a_state;
 extern float encoder_b_state;
@@ -160,12 +161,9 @@ void ANALOG_READING()
      temp_K -= KELVIN_TO_CELSIUS;
      motorControl.temperature.motor = moving_Temperature_measured_fun_M(temp_K, TEMP_AVG);
 
-//      rtU.MotorControllerTemperature_C = avg_board_temp;
-//      rtU.MotorTemperature_C = motorControl.temperature.motor;
+     torque_calc = fmax((1.5 * POLEPAIRS * (FOC_U.Lamda * FOC_Y.Iq + (FOC_U.Ld - FOC_U.Lq) * FOC_Y.Id * FOC_Y.Iq)), torque_calc);
 
      //bus voltage
      busVoltage = moving_Batt_voltage_measured_fun(0.00211*analog.bufferData[BUS_VOLTAGE],VOLTAGE_AVG); 
      terminal.volt.bus_volt = busVoltage; 
-
-//      rtU.BusVoltage_V = 57.4;
 }
