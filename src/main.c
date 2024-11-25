@@ -208,7 +208,7 @@ int main(void) {
     reverse_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_2);
     forward_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
 
-    if (time_count - prev_time >= 10.0)
+    if (time_count - prev_time >= 100.0)
     {
       send_on_300();
       send_on_301();
@@ -234,11 +234,11 @@ int main(void) {
     #if RAMP_CNTRL
     if (time_count - prev_thr_time >= 500)
     {
-      if (FOC_U.RefSpeed < (500.0 * 0.1047))
+      if (FOC_U.RefSpeed < (1500.0 * 0.1047))
         FOC_U.RefSpeed += 5.0;
 
-      if (FOC_U.RefSpeed > (500.0 * 0.1047))
-        FOC_U.RefSpeed = (500.0 * 0.1047);
+      if (FOC_U.RefSpeed > (1500.0 * 0.1047))
+        FOC_U.RefSpeed = (1500.0 * 0.1047);
 
       if (FOC_U.RefSpeed < 0.0)
         FOC_U.RefSpeed = 0.0;

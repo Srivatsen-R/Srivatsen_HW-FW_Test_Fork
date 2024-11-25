@@ -128,6 +128,7 @@ typedef struct {
   real_T Lq;
   real_T Ld;
   real_T Lamda;
+  real_T Rs;
 } ExtU_FOC_T;
 
 /* External outputs (root outports fed by signals with default storage) */

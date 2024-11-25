@@ -124,7 +124,7 @@ void FOC_step(void)
    *  AlgorithmDescriptorDelegate generated from: '<S9>/a16'
    *  Constant: '<S4>/Id_ref'
    */
-  FOC_B.IProdOut = 0.0 - rtb_Switch_f_idx_0;
+  FOC_B.IProdOut = -15.0f - rtb_Switch_f_idx_0;
 
   /* Product: '<S121>/NProd Out' incorporates:
    *  AlgorithmDescriptorDelegate generated from: '<S9>/a16'
@@ -174,6 +174,8 @@ void FOC_step(void)
      */
     FOC_Y.Vd = FOC_B.Sum;
   }
+
+  FOC_Y.Vd = FOC_Y.Vd - FOC_U.ActualSpeed * FOC_U.Lq * FOC_Y.Iq;
 
   /* End of Switch: '<S126>/Switch2' */
 
@@ -269,10 +271,9 @@ void FOC_step(void)
     FOC_Y.Vq = rtb_Sum_eh;
   }
 
-  FOC_Y.Vq = FOC_Y.Vq - FOC_U.ActualSpeed * FOC_U.Ld * FOC_Y.Id;
-  FOC_Y.Vd = FOC_Y.Vd + FOC_U.ActualSpeed * FOC_U.Lq * FOC_Y.Iq;
+  FOC_Y.Vq = FOC_Y.Vq + FOC_U.ActualSpeed * FOC_U.Ld * FOC_Y.Id + FOC_U.ActualSpeed * FOC_U.Lamda;
 
-  real_T Vq_ref_max = sqrtf((57.0f*57.0f) - (FOC_Y.Vd * FOC_Y.Vd));
+  real_T Vq_ref_max = sqrtf((65.0f*65.0f) - (FOC_Y.Vd * FOC_Y.Vd));
 
   if (FOC_Y.Vq > Vq_ref_max)
     FOC_Y.Vq = Vq_ref_max;
@@ -654,26 +655,31 @@ void FOC_initialize(void)
   /* InitializeConditions for DiscreteIntegrator: '<S169>/Filter' */
   FOC_DW.Filter_DSTATE_d = 0.0;
 
+  FOC_U.Lq = 0.000387;
+  FOC_U.Ld = 0.000147;
+  FOC_U.Lamda = 0.0263;
+  FOC_U.Rs = 0.0107;
+
   FOC_U.Kp_speed_PID = 5;
-  FOC_U.Ki_speed_PID = 8;
-  FOC_U.Kd_speed_PID = 0.0002;
-  FOC_U.Filter_speed_PID = 100.0;
+  FOC_U.Ki_speed_PID = 10;
+  FOC_U.Kd_speed_PID = 0.01;
+  FOC_U.Filter_speed_PID = 10.0;
   FOC_U.Up_Limit_speed_PID = 500.0;
   FOC_U.Low_Limit_speed_PID = 0.0;
 
-  FOC_U.Kp_flux_PID = 0.0287;
-  FOC_U.Ki_flux_PID = 6.66;
-  FOC_U.Kd_flux_PID = 0.00021;
-  FOC_U.Filter_flux_PID = 100.0;
-  FOC_U.Up_Limit_flux_PID = 57.0;
-  FOC_U.Low_Limit_flux_PID = -57.0;
+  FOC_U.Kp_flux_PID = 0.8;
+  FOC_U.Ki_flux_PID = 20.0;
+  FOC_U.Kd_flux_PID = 0.03;
+  FOC_U.Filter_flux_PID = 10.0;
+  FOC_U.Up_Limit_flux_PID = 65.0;
+  FOC_U.Low_Limit_flux_PID = -65.0;
 
-  FOC_U.Kp_torque_PID = 0.0825;
-  FOC_U.Ki_torque_PID = 8.44;
-  FOC_U.Kd_torque_PID = 0.000251;
-  FOC_U.Filter_torque_PID = 100.0;
-  FOC_U.Up_Limit_torque_PID = 57.0;
-  FOC_U.Low_Limit_torque_PID = -57.0;
+  FOC_U.Kp_torque_PID = 0.7;
+  FOC_U.Ki_torque_PID = 15.0;
+  FOC_U.Kd_torque_PID = 0.01;
+  FOC_U.Filter_torque_PID = 10.0;
+  FOC_U.Up_Limit_torque_PID = 65.0;
+  FOC_U.Low_Limit_torque_PID = -65.0;
 
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
 }
