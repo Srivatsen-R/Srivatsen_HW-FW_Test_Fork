@@ -124,7 +124,7 @@ void FOC_step(void)
    *  AlgorithmDescriptorDelegate generated from: '<S9>/a16'
    *  Constant: '<S4>/Id_ref'
    */
-  FOC_B.IProdOut = -15.0f - rtb_Switch_f_idx_0;
+  FOC_B.IProdOut = -17.0f - rtb_Switch_f_idx_0;
 
   /* Product: '<S121>/NProd Out' incorporates:
    *  AlgorithmDescriptorDelegate generated from: '<S9>/a16'
@@ -662,24 +662,24 @@ void FOC_initialize(void)
   FOC_U.Lamda = 0.0263;
   FOC_U.Rs = 0.0107;
 
-  FOC_Y.Id_refer = -15.0f;
+  FOC_Y.Id_refer = -17.0f;
 
   FOC_U.Kp_speed_PID = 5;
-  FOC_U.Ki_speed_PID = 10;
+  FOC_U.Ki_speed_PID = 18;
   FOC_U.Kd_speed_PID = 0.01;
   FOC_U.Filter_speed_PID = 10.0;
   FOC_U.Up_Limit_speed_PID = 500.0;
   FOC_U.Low_Limit_speed_PID = 0.0;
 
   FOC_U.Kp_flux_PID = 0.8;
-  FOC_U.Ki_flux_PID = 20.0;
-  FOC_U.Kd_flux_PID = 0.03;
+  FOC_U.Ki_flux_PID = 28.0;
+  FOC_U.Kd_flux_PID = 0.05;
   FOC_U.Filter_flux_PID = 10.0;
   FOC_U.Up_Limit_flux_PID = 65.0;
   FOC_U.Low_Limit_flux_PID = -65.0;
 
   FOC_U.Kp_torque_PID = 0.7;
-  FOC_U.Ki_torque_PID = 15.0;
+  FOC_U.Ki_torque_PID = 18.0;
   FOC_U.Kd_torque_PID = 0.01;
   FOC_U.Filter_torque_PID = 10.0;
   FOC_U.Up_Limit_torque_PID = 65.0;
