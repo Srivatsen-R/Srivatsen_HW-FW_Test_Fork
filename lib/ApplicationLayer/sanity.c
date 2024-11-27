@@ -166,4 +166,8 @@ void ANALOG_READING()
      //bus voltage
      busVoltage = moving_Batt_voltage_measured_fun(0.00211*analog.bufferData[BUS_VOLTAGE],VOLTAGE_AVG); 
      terminal.volt.bus_volt = busVoltage; 
+     FOC_U.BusVoltage_V = busVoltage;
+
+     FOC_U.MotorTemperature_C = motorControl.temperature.motor;
+     FOC_U.MCTemperature_C = avg_board_temp;
 }
