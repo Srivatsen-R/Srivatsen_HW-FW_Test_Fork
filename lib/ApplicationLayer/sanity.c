@@ -68,6 +68,7 @@ float busVoltage=0;
 float avg_board_temp=0;
 float v_rms=0;
 float torque_calc = 0.0f;
+float irms_calc = 0.0f;
 
 extern float encoder_a_state;
 extern float encoder_b_state;
@@ -99,7 +100,7 @@ void FAULT_DETECTION()
 
         if (time_tick_count - prev_count_iq >= 10)
         {
-                if (FOC_Y.Iq >= 500.0)
+                if (FOC_Y.Iq >= 550.0)
                         count_iq++;
 
                 if (count_iq >= 2.0)
@@ -129,7 +130,7 @@ void FAULT_DETECTION()
 
         if (time_tick_count - prev_count_phase_curr >= 10)
         {
-                if ((FOC_U.PhaseCurrent[0] >= 500.0 || FOC_U.PhaseCurrent[0] <= -500.0) || (FOC_U.PhaseCurrent[1] >= 500.0 || FOC_U.PhaseCurrent[1] <= -500.0) || (FOC_U.PhaseCurrent[2] >= 500.0 || FOC_U.PhaseCurrent[2] <= -500.0))
+                if ((FOC_U.PhaseCurrent[0] >= 550.0 || FOC_U.PhaseCurrent[0] <= -550.0) || (FOC_U.PhaseCurrent[1] >= 550.0 || FOC_U.PhaseCurrent[1] <= -550.0) || (FOC_U.PhaseCurrent[2] >= 550.0 || FOC_U.PhaseCurrent[2] <= -550.0))
                         count_phase_Curr++;
 
                 if (count_phase_Curr >= 2.0)
@@ -162,6 +163,7 @@ void ANALOG_READING()
      motorControl.temperature.motor = moving_Temperature_measured_fun_M(temp_K, TEMP_AVG);
 
      torque_calc = fmax((1.5 * POLEPAIRS * (FOC_U.Lamda * FOC_Y.Iq + (FOC_U.Ld - FOC_U.Lq) * FOC_Y.Id * FOC_Y.Iq)), torque_calc);
+     irms_calc = fmax(sqrtf(FOC_Y.Iq * FOC_Y.Iq + FOC_Y.Id * FOC_Y.Id), irms_calc) / sqrtf(2.0f);
 
      //bus voltage
      busVoltage = moving_Batt_voltage_measured_fun(0.00211*analog.bufferData[BUS_VOLTAGE],VOLTAGE_AVG); 

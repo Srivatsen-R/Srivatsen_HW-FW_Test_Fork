@@ -100,6 +100,7 @@ uint8_t check = 0;
 
 extern float avg_board_temp;
 extern float torque_calc;
+extern float irms_calc;
 
 volatile uint32_t ICValue;
 volatile uint32_t angle_curr = 0, angle_prev = 0;
@@ -246,6 +247,22 @@ int main(void) {
 
       prev_thr_time = time_count;
     }
+
+    if (torque_calc >= 45 && torque_calc < 50)
+    {
+      FOC_U.Id_up_limit = 0.0f;
+      FOC_U.Id_low_limit = 0.0f;
+    }
+    else if (torque_calc >= 50)
+    {
+      FOC_U.Id_up_limit = 15.0f;
+      FOC_U.Id_low_limit = 0.0f;
+    }
+    else
+    {
+      FOC_U.Id_up_limit = 0.0f;
+      FOC_U.Id_low_limit = -25.0f;
+    }
     #endif
   }
 }
@@ -284,8 +301,8 @@ void send_on_300()
 void send_on_301()
 {
   uint8_t can_data[8] = {0};
-  can_data[0] = 0;
-  can_data[1] = 0;
+  can_data[0] = (uint8_t)((uint16_t)(irms_calc) & 0x00FF);
+  can_data[1] = (uint8_t)(((uint16_t)(irms_calc) & 0xFF00) >> 8);
   can_data[2] = (uint8_t)((uint16_t)(FOC_U.PhaseCurrent[0] + 400.0) & 0x00FF);
   can_data[3] = (uint8_t)(((uint16_t)(FOC_U.PhaseCurrent[0] + 400.0) & 0xFF00) >> 8);
   can_data[4] = (uint8_t)((uint16_t)(FOC_U.PhaseCurrent[1] + 400.0) & 0x00FF);

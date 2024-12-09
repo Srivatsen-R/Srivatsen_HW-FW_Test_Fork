@@ -231,24 +231,24 @@ void FOC_SPACE_VECTOR_MODULATION()
     // else if (rtY.FOC_Out.Normalized_Vc < LL)
     //     rtY.FOC_Out.Normalized_Vc = LL;
 
-    foc.pwm_a = (uint16_t)((PWM_CONST_2*((FOC_Y.Va / 65.0) * 30000.0))  + PWM_CONST_1);
-    foc.pwm_b = (uint16_t)((PWM_CONST_2*((FOC_Y.Vb / 65.0) * 30000.0))  + PWM_CONST_1);
-    foc.pwm_c = (uint16_t)((PWM_CONST_2*((FOC_Y.Vc / 65.0) * 30000.0))  + PWM_CONST_1);   
+    foc.pwm_a = (uint16_t)((PWM_CONST_2*((FOC_Y.Va / 61.0) * 32767.0))  + PWM_CONST_1);
+    foc.pwm_b = (uint16_t)((PWM_CONST_2*((FOC_Y.Vb / 61.0) * 32767.0))  + PWM_CONST_1);
+    foc.pwm_c = (uint16_t)((PWM_CONST_2*((FOC_Y.Vc / 61.0) * 32767.0))  + PWM_CONST_1);   
 
     if (foc.pwm_a < 0)
         foc.pwm_a = 0;
-    else if (foc.pwm_a > 2289)
-        foc.pwm_a = 2289;
+    else if (foc.pwm_a > 2500)
+        foc.pwm_a = 2500;
 
     if (foc.pwm_b < 0)
         foc.pwm_b = 0;
-    else if (foc.pwm_b > 2289)
-        foc.pwm_b = 2289;
+    else if (foc.pwm_b > 2500)
+        foc.pwm_b = 2500;
 
     if (foc.pwm_c < 0)
         foc.pwm_c = 0;
-    else if (foc.pwm_c > 2289)
-        foc.pwm_c = 2289;
+    else if (foc.pwm_c > 2500)
+        foc.pwm_c = 2500;
 
     //Modulation  Techniques
     //SPWM(foc.pwm_a,foc.pwm_b,foc.pwm_c);
