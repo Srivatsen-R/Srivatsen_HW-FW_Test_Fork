@@ -22,8 +22,6 @@
 #define rx_controller_112       0x112
 #define rx_controller_12A       0x12A 
 #define rx_Controller_6FA       0x6FA
-#define rx_Controller_100       0x100
-#define rx_Controller_101       0x101
 #define tx_Controller_6F0       0x6F0
 #define tx_Controller_6F1       0x6F1
 #define tx_Controller_6F2       0x6F2
