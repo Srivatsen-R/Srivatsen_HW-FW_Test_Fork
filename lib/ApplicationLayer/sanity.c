@@ -85,8 +85,8 @@ extern float freq_rpm;
 extern float throttle_percent;
 
 extern int count_duty;
-extern int forward_flag;
-extern int reverse_flag;
+extern uint8_t forward_set;
+extern uint8_t reverse_set;
 
 void FAULT_DETECTION()
 {
@@ -141,6 +141,12 @@ void FAULT_DETECTION()
                 }
 
                 prev_count_phase_curr = time_tick_count;
+        }
+
+        if (forward_set && reverse_set)
+        {       
+                FOC_F_T.N_Flag = 1;
+                motorControl.drive.check = DRIVE_DISABLE;
         }
 }
 

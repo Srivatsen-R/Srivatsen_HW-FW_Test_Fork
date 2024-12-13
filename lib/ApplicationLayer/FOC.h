@@ -44,6 +44,7 @@ typedef struct {
   char_T dcV_UV_Flag;
   char_T Ph_OC_Flag;
   char_T OT_Cont_Flag;
+  char_T N_Flag;
 } FOC_Flag_T;
 
 typedef struct {

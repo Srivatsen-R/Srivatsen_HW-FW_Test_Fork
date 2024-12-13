@@ -101,6 +101,8 @@ uint8_t check = 0;
 extern float avg_board_temp;
 extern float torque_calc;
 extern float irms_calc;
+extern uint16_t offset_cal_w;
+extern uint16_t offset_cal_v;
 
 volatile uint32_t ICValue;
 volatile uint32_t angle_curr = 0, angle_prev = 0;
@@ -196,12 +198,15 @@ int main(void) {
 
   // Pegasus_MBD_initialize();
   FOC_initialize();
+
+  Current_Sensor_offset_cal();
   
   //while loop running on CLK frequency.
   while (1) 
   {
     uint32_t time_count = HAL_GetTick();
     static uint32_t prev_time = 0;
+    static uint32_t prev_time_700x = 0;
     static uint32_t prev_thr_time = 0;
 
     ANALOG_READING();
@@ -210,7 +215,8 @@ int main(void) {
     reverse_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_2);
     forward_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
 
-    if (time_count - prev_time >= 100.0)
+    #if DEBUG_EN
+    if (time_count - prev_time >= 100)
     {
       send_on_300();
       send_on_301();
@@ -221,6 +227,24 @@ int main(void) {
 
       prev_time = time_count;
     }
+    #endif
+
+    #if DEBUG_OFF
+    if (time_count - prev_time_700x >= 500)
+    {
+      send_on_705();
+      send_on_706();
+      send_on_710();
+      send_on_715();
+      send_on_716();
+      send_on_717();
+      send_on_724();
+      send_on_726();
+      send_on_7A0();
+
+      prev_time_700x = time_count;
+    }
+    #endif
 
     #if THROTTLE_CNTRL
     speed_ref_temp = Throttle_Control(Rpm_Target_Function(moving_Throttle_measured_fun(Read_Throttle(analog.bufferData[THROTTLE]), 1.0)) * SPEED_PU_TO_RPM, speed_ref_temp);
@@ -234,13 +258,13 @@ int main(void) {
     #endif
 
     #if RAMP_CNTRL
-    if (time_count - prev_thr_time >= 500)
+    if (time_count - prev_thr_time >= 1)
     {
-      if (FOC_U.RefSpeed < (1500.0 * 0.1047))
-        FOC_U.RefSpeed += 5.0;
+      if (FOC_U.RefSpeed < (1000.0 * 0.1047))
+        FOC_U.RefSpeed += 1.0;
 
-      if (FOC_U.RefSpeed > (1500.0 * 0.1047))
-        FOC_U.RefSpeed = (1500.0 * 0.1047);
+      if (FOC_U.RefSpeed > (1000.0 * 0.1047))
+        FOC_U.RefSpeed = (1000.0 * 0.1047);
 
       if (FOC_U.RefSpeed < 0.0)
         FOC_U.RefSpeed = 0.0;
@@ -248,21 +272,21 @@ int main(void) {
       prev_thr_time = time_count;
     }
 
-    if (torque_calc >= 45 && torque_calc < 50)
-    {
-      FOC_U.Id_up_limit = 0.0f;
-      FOC_U.Id_low_limit = 0.0f;
-    }
-    else if (torque_calc >= 50)
-    {
-      FOC_U.Id_up_limit = 15.0f;
-      FOC_U.Id_low_limit = 0.0f;
-    }
-    else
-    {
-      FOC_U.Id_up_limit = 0.0f;
-      FOC_U.Id_low_limit = -25.0f;
-    }
+    // if (torque_calc >= 45 && torque_calc < 50)
+    // {
+    //   FOC_U.Id_up_limit = 0.0f;
+    //   FOC_U.Id_low_limit = 0.0f;
+    // }
+    // else if (torque_calc >= 50)
+    // {
+    //   FOC_U.Id_up_limit = 15.0f;
+    //   FOC_U.Id_low_limit = 0.0f;
+    // }
+    // else
+    // {
+    //   FOC_U.Id_up_limit = 0.0f;
+    //   FOC_U.Id_low_limit = -25.0f;
+    // }
     #endif
   }
 }
@@ -317,11 +341,11 @@ void send_on_302()
   uint8_t can_data[8] = {0};
 
   float can_log_rh;
-  if (forward_set)
+  if (forward_set && !reverse_set)
   {
     can_log_rh = foc.rho * 100.0;
   }
-  else if (reverse_set)
+  else if (reverse_set && !forward_set)
   {
     can_log_rh = foc.rho * -100.0;
   }
@@ -332,12 +356,12 @@ void send_on_302()
   can_data[2] = (uint8_t)((uint16_t)(FOC_U.RefSpeed / 0.1047) & 0x00FF);
   can_data[3] = (uint8_t)(((uint16_t)(FOC_U.RefSpeed / 0.1047) & 0xFF00) >> 8);
 
-  if (forward_set)
+  if (forward_set && !reverse_set)
   {
     can_data[4] = (uint8_t)((uint16_t)((foc.speed_sense * 1.0) * SPEED_PU_TO_RPM) & 0x00FF);
     can_data[5] = (uint8_t)(((uint16_t)((foc.speed_sense * 1.0) * SPEED_PU_TO_RPM) & 0xFF00) >> 8);
   }
-  else if (reverse_set)
+  else if (reverse_set && !forward_set)
   {
     can_data[4] = (uint8_t)((uint16_t)((foc.speed_sense * -1.0) * SPEED_PU_TO_RPM) & 0x00FF);
     can_data[5] = (uint8_t)(((uint16_t)((foc.speed_sense * -1.0) * SPEED_PU_TO_RPM) & 0xFF00) >> 8);
@@ -369,11 +393,11 @@ void send_on_304()
   float can_log_mbd_mech_rh = (FOC_U.angle / 3.0) * 100.0;
   float can_log_mbd_speed;
 
-  if (forward_set)
+  if (forward_set && !reverse_set)
   {
     can_log_mbd_speed = (FOC_U.ActualSpeed / 0.1047) * -1.0f;
   }
-  else if (reverse_set)
+  else if (reverse_set && !forward_set)
   {
     can_log_mbd_speed = (FOC_U.ActualSpeed / 0.1047);
   }
@@ -406,6 +430,106 @@ void send_on_305()
   can_data[6] = (uint8_t)(((uint16_t)(terminal.volt.bus_volt) & 0xFF00) >> 8);
   can_data[7] = (uint8_t)((uint16_t)(torque_calc));
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_305, S, can_data, FDCAN_DLC_BYTES);
+}
+
+void send_on_705()
+{
+  uint8_t can_data[8] = {0};
+  can_data[0] = (uint8_t)(motorControl.temperature.motor + 50.0f);
+  can_data[1] = (uint8_t)(avg_board_temp + 50.0f);
+  _fdcan_transmit_on_can(tx_Controller_705, S, can_data, FDCAN_DLC_BYTES);
+}
+
+void send_on_706()
+{
+  uint8_t can_data[8] = {0};
+
+  if (forward_set && !reverse_set){can_data[0] = 0x02;}
+  else if (reverse_set && !forward_set){can_data[0] = 0x04;}
+  else if (reverse_set == 1 && forward_set == 1){can_data[0] = 0x01;}
+  if (FOC_F_T.Iq_OL_Flag){can_data[3] = 0x01;}
+  else if (FOC_F_T.OT_Cont_Flag){can_data[3] = 0x02;}
+  else if (FOC_F_T.Ph_OC_Flag){can_data[3] = 0x03;}
+  else if (FOC_F_T.N_Flag){can_data[3] = 0x04;}
+  can_data[4] = (uint8_t)((uint16_t)(abs(FOC_U.ActualSpeed * 0.1047) * RPM_TO_KMPH * KMPH_CAN_SCALING) & 0x00FF);
+  can_data[5] = (uint8_t)(((uint16_t)(abs(FOC_U.ActualSpeed * 0.1047) * RPM_TO_KMPH * KMPH_CAN_SCALING) & 0xFF00) >> 8);
+  _fdcan_transmit_on_can(tx_Controller_706, S, can_data, FDCAN_DLC_BYTES);
+}
+
+void send_on_710()
+{
+  uint8_t can_data[8] = {0};
+  can_data[0] = (uint8_t)((uint16_t)(((float)(analog.bufferData[THROTTLE]) / 65535.0) * 100.0f));
+  can_data[3] = (uint8_t)((uint16_t)((float)(analog.bufferData[THROTTLE]) * 3.297f / 65535.0f) * THROTTLE_CAN_ADC_SCALING);
+  _fdcan_transmit_on_can(tx_Controller_710, S, can_data, FDCAN_DLC_BYTES);
+}
+
+void send_on_715()
+{
+  uint8_t can_data[8] = {0};
+  can_data[4] = (uint8_t)(FOC_U.BusVoltage_V);
+  can_data[6] = (uint8_t)((uint16_t)(abs(FOC_U.ActualSpeed * 0.1047)) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(abs(FOC_U.ActualSpeed * 0.1047)) & 0xFF00) >> 8);
+  _fdcan_transmit_on_can(tx_Controller_715, S, can_data, FDCAN_DLC_BYTES);
+}
+
+void send_on_716()
+{
+  uint8_t can_data[8] = {0};
+  can_data[6] = (uint8_t)((uint16_t)(irms_calc) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(irms_calc) & 0xFF00) >> 8); 
+  _fdcan_transmit_on_can(tx_Controller_716, S, can_data, FDCAN_DLC_BYTES);
+}
+
+void send_on_717()
+{
+  uint8_t can_data[8] = {0};
+  float freq = abs(FOC_U.ActualSpeed * 0.1047) * POLEPAIRS / 120.0f;
+  can_data[0] = (uint8_t)((uint16_t)(freq) & 0x00FF);
+  can_data[1] = (uint8_t)(((uint16_t)(freq) & 0xFF00) >> 8);
+  _fdcan_transmit_on_can(tx_Controller_717, S, can_data, FDCAN_DLC_BYTES);
+}
+
+void send_on_724()
+{
+  uint8_t can_data[8] = {0};
+  _fdcan_transmit_on_can(tx_Controller_724, S, can_data, FDCAN_DLC_BYTES);
+}
+
+void send_on_726()
+{
+  uint8_t can_data[8] = {0};
+  can_data[0] = 0x04;
+  can_data[1] = 0x01;
+  can_data[2] = 0x01;
+  can_data[3] = 0x00;
+
+  can_data[4] = 0x01;
+  can_data[5] = 0x00;
+  can_data[6] = 0x07;
+
+  can_data[7] = 0x01;
+  _fdcan_transmit_on_can(tx_Controller_726, S, can_data, FDCAN_DLC_BYTES);
+}
+
+void send_on_7A0()
+{
+  uint8_t can_data[8] = {0};
+  can_data[0] = 0x04;
+  can_data[1] = 0x01;
+  can_data[2] = 0x00;
+
+  can_data[3] = 0x01;
+
+  #if APP1
+    can_data[7] = 0x01;
+  #endif
+
+  #if APP2
+    can_data[7] = 0x02;
+  #endif
+
+  _fdcan_transmit_on_can(tx_Controller_7A0, S, can_data, FDCAN_DLC_BYTES);
 }
 
 void send_on_6F0(uint8_t* UIID_Arr)
@@ -479,6 +603,24 @@ float rate_limiter(float target_rpm) {
 
     prev_rpm = target_rpm;  // Update previous RPM for the next iteration
     return target_rpm;
+}
+
+void Current_Sensor_offset_cal(void)
+{
+  float offset_w = 0;
+  float offset_v = 0;
+
+  offset_w = analog.bufferData[PHASE_CURRENT_W];
+  offset_v = analog.bufferData[PHASE_CURRENT_V];
+
+  for (uint8_t i = 0; i < 4; i++)
+  {
+    offset_w += analog.bufferData[PHASE_CURRENT_W];
+    offset_v += analog.bufferData[PHASE_CURRENT_V];
+  }
+
+  offset_cal_w = (uint16_t)(offset_w / 5.0f);
+  offset_cal_v = (uint16_t)(offset_v / 5.0f);
 }
 
 /* USER CODE BEGIN 4 */
@@ -566,9 +708,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
       HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_RESET);
       HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
       HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
-
-      HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
-
     }
 
     //motor angle,current

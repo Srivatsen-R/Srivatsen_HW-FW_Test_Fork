@@ -67,6 +67,8 @@ int neutral_flag=0;
 float encoder_a_state=0;
 float encoder_b_state=0;
 
+uint16_t offset_cal_w = 0;
+uint16_t offset_cal_v = 0;
 
 int reverse_pin_state=1;
 int forward_pin_state=1;
@@ -96,13 +98,21 @@ void READ_MOTOR_PHASE_CURRENT()
 
   for (uint8_t i = 0; i < 10; i++)
   {
-    filteredValue_a = lowPassFilter((float)(analog.bufferData[PHASE_CURRENT_W] - OFFSET_CURRENT), filteredValue_a);
-    filteredValue_b = lowPassFilter((float)(analog.bufferData[PHASE_CURRENT_V] - OFFSET_CURRENT), filteredValue_b);
+    filteredValue_a = lowPassFilter((float)(analog.bufferData[PHASE_CURRENT_W] - offset_cal_w), filteredValue_a);
+    filteredValue_b = lowPassFilter((float)(analog.bufferData[PHASE_CURRENT_V] - offset_cal_v), filteredValue_b);
   }
 
-  FOC_U.PhaseCurrent[0] = (filteredValue_a * 3.297 * 400.0) / 65535.0;
-  FOC_U.PhaseCurrent[1] = (filteredValue_b * 3.297 * 400.0) / 65535.0;
-  FOC_U.PhaseCurrent[2] = (-FOC_U.PhaseCurrent[0]) + (-FOC_U.PhaseCurrent[1]);
+  #if PEG3W
+    FOC_U.PhaseCurrent[0] = (filteredValue_a * 3.297 * 400.0) / 65535.0;
+    FOC_U.PhaseCurrent[1] = (filteredValue_b * 3.297 * 400.0) / 65535.0;
+    FOC_U.PhaseCurrent[2] = (-FOC_U.PhaseCurrent[0]) + (-FOC_U.PhaseCurrent[1]);
+  #endif
+
+  #if PEG4W
+    FOC_U.PhaseCurrent[2] = (filteredValue_a * 3.297 * 400.0) / 65535.0;
+    FOC_U.PhaseCurrent[1] = (filteredValue_b * 3.297 * 400.0) / 65535.0;
+    FOC_U.PhaseCurrent[0] = (-FOC_U.PhaseCurrent[2]) + (-FOC_U.PhaseCurrent[1]);
+  #endif
 
 }
 void READ_MOTOR_POSITION()

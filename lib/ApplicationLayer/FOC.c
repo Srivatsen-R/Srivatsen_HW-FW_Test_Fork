@@ -407,9 +407,9 @@ void FOC_step(void)
    *  Inport: '<Root>/angle'
    *  Trigonometry: '<S6>/Trigonometric Function1'
    */
-  if (forward_set)
+  if (forward_set && !reverse_set)
     FOC_U.angle = (FOC_U.angle);
-  else if (reverse_set)
+  else if (reverse_set && !forward_set)
     FOC_U.angle = (FOC_U.angle) - -3.14159274F;
 
   rtb_Add1 = sin(FOC_U.angle);
@@ -616,7 +616,7 @@ void FOC_step(void)
    */
   FOC_Y.Vq = rtb_Add3 + rtb_Diff;
 
-  real_T Vq_ref_max = sqrtf((61.5f*61.5f) - (FOC_Y.Vd * FOC_Y.Vd));
+  real_T Vq_ref_max = sqrtf((61.0f*61.0f) - (FOC_Y.Vd * FOC_Y.Vd));
 
   if (FOC_Y.Vq > Vq_ref_max)
     FOC_Y.Vq = Vq_ref_max;

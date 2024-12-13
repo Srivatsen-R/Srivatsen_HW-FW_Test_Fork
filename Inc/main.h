@@ -29,9 +29,19 @@ void send_on_302(void);
 void send_on_303(void);
 void send_on_304(void);
 void send_on_305(void);
+void send_on_705(void);
+void send_on_706(void);
+void send_on_710(void);
+void send_on_715(void);
+void send_on_716(void);
+void send_on_717(void);
+void send_on_724(void);
+void send_on_726(void);
+void send_on_7A0(void);
 void send_on_6F0(uint8_t* UIID_Arr);
 void send_on_6F1(uint8_t* UIID_Arr);
 void send_on_6F2(uint8_t* UIID_Arr);
+void Current_Sensor_offset_cal(void);
 
 /* Private defines -----------------------------------------------------------*/
 #define Ibus_U_Pin                GPIO_PIN_0

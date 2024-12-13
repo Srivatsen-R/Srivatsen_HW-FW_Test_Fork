@@ -141,9 +141,9 @@ void FOC_READ_MOTOR_POSITION(void)
     if(foc.speed_sense>MAX_PU_SPEED){foc.speed_sense=MAX_PU_SPEED;} 
     else if (foc.speed_sense<-MAX_PU_SPEED){foc.speed_sense=-MAX_PU_SPEED;}
 
-    if (forward_set)
+    if (forward_set && !reverse_set)
         FOC_U.ActualSpeed = (foc.speed_sense * SPEED_PU_TO_RPM * 1.0) * 0.1047;
-    else if (reverse_set)
+    else if (reverse_set && !forward_set)
         FOC_U.ActualSpeed = (foc.speed_sense * SPEED_PU_TO_RPM * -1.0) * 0.1047;
 
     static float angle_mech;
@@ -152,7 +152,7 @@ void FOC_READ_MOTOR_POSITION(void)
     //Synchronous Speed Calculation
     foc.sync_speed = CALCULATE_SYNC_SPEED(foc.slip_speed,foc.rotor_speed_filtered);//sync speed
 
-    if (forward_set)
+    if (forward_set && !reverse_set)
     {
         if((foc.speed_sense * 1.0 * SPEED_PU_TO_RPM * 0.1047)<10.0 && duty_state)
         { 
@@ -165,7 +165,7 @@ void FOC_READ_MOTOR_POSITION(void)
             duty_state = 0;
         }
     }
-    else if (reverse_set)
+    else if (reverse_set && !forward_set)
     {
         if((foc.speed_sense * -1.0 * SPEED_PU_TO_RPM * 0.1047)<10.0 && duty_state)
         { 
@@ -184,14 +184,14 @@ void FOC_READ_MOTOR_POSITION(void)
         reset_flag=0;
     }
 
-    if (forward_set)
+    if (forward_set && !reverse_set)
     {
         if((foc.speed_sense * SPEED_PU_TO_RPM * 1.0 * 0.1047) <= 0.0)
         {
             duty_state = 1;
         }
     }
-    else if (reverse_set)
+    else if (reverse_set && !forward_set)
     {
         if((foc.speed_sense * SPEED_PU_TO_RPM * -1.0 * 0.1047) <= 0.0)
         {
@@ -202,9 +202,9 @@ void FOC_READ_MOTOR_POSITION(void)
     foc.rho = READ_ROTOR_ANGLE(foc.rho_prev,foc.sync_speed,foc.sync_speed_prev);//electrical angle
     Position_Calculation_step();
 
-    if (forward_set)
+    if (forward_set && !reverse_set)
         FOC_U.angle = foc.rho + ANGLE_OFFSET_RW;
-    else if (reverse_set)
+    else if (reverse_set && !forward_set)
         FOC_U.angle = foc.rho + ANGLE_OFFSET_FW;
 
     foc.rotor_speed_prev          = foc.rotor_speed;  
