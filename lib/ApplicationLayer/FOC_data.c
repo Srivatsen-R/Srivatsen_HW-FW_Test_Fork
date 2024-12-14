@@ -3,9 +3,9 @@
  *
  * Code generation for model "FOC".
  *
- * Model version              : 18.35
+ * Model version              : 18.37
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C source code generated on : Fri Nov 29 17:26:01 2024
+ * C source code generated on : Fri Dec 13 13:25:35 2024
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -18,9 +18,9 @@
 
 /* Invariant block signals (default storage) */
 const ConstB_FOC_T FOC_ConstB = {
-  0.000146,                            /* '<S202>/Switch' */
-  0.000387,                            /* '<S202>/Switch1' */
-  0.0263,                              /* '<S202>/Switch2' */
+  0.000146,                            /* '<S145>/Switch' */
+  0.000387,                            /* '<S145>/Switch1' */
+  0.0263,                              /* '<S145>/Switch2' */
   40.0F,                               /* '<S4>/Data Type Conversion10' */
   65.0F,                               /* '<S4>/Data Type Conversion11' */
   70.0F,                               /* '<S4>/Data Type Conversion12' */

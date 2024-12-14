@@ -103,7 +103,7 @@ void FAULT_DETECTION()
                 if (FOC_Y.Iq >= 550.0)
                         count_iq++;
 
-                if (count_iq >= 2.0)
+                if (count_iq >= 10.0)
                 {
                         count_iq = 0;
                         FOC_F_T.Iq_OL_Flag = 1;
@@ -133,7 +133,7 @@ void FAULT_DETECTION()
                 if ((FOC_U.PhaseCurrent[0] >= 550.0 || FOC_U.PhaseCurrent[0] <= -550.0) || (FOC_U.PhaseCurrent[1] >= 550.0 || FOC_U.PhaseCurrent[1] <= -550.0) || (FOC_U.PhaseCurrent[2] >= 550.0 || FOC_U.PhaseCurrent[2] <= -550.0))
                         count_phase_Curr++;
 
-                if (count_phase_Curr >= 2.0)
+                if (count_phase_Curr >= 10.0)
                 {
                         count_phase_Curr = 0;
                         FOC_F_T.Ph_OC_Flag = 1;
@@ -143,11 +143,13 @@ void FAULT_DETECTION()
                 prev_count_phase_curr = time_tick_count;
         }
 
+        #if DISABLE_ON_NEUTRAL
         if (forward_set && reverse_set)
         {       
                 FOC_F_T.N_Flag = 1;
                 motorControl.drive.check = DRIVE_DISABLE;
         }
+        #endif
 }
 
 void ANALOG_READING()

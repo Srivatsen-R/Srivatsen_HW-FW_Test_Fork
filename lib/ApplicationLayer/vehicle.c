@@ -96,7 +96,7 @@ void READ_MOTOR_PHASE_CURRENT()
   volatile float filteredValue_a = 0.0;
   volatile float filteredValue_b = 0.0;
 
-  for (uint8_t i = 0; i < 10; i++)
+  for (uint8_t i = 0; i < 20; i++)
   {
     filteredValue_a = lowPassFilter((float)(analog.bufferData[PHASE_CURRENT_W] - offset_cal_w), filteredValue_a);
     filteredValue_b = lowPassFilter((float)(analog.bufferData[PHASE_CURRENT_V] - offset_cal_v), filteredValue_b);

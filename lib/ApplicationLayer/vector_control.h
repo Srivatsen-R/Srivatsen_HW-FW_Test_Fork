@@ -111,12 +111,13 @@ typedef struct foc_t {
 
 #define ALPHA                   0.4
 
-#define THROTTLE_CNTRL          0
-#define RAMP_CNTRL              1
+#define THROTTLE_CNTRL          1
+#define RAMP_CNTRL              0
 #define PEG3W                   1
 #define PEG4W                   0
 #define DEBUG_EN                1
 #define DEBUG_OFF               0
+#define DISABLE_ON_NEUTRAL      1
 
 // #define POLEPAIRS               4.0// Nidec 14kg
 #define POLEPAIRS               3.0// Nidec 22kg & ULTRON
@@ -150,11 +151,15 @@ typedef struct foc_t {
 // #define ANGLE_OFFSET_FW                           -1.308996//V3
 // #define ANGLE_OFFSET_RW                            4.188790//V3
 
-// #define ANGLE_OFFSET_FW                               1.076868148//X2
-// #define ANGLE_OFFSET_RW                               2.0647245051//X2
+#if PEG4W
+#define ANGLE_OFFSET_FW                               1.076868148//X2
+#define ANGLE_OFFSET_RW                               2.0647245051//X2
+#endif
 
+#if PEG3W
 #define ANGLE_OFFSET_FW                               2.001892652//R1
 #define ANGLE_OFFSET_RW                               2.001892652//R1
+#endif
 
 // #define ANGLE_OFFSET_FW                            2.44346//V8 LFP
 // #define ANGLE_OFFSET_RW                            1.22173//V8 LFP

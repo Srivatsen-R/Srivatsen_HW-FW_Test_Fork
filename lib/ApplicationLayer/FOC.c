@@ -3,9 +3,9 @@
  *
  * Code generation for model "FOC".
  *
- * Model version              : 18.35
+ * Model version              : 18.37
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C source code generated on : Fri Nov 29 17:26:01 2024
+ * C source code generated on : Fri Dec 13 13:25:35 2024
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -256,16 +256,13 @@ static void FOC_VoltageProtection(void)
 void FOC_step(void)
 {
   real_T rtb_Add1;
-  real_T rtb_Add3;
   real_T rtb_Diff;
   real_T rtb_Divide;
   real_T rtb_IProdOut;
-  real_T rtb_IProdOut_l;
+  real_T rtb_Integrator_d;
   real_T rtb_NProdOut;
-  real_T rtb_NProdOut_b;
   real_T rtb_Subtract;
   real_T rtb_Sum;
-  real_T rtb_Sum_ep;
   real_T rtb_Switch_fv_idx_0;
   real_T rtb_TrigonometricFunction1_tmp;
   real_T rtb_VdFF_unsat;
@@ -274,7 +271,6 @@ void FOC_step(void)
   int8_T tmp;
   int8_T tmp_0;
   boolean_T rtb_AND3;
-  boolean_T rtb_AND3_g;
 
   /* Product: '<S25>/Divide1' incorporates:
    *  Gain: '<S25>/Gain2'
@@ -285,75 +281,36 @@ void FOC_step(void)
    */
   rtb_Divide1 = FOC_U.Lamda / ((FOC_U.Lq - FOC_U.Ld) * 4.0F);
 
-  /* Sum: '<S7>/Sum1' incorporates:
-   *  Inport: '<Root>/Actual Speed'
-   *  Inport: '<Root>/Ref Speed'
-   */
-  rtb_IProdOut = FOC_U.RefSpeed - FOC_U.ActualSpeed;
-
-  /* Product: '<S72>/NProd Out' incorporates:
-   *  DiscreteIntegrator: '<S64>/Filter'
-   *  Inport: '<Root>/Filter_speed_PID'
-   *  Inport: '<Root>/Kd_speed_PID'
-   *  Product: '<S62>/DProd Out'
-   *  Sum: '<S64>/SumD'
-   */
-  rtb_NProdOut = (rtb_IProdOut * FOC_U.Kd_speed_PID - FOC_DW.Filter_DSTATE) *
-    FOC_U.Filter_speed_PID;
-
-  /* Sum: '<S79>/Sum' incorporates:
-   *  DiscreteIntegrator: '<S69>/Integrator'
-   *  Inport: '<Root>/Kp_speed_PID'
-   *  Product: '<S74>/PProd Out'
-   */
-  rtb_Sum = (rtb_IProdOut * FOC_U.Kp_speed_PID + FOC_DW.Integrator_DSTATE) +
-    rtb_NProdOut;
-
-  /* Switch: '<S77>/Switch2' incorporates:
-   *  Inport: '<Root>/Low_Limit_speed_PID'
-   *  Inport: '<Root>/Up_Limit_speed_PID'
-   *  RelationalOperator: '<S77>/LowerRelop1'
-   *  RelationalOperator: '<S77>/UpperRelop'
-   *  Switch: '<S77>/Switch'
-   */
-  if (rtb_Sum > FOC_U.Up_Limit_speed_PID) {
-    rtb_Diff = FOC_U.Up_Limit_speed_PID;
-  } else if (rtb_Sum < FOC_U.Low_Limit_speed_PID) {
-    /* Switch: '<S77>/Switch' incorporates:
-     *  Inport: '<Root>/Low_Limit_speed_PID'
-     */
-    rtb_Diff = FOC_U.Low_Limit_speed_PID;
-  } else {
-    rtb_Diff = rtb_Sum;
-  }
-
   /* Product: '<S25>/Divide' incorporates:
    *  Constant: '<S25>/Constant1'
    *  Gain: '<S25>/Gain'
+   *  Inport: '<Root>/Current_ref'
    *  Inport: '<Root>/Lamda'
+   *  Inport: '<Root>/Torque_ratio'
    *  Inport: '<Root>/p'
    *  Product: '<S25>/Product'
-   *  Switch: '<S77>/Switch2'
+   *  Product: '<S7>/Product'
    */
-  rtb_Divide = 2.0 * rtb_Diff / (real32_T)(FOC_U.Lamda * FOC_U.p * 3.0);
+  rtb_Divide = FOC_U.RefSpeed * FOC_U.Torque_ratio * 2.0 / (real32_T)
+    (FOC_U.Lamda * FOC_U.p * 3.0);
 
-  /* Switch: '<S31>/Switch2' incorporates:
+  /* Switch: '<S30>/Switch2' incorporates:
    *  Inport: '<Root>/Iq_low_limit'
    *  Inport: '<Root>/Iq_up_limit'
-   *  RelationalOperator: '<S31>/LowerRelop1'
-   *  RelationalOperator: '<S31>/UpperRelop'
-   *  Switch: '<S31>/Switch'
+   *  RelationalOperator: '<S30>/LowerRelop1'
+   *  RelationalOperator: '<S30>/UpperRelop'
+   *  Switch: '<S30>/Switch'
    */
   if (rtb_Divide > FOC_U.Iq_up_limit) {
     rtb_Divide = FOC_U.Iq_up_limit;
   } else if (rtb_Divide < FOC_U.Iq_low_limit) {
-    /* Switch: '<S31>/Switch' incorporates:
+    /* Switch: '<S30>/Switch' incorporates:
      *  Inport: '<Root>/Iq_low_limit'
      */
     rtb_Divide = FOC_U.Iq_low_limit;
   }
 
-  /* End of Switch: '<S31>/Switch2' */
+  /* End of Switch: '<S30>/Switch2' */
 
   /* Math: '<S25>/Math Function2'
    *
@@ -373,25 +330,23 @@ void FOC_step(void)
    */
   rtb_Subtract = rtb_Divide1 - sqrt(rtb_Divide1 * rtb_Divide1 + 0.5 * rtb_Divide);
 
-  /* Switch: '<S30>/Switch2' incorporates:
+  /* Switch: '<S29>/Switch2' incorporates:
    *  Inport: '<Root>/Id_low_limit'
    *  Inport: '<Root>/Id_up_limit'
-   *  RelationalOperator: '<S30>/LowerRelop1'
-   *  RelationalOperator: '<S30>/UpperRelop'
-   *  Switch: '<S30>/Switch'
+   *  RelationalOperator: '<S29>/LowerRelop1'
+   *  RelationalOperator: '<S29>/UpperRelop'
+   *  Switch: '<S29>/Switch'
    */
   if (rtb_Subtract > FOC_U.Id_up_limit) {
-    rtb_Add3 = FOC_U.Id_up_limit;
+    rtb_Subtract = FOC_U.Id_up_limit;
   } else if (rtb_Subtract < FOC_U.Id_low_limit) {
-    /* Switch: '<S30>/Switch' incorporates:
+    /* Switch: '<S29>/Switch' incorporates:
      *  Inport: '<Root>/Id_low_limit'
      */
-    rtb_Add3 = FOC_U.Id_low_limit;
-  } else {
-    rtb_Add3 = rtb_Subtract;
+    rtb_Subtract = FOC_U.Id_low_limit;
   }
 
-  /* End of Switch: '<S30>/Switch2' */
+  /* End of Switch: '<S29>/Switch2' */
 
   /* Outputs for Atomic SubSystem: '<S10>/Two phase CRL wrap' */
   /* Gain: '<S11>/one_by_sqrt3' incorporates:
@@ -457,29 +412,29 @@ void FOC_step(void)
   /* Sum: '<S7>/Sum3' incorporates:
    *  AlgorithmDescriptorDelegate generated from: '<S12>/a16'
    */
-  rtb_IProdOut_l = rtb_Add3 - rtb_Switch_fv_idx_0;
+  rtb_IProdOut = rtb_Subtract - rtb_Switch_fv_idx_0;
 
-  FOC_Y.Id_refer = rtb_Add3;
+  FOC_Y.Id_refer = rtb_Subtract;
 
   /* End of Outputs for SubSystem: '<S9>/Two inputs CRL' */
 
-  /* Product: '<S128>/NProd Out' incorporates:
-   *  DiscreteIntegrator: '<S120>/Filter'
+  /* Product: '<S71>/NProd Out' incorporates:
+   *  DiscreteIntegrator: '<S63>/Filter'
    *  Inport: '<Root>/Filter_flux_PID'
    *  Inport: '<Root>/Kd_flux_PID'
-   *  Product: '<S118>/DProd Out'
-   *  Sum: '<S120>/SumD'
+   *  Product: '<S61>/DProd Out'
+   *  Sum: '<S63>/SumD'
    */
-  rtb_NProdOut_b = (rtb_IProdOut_l * FOC_U.Kd_flux_PID - FOC_DW.Filter_DSTATE_k)
-    * FOC_U.Filter_flux_PID;
+  rtb_NProdOut = (rtb_IProdOut * FOC_U.Kd_flux_PID - FOC_DW.Filter_DSTATE) *
+    FOC_U.Filter_flux_PID;
 
-  /* Sum: '<S135>/Sum' incorporates:
-   *  DiscreteIntegrator: '<S125>/Integrator'
+  /* Sum: '<S78>/Sum' incorporates:
+   *  DiscreteIntegrator: '<S68>/Integrator'
    *  Inport: '<Root>/Kp_flux_PID'
-   *  Product: '<S130>/PProd Out'
+   *  Product: '<S73>/PProd Out'
    */
-  rtb_Sum_ep = (rtb_IProdOut_l * FOC_U.Kp_flux_PID + FOC_DW.Integrator_DSTATE_p)
-    + rtb_NProdOut_b;
+  rtb_Sum = (rtb_IProdOut * FOC_U.Kp_flux_PID + FOC_DW.Integrator_DSTATE) +
+    rtb_NProdOut;
 
   /* Sqrt: '<S25>/Sqrt1' incorporates:
    *  Abs: '<S25>/Abs'
@@ -493,62 +448,63 @@ void FOC_step(void)
 
   FOC_Y.Iq_refer = rtb_Divide;
 
-  /* Gain: '<S201>/wm_pu2si_mech2elec' incorporates:
+  /* Gain: '<S144>/wm_pu2si_mech2elec' incorporates:
    *  Gain: '<S7>/Gain'
    *  Inport: '<Root>/Actual Speed'
    */
-  rtb_Subtract = 0.33333333333333331 * FOC_U.ActualSpeed * 3.0;
+  rtb_Integrator_d = 0.33333333333333331 * FOC_U.ActualSpeed * 3.0;
 
-  /* Gain: '<S201>/NegSign' incorporates:
-   *  Product: '<S201>/prod1'
+  /* Gain: '<S144>/NegSign' incorporates:
+   *  Product: '<S144>/prod1'
    */
-  rtb_VdFF_unsat = -(FOC_ConstB.Switch1 * rtb_Divide * rtb_Subtract);
+  rtb_VdFF_unsat = -(FOC_ConstB.Switch1 * rtb_Divide * rtb_Integrator_d);
 
-  /* Switch: '<S133>/Switch2' incorporates:
+  /* Switch: '<S76>/Switch2' incorporates:
    *  Inport: '<Root>/Low_Limit_flux_PID'
    *  Inport: '<Root>/Up_Limit_flux_PID'
-   *  RelationalOperator: '<S133>/LowerRelop1'
-   *  RelationalOperator: '<S133>/UpperRelop'
-   *  Switch: '<S133>/Switch'
+   *  RelationalOperator: '<S76>/LowerRelop1'
+   *  RelationalOperator: '<S76>/UpperRelop'
+   *  Switch: '<S76>/Switch'
    */
-  if (rtb_Sum_ep > FOC_U.Up_Limit_flux_PID) {
+  if (rtb_Sum > FOC_U.Up_Limit_flux_PID) {
     rtb_Diff = FOC_U.Up_Limit_flux_PID;
-  } else if (rtb_Sum_ep < FOC_U.Low_Limit_flux_PID) {
-    /* Switch: '<S133>/Switch' incorporates:
+  } else if (rtb_Sum < FOC_U.Low_Limit_flux_PID) {
+    /* Switch: '<S76>/Switch' incorporates:
      *  Inport: '<Root>/Low_Limit_flux_PID'
      */
     rtb_Diff = FOC_U.Low_Limit_flux_PID;
   } else {
-    rtb_Diff = rtb_Sum_ep;
+    rtb_Diff = rtb_Sum;
   }
 
-  /* Switch: '<S203>/Switch2' incorporates:
+  /* Switch: '<S146>/Switch2' incorporates:
    *  Inport: '<Root>/BusVoltage_V'
-   *  RelationalOperator: '<S203>/LowerRelop1'
-   *  RelationalOperator: '<S203>/UpperRelop'
-   *  Switch: '<S203>/Switch'
-   *  UnaryMinus: '<S201>/Unary Minus'
+   *  RelationalOperator: '<S146>/LowerRelop1'
+   *  RelationalOperator: '<S146>/UpperRelop'
+   *  Switch: '<S146>/Switch'
+   *  UnaryMinus: '<S144>/Unary Minus'
    */
   if (rtb_VdFF_unsat > FOC_U.BusVoltage_V) {
     rtb_VdFF_unsat = FOC_U.BusVoltage_V;
   } else if (rtb_VdFF_unsat < -FOC_U.BusVoltage_V) {
-    /* Switch: '<S203>/Switch' incorporates:
-     *  UnaryMinus: '<S201>/Unary Minus'
+    /* Switch: '<S146>/Switch' incorporates:
+     *  UnaryMinus: '<S144>/Unary Minus'
      */
     rtb_VdFF_unsat = -FOC_U.BusVoltage_V;
   }
 
   /* Sum: '<S7>/Sum' incorporates:
-   *  Switch: '<S133>/Switch2'
-   *  Switch: '<S203>/Switch2'
+   *  Switch: '<S146>/Switch2'
+   *  Switch: '<S76>/Switch2'
    */
   FOC_Y.Vd = rtb_Diff + rtb_VdFF_unsat;
 
-  /* Product: '<S201>/prod2' incorporates:
-   *  Product: '<S201>/prod3'
-   *  Sum: '<S201>/add1'
+  /* Product: '<S144>/prod2' incorporates:
+   *  Product: '<S144>/prod3'
+   *  Sum: '<S144>/add1'
    */
-  rtb_Add3 = (FOC_ConstB.Switch * rtb_Add3 + FOC_ConstB.Switch2) * rtb_Subtract;
+  rtb_Subtract = (FOC_ConstB.Switch * rtb_Subtract + FOC_ConstB.Switch2) *
+    rtb_Integrator_d;
 
   /* Outputs for Atomic SubSystem: '<S9>/Two inputs CRL' */
   /* Sum: '<S7>/Sum2' incorporates:
@@ -558,51 +514,51 @@ void FOC_step(void)
 
   /* End of Outputs for SubSystem: '<S9>/Two inputs CRL' */
 
-  /* Product: '<S184>/NProd Out' incorporates:
-   *  DiscreteIntegrator: '<S176>/Filter'
+  /* Product: '<S127>/NProd Out' incorporates:
+   *  DiscreteIntegrator: '<S119>/Filter'
    *  Inport: '<Root>/Filter_torque_PID'
    *  Inport: '<Root>/Kd_torque_PID'
-   *  Product: '<S174>/DProd Out'
-   *  Sum: '<S176>/SumD'
+   *  Product: '<S117>/DProd Out'
+   *  Sum: '<S119>/SumD'
    */
-  rtb_Subtract = (rtb_Divide * FOC_U.Kd_torque_PID - FOC_DW.Filter_DSTATE_d) *
-    FOC_U.Filter_torque_PID;
+  rtb_Integrator_d = (rtb_Divide * FOC_U.Kd_torque_PID - FOC_DW.Filter_DSTATE_d)
+    * FOC_U.Filter_torque_PID;
 
-  /* Sum: '<S191>/Sum' incorporates:
-   *  DiscreteIntegrator: '<S181>/Integrator'
+  /* Sum: '<S134>/Sum' incorporates:
+   *  DiscreteIntegrator: '<S124>/Integrator'
    *  Inport: '<Root>/Kp_torque_PID'
-   *  Product: '<S186>/PProd Out'
+   *  Product: '<S129>/PProd Out'
    */
   rtb_VdFF_unsat = (rtb_Divide * FOC_U.Kp_torque_PID +
-                    FOC_DW.Integrator_DSTATE_h) + rtb_Subtract;
+                    FOC_DW.Integrator_DSTATE_h) + rtb_Integrator_d;
 
-  /* Switch: '<S204>/Switch2' incorporates:
+  /* Switch: '<S147>/Switch2' incorporates:
    *  Inport: '<Root>/BusVoltage_V'
-   *  RelationalOperator: '<S204>/LowerRelop1'
-   *  RelationalOperator: '<S204>/UpperRelop'
-   *  Switch: '<S204>/Switch'
-   *  UnaryMinus: '<S201>/Unary Minus'
+   *  RelationalOperator: '<S147>/LowerRelop1'
+   *  RelationalOperator: '<S147>/UpperRelop'
+   *  Switch: '<S147>/Switch'
+   *  UnaryMinus: '<S144>/Unary Minus'
    */
-  if (rtb_Add3 > FOC_U.BusVoltage_V) {
-    rtb_Add3 = FOC_U.BusVoltage_V;
-  } else if (rtb_Add3 < -FOC_U.BusVoltage_V) {
-    /* Switch: '<S204>/Switch' incorporates:
-     *  UnaryMinus: '<S201>/Unary Minus'
+  if (rtb_Subtract > FOC_U.BusVoltage_V) {
+    rtb_Subtract = FOC_U.BusVoltage_V;
+  } else if (rtb_Subtract < -FOC_U.BusVoltage_V) {
+    /* Switch: '<S147>/Switch' incorporates:
+     *  UnaryMinus: '<S144>/Unary Minus'
      */
-    rtb_Add3 = -FOC_U.BusVoltage_V;
+    rtb_Subtract = -FOC_U.BusVoltage_V;
   }
 
-  /* Switch: '<S189>/Switch2' incorporates:
+  /* Switch: '<S132>/Switch2' incorporates:
    *  Inport: '<Root>/Low_Limit_torque_PID'
    *  Inport: '<Root>/Up_Limit_torque_PID'
-   *  RelationalOperator: '<S189>/LowerRelop1'
-   *  RelationalOperator: '<S189>/UpperRelop'
-   *  Switch: '<S189>/Switch'
+   *  RelationalOperator: '<S132>/LowerRelop1'
+   *  RelationalOperator: '<S132>/UpperRelop'
+   *  Switch: '<S132>/Switch'
    */
   if (rtb_VdFF_unsat > FOC_U.Up_Limit_torque_PID) {
     rtb_Diff = FOC_U.Up_Limit_torque_PID;
   } else if (rtb_VdFF_unsat < FOC_U.Low_Limit_torque_PID) {
-    /* Switch: '<S189>/Switch' incorporates:
+    /* Switch: '<S132>/Switch' incorporates:
      *  Inport: '<Root>/Low_Limit_torque_PID'
      */
     rtb_Diff = FOC_U.Low_Limit_torque_PID;
@@ -611,10 +567,10 @@ void FOC_step(void)
   }
 
   /* Sum: '<S7>/Sum4' incorporates:
-   *  Switch: '<S189>/Switch2'
-   *  Switch: '<S204>/Switch2'
+   *  Switch: '<S132>/Switch2'
+   *  Switch: '<S147>/Switch2'
    */
-  FOC_Y.Vq = rtb_Add3 + rtb_Diff;
+  FOC_Y.Vq = rtb_Subtract + rtb_Diff;
 
   real_T Vq_ref_max = sqrtf((61.0f*61.0f) - (FOC_Y.Vd * FOC_Y.Vd));
 
@@ -640,16 +596,16 @@ void FOC_step(void)
    *  Product: '<S18>/qcos'
    *  Sum: '<S18>/sum_beta'
    */
-  rtb_Add3 = (FOC_Y.Vq * rtb_TrigonometricFunction1_tmp + FOC_Y.Vd * rtb_Add1) *
-    0.8660254037844386;
+  rtb_Subtract = (FOC_Y.Vq * rtb_TrigonometricFunction1_tmp + FOC_Y.Vd *
+                  rtb_Add1) * 0.8660254037844386;
 
   /* End of Outputs for SubSystem: '<S15>/Two inputs CRL' */
 
   /* Sum: '<S17>/add_b' */
-  rtb_Add1 = rtb_Add3 - rtb_add_c;
+  rtb_Add1 = rtb_Subtract - rtb_add_c;
 
   /* Sum: '<S17>/add_c' */
-  rtb_add_c = (0.0 - rtb_add_c) - rtb_Add3;
+  rtb_add_c = (0.0 - rtb_add_c) - rtb_Subtract;
 
   /* Outputs for Atomic SubSystem: '<S15>/Two inputs CRL' */
   /* Gain: '<S23>/one_by_two' incorporates:
@@ -685,8 +641,8 @@ void FOC_step(void)
   /* MinMax: '<S3>/Max' incorporates:
    *  Inport: '<Root>/Phase Current'
    */
-  rtb_Add3 = fmax(fmax(FOC_U.PhaseCurrent[0], FOC_U.PhaseCurrent[1]),
-                  FOC_U.PhaseCurrent[2]);
+  rtb_Subtract = fmax(fmax(FOC_U.PhaseCurrent[0], FOC_U.PhaseCurrent[1]),
+                      FOC_U.PhaseCurrent[2]);
 
   /* BusCreator generated from: '<S3>/Protection_States' */
   FOC_B.BusConversion_InsertedFor_Prote.MaxCurrentLimit_A =
@@ -834,8 +790,8 @@ void FOC_step(void)
      case FOC_IN_CurrentSafe:
       /* Outport: '<Root>/CurrentFlag' */
       FOC_Y.CurrentFlag = SafeCurrent;
-      if (!(rtb_Add3 > FOC_B.BusConversion_InsertedFor_Prote.OCWarningLimit_A))
-      {
+      if (!(rtb_Subtract >
+            FOC_B.BusConversion_InsertedFor_Prote.OCWarningLimit_A)) {
         FOC_DW.durationCounter_1_i = 0U;
       }
 
@@ -854,8 +810,8 @@ void FOC_step(void)
      case FOC_IN_OC_Error:
       /* Outport: '<Root>/CurrentFlag' */
       FOC_Y.CurrentFlag = OC_Error;
-      if (!(rtb_Add3 < FOC_B.BusConversion_InsertedFor_Prote.OCWarningLimit_A))
-      {
+      if (!(rtb_Subtract <
+            FOC_B.BusConversion_InsertedFor_Prote.OCWarningLimit_A)) {
         FOC_DW.durationCounter_1_a = 0U;
       }
 
@@ -869,8 +825,8 @@ void FOC_step(void)
         /* Outport: '<Root>/CurrentFlag' */
         FOC_Y.CurrentFlag = SafeCurrent;
       } else {
-        if (!(rtb_Add3 < FOC_B.BusConversion_InsertedFor_Prote.OCErrorLimit_A))
-        {
+        if (!(rtb_Subtract <
+              FOC_B.BusConversion_InsertedFor_Prote.OCErrorLimit_A)) {
           FOC_DW.durationCounter_2_b = 0U;
         }
 
@@ -889,7 +845,8 @@ void FOC_step(void)
       /* Outport: '<Root>/CurrentFlag' */
       /* case IN_OC_Warning: */
       FOC_Y.CurrentFlag = OC_Warning;
-      if (!(rtb_Add3 > FOC_B.BusConversion_InsertedFor_Prote.OCErrorLimit_A)) {
+      if (!(rtb_Subtract > FOC_B.BusConversion_InsertedFor_Prote.OCErrorLimit_A))
+      {
         FOC_DW.durationCounter_2_c = 0U;
       }
 
@@ -904,8 +861,8 @@ void FOC_step(void)
         /* Outport: '<Root>/CurrentFlag' */
         FOC_Y.CurrentFlag = OC_Error;
       } else {
-        if (!(rtb_Add3 < FOC_B.BusConversion_InsertedFor_Prote.OCWarningLimit_A))
-        {
+        if (!(rtb_Subtract <
+              FOC_B.BusConversion_InsertedFor_Prote.OCWarningLimit_A)) {
           FOC_DW.durationCounter_1_d = 0U;
         }
 
@@ -947,13 +904,13 @@ void FOC_step(void)
     FOC_DW.durationCounter_2_e = 0U;
   }
 
-  if (rtb_Add3 > FOC_B.BusConversion_InsertedFor_Prote.OCWarningLimit_A) {
+  if (rtb_Subtract > FOC_B.BusConversion_InsertedFor_Prote.OCWarningLimit_A) {
     FOC_DW.durationCounter_1_i++;
   } else {
     FOC_DW.durationCounter_1_i = 0U;
   }
 
-  if (rtb_Add3 < FOC_B.BusConversion_InsertedFor_Prote.OCWarningLimit_A) {
+  if (rtb_Subtract < FOC_B.BusConversion_InsertedFor_Prote.OCWarningLimit_A) {
     FOC_DW.durationCounter_1_a++;
     FOC_DW.durationCounter_1_d++;
   } else {
@@ -961,13 +918,13 @@ void FOC_step(void)
     FOC_DW.durationCounter_1_d = 0U;
   }
 
-  if (rtb_Add3 < FOC_B.BusConversion_InsertedFor_Prote.OCErrorLimit_A) {
+  if (rtb_Subtract < FOC_B.BusConversion_InsertedFor_Prote.OCErrorLimit_A) {
     FOC_DW.durationCounter_2_b++;
   } else {
     FOC_DW.durationCounter_2_b = 0U;
   }
 
-  if (rtb_Add3 > FOC_B.BusConversion_InsertedFor_Prote.OCErrorLimit_A) {
+  if (rtb_Subtract > FOC_B.BusConversion_InsertedFor_Prote.OCErrorLimit_A) {
     FOC_DW.durationCounter_2_c++;
   } else {
     FOC_DW.durationCounter_2_c = 0U;
@@ -1032,37 +989,37 @@ void FOC_step(void)
 
   /* End of Chart: '<S3>/Protection_States' */
 
-  /* Switch: '<S173>/Switch' incorporates:
+  /* Switch: '<S116>/Switch' incorporates:
    *  Inport: '<Root>/Low_Limit_torque_PID'
    *  Inport: '<Root>/Up_Limit_torque_PID'
-   *  RelationalOperator: '<S173>/u_GTE_up'
-   *  RelationalOperator: '<S173>/u_GT_lo'
-   *  Switch: '<S173>/Switch1'
+   *  RelationalOperator: '<S116>/u_GTE_up'
+   *  RelationalOperator: '<S116>/u_GT_lo'
+   *  Switch: '<S116>/Switch1'
    */
   if (rtb_VdFF_unsat >= FOC_U.Up_Limit_torque_PID) {
     rtb_Diff = FOC_U.Up_Limit_torque_PID;
   } else if (rtb_VdFF_unsat > FOC_U.Low_Limit_torque_PID) {
-    /* Switch: '<S173>/Switch1' */
+    /* Switch: '<S116>/Switch1' */
     rtb_Diff = rtb_VdFF_unsat;
   } else {
     rtb_Diff = FOC_U.Low_Limit_torque_PID;
   }
 
-  /* Sum: '<S173>/Diff' incorporates:
-   *  Switch: '<S173>/Switch'
+  /* Sum: '<S116>/Diff' incorporates:
+   *  Switch: '<S116>/Switch'
    */
   rtb_Diff = rtb_VdFF_unsat - rtb_Diff;
 
-  /* Product: '<S178>/IProd Out' incorporates:
+  /* Product: '<S121>/IProd Out' incorporates:
    *  Inport: '<Root>/Ki_torque_PID'
    */
   rtb_Divide *= FOC_U.Ki_torque_PID;
 
-  /* Switch: '<S170>/Switch1' incorporates:
-   *  Constant: '<S170>/Clamping_zero'
-   *  Constant: '<S170>/Constant'
-   *  Constant: '<S170>/Constant2'
-   *  RelationalOperator: '<S170>/fix for DT propagation issue'
+  /* Switch: '<S113>/Switch1' incorporates:
+   *  Constant: '<S113>/Clamping_zero'
+   *  Constant: '<S113>/Constant'
+   *  Constant: '<S113>/Constant2'
+   *  RelationalOperator: '<S113>/fix for DT propagation issue'
    */
   if (rtb_Diff > 0.0) {
     tmp = 1;
@@ -1070,11 +1027,11 @@ void FOC_step(void)
     tmp = -1;
   }
 
-  /* Switch: '<S170>/Switch2' incorporates:
-   *  Constant: '<S170>/Clamping_zero'
-   *  Constant: '<S170>/Constant3'
-   *  Constant: '<S170>/Constant4'
-   *  RelationalOperator: '<S170>/fix for DT propagation issue1'
+  /* Switch: '<S113>/Switch2' incorporates:
+   *  Constant: '<S113>/Clamping_zero'
+   *  Constant: '<S113>/Constant3'
+   *  Constant: '<S113>/Constant4'
+   *  RelationalOperator: '<S113>/fix for DT propagation issue1'
    */
   if (rtb_Divide > 0.0) {
     tmp_0 = 1;
@@ -1082,105 +1039,46 @@ void FOC_step(void)
     tmp_0 = -1;
   }
 
-  /* Logic: '<S170>/AND3' incorporates:
-   *  Constant: '<S170>/Clamping_zero'
-   *  RelationalOperator: '<S170>/Equal1'
-   *  RelationalOperator: '<S170>/Relational Operator'
-   *  Switch: '<S170>/Switch1'
-   *  Switch: '<S170>/Switch2'
+  /* Logic: '<S113>/AND3' incorporates:
+   *  Constant: '<S113>/Clamping_zero'
+   *  RelationalOperator: '<S113>/Equal1'
+   *  RelationalOperator: '<S113>/Relational Operator'
+   *  Switch: '<S113>/Switch1'
+   *  Switch: '<S113>/Switch2'
    */
   rtb_AND3 = ((rtb_Diff != 0.0) && (tmp == tmp_0));
 
-  /* Switch: '<S117>/Switch' incorporates:
+  /* Switch: '<S60>/Switch' incorporates:
    *  Inport: '<Root>/Low_Limit_flux_PID'
    *  Inport: '<Root>/Up_Limit_flux_PID'
-   *  RelationalOperator: '<S117>/u_GTE_up'
-   *  RelationalOperator: '<S117>/u_GT_lo'
-   *  Switch: '<S117>/Switch1'
+   *  RelationalOperator: '<S60>/u_GTE_up'
+   *  RelationalOperator: '<S60>/u_GT_lo'
+   *  Switch: '<S60>/Switch1'
    */
-  if (rtb_Sum_ep >= FOC_U.Up_Limit_flux_PID) {
+  if (rtb_Sum >= FOC_U.Up_Limit_flux_PID) {
     rtb_Diff = FOC_U.Up_Limit_flux_PID;
-  } else if (rtb_Sum_ep > FOC_U.Low_Limit_flux_PID) {
-    /* Switch: '<S117>/Switch1' */
-    rtb_Diff = rtb_Sum_ep;
+  } else if (rtb_Sum > FOC_U.Low_Limit_flux_PID) {
+    /* Switch: '<S60>/Switch1' */
+    rtb_Diff = rtb_Sum;
   } else {
     rtb_Diff = FOC_U.Low_Limit_flux_PID;
   }
 
-  /* Sum: '<S117>/Diff' incorporates:
-   *  Switch: '<S117>/Switch'
-   */
-  rtb_Diff = rtb_Sum_ep - rtb_Diff;
-
-  /* Product: '<S122>/IProd Out' incorporates:
-   *  Inport: '<Root>/Ki_flux_PID'
-   */
-  rtb_IProdOut_l *= FOC_U.Ki_flux_PID;
-
-  /* Switch: '<S114>/Switch1' incorporates:
-   *  Constant: '<S114>/Clamping_zero'
-   *  Constant: '<S114>/Constant'
-   *  Constant: '<S114>/Constant2'
-   *  RelationalOperator: '<S114>/fix for DT propagation issue'
-   */
-  if (rtb_Diff > 0.0) {
-    tmp = 1;
-  } else {
-    tmp = -1;
-  }
-
-  /* Switch: '<S114>/Switch2' incorporates:
-   *  Constant: '<S114>/Clamping_zero'
-   *  Constant: '<S114>/Constant3'
-   *  Constant: '<S114>/Constant4'
-   *  RelationalOperator: '<S114>/fix for DT propagation issue1'
-   */
-  if (rtb_IProdOut_l > 0.0) {
-    tmp_0 = 1;
-  } else {
-    tmp_0 = -1;
-  }
-
-  /* Logic: '<S114>/AND3' incorporates:
-   *  Constant: '<S114>/Clamping_zero'
-   *  RelationalOperator: '<S114>/Equal1'
-   *  RelationalOperator: '<S114>/Relational Operator'
-   *  Switch: '<S114>/Switch1'
-   *  Switch: '<S114>/Switch2'
-   */
-  rtb_AND3_g = ((rtb_Diff != 0.0) && (tmp == tmp_0));
-
-  /* Switch: '<S61>/Switch' incorporates:
-   *  Inport: '<Root>/Low_Limit_speed_PID'
-   *  Inport: '<Root>/Up_Limit_speed_PID'
-   *  RelationalOperator: '<S61>/u_GTE_up'
-   *  RelationalOperator: '<S61>/u_GT_lo'
-   *  Switch: '<S61>/Switch1'
-   */
-  if (rtb_Sum >= FOC_U.Up_Limit_speed_PID) {
-    rtb_Diff = FOC_U.Up_Limit_speed_PID;
-  } else if (rtb_Sum > FOC_U.Low_Limit_speed_PID) {
-    /* Switch: '<S61>/Switch1' */
-    rtb_Diff = rtb_Sum;
-  } else {
-    rtb_Diff = FOC_U.Low_Limit_speed_PID;
-  }
-
-  /* Sum: '<S61>/Diff' incorporates:
-   *  Switch: '<S61>/Switch'
+  /* Sum: '<S60>/Diff' incorporates:
+   *  Switch: '<S60>/Switch'
    */
   rtb_Diff = rtb_Sum - rtb_Diff;
 
-  /* Product: '<S66>/IProd Out' incorporates:
-   *  Inport: '<Root>/Ki_speed_PID'
+  /* Product: '<S65>/IProd Out' incorporates:
+   *  Inport: '<Root>/Ki_flux_PID'
    */
-  rtb_IProdOut *= FOC_U.Ki_speed_PID;
+  rtb_IProdOut *= FOC_U.Ki_flux_PID;
 
-  /* Switch: '<S58>/Switch1' incorporates:
-   *  Constant: '<S58>/Clamping_zero'
-   *  Constant: '<S58>/Constant'
-   *  Constant: '<S58>/Constant2'
-   *  RelationalOperator: '<S58>/fix for DT propagation issue'
+  /* Switch: '<S57>/Switch1' incorporates:
+   *  Constant: '<S57>/Clamping_zero'
+   *  Constant: '<S57>/Constant'
+   *  Constant: '<S57>/Constant2'
+   *  RelationalOperator: '<S57>/fix for DT propagation issue'
    */
   if (rtb_Diff > 0.0) {
     tmp = 1;
@@ -1188,11 +1086,11 @@ void FOC_step(void)
     tmp = -1;
   }
 
-  /* Switch: '<S58>/Switch2' incorporates:
-   *  Constant: '<S58>/Clamping_zero'
-   *  Constant: '<S58>/Constant3'
-   *  Constant: '<S58>/Constant4'
-   *  RelationalOperator: '<S58>/fix for DT propagation issue1'
+  /* Switch: '<S57>/Switch2' incorporates:
+   *  Constant: '<S57>/Clamping_zero'
+   *  Constant: '<S57>/Constant3'
+   *  Constant: '<S57>/Constant4'
+   *  RelationalOperator: '<S57>/fix for DT propagation issue1'
    */
   if (rtb_IProdOut > 0.0) {
     tmp_0 = 1;
@@ -1200,56 +1098,41 @@ void FOC_step(void)
     tmp_0 = -1;
   }
 
-  /* Switch: '<S58>/Switch' incorporates:
-   *  Constant: '<S58>/Clamping_zero'
-   *  Constant: '<S58>/Constant1'
-   *  Logic: '<S58>/AND3'
-   *  RelationalOperator: '<S58>/Equal1'
-   *  RelationalOperator: '<S58>/Relational Operator'
-   *  Switch: '<S58>/Switch1'
-   *  Switch: '<S58>/Switch2'
+  /* Switch: '<S57>/Switch' incorporates:
+   *  Constant: '<S57>/Clamping_zero'
+   *  Constant: '<S57>/Constant1'
+   *  Logic: '<S57>/AND3'
+   *  RelationalOperator: '<S57>/Equal1'
+   *  RelationalOperator: '<S57>/Relational Operator'
+   *  Switch: '<S57>/Switch1'
+   *  Switch: '<S57>/Switch2'
    */
   if ((rtb_Diff != 0.0) && (tmp == tmp_0)) {
     rtb_IProdOut = 0.0;
   }
 
-  /* Update for DiscreteIntegrator: '<S69>/Integrator' incorporates:
-   *  Switch: '<S58>/Switch'
+  /* Update for DiscreteIntegrator: '<S68>/Integrator' incorporates:
+   *  Switch: '<S57>/Switch'
    */
   FOC_DW.Integrator_DSTATE += 1.0E-5 * rtb_IProdOut;
 
-  /* Update for DiscreteIntegrator: '<S64>/Filter' */
+  /* Update for DiscreteIntegrator: '<S63>/Filter' */
   FOC_DW.Filter_DSTATE += 1.0E-5 * rtb_NProdOut;
 
-  /* Switch: '<S114>/Switch' incorporates:
-   *  Constant: '<S114>/Constant1'
-   */
-  if (rtb_AND3_g) {
-    rtb_IProdOut_l = 0.0;
-  }
-
-  /* Update for DiscreteIntegrator: '<S125>/Integrator' incorporates:
-   *  Switch: '<S114>/Switch'
-   */
-  FOC_DW.Integrator_DSTATE_p += 1.0E-5 * rtb_IProdOut_l;
-
-  /* Update for DiscreteIntegrator: '<S120>/Filter' */
-  FOC_DW.Filter_DSTATE_k += 1.0E-5 * rtb_NProdOut_b;
-
-  /* Switch: '<S170>/Switch' incorporates:
-   *  Constant: '<S170>/Constant1'
+  /* Switch: '<S113>/Switch' incorporates:
+   *  Constant: '<S113>/Constant1'
    */
   if (rtb_AND3) {
     rtb_Divide = 0.0;
   }
 
-  /* Update for DiscreteIntegrator: '<S181>/Integrator' incorporates:
-   *  Switch: '<S170>/Switch'
+  /* Update for DiscreteIntegrator: '<S124>/Integrator' incorporates:
+   *  Switch: '<S113>/Switch'
    */
   FOC_DW.Integrator_DSTATE_h += 1.0E-5 * rtb_Divide;
 
-  /* Update for DiscreteIntegrator: '<S176>/Filter' */
-  FOC_DW.Filter_DSTATE_d += 1.0E-5 * rtb_Subtract;
+  /* Update for DiscreteIntegrator: '<S119>/Filter' */
+  FOC_DW.Filter_DSTATE_d += 1.0E-5 * rtb_Integrator_d;
 }
 
 /* Model initialize function */
@@ -1274,22 +1157,16 @@ void FOC_initialize(void)
   /* external outputs */
   (void)memset(&FOC_Y, 0, sizeof(ExtY_FOC_T));
 
-  /* InitializeConditions for DiscreteIntegrator: '<S69>/Integrator' */
+  /* InitializeConditions for DiscreteIntegrator: '<S68>/Integrator' */
   FOC_DW.Integrator_DSTATE = 0.0;
 
-  /* InitializeConditions for DiscreteIntegrator: '<S64>/Filter' */
+  /* InitializeConditions for DiscreteIntegrator: '<S63>/Filter' */
   FOC_DW.Filter_DSTATE = 0.0;
 
-  /* InitializeConditions for DiscreteIntegrator: '<S125>/Integrator' */
-  FOC_DW.Integrator_DSTATE_p = 0.0;
-
-  /* InitializeConditions for DiscreteIntegrator: '<S120>/Filter' */
-  FOC_DW.Filter_DSTATE_k = 0.0;
-
-  /* InitializeConditions for DiscreteIntegrator: '<S181>/Integrator' */
+  /* InitializeConditions for DiscreteIntegrator: '<S124>/Integrator' */
   FOC_DW.Integrator_DSTATE_h = 0.0;
 
-  /* InitializeConditions for DiscreteIntegrator: '<S176>/Filter' */
+  /* InitializeConditions for DiscreteIntegrator: '<S119>/Filter' */
   FOC_DW.Filter_DSTATE_d = 0.0;
 
   /* SystemInitialize for Outport: '<Root>/CurrentFlag' incorporates:
@@ -1318,19 +1195,30 @@ void FOC_initialize(void)
   FOC_U.Lamda = 0.0263;
   FOC_U.Rs = 0.0107;
   FOC_U.p = POLEPAIRS;
+  FOC_U.Torque_ratio = 4.375;
 
   FOC_U.Id_up_limit = 0.0f;
-  FOC_U.Id_low_limit = -20.0f;
-  FOC_U.Iq_up_limit = 550.0f;
+  FOC_U.Id_low_limit = 0.0f;
+  FOC_U.Iq_up_limit = 360.0f;
   FOC_U.Iq_low_limit = 0.0f;
 
-  FOC_U.Kp_speed_PID = 5;
-  FOC_U.Ki_speed_PID = 20;
-  FOC_U.Kd_speed_PID = 0.01;
-  FOC_U.Filter_speed_PID = 2.0;
-  FOC_U.Up_Limit_speed_PID = 550.0;
-  FOC_U.Low_Limit_speed_PID = 0.0;
+  #if PEG4W
+  FOC_U.Kp_flux_PID = 0.12;
+  FOC_U.Ki_flux_PID = 16.0;
+  FOC_U.Kd_flux_PID = 0.001;
+  FOC_U.Filter_flux_PID = 2.0;
+  FOC_U.Up_Limit_flux_PID = 61.0;
+  FOC_U.Low_Limit_flux_PID = -61.0;
 
+  FOC_U.Kp_torque_PID = 0.12;
+  FOC_U.Ki_torque_PID = 8.0;
+  FOC_U.Kd_torque_PID = 0.001;
+  FOC_U.Filter_torque_PID = 2.0;
+  FOC_U.Up_Limit_torque_PID = 61.0;
+  FOC_U.Low_Limit_torque_PID = -61.0;
+  #endif
+
+  #if PEG3W
   FOC_U.Kp_flux_PID = 0.8;
   FOC_U.Ki_flux_PID = 30.0;
   FOC_U.Kd_flux_PID = 0.01;
@@ -1344,6 +1232,7 @@ void FOC_initialize(void)
   FOC_U.Filter_torque_PID = 2.0;
   FOC_U.Up_Limit_torque_PID = 61.0;
   FOC_U.Low_Limit_torque_PID = -61.0;
+  #endif
 
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
 }

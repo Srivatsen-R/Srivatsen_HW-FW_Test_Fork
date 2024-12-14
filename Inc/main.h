@@ -42,6 +42,9 @@ void send_on_6F0(uint8_t* UIID_Arr);
 void send_on_6F1(uint8_t* UIID_Arr);
 void send_on_6F2(uint8_t* UIID_Arr);
 void Current_Sensor_offset_cal(void);
+void CAN_Transmit_routine(void);
+void Throttle_Control_routine(void);
+void Get_and_Send_UIID(void);
 
 /* Private defines -----------------------------------------------------------*/
 #define Ibus_U_Pin                GPIO_PIN_0

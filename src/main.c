@@ -183,18 +183,14 @@ int main(void) {
      Error_Handler();
   }
 
-  HAL_Delay(5000);
+  HAL_Delay(1000);
 
   bootup_config();
 
   //enabling motor control interrupts , ABZ+PWM sensing interrpts.
   ENABLE_PERIPHERALS();
 
-  get_UIID();
-
-  send_on_6F0(UIID_Array);
-  send_on_6F1(UIID_Array);
-  send_on_6F2(UIID_Array);
+  Get_and_Send_UIID();
 
   // Pegasus_MBD_initialize();
   FOC_initialize();
@@ -204,90 +200,12 @@ int main(void) {
   //while loop running on CLK frequency.
   while (1) 
   {
-    uint32_t time_count = HAL_GetTick();
-    static uint32_t prev_time = 0;
-    static uint32_t prev_time_700x = 0;
-    static uint32_t prev_thr_time = 0;
+    CAN_Transmit_routine();
 
     ANALOG_READING();
     FAULT_DETECTION();
 
-    reverse_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_2);
-    forward_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
-
-    #if DEBUG_EN
-    if (time_count - prev_time >= 100)
-    {
-      send_on_300();
-      send_on_301();
-      send_on_302();
-      send_on_303();
-      send_on_304();
-      send_on_305();
-
-      prev_time = time_count;
-    }
-    #endif
-
-    #if DEBUG_OFF
-    if (time_count - prev_time_700x >= 500)
-    {
-      send_on_705();
-      send_on_706();
-      send_on_710();
-      send_on_715();
-      send_on_716();
-      send_on_717();
-      send_on_724();
-      send_on_726();
-      send_on_7A0();
-
-      prev_time_700x = time_count;
-    }
-    #endif
-
-    #if THROTTLE_CNTRL
-    speed_ref_temp = Throttle_Control(Rpm_Target_Function(moving_Throttle_measured_fun(Read_Throttle(analog.bufferData[THROTTLE]), 1.0)) * SPEED_PU_TO_RPM, speed_ref_temp);
-    FOC_U.RefSpeed = speed_ref_temp * 0.1047;
-
-    if (FOC_U.RefSpeed <= 0.0)
-    {
-      FOC_U.RefSpeed = 0.0;
-    }
-
-    #endif
-
-    #if RAMP_CNTRL
-    if (time_count - prev_thr_time >= 1)
-    {
-      if (FOC_U.RefSpeed < (1000.0 * 0.1047))
-        FOC_U.RefSpeed += 1.0;
-
-      if (FOC_U.RefSpeed > (1000.0 * 0.1047))
-        FOC_U.RefSpeed = (1000.0 * 0.1047);
-
-      if (FOC_U.RefSpeed < 0.0)
-        FOC_U.RefSpeed = 0.0;
-
-      prev_thr_time = time_count;
-    }
-
-    // if (torque_calc >= 45 && torque_calc < 50)
-    // {
-    //   FOC_U.Id_up_limit = 0.0f;
-    //   FOC_U.Id_low_limit = 0.0f;
-    // }
-    // else if (torque_calc >= 50)
-    // {
-    //   FOC_U.Id_up_limit = 15.0f;
-    //   FOC_U.Id_low_limit = 0.0f;
-    // }
-    // else
-    // {
-    //   FOC_U.Id_up_limit = 0.0f;
-    //   FOC_U.Id_low_limit = -25.0f;
-    // }
-    #endif
+    Throttle_Control_routine();
   }
 }
 
@@ -314,7 +232,9 @@ void send_on_300()
   can_data[0] = (uint8_t)(FOC_Y.Va + 60.0);
   can_data[1] = (uint8_t)(FOC_Y.Vb + 60.0);
   can_data[2] = (uint8_t)(FOC_Y.Vc + 60.0);
-  can_data[3] = 0;
+  if (forward_set && !reverse_set){can_data[3] = 0x02;}
+  else if (reverse_set && !forward_set){can_data[3] = 0x04;}
+  else if (forward_set && reverse_set){can_data[3] = 0x01;}
   can_data[4] = (uint8_t)((uint16_t)(FOC_Y.Vq + 10000.0) & 0x00FF);
   can_data[5] = (uint8_t)(((uint16_t)(FOC_Y.Vq + 10000.0) & 0xFF00) >> 8);
   can_data[6] = (uint8_t)((uint16_t)(FOC_Y.Vd + 10000.0) & 0x00FF);
@@ -353,8 +273,8 @@ void send_on_302()
   can_data[0] = (uint8_t)((uint16_t)((can_log_rh)) & 0x00FF);
   can_data[1] = (uint8_t)(((uint16_t)((can_log_rh)) & 0xFF00) >> 8);
 
-  can_data[2] = (uint8_t)((uint16_t)(FOC_U.RefSpeed / 0.1047) & 0x00FF);
-  can_data[3] = (uint8_t)(((uint16_t)(FOC_U.RefSpeed / 0.1047) & 0xFF00) >> 8);
+  can_data[2] = (uint8_t)((uint16_t)(FOC_U.RefSpeed) & 0x00FF);
+  can_data[3] = (uint8_t)(((uint16_t)(FOC_U.RefSpeed) & 0xFF00) >> 8);
 
   if (forward_set && !reverse_set)
   {
@@ -621,6 +541,123 @@ void Current_Sensor_offset_cal(void)
 
   offset_cal_w = (uint16_t)(offset_w / 5.0f);
   offset_cal_v = (uint16_t)(offset_v / 5.0f);
+}
+
+void Throttle_Control_routine()
+{
+  #if PEG4W
+  reverse_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_3);
+  #endif
+  #if PEG3W
+  reverse_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_2);
+  #endif
+  forward_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
+
+  #if THROTTLE_CNTRL
+  speed_ref_temp = Throttle_Control(Rpm_Target_Function(moving_Throttle_measured_fun(Read_Throttle(analog.bufferData[THROTTLE]), 1.0)) * SPEED_PU_TO_RPM, speed_ref_temp);
+  FOC_U.RefSpeed = speed_ref_temp;
+
+  if (FOC_U.RefSpeed <= 0.0)
+  {
+    FOC_U.RefSpeed = 0.0;
+  }
+
+  if (forward_set && !reverse_set){FOC_U.Id_up_limit = 0.0f; FOC_U.Id_low_limit = 0.0f;}
+  else if (reverse_set && !forward_set){FOC_U.Id_up_limit = 0.0f; FOC_U.Id_low_limit = 0.0f;}
+  else if (forward_set && reverse_set){FOC_U.Id_up_limit = 0.0f; FOC_U.Id_low_limit = 0.0f;}
+
+  FOC_U.Up_Limit_flux_PID = 0.4 * FOC_U.RefSpeed + 1.5f;
+  FOC_U.Low_Limit_flux_PID = -(0.4 * FOC_U.RefSpeed) - 1.5f;
+  FOC_U.Up_Limit_torque_PID = 0.4 * FOC_U.RefSpeed + 1.5f;
+  FOC_U.Low_Limit_torque_PID = -(0.4 * FOC_U.RefSpeed) - 1.5f;
+
+  if (FOC_U.Up_Limit_flux_PID >= 61.0f){FOC_U.Up_Limit_flux_PID = 61.0f;}
+  else if (FOC_U.Low_Limit_flux_PID <= -61.0f){FOC_U.Low_Limit_flux_PID = -61.0f;}
+
+  if (FOC_U.Up_Limit_torque_PID >= 61.0f){FOC_U.Up_Limit_torque_PID = 61.0f;}
+  else if (FOC_U.Low_Limit_torque_PID <= -61.0f){FOC_U.Low_Limit_torque_PID = -61.0f;}
+
+  #endif
+
+  #if RAMP_CNTRL
+  if (time_count - prev_thr_time >= 1)
+  {
+    if (FOC_U.RefSpeed < (1000.0 * 0.1047))
+      FOC_U.RefSpeed += 1.0;
+
+    if (FOC_U.RefSpeed > (1000.0 * 0.1047))
+      FOC_U.RefSpeed = (1000.0 * 0.1047);
+
+    if (FOC_U.RefSpeed < 0.0)
+      FOC_U.RefSpeed = 0.0;
+
+    prev_thr_time = time_count;
+  }
+
+  // if (torque_calc >= 45 && torque_calc < 50)
+  // {
+  //   FOC_U.Id_up_limit = 0.0f;
+  //   FOC_U.Id_low_limit = 0.0f;
+  // }
+  // else if (torque_calc >= 50)
+  // {
+  //   FOC_U.Id_up_limit = 15.0f;
+  //   FOC_U.Id_low_limit = 0.0f;
+  // }
+  // else
+  // {
+  //   FOC_U.Id_up_limit = 0.0f;
+  //   FOC_U.Id_low_limit = -25.0f;
+  // }
+  #endif
+}
+
+void Get_and_Send_UIID()
+{
+  get_UIID();
+
+  send_on_6F0(UIID_Array);
+  send_on_6F1(UIID_Array);
+  send_on_6F2(UIID_Array);
+}
+
+void CAN_Transmit_routine()
+{
+  uint32_t time_count = HAL_GetTick();
+  static uint32_t prev_time = 0;
+  static uint32_t prev_time_700x = 0;
+  static uint32_t prev_thr_time = 0;
+
+  #if DEBUG_EN
+  if (time_count - prev_time >= 100)
+  {
+    send_on_300();
+    send_on_301();
+    send_on_302();
+    send_on_303();
+    send_on_304();
+    send_on_305();
+
+    prev_time = time_count;
+  }
+  #endif
+
+  #if DEBUG_OFF
+  if (time_count - prev_time_700x >= 500)
+  {
+    send_on_705();
+    send_on_706();
+    send_on_710();
+    send_on_715();
+    send_on_716();
+    send_on_717();
+    send_on_724();
+    send_on_726();
+    send_on_7A0();
+
+    prev_time_700x = time_count;
+  }
+  #endif
 }
 
 /* USER CODE BEGIN 4 */
