@@ -9,16 +9,13 @@ This file contains functions associated with sanity checks for vehicle.
 
 #include <stdlib.h>
 #include <math.h>
-#include "math_func.h"
 #include "vehicle.h"
 #include "motor_param.h"
 #include "vector_control.h"
 #include "sanity.h"
 #include "adc_AL.h"
 #include "dr_devices.h"
-#include "Pegasus_MBD.h"
 #include "FOC.h"
-#include "rtwtypes.h"
 
 #define FDCAN_ERROR_BIT (0x4000A400 + 0x0044)
 
@@ -36,7 +33,7 @@ sanity_t fault = {
         .throttleStarting = 0,
         .status           = 0,
         .generic          = 0,
-        .fault_code       = 0x00000000,
+        .fault_code       = 0,
         .run_sanity = RUN_SANITY
 };
 
@@ -55,36 +52,18 @@ motorControl_t motorControl = {
 };
 
 extern adc_t          analog;
-extern ExtU           rtU;
 extern ExtU_FOC_T     FOC_U;
-extern FOC_Flag_T     FOC_F_T;
 extern ExtY_FOC_T     FOC_Y;
+extern FOC_Flag_T     FOC_F_T;
 extern terminal_t     terminal;
 extern motorControl_t mControl;
 
-__IO float dc_current = 0.0; 
-extern __IO float speed_filtered;
 float busVoltage=0;
 float avg_board_temp=0;
 float v_rms=0;
 float torque_calc = 0.0f;
 float irms_calc = 0.0f;
 
-extern float encoder_a_state;
-extern float encoder_b_state;
-extern float Duty;
-extern int counter_current_ms;
-extern int counter_encoder_ms;
-extern int counter_abnormal_run;
-extern float throttle_adc_voltage;
-
-extern int reverse_pin_state;
-extern int forward_pin_state;
-
-extern float freq_rpm;
-extern float throttle_percent;
-
-extern int count_duty;
 extern uint8_t forward_set;
 extern uint8_t reverse_set;
 

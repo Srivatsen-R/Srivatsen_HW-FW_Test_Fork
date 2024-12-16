@@ -1,13 +1,11 @@
 #include "foc_mtpa_lut.h"
 
-
 mtpa_lut mtpa = {
-               .rpm_index=0,
-               .torque_index=0,
-               .speed=0,
-               .torque=0
-                };
-
+    .rpm_index=0,
+    .torque_index=0,
+    .speed=0,
+    .torque=0
+};
 
 const int mtpa_lut_id[16][6] = 
 {-5.3,	-5.3,	  -5.6,	    -5.3,	     -5.3,	  -5,
@@ -27,8 +25,6 @@ const int mtpa_lut_id[16][6] =
 -198.7,	-201.48,  -201.54,	 0,	        0,	       0,
 0,     0,          0,        0,         0,         0};
 
-
-
 const int mtpa_lut_iq[16][6] = 
 {34.18,	34.18,	33.2,	32.1,	31.9,	30.6,
 57.6,	56.9,	57.1,	57.2,	56.5,	54.9,
@@ -47,11 +43,8 @@ const int mtpa_lut_iq[16][6] =
 281.77,	284.96,	285.04,	0,	    0,	    0,
 0,	    0,	    0,	    0,	    0,	    0};
 
-
-
 //0 to 15 , 5 to 80nm
 //0 to 6  , 500 to 3000rpm
-
 
 int TORQUE_INDEX_CALCULATE(int torque )
 {
@@ -75,7 +68,6 @@ else if(torque>=80 && torque<85){mtpa.torque_index=15;}
 
 return mtpa.torque_index;
 }
-
 
 int RPM_INDEX_CALCULATE(int rpm)
 {

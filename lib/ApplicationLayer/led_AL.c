@@ -9,7 +9,6 @@ This file contains functions associated with GPIO read/write.
 
 #include "led_AL.h"
 
-
 gpio_t io = {
             .fnr.neutral = true,
             .fnr.forward = false,
@@ -25,22 +24,22 @@ led_t led = {
 };
 
 void run_disco(void) {
-               writeColor(BLACK);
-               HAL_Delay(500);
-               writeColor(GREEN);
-               HAL_Delay(500);
-               writeColor(BLUE);
-               HAL_Delay(500);
-               writeColor(RED);
-               HAL_Delay(500);
-               writeColor(CYAN);
-               HAL_Delay(500);
-               writeColor(PURPLE); 
-               HAL_Delay(500);
-               writeColor(YELLOW);
-               HAL_Delay(500);
-               writeColor(WHITE);
-               HAL_Delay(500);
+     writeColor(BLACK);
+     HAL_Delay(500);
+     writeColor(GREEN);
+     HAL_Delay(500);
+     writeColor(BLUE);
+     HAL_Delay(500);
+     writeColor(RED);
+     HAL_Delay(500);
+     writeColor(CYAN);
+     HAL_Delay(500);
+     writeColor(PURPLE); 
+     HAL_Delay(500);
+     writeColor(YELLOW);
+     HAL_Delay(500);
+     writeColor(WHITE);
+     HAL_Delay(500);
 }
 
 void writeColor(uint16_t color) {

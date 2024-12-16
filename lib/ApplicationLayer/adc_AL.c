@@ -7,8 +7,6 @@ This file contains functions associated with ADC.
 
 */
 
-
-
 #include "adc_AL.h"
 
 adc_t analog = {

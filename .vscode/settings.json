@@ -40,7 +40,9 @@
         "microcontroller.h": "c",
         "rtwtypes.h": "c",
         "foc_private.h": "c",
-        "rt_logging.h": "c"
+        "rt_logging.h": "c",
+        "dr_devices.h": "c",
+        "structures.h": "c"
     },
     "cortex-debug.variableUseNaturalFormat": true
 }

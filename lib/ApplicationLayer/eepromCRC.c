@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "eepromCRC.h"
 
 uint32_t calculateFlashCRC(volatile uint64_t *data, uint16_t size)

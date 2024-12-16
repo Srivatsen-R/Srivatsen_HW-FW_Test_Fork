@@ -8,41 +8,28 @@ This file contains functions associated with Vector FOC Control for motor contro
 */
 
 #include <math.h>
-#include "math_func.h"
 #include "foc_blockset.h"
 #include "vector_control.h"
 #include "structures.h"
 #include "tim.h"
 #include "sanity.h"
-#include "foc_mtpa_lut.h"
 #include "motor_param.h"
 
-
-extern mtpa_lut mtpa;
-extern terminal_t terminal;
-extern foc_t foc;
-extern motorControl_t motorControl;
-
-extern int forward_flag;
-extern int reverse_flag;
-extern int neutral_flag;
-
 //Calculate rotor speed from position.
-float READ_SPEED(float angle) {
+float READ_SPEED(float angle) 
+{
+    static float sine_rotor ,sine_rotor_prev;
+    static float derivative_sine_rotor;
+    static float cosine_rotor,cosine_rotor_prev;
+    static float derivative_cosine_rotor;
 
-        static float sine_rotor ,sine_rotor_prev;
-        static float derivative_sine_rotor;
-        static float cosine_rotor,cosine_rotor_prev;
-        static float derivative_cosine_rotor;
-
-        sine_rotor = sin(angle);
-        derivative_sine_rotor = DERIVATIVE_CONSTANT*(sine_rotor-sine_rotor_prev);
-        cosine_rotor = cos(angle);
-        derivative_cosine_rotor = DERIVATIVE_CONSTANT*(cosine_rotor-cosine_rotor_prev);
-        sine_rotor_prev = sine_rotor;
-        cosine_rotor_prev = cosine_rotor;
-        return ((cosine_rotor*derivative_sine_rotor)-(sine_rotor*derivative_cosine_rotor));
-
+    sine_rotor = sin(angle);
+    derivative_sine_rotor = DERIVATIVE_CONSTANT*(sine_rotor-sine_rotor_prev);
+    cosine_rotor = cos(angle);
+    derivative_cosine_rotor = DERIVATIVE_CONSTANT*(cosine_rotor-cosine_rotor_prev);
+    sine_rotor_prev = sine_rotor;
+    cosine_rotor_prev = cosine_rotor;
+    return ((cosine_rotor*derivative_sine_rotor)-(sine_rotor*derivative_cosine_rotor));
 }
 
 //Read rotor position from Encoder pulses.
@@ -65,178 +52,7 @@ float CALCULATE_SLIP_SPEED(float iq_sen,float imr_ref)
     return slip ;        
 }
 
-
-//Torque PI Control
-float TORQUE_PI_LOOP(float iq_ref,float iq_sen)
-{
-    foc.limMaxVq = VQ_LIMIT;
-    foc.limMinVq = -VQ_LIMIT;
-    float error = 0.0f;
-    float proportional = 0.0f;
-    float output = 0.0f;
-    static float integration = 0.0f;
-    static float error_prev = 0.0f;
-
-    terminal.iq.ref = iq_ref * IQ_PU_TO_A;
-
-    error = iq_ref - iq_sen;
-
-    proportional = KP_IQ * error;
-
-    integration = integration + KI_IQ * T_S * 0.5f * (error + error_prev);
-
-    float intlimMax = 0.0f, intlimMin = 0.0f;
-
-    if (foc.limMaxVq > proportional)
-    {
-        intlimMax = foc.limMaxVq - proportional;
-    }
-    else
-    {
-        intlimMax = 0.0f;
-    }
-
-    if (foc.limMinVq < proportional)
-    {
-        intlimMin = foc.limMinVq - proportional;
-    }
-    else
-    {
-        intlimMin = 0.0f;
-    }
-
-    if (integration > intlimMax)
-    {
-        integration = intlimMax;
-    }
-    else if (integration < intlimMin)
-    {
-        integration = intlimMin;
-    }
-
-    error_prev = error;
-
-    output = integration + proportional;
-
-    if (output > foc.limMaxVq)
-    {
-        output = foc.limMaxVq;
-    }
-    else if (output < foc.limMinVq)
-    {
-        output = foc.limMinVq;
-    }
-
-    return output; 
-}
-
-//PI LOOP 2
-float TORQUE_PI_LOOP_2(float ac_max, float ac_input  , float torque_input , float vq_prev )
-    {
-        float ac_error;
-        static float ac_intg;
-
-        ac_error = ((ac_max) - (ac_input));   
-        if((ac_error < (400.0)) && (ac_error > (-400.0))){ac_intg = (0.0) ;}
-
-        if(forward_flag)
-        {
-            if(ac_error >= (0.0)) // current less than max current
-            {
-            ac_intg += (ac_error *(KI_AC_CURRENT));             
-            ac_error = ((KP_AC_CURRENT_UP) *ac_error);
-            }
-            else // current more than max  current.
-            {
-            ac_intg += (ac_error *(KI_AC_CURRENT));
-            ac_error = ((KP_AC_CURRENT_DOWN)*ac_error);
-            }
-        }
-
-        if(reverse_flag)
-        {
-            if(ac_error <= (0.0)) // current less than max current
-            {
-            ac_intg += (ac_error *(KI_AC_CURRENT));             
-            ac_error = ((KP_AC_CURRENT_UP) *ac_error);
-            }
-            else // current more than max  current.
-            {
-            ac_intg += (ac_error *(KI_AC_CURRENT));
-            ac_error = ((KP_AC_CURRENT_DOWN)*ac_error);
-            }
-        }
-
-        if(neutral_flag)
-        {
-            if(motorControl.drive.fnr_status==1)
-            {
-                if(ac_error >= (0.0)) // current less than max current
-                {
-                ac_intg += (ac_error *(KI_AC_CURRENT));             
-                ac_error = ((KP_AC_CURRENT_UP) *ac_error);
-                }
-                else // current more than max  current.
-                {
-                ac_intg += (ac_error *(KI_AC_CURRENT));
-                ac_error = ((KP_AC_CURRENT_DOWN)*ac_error);
-                }
-            }
-
-            if(motorControl.drive.fnr_status==2)
-            {
-                if(ac_error <= (0.0)) // current less than max current
-                {
-                ac_intg += (ac_error *(KI_AC_CURRENT));             
-                ac_error = ((KP_AC_CURRENT_UP) *ac_error);
-                }
-                else // current more than max  current.
-                {
-                ac_intg += (ac_error *(KI_AC_CURRENT));
-                ac_error = ((KP_AC_CURRENT_DOWN)*ac_error);
-                }
-            }
-        }
-
-        ac_intg = (ac_intg >=(868.0))?(868.0):ac_intg;
-        ac_intg = (ac_intg <=(-868.0))?(-868.0):ac_intg;
-
-        ac_error += ac_intg;       
-        ac_error += vq_prev ;
-
-        if(forward_flag)
-        {
-            if(ac_error >= torque_input) ac_error = torque_input ;
-            if(ac_error <= 0) ac_error = 0 ;
-        }
-
-        if(reverse_flag)
-        {
-            if(ac_error <= torque_input) ac_error = torque_input ;
-            if(ac_error > 0) ac_error = 0 ;
-        }
-
-        if(neutral_flag)
-        {
-            if(motorControl.drive.fnr_status==1)
-            {
-                if(ac_error >= torque_input) ac_error = torque_input ;
-                if(ac_error <= 0) ac_error = 0 ;
-            }
-
-            if(motorControl.drive.fnr_status==2)
-            {
-                if(ac_error <= torque_input) ac_error = torque_input ;
-                if(ac_error > 0) ac_error = 0 ;
-            }
-        }
-
-        return ac_error ;
-    }
-
 // PI LOOP 2 END
-
-
 //Synchronous Speed Routine
 float CALCULATE_SYNC_SPEED(float slip , float rotor_speed) {
     return (slip+(POLEPAIRS*(rotor_speed*628.0)));
@@ -245,142 +61,6 @@ float CALCULATE_SYNC_SPEED(float slip , float rotor_speed) {
 //Electrical angle calculation
 float  READ_ROTOR_ANGLE(float rho_prev,float w_s,float w_s_prev) {
     return (rho_prev+((0.5*T_S)*(w_s+w_s_prev)));
-}
-
-//Speed PI Control
-float SPEED_PI_LOOP(float w_ref,float w_sen,float phase_current_limit ) {
-      
-static float error;
-static float gain;
-static float intg;
-static float intg_prev;
-static float error_prev;  
-float out;
-float u;
-float excess;
-
-error = w_ref - w_sen;
-terminal.w.err = error;
-gain = KP_W*error;
-terminal.w.gain = gain;
-
-u = gain +intg;
-
-if(u<=0.0){u=0.0;}
-if(u>phase_current_limit){out = phase_current_limit;}
-else if(u<=0.0){out=0.0;}
-else{out = u;}
-
-excess = u - out;
-intg = intg_prev + ((SPEED_INTG_CONST)*(error+error_prev))- (KC_W*excess);
-terminal.w.intg = intg;
-intg_prev=intg;
-error_prev=error;
-
-return out;
-
-}
-
-
-//Magnetizing Current PI Loop
-float  MAGNETISING_PI_LOOP(float imr_ref,float imr_sen) {
-
-    static float error;
-    static float gain;
-    static float intg;
-    static float intg_prev;
-    static float error_prev;  
-    float  out;
-
-    error = imr_ref - imr_sen;
-
-    terminal.imr.err = error;
-
-    gain = KP_IMR*error;
-    gain = (gain>MAGNETISING_CURRENT_REF)?MAGNETISING_CURRENT_REF:gain;
-    gain = (gain<-MAGNETISING_CURRENT_REF)?-MAGNETISING_CURRENT_REF:gain;	
-
-    terminal.imr.gain = gain;
-
-    intg = intg_prev + ((IMR_INTG_CONST)*(error+error_prev));
-    intg = (intg>MAGNETISING_CURRENT_REF)?MAGNETISING_CURRENT_REF:intg;
-    intg = (intg<-MAGNETISING_CURRENT_REF)?-MAGNETISING_CURRENT_REF:intg;
-
-    terminal.imr.intg = intg;
-
-    out = gain +intg;
-    out = (out>MAGNETISING_CURRENT_REF)?MAGNETISING_CURRENT_REF:out;
-    out = (out<-MAGNETISING_CURRENT_REF)?-MAGNETISING_CURRENT_REF:out;
-
-
-    intg_prev = intg;
-    error_prev = error;
-
-    return out; 
-}
-
-//Flux Control PI Loop
-float FLUX_PI_LOOP(float id_ref,float id_sen)
-{
-    foc.limMaxVd = VD_LIMIT;
-    foc.limMinVd = -VD_LIMIT;
-    float error = 0.0f;
-    float proportional = 0.0f;
-    float output = 0.0f;
-    static float integration = 0.0f;
-    static float error_prev = 0.0f;
-
-    terminal.id.ref = id_ref * ID_PU_TO_A;
-
-    error = id_ref - id_sen;
-
-    proportional = KP_IQ * error;
-
-    integration = integration + KI_IQ * T_S * 0.5f * (error + error_prev);
-
-    float intlimMax = 0.0f, intlimMin = 0.0f;
-
-    if (foc.limMaxVd > proportional)
-    {
-        intlimMax = foc.limMaxVd - proportional;
-    }
-    else
-    {
-        intlimMax = 0.0f;
-    }
-
-    if (foc.limMinVd < proportional)
-    {
-        intlimMin = foc.limMinVd - proportional;
-    }
-    else
-    {
-        intlimMin = 0.0f;
-    }
-
-    if (integration > intlimMax)
-    {
-        integration = intlimMax;
-    }
-    else if (integration < intlimMin)
-    {
-        integration = intlimMin;
-    }
-
-    error_prev = error;
-
-    output = integration + proportional;
-
-    if (output > foc.limMaxVd)
-    {
-        output = foc.limMaxVd;
-    }
-    else if (output < foc.limMinVd)
-    {
-        output = foc.limMinVd;
-    }
-
-    return output;
 }
 
 void SPWM(int p_a ,int p_b , int p_c) 
@@ -398,45 +78,12 @@ void SPWM(int p_a ,int p_b , int p_c)
     HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
 }
 
-void SVPWM_MODE_DRIVE_FUNCTION(int A_Duty_Svpwm_iq15 , int B_Duty_Svpwm_iq15  , int C_Duty_Svpwm_iq15 ) {
-
-//     int MAX_Duty_Svpwm_iq15 , MIN_Duty_Svpwm_iq15 , OFF_Duty_Spwm_iq15;
-//     int A_Duty_Svpwm_Temp_iq15 , B_Duty_Svpwm_Temp_iq15 ,  C_Duty_Svpwm_Temp_iq15 ;
-
-//      //*******   MAX Value CAlculate ********//
-//     if(A_Duty_Svpwm_iq15 > B_Duty_Svpwm_iq15) MAX_Duty_Svpwm_iq15 = A_Duty_Svpwm_iq15 ;
-//     else MAX_Duty_Svpwm_iq15 = B_Duty_Svpwm_iq15 ;
-//     if(MAX_Duty_Svpwm_iq15 < C_Duty_Svpwm_iq15) MAX_Duty_Svpwm_iq15 = C_Duty_Svpwm_iq15 ;
-
-//     //*******   MIN Value CAlculate ********//
-//    if(A_Duty_Svpwm_iq15 < B_Duty_Svpwm_iq15) MIN_Duty_Svpwm_iq15 = A_Duty_Svpwm_iq15 ;
-//    else MIN_Duty_Svpwm_iq15 = B_Duty_Svpwm_iq15 ;
-//    if(MIN_Duty_Svpwm_iq15 > C_Duty_Svpwm_iq15) MIN_Duty_Svpwm_iq15 = C_Duty_Svpwm_iq15 ;
-
-//    OFF_Duty_Spwm_iq15 =  MAX_Duty_Svpwm_iq15 ;
-//    OFF_Duty_Spwm_iq15 += MIN_Duty_Svpwm_iq15 ;
-//    OFF_Duty_Spwm_iq15 = OFF_Duty_Spwm_iq15*0.50;
-
-//    A_Duty_Svpwm_Temp_iq15 = A_Duty_Svpwm_iq15 ;
-//    A_Duty_Svpwm_Temp_iq15 -= OFF_Duty_Spwm_iq15 ;
-//    A_Duty_Svpwm_Temp_iq15 = A_Duty_Svpwm_Temp_iq15*(1.1547) ;
-//    A_Duty_Svpwm_Temp_iq15 += (PWM_DUTY_ADD) ;
-
-//    B_Duty_Svpwm_Temp_iq15 = B_Duty_Svpwm_iq15 ;
-//    B_Duty_Svpwm_Temp_iq15 -= OFF_Duty_Spwm_iq15 ;
-//    B_Duty_Svpwm_Temp_iq15 = (B_Duty_Svpwm_Temp_iq15*(1.1547)) ;
-//    B_Duty_Svpwm_Temp_iq15 += (PWM_DUTY_ADD) ;
-
-//    C_Duty_Svpwm_Temp_iq15 = C_Duty_Svpwm_iq15 ;
-//    C_Duty_Svpwm_Temp_iq15 -= OFF_Duty_Spwm_iq15 ;
-//    C_Duty_Svpwm_Temp_iq15 = C_Duty_Svpwm_Temp_iq15*(1.1547) ;
-//    C_Duty_Svpwm_Temp_iq15 += (PWM_DUTY_ADD) ;
-
+void SVPWM_MODE_DRIVE_FUNCTION(int A_Duty_Svpwm_iq15 , int B_Duty_Svpwm_iq15  , int C_Duty_Svpwm_iq15 ) 
+{
    __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,A_Duty_Svpwm_iq15);
    __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,B_Duty_Svpwm_iq15);
    __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_3,C_Duty_Svpwm_iq15);
 }
-
 
 void MotorControl_Init (void) 
 {
@@ -462,13 +109,7 @@ void DRIVE_STOP(void)
     HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_3);
 }
 
-
 float map(float x, float in_min, float in_max, float out_min, float out_max)
 {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
-
-
-
-
-

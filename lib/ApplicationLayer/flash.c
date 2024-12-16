@@ -7,7 +7,6 @@ This file contains functions associated with flash read/write.
 
 */
 
-
 #include "stm32h7xx_hal.h"
 #include "flash.h"
 #include "string.h"
@@ -20,9 +19,6 @@ This file contains functions associated with flash read/write.
 
 // If using any other STM32H7 Series, uncomment the line below
 #define FLASHWORD		8
-
-
-
 
 // There are 2 BANKS available for H745, BANK 1 (0x0800 0000 - 0x080F FFFF) and BANK 2 (0x0810 0000 - 0x080F FFFF)
 // Both of them have Sectors 0 to 7.
@@ -118,7 +114,6 @@ static uint32_t GetSector(uint32_t Address)
   return sector;
 }
 
-
 /* Some Controllers like STM32H7Ax have 128 sectors. It's not possible to write each one of them here.
    You can come up with easier ways to set the sector numbers. FOR EXAMPLE
 static uint32_t GetSector(uint32_t Address)
@@ -129,11 +124,7 @@ static uint32_t GetSector(uint32_t Address)
 }
 */
 
-
-
-
 uint8_t bytes_temp[4];
-
 
 void float2Bytes(uint8_t * ftoa_bytes_temp,float float_variable)
 {
@@ -201,9 +192,6 @@ uint32_t Flash_Erase_Data (uint32_t StartSectorAddress, uint16_t noofBytes)
 
   return 0;
 }
-
-
-
 
 /* The DATA to be written here MUST be according to the List Shown Below
 For EXAMPLE:- For H74x/5x, a single data must be 8 numbers of 32 bits word

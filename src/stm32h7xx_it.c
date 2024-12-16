@@ -1,9 +1,6 @@
-
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32h7xx_it.h"
-#include "structures.h"
-#include "led_AL.h"
 /* Private includes ----------------------------------------------------------*/
 
 /* External variables --------------------------------------------------------*/
@@ -20,7 +17,6 @@ extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim7;
 extern TIM_HandleTypeDef htim8;
 extern UART_HandleTypeDef huart1;
-
 
 /******************************************************************************/
 /*           Cortex Processor Interruption and Exception Handlers          */

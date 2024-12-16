@@ -24,6 +24,7 @@ motorControl_t mControl = {
               .temperature.overtemp_verifier = 0,
               .temperature.rst_temp_verifier = 0,
 };
+
 temperature_t temp =  {
                .isOverTemp = IsOvertemp,
 };
@@ -31,6 +32,7 @@ motor_t motor = {
         .overtemp_verifier = 0,
         .temperature       = KTY84150_Motor_Temp,
 };
+
 /************************** Motor Temperature Reading ************************************/
 const int16_t KTY84150_POINTS = 36;
 const int16_t KTY84150_Ta_Rt[36][3] = {
@@ -39,6 +41,7 @@ const int16_t KTY84150_Ta_Rt[36][3] = {
       {130, 1194, 1259}, {140, 1262, 1334}, {150, 1334, 1412},  {160, 1407, 1492}, {170, 1482, 1574},  {180, 1560, 1659}, {190, 1640, 1747}, {200, 1722, 1837}, {210, 1807, 1931},
       {220, 1893, 2026}, {230, 1982, 2125}, {240, 2073, 2226},  {250, 2166, 2329}, {260, 2261, 2436},  {270, 2357, 2543}, {280, 2452, 2650}, {290, 2542, 2751}, {300, 2624, 2844},
 };
+
 int16_t KTY84150_Motor_Temp(void) {
         uint16_t motor_temp_value = analog.bufferData[MOTOR_TEMP_SENSE];
         double Rx  = (motor_temp_value * Re)/((Adc_max_Value-1)-motor_temp_value);  // Get Rx value
@@ -78,6 +81,7 @@ int16_t KTY84150_Motor_Temp(void) {
               return (int16_t) Ta;
         }
 }
+
 /********************************************************************************************/
 /*************************** Board Temp Measurement *****************************************/
 double NTC_Board_Temp(double ntc) {
@@ -97,6 +101,7 @@ double NTC_Board_Temp(double ntc) {
           temp_value = temp_value - mControl.temperature.Ka; /* Temperature in degree Celsius */
           return temp_value;
 }
+
 /***********************************************************************************************/
 /**
  * @brief Returns Motor and Board temperature status

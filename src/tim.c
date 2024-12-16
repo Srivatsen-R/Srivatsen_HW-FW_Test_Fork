@@ -7,7 +7,6 @@ This file contains functions associated with Timer.
 
 */
 
-
 /* Includes ------------------------------------------------------------------*/
 #include "tim.h"
 #include "vector_control.h"

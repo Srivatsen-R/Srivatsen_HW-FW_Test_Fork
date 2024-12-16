@@ -8,7 +8,6 @@ initializations.Functions specific to STM32 are mentioned in this file.
 
 */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,31 +20,15 @@ initializations.Functions specific to STM32 are mentioned in this file.
 #include "usart.h"
 #include "gpio.h"
 
-#include "led_AL.h"
-#include "adc_AL.h"
-#include "fdcan_AL.h"
-#include "temp_AL.h"
-
-#include "math.h"
-#include "v_f_control.h"
-#include "vector_control.h"
-
-#include "motor_param.h"
-#include "eeprom_AL.h"
-#include "flash.h"
-#include "eepromCRC.h"
-#include "vehicle.h"
-#include "sanity.h"
-#include "foc_blockset.h"
 #include "microcontroller.h"
-
+#include "foc_blockset.h"
 
 /**
   * @brief System Clock Configuration
   * @retval None
   */
-void SystemClock_Config(void) {
-
+void SystemClock_Config(void) 
+{
   // 400MHz
     RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
@@ -98,12 +81,10 @@ void SystemClock_Config(void) {
   {
     Error_Handler();
   }
-
 }
 
 void SYSTEM_INIT()
 {
-    
   /* Enable I-Cache---------------------------------------------------------*/
   SCB_EnableICache();
   /* Enable D-Cache---------------------------------------------------------*/
@@ -121,16 +102,12 @@ void SYSTEM_INIT()
   MX_TIM3_Init();
   MX_TIM1_Init();
   MX_TIM5_Init();
-  HAL_Delay(1000);
   MX_TIM17_Init();
-  // MX_TIM4_Init();
-  // MX_TIM15_Init();
   MX_TIM7_Init();
-  MX_I2C2_Init();
 
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
   DRIVE_STOP();
 }
-
 
 void ENABLE_PERIPHERALS()
 {
@@ -138,6 +115,4 @@ void ENABLE_PERIPHERALS()
   HAL_TIM_IC_Start_IT(&htim5, TIM_CHANNEL_1);//PWM   
   HAL_TIM_IC_Start(&htim5, TIM_CHANNEL_2);//PWM
   HAL_TIM_Base_Start_IT(&htim17);//20kHz
-  // HAL_TIM_Base_Start_IT(&htim4);
-  // HAL_TIM_Base_Start_IT(&htim15);
 }

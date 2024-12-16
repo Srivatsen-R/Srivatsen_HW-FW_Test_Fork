@@ -37,26 +37,16 @@ duty cycle values that generate the desired voltage vector.
 */
 
 #include <math.h>
-#include "math_func.h"
+#include <stdint.h>
 #include "vector_control.h"
 #include "dr_devices.h"
 #include "structures.h"
 #include "tim.h"
 #include "sanity.h"
 #include "foc_blockset.h"
-#include "foc_mtpa_lut.h"
-#include <stdint.h>
 #include "motor_param.h"
-#include "Pegasus_MBD.h"
-#include "Position_Calculation.h"
 #include "FOC.h"
-#include "rtwtypes.h"
 
-extern int a_current;
-extern int b_current;
-extern int dc_current_u;
-extern int dc_current_v;
-extern int dc_current_w;
 extern int speed_filtered;
 extern float ref_output;
 
@@ -68,27 +58,11 @@ extern uint8_t reset_flag;
 extern uint8_t forward_set;
 extern uint8_t reverse_set;
 uint8_t duty_state=1;
-uint8_t speed_fix_flag=0;
-extern uint8_t acc_flag;
-extern uint8_t deacc_flag;
 
-float log_gain=0;
-float log_intg=0;
 extern motorControl_t motorControl;
-
-extern ExtU rtU;
-extern ExtY rtY;
-
 extern ExtU_FOC_T FOC_U;
 extern ExtY_FOC_T FOC_Y;
-
-int state=0;
-
 foc_t foc; 
-extern mtpa_lut mtpa;
-
-extern const int mtpa_lut_id[16][6];
-extern const int mtpa_lut_iq[16][6];
 
 
 terminal_t terminal = {
@@ -200,7 +174,6 @@ void FOC_READ_MOTOR_POSITION(void)
     }
 
     foc.rho = READ_ROTOR_ANGLE(foc.rho_prev,foc.sync_speed,foc.sync_speed_prev);//electrical angle
-    Position_Calculation_step();
 
     if (forward_set && !reverse_set)
         FOC_U.angle = foc.rho + ANGLE_OFFSET_RW;
@@ -215,22 +188,6 @@ void FOC_READ_MOTOR_POSITION(void)
 
 void FOC_SPACE_VECTOR_MODULATION()
 {
-    // //PWM DUTY VARIABLES
-    // if (rtY.FOC_Out.Normalized_Va > UL)
-    //     rtY.FOC_Out.Normalized_Va = UL;
-    // else if (rtY.FOC_Out.Normalized_Va < LL)
-    //     rtY.FOC_Out.Normalized_Va = LL;
-
-    // if (rtY.FOC_Out.Normalized_Vb > UL)
-    //     rtY.FOC_Out.Normalized_Vb = UL;
-    // else if (rtY.FOC_Out.Normalized_Vb < LL)
-    //     rtY.FOC_Out.Normalized_Vb = LL;
-
-    // if (rtY.FOC_Out.Normalized_Vc > UL)
-    //     rtY.FOC_Out.Normalized_Vc = UL;
-    // else if (rtY.FOC_Out.Normalized_Vc < LL)
-    //     rtY.FOC_Out.Normalized_Vc = LL;
-
     foc.pwm_a = (uint16_t)((PWM_CONST_2*((FOC_Y.Va / 61.0) * 32767.0))  + PWM_CONST_1);
     foc.pwm_b = (uint16_t)((PWM_CONST_2*((FOC_Y.Vb / 61.0) * 32767.0))  + PWM_CONST_1);
     foc.pwm_c = (uint16_t)((PWM_CONST_2*((FOC_Y.Vc / 61.0) * 32767.0))  + PWM_CONST_1);   
@@ -250,8 +207,6 @@ void FOC_SPACE_VECTOR_MODULATION()
     else if (foc.pwm_c > 2500)
         foc.pwm_c = 2500;
 
-    //Modulation  Techniques
-    //SPWM(foc.pwm_a,foc.pwm_b,foc.pwm_c);
     if(motorControl.drive.check == DRIVE_ENABLE) {SVPWM_MODE_DRIVE_FUNCTION(foc.pwm_a,foc.pwm_b,foc.pwm_c);}
     else {DRIVE_STOP();}
 }

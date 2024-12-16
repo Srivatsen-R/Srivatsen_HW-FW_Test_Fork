@@ -14,8 +14,6 @@ HAL_GPIO_EXTI_Callback          : Contain code blocks for reseting position.
 
 */
 
-
-
 /* Includes ------------------------------------------------------------------*/
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,26 +21,21 @@ HAL_GPIO_EXTI_Callback          : Contain code blocks for reseting position.
 #include <math.h>
 
 #include "main.h"
-#include "math_func.h"
 #include "adc.h"
 #include "dma.h"
 #include "fdcan.h"
 #include "tim.h"
-#include "usart.h"
 #include "gpio.h"
 
-#include "led_AL.h"
 #include "adc_AL.h"
 #include "fdcan_AL.h"
 #include "temp_AL.h"
 
-#include "v_f_control.h"
 #include "vector_control.h"
 
 #include "motor_param.h"
 #include "eeprom_AL.h"
 #include "flash.h"
-#include "eepromCRC.h"
 #include "vehicle.h"
 #include "sanity.h"
 #include "foc_blockset.h"
@@ -54,59 +47,18 @@ HAL_GPIO_EXTI_Callback          : Contain code blocks for reseting position.
 #include "firmware_upgrade_app.h"
 #include "isotp/isotp_types.h"
 
-#include "Pegasus_MBD.h"
-#include "Position_Calculation.h"
 #include "FOC.h"
-#include "rtwtypes.h"
 
 /* Variable declaration ------------------------------------------------------*/
-
-#ifndef HSEM_ID_0
-#define HSEM_ID_0 (0U) /* HW semaphore 0*/
-#endif
-
-/* externs -------------------------------------------------------------------*/
-extern led_t          led;
-extern foc_t          foc;
-extern can_t          can;
-extern adc_t          analog;
-extern terminal_t     terminal;
-extern struct gpio    io;
-extern motorControl_t motorControl;
-extern vehicle_t vehicle;
-extern ExtU           rtU;
-extern ExtY           rtY;
-extern ExtU_Angle     rtU_Angle;
-extern ExtY_Angle     rtY_Angle;
-extern ExtU_FOC_T     FOC_U;
-extern ExtY_FOC_T     FOC_Y;
-extern FOC_Flag_T     FOC_F_T;
-
-/* Private function prototypes -----------------------------------------------*/
-
-// Global variables for filtering
-static float prev_rpm = 0;      // Initialize previous RPM for rate limiting
-
+static float prev_rpm = 0;
 float Duty;
-float freq_rpm = 0.0;
-float throttle_percent = 0.0;
-float speed_set = 0.0;
 float speed_ref_temp = 0.0;
-
-volatile uint8_t forward_flag_thr = 0;
-volatile uint8_t reverse_flag_thr = 0;
-uint8_t neutral_set;
-uint8_t check = 0;
-
 extern float avg_board_temp;
 extern float torque_calc;
 extern float irms_calc;
 extern uint16_t offset_cal_w;
 extern uint16_t offset_cal_v;
-
 volatile uint32_t ICValue;
-volatile uint32_t angle_curr = 0, angle_prev = 0;
-uint32_t z_count=50;
 volatile uint32_t z_trig = 0;
 uint8_t reset_flag = 0;
 uint8_t app_version = 0;
@@ -114,13 +66,6 @@ uint8_t cantp_config_flag = 0;
 uint8_t interrupt_flag = 0;
 uint8_t forward_set = 0;
 uint8_t reverse_set = 0;
-uint8_t start_flag = 0;
-uint8_t acc_flag = 0;
-uint8_t deacc_flag = 0;
-uint32_t can_log_timer_700_hex = 0;
-uint32_t can_log_timer_300_hex = 0;
-uint32_t odo_cal_timer = 0;
-uint32_t eeprom_write_timer = 0;
 
 uint32_t* first_4Bytes = ((uint32_t *)(UID_BASE));
 uint32_t* next_4Bytes = ((uint32_t *)(UID_BASE + 4));
@@ -128,17 +73,19 @@ uint32_t* last_4Bytes = ((uint32_t *)(UID_BASE + 8));
 
 uint8_t UIID_Array[12];
 
-int count_duty=0;
-int counter_100ms=0;
-int counter_current_ms = 0;
-int counter_encoder_ms = 0;
-uint8_t counter_abnormal_run = 0;
- 
-int pwm_pulse=0;
-int z_pulse=0;    
-
 char message[50] = {0};
 
+/* externs -------------------------------------------------------------------*/
+extern foc_t          foc;
+extern can_t          can;
+extern adc_t          analog;
+extern terminal_t     terminal;
+extern motorControl_t motorControl;
+extern ExtU_FOC_T     FOC_U;
+extern ExtY_FOC_T     FOC_Y;
+extern FOC_Flag_T     FOC_F_T;
+
+/* Private function prototypes -----------------------------------------------*/
 typedef struct __attribute__((packed))
 {
 	uint32_t flags;
@@ -168,7 +115,6 @@ shared_memory_t sharedmemory __attribute__((section(".shared_memory")));
 
 //main function. 
 int main(void) {
-
   //system clock init.
   SYSTEM_INIT();
 
@@ -183,7 +129,7 @@ int main(void) {
      Error_Handler();
   }
 
-  HAL_Delay(1000);
+  HAL_Delay(2000);
 
   bootup_config();
 
@@ -192,10 +138,9 @@ int main(void) {
 
   Get_and_Send_UIID();
 
-  // Pegasus_MBD_initialize();
-  FOC_initialize();
-
   Current_Sensor_offset_cal();
+
+  FOC_initialize();
   
   //while loop running on CLK frequency.
   while (1) 
@@ -203,6 +148,7 @@ int main(void) {
     CAN_Transmit_routine();
 
     ANALOG_READING();
+    
     FAULT_DETECTION();
 
     Throttle_Control_routine();
@@ -219,7 +165,6 @@ uint8_t get_interrupt_flag(){
 
 void set_config_flag(uint8_t value){
   cantp_config_flag = value;
-
 }
 
 void set_interrupt_flag(uint8_t value){
@@ -260,7 +205,7 @@ void send_on_302()
 {
   uint8_t can_data[8] = {0};
 
-  float can_log_rh;
+  float can_log_rh = 0.0f;
   if (forward_set && !reverse_set)
   {
     can_log_rh = foc.rho * 100.0;
@@ -311,7 +256,7 @@ void send_on_304()
 {
   uint8_t can_data[8] = {0};
   float can_log_mbd_mech_rh = (FOC_U.angle / 3.0) * 100.0;
-  float can_log_mbd_speed;
+  float can_log_mbd_speed = 0.0f;
 
   if (forward_set && !reverse_set)
   {
@@ -494,7 +439,8 @@ void send_on_6F2(uint8_t* UIID_Arr)
   _fdcan_transmit_on_can(tx_Controller_6F2, S, can_data, FDCAN_DLC_BYTES);
 }
 
-void get_UIID(){
+void get_UIID()
+{
   UIID_Array[0] = (*first_4Bytes) & 0xFF;
   UIID_Array[1] = (*first_4Bytes >> 8) & 0xFF;
   UIID_Array[2] = (*first_4Bytes >> 16) & 0xFF;
@@ -512,17 +458,18 @@ void get_UIID(){
 }
 
 // Rate limiter to smooth RPM changes
-float rate_limiter(float target_rpm) {
-    float rpm_change = target_rpm - prev_rpm;
+float rate_limiter(float target_rpm) 
+{
+  float rpm_change = target_rpm - prev_rpm;
 
-    if (rpm_change > RATE_LIMIT) {
-        target_rpm = prev_rpm + RATE_LIMIT;  // Limit the increase
-    } else if (rpm_change < -RATE_LIMIT) {
-        target_rpm = prev_rpm - RATE_LIMIT;  // Limit the decrease
-    }
+  if (rpm_change > RATE_LIMIT) {
+      target_rpm = prev_rpm + RATE_LIMIT;  // Limit the increase
+  } else if (rpm_change < -RATE_LIMIT) {
+      target_rpm = prev_rpm - RATE_LIMIT;  // Limit the decrease
+  }
 
-    prev_rpm = target_rpm;  // Update previous RPM for the next iteration
-    return target_rpm;
+  prev_rpm = target_rpm;  // Update previous RPM for the next iteration
+  return target_rpm;
 }
 
 void Current_Sensor_offset_cal(void)
@@ -545,6 +492,9 @@ void Current_Sensor_offset_cal(void)
 
 void Throttle_Control_routine()
 {
+  uint32_t time_count = HAL_GetTick();
+  static uint32_t prev_thr_time = 0;
+
   #if PEG4W
   reverse_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_3);
   #endif
@@ -626,7 +576,6 @@ void CAN_Transmit_routine()
   uint32_t time_count = HAL_GetTick();
   static uint32_t prev_time = 0;
   static uint32_t prev_time_700x = 0;
-  static uint32_t prev_thr_time = 0;
 
   #if DEBUG_EN
   if (time_count - prev_time >= 100)
@@ -676,20 +625,17 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 		}
 	}
 }
+
 //callback to read Z data from encoder
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
     if(GPIO_Pin == GPIO_PIN_7) // If The INT Source Is EXTI Line9_5 (PE7 Pin)
     {
       motorControl.encoder.value = 0;
-      rtY_Angle.Mech_Angle_rad = 0;
-      rtU_Angle.Encoder_Cnt = 0;
-      rtY_Angle.Elec_Angle_rad = 0;
       foc.rho = 0.0;
       foc.rho_prev = 0.0;
       reset_flag = 1;
       z_trig += 1;
-      rtU_Angle.Z_Cnt = z_trig;
     }
 }
 
@@ -730,8 +676,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
     }
   }
 
-  if(htim->Instance==TIM17) {
-  //turn led red/green depending on drive status
+  if(htim->Instance==TIM17) 
+  {
+    //turn led red/green depending on drive status
     if(motorControl.drive.check == DRIVE_DISABLE) {
       //rgb gpio
       HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_SET);
@@ -760,13 +707,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
   }
 }
 
-
 void switch_partition_and_reset()
 {
 	sharedmemory.flags |= BL_SWITCH_PARTITION;
 	NVIC_SystemReset();
 }
-
 
 /**
   * @brief  This function is executed in case of error occurrence.

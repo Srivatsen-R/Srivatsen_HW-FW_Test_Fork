@@ -277,7 +277,7 @@ typedef struct foc_t {
 void   VECTOR_FOC_Control(void) ;
 void   FOC_CLARK_PARK_TRANSFORM(void);
 void   FOC_READ_MOTOR_CURRENT(void);
-void   FOC_READ_MOTOR_POSITON(void);
+void   FOC_READ_MOTOR_POSITION(void);
 void   FOC_TORQUE_PI_CONTROL(void);
 void   FOC_ELECTRICAL_ANGLE_CALCULATION(void);
 void   FOC_FLUX_PI_CONTROL(void);
