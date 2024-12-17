@@ -247,7 +247,7 @@ float Throttle_Control(int target_speed,float prev_output)
 
         if(target_speed >= prev_output)
         {
-            th_increment = 0.05;
+            th_increment = 0.002;
 
             if(target_speed >= prev_output)
             {
@@ -257,7 +257,7 @@ float Throttle_Control(int target_speed,float prev_output)
         }
         else
         {
-            th_decrement = 0.05;
+            th_decrement = 0.002;
 
             if(target_speed <= (prev_output - th_decrement)) prev_output -= th_decrement ;
             else prev_output = target_speed ;
@@ -328,7 +328,6 @@ int Read_Throttle(int adc_data)
     {
         adc_data=0;
     }
-
 
     return adc_data;
 }

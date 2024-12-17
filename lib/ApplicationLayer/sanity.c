@@ -16,6 +16,7 @@ This file contains functions associated with sanity checks for vehicle.
 #include "adc_AL.h"
 #include "dr_devices.h"
 #include "FOC.h"
+#include "main.h"
 
 #define FDCAN_ERROR_BIT (0x4000A400 + 0x0044)
 
@@ -58,14 +59,11 @@ extern FOC_Flag_T     FOC_F_T;
 extern terminal_t     terminal;
 extern motorControl_t mControl;
 
-float busVoltage=0;
-float avg_board_temp=0;
-float v_rms=0;
+float busVoltage = 0.0f;
+float avg_board_temp = 0.0f;
+float v_rms = 0.0f;
 float torque_calc = 0.0f;
 float irms_calc = 0.0f;
-
-extern uint8_t forward_set;
-extern uint8_t reverse_set;
 
 void FAULT_DETECTION()
 {
@@ -79,7 +77,7 @@ void FAULT_DETECTION()
 
         if (time_tick_count - prev_count_iq >= 10)
         {
-                if (FOC_Y.Iq >= 550.0)
+                if (FOC_Y.Iq >= 280.0)
                         count_iq++;
 
                 if (count_iq >= 10.0)
@@ -109,7 +107,7 @@ void FAULT_DETECTION()
 
         if (time_tick_count - prev_count_phase_curr >= 10)
         {
-                if ((FOC_U.PhaseCurrent[0] >= 550.0 || FOC_U.PhaseCurrent[0] <= -550.0) || (FOC_U.PhaseCurrent[1] >= 550.0 || FOC_U.PhaseCurrent[1] <= -550.0) || (FOC_U.PhaseCurrent[2] >= 550.0 || FOC_U.PhaseCurrent[2] <= -550.0))
+                if ((FOC_U.PhaseCurrent[0] >= 280.0 || FOC_U.PhaseCurrent[0] <= -280.0) || (FOC_U.PhaseCurrent[1] >= 280.0 || FOC_U.PhaseCurrent[1] <= -280.0) || (FOC_U.PhaseCurrent[2] >= 280.0 || FOC_U.PhaseCurrent[2] <= -280.0))
                         count_phase_Curr++;
 
                 if (count_phase_Curr >= 10.0)
@@ -123,7 +121,7 @@ void FAULT_DETECTION()
         }
 
         #if DISABLE_ON_NEUTRAL
-        if (forward_set && reverse_set)
+        if (fnr.current_state == NEUTRAL)
         {       
                 FOC_F_T.N_Flag = 1;
                 motorControl.drive.check = DRIVE_DISABLE;
@@ -151,6 +149,7 @@ void ANALOG_READING()
 
      torque_calc = fmax((1.5 * POLEPAIRS * (FOC_U.Lamda * FOC_Y.Iq + (FOC_U.Ld - FOC_U.Lq) * FOC_Y.Id * FOC_Y.Iq)), torque_calc);
      irms_calc = fmax(sqrtf(FOC_Y.Iq * FOC_Y.Iq + FOC_Y.Id * FOC_Y.Id), irms_calc) / sqrtf(2.0f);
+     v_rms = sqrtf(FOC_Y.Vq * FOC_Y.Vq + FOC_Y.Vd * FOC_Y.Vd) / sqrtf(2.0f);
 
      //bus voltage
      busVoltage = moving_Batt_voltage_measured_fun(0.00211*analog.bufferData[BUS_VOLTAGE],VOLTAGE_AVG); 

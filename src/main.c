@@ -85,6 +85,8 @@ extern ExtU_FOC_T     FOC_U;
 extern ExtY_FOC_T     FOC_Y;
 extern FOC_Flag_T     FOC_F_T;
 
+fnr_states fnr;
+
 /* Private function prototypes -----------------------------------------------*/
 typedef struct __attribute__((packed))
 {
@@ -499,22 +501,37 @@ void Throttle_Control_routine()
   reverse_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_3);
   #endif
   #if PEG3W
-  reverse_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_2);
+  reverse_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_3);
   #endif
   forward_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
 
+  if (forward_set && !reverse_set && fabsf((FOC_U.ActualSpeed / 0.1047)) <= 10.0f && Read_Throttle(analog.bufferData[THROTTLE]) <= 600){fnr.throttle_disabled = 0; fnr.previous_state = fnr.current_state; fnr.current_state = FORWARD;}
+  else if (reverse_set && !forward_set && fabsf((FOC_U.ActualSpeed / 0.1047)) <= 10.0f && Read_Throttle(analog.bufferData[THROTTLE]) <= 600){fnr.throttle_disabled = 0; fnr.previous_state = fnr.current_state; fnr.current_state = REVERSE;}
+  else if (forward_set && reverse_set){fnr.throttle_disabled = 1; fnr.current_state = NEUTRAL;}
+
+  if ((fnr.current_state == FORWARD && fnr.previous_state == NEUTRAL) || (fnr.current_state == REVERSE && fnr.previous_state == NEUTRAL)){fnr.throttle_disabled = 0;}
+
   #if THROTTLE_CNTRL
-  speed_ref_temp = Throttle_Control(Rpm_Target_Function(moving_Throttle_measured_fun(Read_Throttle(analog.bufferData[THROTTLE]), 1.0)) * SPEED_PU_TO_RPM, speed_ref_temp);
-  FOC_U.RefSpeed = speed_ref_temp;
-
-  if (FOC_U.RefSpeed <= 0.0)
+  if (!fnr.throttle_disabled)
   {
-    FOC_U.RefSpeed = 0.0;
-  }
+    speed_ref_temp = Throttle_Control(Rpm_Target_Function(moving_Throttle_measured_fun(Read_Throttle(analog.bufferData[THROTTLE]), 1.0)) * SPEED_PU_TO_RPM, speed_ref_temp);
+    FOC_U.RefSpeed = speed_ref_temp;
 
-  if (forward_set && !reverse_set){FOC_U.Id_up_limit = 0.0f; FOC_U.Id_low_limit = 0.0f;}
-  else if (reverse_set && !forward_set){FOC_U.Id_up_limit = 0.0f; FOC_U.Id_low_limit = 0.0f;}
-  else if (forward_set && reverse_set){FOC_U.Id_up_limit = 0.0f; FOC_U.Id_low_limit = 0.0f;}
+    if (FOC_U.RefSpeed <= 0.0)
+    {
+      FOC_U.RefSpeed = 0.0;
+    }
+  }
+  else if (fnr.throttle_disabled)
+  {
+    speed_ref_temp = Throttle_Control(Rpm_Target_Function(moving_Throttle_measured_fun(Read_Throttle(8500.0f), 1.0)) * SPEED_PU_TO_RPM, speed_ref_temp);
+    FOC_U.RefSpeed = speed_ref_temp;
+
+    if (FOC_U.RefSpeed <= 0.0)
+    {
+      FOC_U.RefSpeed = 0.0;
+    }
+  }
 
   FOC_U.Up_Limit_flux_PID = 0.4 * FOC_U.RefSpeed + 1.5f;
   FOC_U.Low_Limit_flux_PID = -(0.4 * FOC_U.RefSpeed) - 1.5f;

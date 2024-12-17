@@ -42,7 +42,10 @@
         "foc_private.h": "c",
         "rt_logging.h": "c",
         "dr_devices.h": "c",
-        "structures.h": "c"
+        "structures.h": "c",
+        "*.tcc": "cpp",
+        "cinttypes": "cpp",
+        "cstdlib": "cpp"
     },
     "cortex-debug.variableUseNaturalFormat": true
 }

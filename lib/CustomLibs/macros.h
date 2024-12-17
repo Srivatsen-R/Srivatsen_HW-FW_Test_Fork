@@ -57,8 +57,7 @@
 #define UART_TIMEOUT       500 
 
 /* Parameters for motor status */ 
-#define FNR                 4     
-#define NEUTRAL             0    
+#define FNR                 4        
 
 
 // #define serial1            &huart1     // pointer to uart1 handle

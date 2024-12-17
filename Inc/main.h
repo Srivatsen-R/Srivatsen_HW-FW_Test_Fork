@@ -118,7 +118,19 @@ void Get_and_Send_UIID(void);
 #define SW16_Pin                  GPIO_PIN_7
 #define SW16_GPIO_Port            GPIOD
 /* USER CODE BEGIN Private defines */
+typedef struct {
+    uint8_t current_state;
+    uint8_t previous_state;
+    uint8_t throttle_disabled;
+} fnr_states;
 
+typedef enum {
+    FORWARD,
+    NEUTRAL,
+    REVERSE
+} fnr_codes;
+
+extern fnr_states fnr;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

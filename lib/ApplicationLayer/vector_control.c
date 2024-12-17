@@ -46,24 +46,16 @@ duty cycle values that generate the desired voltage vector.
 #include "foc_blockset.h"
 #include "motor_param.h"
 #include "FOC.h"
+#include "main.h"
 
-extern int speed_filtered;
-extern float ref_output;
-
-extern int forward_flag;
-extern int reverse_flag;
-extern int neutral_flag;
 extern float Duty;
 extern uint8_t reset_flag;
-extern uint8_t forward_set;
-extern uint8_t reverse_set;
 uint8_t duty_state=1;
 
 extern motorControl_t motorControl;
 extern ExtU_FOC_T FOC_U;
 extern ExtY_FOC_T FOC_Y;
 foc_t foc; 
-
 
 terminal_t terminal = {
        .rotor.rpm            = 10000.0,
@@ -115,10 +107,27 @@ void FOC_READ_MOTOR_POSITION(void)
     if(foc.speed_sense>MAX_PU_SPEED){foc.speed_sense=MAX_PU_SPEED;} 
     else if (foc.speed_sense<-MAX_PU_SPEED){foc.speed_sense=-MAX_PU_SPEED;}
 
-    if (forward_set && !reverse_set)
+    if (fnr.current_state == FORWARD)
+    {
         FOC_U.ActualSpeed = (foc.speed_sense * SPEED_PU_TO_RPM * 1.0) * 0.1047;
-    else if (reverse_set && !forward_set)
+        fnr.previous_state = fnr.current_state;
+    }
+    else if (fnr.current_state == REVERSE)
+    {
         FOC_U.ActualSpeed = (foc.speed_sense * SPEED_PU_TO_RPM * -1.0) * 0.1047;
+        fnr.previous_state = fnr.current_state;
+    }
+    else if (fnr.current_state == NEUTRAL)
+    {
+        if (fnr.previous_state == FORWARD)
+        {
+            FOC_U.ActualSpeed = (foc.speed_sense * SPEED_PU_TO_RPM * 1.0) * 0.1047;
+        }
+        else if (fnr.previous_state == REVERSE)
+        {
+            FOC_U.ActualSpeed = (foc.speed_sense * SPEED_PU_TO_RPM * -1.0) * 0.1047;
+        }
+    }
 
     static float angle_mech;
 
@@ -126,7 +135,7 @@ void FOC_READ_MOTOR_POSITION(void)
     //Synchronous Speed Calculation
     foc.sync_speed = CALCULATE_SYNC_SPEED(foc.slip_speed,foc.rotor_speed_filtered);//sync speed
 
-    if (forward_set && !reverse_set)
+    if (fnr.current_state == FORWARD)
     {
         if((foc.speed_sense * 1.0 * SPEED_PU_TO_RPM * 0.1047)<10.0 && duty_state)
         { 
@@ -138,8 +147,10 @@ void FOC_READ_MOTOR_POSITION(void)
             else  if(angle_mech>=4.1886){foc.rho_prev = foc.rho_prev - 12.56;}
             duty_state = 0;
         }
+
+        fnr.previous_state = fnr.current_state;
     }
-    else if (reverse_set && !forward_set)
+    else if (fnr.current_state == REVERSE)
     {
         if((foc.speed_sense * -1.0 * SPEED_PU_TO_RPM * 0.1047)<10.0 && duty_state)
         { 
@@ -151,6 +162,37 @@ void FOC_READ_MOTOR_POSITION(void)
             else  if(angle_mech>=4.1886){foc.rho_prev = foc.rho_prev - 12.56;}
             duty_state = 0;
         }
+
+        fnr.previous_state = fnr.current_state;
+    }
+    else if (fnr.current_state == NEUTRAL)
+    {
+        if (fnr.previous_state == FORWARD)
+        {
+            if((foc.speed_sense * 1.0 * SPEED_PU_TO_RPM * 0.1047)<10.0 && duty_state)
+            { 
+                angle_mech = (100-Duty)*DUTY_TO_RADIAN;
+
+                // angle_mech = (Duty)*DUTY_TO_RADIAN; //mech angle
+                foc.rho_prev = POLEPAIRS*angle_mech; // elec angle
+                if (angle_mech>2.095 && angle_mech<4.1866){foc.rho_prev = foc.rho_prev - 6.28;}
+                else  if(angle_mech>=4.1886){foc.rho_prev = foc.rho_prev - 12.56;}
+                duty_state = 0;
+            }
+        }
+        else if (fnr.previous_state == REVERSE)
+        {
+            if((foc.speed_sense * -1.0 * SPEED_PU_TO_RPM * 0.1047)<10.0 && duty_state)
+            { 
+                angle_mech = (100-Duty)*DUTY_TO_RADIAN;
+
+                // angle_mech = (Duty)*DUTY_TO_RADIAN; //mech angle
+                foc.rho_prev = POLEPAIRS*angle_mech; // elec angle
+                if (angle_mech>2.095 && angle_mech<4.1866){foc.rho_prev = foc.rho_prev - 6.28;}
+                else  if(angle_mech>=4.1886){foc.rho_prev = foc.rho_prev - 12.56;}
+                duty_state = 0;
+            }
+        }
     }
 
     if(reset_flag == 1)
@@ -158,27 +200,65 @@ void FOC_READ_MOTOR_POSITION(void)
         reset_flag=0;
     }
 
-    if (forward_set && !reverse_set)
+    if (fnr.current_state == FORWARD)
     {
         if((foc.speed_sense * SPEED_PU_TO_RPM * 1.0 * 0.1047) <= 0.0)
         {
             duty_state = 1;
         }
+
+        fnr.previous_state = fnr.current_state;
     }
-    else if (reverse_set && !forward_set)
+    else if (fnr.current_state == REVERSE)
     {
         if((foc.speed_sense * SPEED_PU_TO_RPM * -1.0 * 0.1047) <= 0.0)
         {
             duty_state = 1;
         }
+
+        fnr.previous_state = fnr.current_state;
+    }
+    else if (fnr.current_state == NEUTRAL)
+    {
+        if (fnr.previous_state == FORWARD)
+        {
+            if((foc.speed_sense * SPEED_PU_TO_RPM * 1.0 * 0.1047) <= 0.0)
+            {
+                duty_state = 1;
+            }
+        }
+        else if (fnr.previous_state == REVERSE)
+        {
+            if((foc.speed_sense * SPEED_PU_TO_RPM * -1.0 * 0.1047) <= 0.0)
+            {
+                duty_state = 1;
+            }
+        }
     }
 
     foc.rho = READ_ROTOR_ANGLE(foc.rho_prev,foc.sync_speed,foc.sync_speed_prev);//electrical angle
 
-    if (forward_set && !reverse_set)
+    if (fnr.current_state == FORWARD)
+    {
         FOC_U.angle = foc.rho + ANGLE_OFFSET_RW;
-    else if (reverse_set && !forward_set)
+        fnr.previous_state = fnr.current_state;
+    }
+    else if (fnr.current_state == REVERSE)
+    {
         FOC_U.angle = foc.rho + ANGLE_OFFSET_FW;
+        fnr.previous_state = fnr.current_state;
+    }
+    else if (fnr.current_state == NEUTRAL)
+    {
+        if (fnr.previous_state == FORWARD)
+        {
+            FOC_U.angle = foc.rho + ANGLE_OFFSET_RW;
+        }
+        else if (fnr.previous_state == REVERSE)
+        {
+            FOC_U.angle = foc.rho + ANGLE_OFFSET_FW;
+        }
+    }
 
     foc.rotor_speed_prev          = foc.rotor_speed;  
     foc.rotor_speed_filtered_prev = foc.rotor_speed_filtered;

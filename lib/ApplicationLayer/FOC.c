@@ -18,6 +18,7 @@
 #include "rtwtypes.h"
 #include "FOC_types.h"
 #include "vector_control.h"
+#include "main.h"
 #include "motor_param.h"
 #include <math.h>
 #include <string.h>
@@ -35,9 +36,6 @@
 #define FOC_IN_UV_Error                ((uint8_T)3U)
 #define FOC_IN_UV_Warning              ((uint8_T)4U)
 #define FOC_IN_VoltageSafe             ((uint8_T)5U)
-
-extern uint8_t forward_set;
-extern uint8_t reverse_set;
 
 /* Block signals (default storage) */
 B_FOC_T FOC_B;
@@ -362,10 +360,27 @@ void FOC_step(void)
    *  Inport: '<Root>/angle'
    *  Trigonometry: '<S6>/Trigonometric Function1'
    */
-  if (forward_set && !reverse_set)
+  if (fnr.current_state == FORWARD)
+  {
     FOC_U.angle = (FOC_U.angle);
-  else if (reverse_set && !forward_set)
+    fnr.previous_state = fnr.current_state;
+  }
+  else if (fnr.current_state == REVERSE)
+  {
     FOC_U.angle = (FOC_U.angle) - -3.14159274F;
+    fnr.previous_state = fnr.current_state;
+  }
+  else if (fnr.current_state == NEUTRAL)
+  {
+    if (fnr.previous_state == FORWARD)
+    {
+      FOC_U.angle = (FOC_U.angle);
+    }
+    else if (fnr.previous_state == REVERSE)
+    {
+      FOC_U.angle = (FOC_U.angle) - -3.14159274F;
+    }
+  }
 
   rtb_Add1 = sin(FOC_U.angle);
 
@@ -1195,11 +1210,11 @@ void FOC_initialize(void)
   FOC_U.Lamda = 0.0263;
   FOC_U.Rs = 0.0107;
   FOC_U.p = POLEPAIRS;
-  FOC_U.Torque_ratio = 4.375;
+  FOC_U.Torque_ratio = 0.228571;
 
   FOC_U.Id_up_limit = 0.0f;
   FOC_U.Id_low_limit = 0.0f;
-  FOC_U.Iq_up_limit = 360.0f;
+  FOC_U.Iq_up_limit = 250.0f;
   FOC_U.Iq_low_limit = 0.0f;
 
   #if PEG4W
@@ -1233,6 +1248,10 @@ void FOC_initialize(void)
   FOC_U.Up_Limit_torque_PID = 61.0;
   FOC_U.Low_Limit_torque_PID = -61.0;
   #endif
+
+  fnr.current_state = NEUTRAL;
+  fnr.previous_state = FORWARD;
+  fnr.throttle_disabled = 1;
 
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
 }

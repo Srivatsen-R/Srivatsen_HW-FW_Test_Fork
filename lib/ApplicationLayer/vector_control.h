@@ -102,11 +102,10 @@ typedef struct foc_t {
 
 #define __IO volatile
 
-
 //Motor-Controller Specific Parameters
 #define RATE_LIMIT 50.0
 
-#define PPR                     4095.0//NIDEC        
+#define PPR                     4096.0//NIDEC        
 //#define PPR                     2048.0//ULTRON    
 
 #define ALPHA                   0.4
@@ -117,7 +116,7 @@ typedef struct foc_t {
 #define PEG4W                   0
 #define DEBUG_EN                1
 #define DEBUG_OFF               0
-#define DISABLE_ON_NEUTRAL      1
+#define DISABLE_ON_NEUTRAL      0
 
 // #define POLEPAIRS               4.0// Nidec 14kg
 #define POLEPAIRS               3.0// Nidec 22kg & ULTRON
