@@ -45,6 +45,7 @@ typedef struct {
   char_T Ph_OC_Flag;
   char_T OT_Cont_Flag;
   char_T N_Flag;
+  char_T EEPROM_Error;
 } FOC_Flag_T;
 
 typedef struct {

@@ -11,33 +11,22 @@ This file contains functions associated with vehicle such as throttle, FNR , CAN
 #include "vehicle.h"
 #include "motor_param.h"
 #include "vector_control.h"
-#include "fdcan_AL.h"
 #include "foc_blockset.h"
 #include "FOC.h"
 
-vehicle_t vehicle = 
-{
-  .odometer=0.0,
-  .speed=0.0,
-  .trip=0.0,
-  .odo_change_status=0.0,
-  .calculate_ots = Calculate_OTS
-};
-
-extern can_t can;
 extern ExtU_FOC_T FOC_U;
 extern ExtY_FOC_T FOC_Y;
-extern sanity_t fault;
 extern motorControl_t motorControl;
 extern adc_t analog;
 
 uint16_t offset_cal_w = 32996;
 uint16_t offset_cal_v = 32996;
 
-float lowPassFilter(float input, float prevFilteredValue) {
-    // Apply the exponential moving average (EMA) filter
-    prevFilteredValue = (ALPHA * input) + ((1.0 - ALPHA) * (prevFilteredValue));
-    return prevFilteredValue;
+float lowPassFilter(float input, float prevFilteredValue) 
+{
+  // Apply the exponential moving average (EMA) filter
+  prevFilteredValue = (ALPHA * input) + ((1.0 - ALPHA) * (prevFilteredValue));
+  return prevFilteredValue;
 }
 
 void READ_MOTOR_PHASE_CURRENT()

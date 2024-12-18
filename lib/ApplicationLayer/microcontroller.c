@@ -19,6 +19,7 @@ initializations.Functions specific to STM32 are mentioned in this file.
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
+#include "i2c.h"
 
 #include "microcontroller.h"
 #include "foc_blockset.h"
@@ -30,7 +31,7 @@ initializations.Functions specific to STM32 are mentioned in this file.
 void SystemClock_Config(void) 
 {
   // 400MHz
-    RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Supply configuration update enable
@@ -98,8 +99,8 @@ void SYSTEM_INIT()
   MX_DMA_Init();
   MX_ADC1_Init();
   MX_FDCAN2_Init();
+  MX_I2C2_Init();
   MX_TIM2_Init();
-  MX_TIM3_Init();
   MX_TIM1_Init();
   MX_TIM5_Init();
   MX_TIM17_Init();

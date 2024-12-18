@@ -26,6 +26,7 @@ HAL_GPIO_EXTI_Callback          : Contain code blocks for reseting position.
 #include "fdcan.h"
 #include "tim.h"
 #include "gpio.h"
+#include "i2c.h"
 
 #include "adc_AL.h"
 #include "fdcan_AL.h"
@@ -66,6 +67,7 @@ uint8_t cantp_config_flag = 0;
 uint8_t interrupt_flag = 0;
 uint8_t forward_set = 0;
 uint8_t reverse_set = 0;
+uint16_t boot_counter = 0;
 
 uint32_t* first_4Bytes = ((uint32_t *)(UID_BASE));
 uint32_t* next_4Bytes = ((uint32_t *)(UID_BASE + 4));
@@ -116,9 +118,23 @@ image_hdr_t image_hdr __attribute__((section(".image_hdr"))) = {
 shared_memory_t sharedmemory __attribute__((section(".shared_memory")));
 
 //main function. 
-int main(void) {
+int main(void) 
+{
   //system clock init.
   SYSTEM_INIT();
+
+  // Counting the number of boot cycles
+  if (HAL_I2C_Mem_Read(&hi2c2, 0xA0, 0x00, I2C_MEMADD_SIZE_8BIT, (uint8_t*)&boot_counter, 2, HAL_MAX_DELAY) != HAL_OK)
+  {
+    FOC_F_T.EEPROM_Error = 1;
+  }
+
+  boot_counter += 1;
+
+  if (HAL_I2C_Mem_Write(&hi2c2, 0xA0, 0x00, I2C_MEMADD_SIZE_8BIT, (uint8_t*)&boot_counter, 2, HAL_MAX_DELAY) != HAL_OK)
+  {
+    FOC_F_T.EEPROM_Error = 1;
+  }
 
   //function to keep drive disable intially.
   MotorControl_Init();
@@ -127,8 +143,9 @@ int main(void) {
   can.setup();
 
   //adc init and start via DMA
-  if(analog.start_dma(&hadc1, (uint32_t*) analog.bufferData, ADC_NoOfConversion) != OK) {
-     Error_Handler();
+  if(analog.start_dma(&hadc1, (uint32_t*) analog.bufferData, ADC_NoOfConversion) != OK) 
+  {
+    Error_Handler();
   }
 
   HAL_Delay(2000);
