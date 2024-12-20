@@ -27,6 +27,8 @@ HAL_GPIO_EXTI_Callback          : Contain code blocks for reseting position.
 #include "tim.h"
 #include "gpio.h"
 #include "i2c.h"
+#include "bor.h"
+#include "pvd.h"
 
 #include "adc_AL.h"
 #include "fdcan_AL.h"
@@ -68,6 +70,10 @@ uint8_t interrupt_flag = 0;
 uint8_t forward_set = 0;
 uint8_t reverse_set = 0;
 uint32_t boot_counter = 0;
+uint32_t bor_counter = 0;
+uint8_t bor_counter_trig = 0;
+uint8_t pvd_trig_flag = 0;
+uint32_t pvd_counter = 0;
 
 uint32_t* first_4Bytes = ((uint32_t *)(UID_BASE));
 uint32_t* next_4Bytes = ((uint32_t *)(UID_BASE + 4));
@@ -83,9 +89,6 @@ extern can_t          can;
 extern adc_t          analog;
 extern terminal_t     terminal;
 extern motorControl_t motorControl;
-extern ExtU_FOC_T     FOC_U;
-extern ExtY_FOC_T     FOC_Y;
-extern FOC_Flag_T     FOC_F_T;
 
 fnr_states fnr;
 
@@ -123,6 +126,8 @@ int main(void)
   //system clock init.
   SYSTEM_INIT();
 
+  Update_BOR_Counter();
+
   Boot_Counter();
 
   //function to keep drive disable intially.
@@ -153,6 +158,8 @@ int main(void)
   //while loop running on CLK frequency.
   while (1) 
   {
+    PVD_Counter_Update();
+
     CAN_Transmit_routine();
 
     ANALOG_READING();
@@ -160,6 +167,8 @@ int main(void)
     FAULT_DETECTION();
 
     Throttle_Control_routine();
+
+    Led_Toggle();
   }
 }
 
@@ -312,7 +321,21 @@ void send_on_306()
   can_data[1] = (uint8_t)((boot_counter & 0x0000FF00) >> 8);
   can_data[2] = (uint8_t)((boot_counter & 0x00FF0000) >> 16);
   can_data[3] = (uint8_t)((boot_counter & 0xFF000000) >> 24);
+  can_data[4] = (uint8_t)(bor_counter & 0x000000FF);
+  can_data[5] = (uint8_t)((bor_counter & 0x0000FF00) >> 8);
+  can_data[6] = (uint8_t)((bor_counter & 0x00FF0000) >> 16);
+  can_data[7] = (uint8_t)((bor_counter & 0xFF000000) >> 24);
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_306, S, can_data, FDCAN_DLC_BYTES);
+}
+
+void send_on_307()
+{
+  uint8_t can_data[8] = {0};
+  can_data[0] = (uint8_t)(pvd_counter & 0x000000FF);
+  can_data[1] = (uint8_t)((pvd_counter & 0x0000FF00) >> 8);
+  can_data[2] = (uint8_t)((pvd_counter & 0x00FF0000) >> 16);
+  can_data[3] = (uint8_t)((pvd_counter & 0xFF000000) >> 24);
+  _fdcan_transmit_on_can(FDCAN_DEBUG_ID_307, S, can_data, FDCAN_DLC_BYTES);
 }
 
 void send_on_705()
@@ -625,6 +648,7 @@ void CAN_Transmit_routine()
     send_on_304();
     send_on_305();
     send_on_306();
+    send_on_307();
 
     prev_time = time_count;
   }
@@ -668,6 +692,23 @@ void Boot_Counter()
   EEPROM_Write_Data_Boot_Counter(boot_counter);
 }
 
+void Led_Toggle()
+{
+  //turn led red/green depending on drive status
+  if(motorControl.drive.check == DRIVE_DISABLE) {
+    //rgb gpio
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
+  }
+  else if(motorControl.drive.check == DRIVE_ENABLE) {
+    //rgb gpio
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
+  }
+}
+
 /* USER CODE BEGIN 4 */
 //callback to read pwm value from encoder
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
@@ -696,6 +737,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
       reset_flag = 1;
       z_trig += 1;
     }
+}
+
+void HAL_PWR_PVDCallback(void) 
+{
+  // Handle PVD event
+  // For example, toggle an LED or log the event
+  pvd_trig_flag = 1;
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
@@ -737,21 +785,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
 
   if(htim->Instance==TIM17) 
   {
-    //turn led red/green depending on drive status
-    if(motorControl.drive.check == DRIVE_DISABLE) {
-      //rgb gpio
-      HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_SET);
-      HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
-      HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
-
-      DRIVE_STOP();
-    }
-    else if(motorControl.drive.check == DRIVE_ENABLE) {
-      //  rgb gpio
-      HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
-      HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
-    }
+    if (motorControl.drive.check == DRIVE_DISABLE){DRIVE_STOP();}
 
     //motor angle,current
     READ_MOTOR_POSITION();

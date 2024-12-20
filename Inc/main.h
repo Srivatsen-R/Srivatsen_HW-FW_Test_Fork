@@ -30,6 +30,7 @@ void send_on_303(void);
 void send_on_304(void);
 void send_on_305(void);
 void send_on_306(void);
+void send_on_307(void);
 void send_on_705(void);
 void send_on_706(void);
 void send_on_710(void);
@@ -47,6 +48,7 @@ void CAN_Transmit_routine(void);
 void Throttle_Control_routine(void);
 void Get_and_Send_UIID(void);
 void Boot_Counter(void);
+void Led_Toggle(void);
 
 /* Private defines -----------------------------------------------------------*/
 #define Ibus_U_Pin                GPIO_PIN_0

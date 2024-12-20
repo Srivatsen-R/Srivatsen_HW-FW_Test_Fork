@@ -1927,6 +1927,36 @@ src/adc.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/adc.c.s
 .PHONY : src/adc.c.s
 
+src/bor.obj: src/bor.c.obj
+.PHONY : src/bor.obj
+
+# target to build an object file
+src/bor.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/bor.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/bor.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/bor.c.obj
+.PHONY : src/bor.c.obj
+
+src/bor.i: src/bor.c.i
+.PHONY : src/bor.i
+
+# target to preprocess a source file
+src/bor.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/bor.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/bor.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/bor.c.i
+.PHONY : src/bor.c.i
+
+src/bor.s: src/bor.c.s
+.PHONY : src/bor.s
+
+# target to generate assembly for a file
+src/bor.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/bor.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/bor.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/bor.c.s
+.PHONY : src/bor.c.s
+
 src/dma.obj: src/dma.c.obj
 .PHONY : src/dma.obj
 
@@ -2073,6 +2103,36 @@ src/main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/main.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/main.c.s
 .PHONY : src/main.c.s
+
+src/pvd.obj: src/pvd.c.obj
+.PHONY : src/pvd.obj
+
+# target to build an object file
+src/pvd.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/pvd.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/pvd.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/pvd.c.obj
+.PHONY : src/pvd.c.obj
+
+src/pvd.i: src/pvd.c.i
+.PHONY : src/pvd.i
+
+# target to preprocess a source file
+src/pvd.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/pvd.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/pvd.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/pvd.c.i
+.PHONY : src/pvd.c.i
+
+src/pvd.s: src/pvd.c.s
+.PHONY : src/pvd.s
+
+# target to generate assembly for a file
+src/pvd.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/pvd.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/pvd.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/pvd.c.s
+.PHONY : src/pvd.c.s
 
 src/stm32h7xx_hal_msp.obj: src/stm32h7xx_hal_msp.c.obj
 .PHONY : src/stm32h7xx_hal_msp.obj
@@ -2434,6 +2494,9 @@ help:
 	@echo ... src/adc.obj
 	@echo ... src/adc.i
 	@echo ... src/adc.s
+	@echo ... src/bor.obj
+	@echo ... src/bor.i
+	@echo ... src/bor.s
 	@echo ... src/dma.obj
 	@echo ... src/dma.i
 	@echo ... src/dma.s
@@ -2449,6 +2512,9 @@ help:
 	@echo ... src/main.obj
 	@echo ... src/main.i
 	@echo ... src/main.s
+	@echo ... src/pvd.obj
+	@echo ... src/pvd.i
+	@echo ... src/pvd.s
 	@echo ... src/stm32h7xx_hal_msp.obj
 	@echo ... src/stm32h7xx_hal_msp.i
 	@echo ... src/stm32h7xx_hal_msp.s

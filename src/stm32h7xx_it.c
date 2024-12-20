@@ -193,7 +193,10 @@ void FDCAN2_IT1_IRQHandler(void)
 
   /* USER CODE END FDCAN2_IT1_IRQn 1 */
 }
-
+void PVD_IRQHandler(void) 
+{
+  HAL_PWR_PVD_IRQHandler();
+}
 
 /**
   * @brief This function handles TIM1 capture compare interrupt.

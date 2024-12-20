@@ -53,8 +53,6 @@ extern uint8_t reset_flag;
 uint8_t duty_state=1;
 
 extern motorControl_t motorControl;
-extern ExtU_FOC_T FOC_U;
-extern ExtY_FOC_T FOC_Y;
 foc_t foc; 
 
 terminal_t terminal = {

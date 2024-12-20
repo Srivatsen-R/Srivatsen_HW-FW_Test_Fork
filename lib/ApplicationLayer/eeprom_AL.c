@@ -46,7 +46,7 @@ EEPROM_STATUS EEPROM_Read (I2C_HandleTypeDef* hi2c,
                             uint8_t  *pData,
                             uint16_t size) 
 {
-   EEPROM_STATUS eepromStatus = HAL_I2C_Mem_Read(hi2c, devAddress, memAddress, I2C_MEMADD_SIZE_8BIT, (uint8_t*) &e24lc02.pData, size, 500);
+   EEPROM_STATUS eepromStatus = HAL_I2C_Mem_Read(hi2c, devAddress, memAddress, I2C_MEMADD_SIZE_8BIT, (uint8_t*) &e24lc02.pData, 4, 500);
    return eepromStatus;
 }
 
@@ -65,6 +65,22 @@ void EEPROM_Read_Data_Boot_Counter(uint32_t* boot_counter)
       e24lc02.status =  e24lc02.read(e24lc02.eepromI2C, e24lc02.devAddress, e24lc02.memAddress, (uint8_t*) &e24lc02.pData, e24lc02.size);
       if(e24lc02.status != EEPROM_OK){FOC_F_T.EEPROM_Error = 1;}
       *boot_counter = atoi((char*) e24lc02.pData);
+}
+
+void EEPROM_Read_Data_BOR_Counter(uint32_t* bor_counter)
+{
+      // Reading BOR counter data from EEPROM 
+      e24lc02.status =  e24lc02.read(e24lc02.eepromI2C, e24lc02.devAddress, (e24lc02.memAddress + 12), (uint8_t*) &e24lc02.pData, e24lc02.size);
+      if(e24lc02.status != EEPROM_OK){FOC_F_T.EEPROM_Error = 1;}
+      *bor_counter = atoi((char*) e24lc02.pData);
+}
+
+void EEPROM_Read_Data_PVD_Counter(uint32_t* pvd_counter)
+{
+      // Reading PVD counter data from EEPROM 
+      e24lc02.status =  e24lc02.read(e24lc02.eepromI2C, e24lc02.devAddress, (e24lc02.memAddress + 24), (uint8_t*) &e24lc02.pData, e24lc02.size);
+      if(e24lc02.status != EEPROM_OK){FOC_F_T.EEPROM_Error = 1;}
+      *pvd_counter = atoi((char*) e24lc02.pData);
 }
 
 void EEPROM_Read_Data_trip()
@@ -95,6 +111,26 @@ void EEPROM_Write_Data_Boot_Counter(uint32_t boot_counter)
       sprintf(msg, "%lu", boot_counter);
       e24lc02.size = strlen((char*) msg);
       e24lc02.status = e24lc02.write(e24lc02.eepromI2C, e24lc02.devAddress, e24lc02.memAddress, (uint8_t*)msg);
+      if(e24lc02.status != EEPROM_OK){FOC_F_T.EEPROM_Error = 1;}
+}
+
+void EEPROM_Write_Data_BOR_Counter(uint32_t bor_counter)
+{
+      // Writing BOR counter data to EEPROM
+      char msg[12] ={0};
+      sprintf(msg, "%lu", bor_counter);
+      e24lc02.size = strlen((char*) msg);
+      e24lc02.status = e24lc02.write(e24lc02.eepromI2C, e24lc02.devAddress, (e24lc02.memAddress + 12), (uint8_t*)msg);
+      if(e24lc02.status != EEPROM_OK){FOC_F_T.EEPROM_Error = 1;}
+}
+
+void EEPROM_Write_Data_PVD_Counter(uint32_t pvd_counter)
+{
+      // Writing PVD counter data to EEPROM
+      char msg[12] ={0};
+      sprintf(msg, "%lu", pvd_counter);
+      e24lc02.size = strlen((char*) msg);
+      e24lc02.status = e24lc02.write(e24lc02.eepromI2C, e24lc02.devAddress, (e24lc02.memAddress + 24), (uint8_t*)msg);
       if(e24lc02.status != EEPROM_OK){FOC_F_T.EEPROM_Error = 1;}
 }
 

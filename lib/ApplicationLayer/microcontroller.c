@@ -20,6 +20,8 @@ initializations.Functions specific to STM32 are mentioned in this file.
 #include "usart.h"
 #include "gpio.h"
 #include "i2c.h"
+#include "bor.h"
+#include "pvd.h"
 
 #include "microcontroller.h"
 #include "foc_blockset.h"
@@ -94,6 +96,12 @@ void SYSTEM_INIT()
   HAL_Init();
   /* Configure the system clock */
   SystemClock_Config();
+
+  Configure_BOR_Level();
+
+  Check_Reset_Source();
+
+  Configure_PVD();
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();

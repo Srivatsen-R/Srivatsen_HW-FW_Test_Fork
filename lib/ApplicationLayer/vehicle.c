@@ -15,8 +15,6 @@ This file contains functions associated with vehicle such as throttle, FNR , CAN
 #include "foc_blockset.h"
 #include "FOC.h"
 
-extern ExtU_FOC_T FOC_U;
-extern ExtY_FOC_T FOC_Y;
 extern motorControl_t motorControl;
 extern adc_t analog;
 

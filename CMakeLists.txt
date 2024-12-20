@@ -47,6 +47,8 @@ set(COMMON_FILES
     src/tim.c
     src/usart.c
     src/dma.c
+    src/bor.c
+    src/pvd.c
 
     src/stm32h7xx_it.c
     src/stm32h7xx_hal_msp.c

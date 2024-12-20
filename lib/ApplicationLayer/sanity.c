@@ -18,8 +18,6 @@ This file contains functions associated with sanity checks for vehicle.
 #include "FOC.h"
 #include "main.h"
 
-#define FDCAN_ERROR_BIT (0x4000A400 + 0x0044)
-
 sanity_t fault = {
         .boardTemperature_u = 0,
         .boardTemperature_v = 0,
@@ -53,9 +51,6 @@ motorControl_t motorControl = {
 };
 
 extern adc_t          analog;
-extern ExtU_FOC_T     FOC_U;
-extern ExtY_FOC_T     FOC_Y;
-extern FOC_Flag_T     FOC_F_T;
 extern terminal_t     terminal;
 extern motorControl_t mControl;
 
