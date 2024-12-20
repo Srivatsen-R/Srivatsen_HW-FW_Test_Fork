@@ -247,7 +247,7 @@ float Throttle_Control(int target_speed,float prev_output)
 
         if(target_speed >= prev_output)
         {
-            th_increment = 0.002;
+            th_increment = 0.02;
 
             if(target_speed >= prev_output)
             {
@@ -257,7 +257,7 @@ float Throttle_Control(int target_speed,float prev_output)
         }
         else
         {
-            th_decrement = 0.002;
+            th_decrement = 0.02;
 
             if(target_speed <= (prev_output - th_decrement)) prev_output -= th_decrement ;
             else prev_output = target_speed ;

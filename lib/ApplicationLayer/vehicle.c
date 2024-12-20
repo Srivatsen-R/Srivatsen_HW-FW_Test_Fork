@@ -11,6 +11,7 @@ This file contains functions associated with vehicle such as throttle, FNR , CAN
 #include "vehicle.h"
 #include "motor_param.h"
 #include "vector_control.h"
+#include "sanity.h"
 #include "foc_blockset.h"
 #include "FOC.h"
 

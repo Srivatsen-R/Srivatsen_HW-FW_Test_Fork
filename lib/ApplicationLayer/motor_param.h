@@ -12,7 +12,7 @@
 
 
 #define TORQUE_MODE                     1.0
-#define SPEED_LIMIT                     120.0
+#define SPEED_LIMIT                     150.0
 #define SPORTS_MODE                     0.0
 #define ECO_MODE                        0.0
 

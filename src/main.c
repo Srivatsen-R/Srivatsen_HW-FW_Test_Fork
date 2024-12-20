@@ -67,7 +67,7 @@ uint8_t cantp_config_flag = 0;
 uint8_t interrupt_flag = 0;
 uint8_t forward_set = 0;
 uint8_t reverse_set = 0;
-uint16_t boot_counter = 0;
+uint32_t boot_counter = 0;
 
 uint32_t* first_4Bytes = ((uint32_t *)(UID_BASE));
 uint32_t* next_4Bytes = ((uint32_t *)(UID_BASE + 4));
@@ -123,18 +123,7 @@ int main(void)
   //system clock init.
   SYSTEM_INIT();
 
-  // Counting the number of boot cycles
-  if (HAL_I2C_Mem_Read(&hi2c2, 0xA0, 0x00, I2C_MEMADD_SIZE_8BIT, (uint8_t*)&boot_counter, 2, HAL_MAX_DELAY) != HAL_OK)
-  {
-    FOC_F_T.EEPROM_Error = 1;
-  }
-
-  boot_counter += 1;
-
-  if (HAL_I2C_Mem_Write(&hi2c2, 0xA0, 0x00, I2C_MEMADD_SIZE_8BIT, (uint8_t*)&boot_counter, 2, HAL_MAX_DELAY) != HAL_OK)
-  {
-    FOC_F_T.EEPROM_Error = 1;
-  }
+  Boot_Counter();
 
   //function to keep drive disable intially.
   MotorControl_Init();
@@ -316,11 +305,25 @@ void send_on_305()
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_305, S, can_data, FDCAN_DLC_BYTES);
 }
 
+void send_on_306()
+{
+  uint8_t can_data[8] = {0};
+  can_data[0] = (uint8_t)(boot_counter & 0x000000FF);
+  can_data[1] = (uint8_t)((boot_counter & 0x0000FF00) >> 8);
+  can_data[2] = (uint8_t)((boot_counter & 0x00FF0000) >> 16);
+  can_data[3] = (uint8_t)((boot_counter & 0xFF000000) >> 24);
+  _fdcan_transmit_on_can(FDCAN_DEBUG_ID_306, S, can_data, FDCAN_DLC_BYTES);
+}
+
 void send_on_705()
 {
   uint8_t can_data[8] = {0};
   can_data[0] = (uint8_t)(motorControl.temperature.motor + 50.0f);
   can_data[1] = (uint8_t)(avg_board_temp + 50.0f);
+  can_data[2] = (uint8_t)(boot_counter & 0x000000FF);
+  can_data[3] = (uint8_t)((boot_counter & 0x0000FF00) >> 8);
+  can_data[4] = (uint8_t)((boot_counter & 0x00FF0000) >> 16);
+  can_data[5] = (uint8_t)((boot_counter & 0xFF000000) >> 24);
   _fdcan_transmit_on_can(tx_Controller_705, S, can_data, FDCAN_DLC_BYTES);
 }
 
@@ -335,6 +338,7 @@ void send_on_706()
   else if (FOC_F_T.OT_Cont_Flag){can_data[3] = 0x02;}
   else if (FOC_F_T.Ph_OC_Flag){can_data[3] = 0x03;}
   else if (FOC_F_T.N_Flag){can_data[3] = 0x04;}
+  else if (FOC_F_T.EEPROM_Error){can_data[3] = 0x05;}
   can_data[4] = (uint8_t)((uint16_t)(abs(FOC_U.ActualSpeed * 0.1047) * RPM_TO_KMPH * KMPH_CAN_SCALING) & 0x00FF);
   can_data[5] = (uint8_t)(((uint16_t)(abs(FOC_U.ActualSpeed * 0.1047) * RPM_TO_KMPH * KMPH_CAN_SCALING) & 0xFF00) >> 8);
   _fdcan_transmit_on_can(tx_Controller_706, S, can_data, FDCAN_DLC_BYTES);
@@ -419,13 +423,13 @@ void send_on_7A0()
 void send_on_6F0(uint8_t* UIID_Arr)
 {
   uint8_t can_data[8] = {0};
-  can_data[0] = 0x03;
-  can_data[1] = 0x03;
+  can_data[0] = 0x04;
+  can_data[1] = 0x04;
   can_data[2] = 0x01;
   can_data[3] = 0x01;
   can_data[4] = 0x01;
-  can_data[5] = 0x01;
-  can_data[6] = 0x02;
+  can_data[5] = 0x00;
+  can_data[6] = 0x01;
   can_data[7] = UIID_Arr[0];
   _fdcan_transmit_on_can(tx_Controller_6F0, S, can_data, FDCAN_DLC_BYTES);
 }
@@ -433,8 +437,8 @@ void send_on_6F0(uint8_t* UIID_Arr)
 void send_on_6F1(uint8_t* UIID_Arr)
 {
   uint8_t can_data[8] = {0};
-  can_data[0] = 0x03;
-  can_data[1] = 0x04;
+  can_data[0] = 0x04;
+  can_data[1] = 0x01;
   can_data[2] = 0x00;
   can_data[3] = 0x00;
   can_data[4] = UIID_Arr[1];
@@ -447,7 +451,7 @@ void send_on_6F1(uint8_t* UIID_Arr)
 void send_on_6F2(uint8_t* UIID_Arr)
 {
   uint8_t can_data[8] = {0};
-  can_data[0] = 0x03;
+  can_data[0] = 0x04;
   can_data[1] = UIID_Arr[5];
   can_data[2] = UIID_Arr[6];
   can_data[3] = UIID_Arr[7];
@@ -518,7 +522,7 @@ void Throttle_Control_routine()
   reverse_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_3);
   #endif
   #if PEG3W
-  reverse_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_3);
+  reverse_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_2);
   #endif
   forward_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
 
@@ -620,6 +624,7 @@ void CAN_Transmit_routine()
     send_on_303();
     send_on_304();
     send_on_305();
+    send_on_306();
 
     prev_time = time_count;
   }
@@ -641,6 +646,26 @@ void CAN_Transmit_routine()
     prev_time_700x = time_count;
   }
   #endif
+}
+
+void Boot_Counter()
+{  
+  // // Counting the number of boot cycles
+  // if (HAL_I2C_Mem_Read(&hi2c2, 0xA0, 0x00, I2C_MEMADD_SIZE_8BIT, (uint8_t*)&boot_counter, sizeof(boot_counter), HAL_MAX_DELAY) != HAL_OK)
+  // {
+  //   FOC_F_T.EEPROM_Error = 1;
+  // }
+
+  // boot_counter += 1;
+
+  // if (HAL_I2C_Mem_Write(&hi2c2, 0xA0, 0x00, I2C_MEMADD_SIZE_8BIT, (uint8_t*)&boot_counter, sizeof(boot_counter), HAL_MAX_DELAY) != HAL_OK)
+  // {
+  //   FOC_F_T.EEPROM_Error = 1;
+  // }
+
+  EEPROM_Read_Data_Boot_Counter(&boot_counter);
+  boot_counter += 1;
+  EEPROM_Write_Data_Boot_Counter(boot_counter);
 }
 
 /* USER CODE BEGIN 4 */

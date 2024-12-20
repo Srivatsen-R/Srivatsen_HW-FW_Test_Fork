@@ -1214,7 +1214,7 @@ void FOC_initialize(void)
 
   FOC_U.Id_up_limit = 0.0f;
   FOC_U.Id_low_limit = 0.0f;
-  FOC_U.Iq_up_limit = 250.0f;
+  FOC_U.Iq_up_limit = 280.0f;
   FOC_U.Iq_low_limit = 0.0f;
 
   #if PEG4W

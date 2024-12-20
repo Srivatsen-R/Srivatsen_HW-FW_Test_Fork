@@ -18,5 +18,7 @@ void EEPROM_Read_Data_odo(void);
 void EEPROM_Read_Data_trip(void);
 void EEPROM_Write_Data_odo(uint32_t);
 void EEPROM_Write_Data_trip(uint32_t);
+void EEPROM_Read_Data_Boot_Counter(uint32_t*);
+void EEPROM_Write_Data_Boot_Counter(uint32_t);
 
 #endif

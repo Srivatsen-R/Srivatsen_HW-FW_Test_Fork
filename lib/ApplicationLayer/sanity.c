@@ -77,7 +77,7 @@ void FAULT_DETECTION()
 
         if (time_tick_count - prev_count_iq >= 10)
         {
-                if (FOC_Y.Iq >= 280.0)
+                if (FOC_Y.Iq >= 550.0)
                         count_iq++;
 
                 if (count_iq >= 10.0)
@@ -107,7 +107,7 @@ void FAULT_DETECTION()
 
         if (time_tick_count - prev_count_phase_curr >= 10)
         {
-                if ((FOC_U.PhaseCurrent[0] >= 280.0 || FOC_U.PhaseCurrent[0] <= -280.0) || (FOC_U.PhaseCurrent[1] >= 280.0 || FOC_U.PhaseCurrent[1] <= -280.0) || (FOC_U.PhaseCurrent[2] >= 280.0 || FOC_U.PhaseCurrent[2] <= -280.0))
+                if ((FOC_U.PhaseCurrent[0] >= 550.0 || FOC_U.PhaseCurrent[0] <= -550.0) || (FOC_U.PhaseCurrent[1] >= 550.0 || FOC_U.PhaseCurrent[1] <= -550.0) || (FOC_U.PhaseCurrent[2] >= 550.0 || FOC_U.PhaseCurrent[2] <= -550.0))
                         count_phase_Curr++;
 
                 if (count_phase_Curr >= 10.0)
