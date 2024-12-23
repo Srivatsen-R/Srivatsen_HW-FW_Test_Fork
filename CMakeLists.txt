@@ -49,6 +49,7 @@ set(COMMON_FILES
     src/dma.c
     src/bor.c
     src/pvd.c
+    src/get_flags.c
 
     src/stm32h7xx_it.c
     src/stm32h7xx_hal_msp.c

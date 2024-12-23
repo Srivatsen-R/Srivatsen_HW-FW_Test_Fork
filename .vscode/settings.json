@@ -45,7 +45,8 @@
         "structures.h": "c",
         "*.tcc": "cpp",
         "cinttypes": "cpp",
-        "cstdlib": "cpp"
+        "cstdlib": "cpp",
+        "get_flags.h": "c"
     },
     "cortex-debug.variableUseNaturalFormat": true
 }

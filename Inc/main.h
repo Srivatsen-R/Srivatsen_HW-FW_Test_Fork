@@ -49,6 +49,7 @@ void Throttle_Control_routine(void);
 void Get_and_Send_UIID(void);
 void Boot_Counter(void);
 void Led_Toggle(void);
+void hard_fault_handler_c(uint32_t*);
 
 /* Private defines -----------------------------------------------------------*/
 #define Ibus_U_Pin                GPIO_PIN_0

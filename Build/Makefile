@@ -2017,6 +2017,36 @@ src/fdcan.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/fdcan.c.s
 .PHONY : src/fdcan.c.s
 
+src/get_flags.obj: src/get_flags.c.obj
+.PHONY : src/get_flags.obj
+
+# target to build an object file
+src/get_flags.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/get_flags.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/get_flags.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/get_flags.c.obj
+.PHONY : src/get_flags.c.obj
+
+src/get_flags.i: src/get_flags.c.i
+.PHONY : src/get_flags.i
+
+# target to preprocess a source file
+src/get_flags.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/get_flags.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/get_flags.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/get_flags.c.i
+.PHONY : src/get_flags.c.i
+
+src/get_flags.s: src/get_flags.c.s
+.PHONY : src/get_flags.s
+
+# target to generate assembly for a file
+src/get_flags.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-bootloader.elf.dir\build.make CMakeFiles/Pegasus3.1v-bootloader.elf.dir/src/get_flags.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/src/get_flags.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/src/get_flags.c.s
+.PHONY : src/get_flags.c.s
+
 src/gpio.obj: src/gpio.c.obj
 .PHONY : src/gpio.obj
 
@@ -2503,6 +2533,9 @@ help:
 	@echo ... src/fdcan.obj
 	@echo ... src/fdcan.i
 	@echo ... src/fdcan.s
+	@echo ... src/get_flags.obj
+	@echo ... src/get_flags.i
+	@echo ... src/get_flags.s
 	@echo ... src/gpio.obj
 	@echo ... src/gpio.i
 	@echo ... src/gpio.s

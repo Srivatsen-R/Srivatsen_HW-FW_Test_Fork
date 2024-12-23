@@ -545,7 +545,7 @@ void Throttle_Control_routine()
   reverse_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_3);
   #endif
   #if PEG3W
-  reverse_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_2);
+  reverse_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_3);
   #endif
   forward_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
 
@@ -577,16 +577,7 @@ void Throttle_Control_routine()
     }
   }
 
-  FOC_U.Up_Limit_flux_PID = 0.4 * FOC_U.RefSpeed + 1.5f;
-  FOC_U.Low_Limit_flux_PID = -(0.4 * FOC_U.RefSpeed) - 1.5f;
-  FOC_U.Up_Limit_torque_PID = 0.4 * FOC_U.RefSpeed + 1.5f;
-  FOC_U.Low_Limit_torque_PID = -(0.4 * FOC_U.RefSpeed) - 1.5f;
-
-  if (FOC_U.Up_Limit_flux_PID >= 61.0f){FOC_U.Up_Limit_flux_PID = 61.0f;}
-  else if (FOC_U.Low_Limit_flux_PID <= -61.0f){FOC_U.Low_Limit_flux_PID = -61.0f;}
-
-  if (FOC_U.Up_Limit_torque_PID >= 61.0f){FOC_U.Up_Limit_torque_PID = 61.0f;}
-  else if (FOC_U.Low_Limit_torque_PID <= -61.0f){FOC_U.Low_Limit_torque_PID = -61.0f;}
+  FOC_U.Iq_up_limit = 0.4 * FOC_U.RefSpeed + FOC_U.RefSpeed;
 
   #endif
 
@@ -674,19 +665,6 @@ void CAN_Transmit_routine()
 
 void Boot_Counter()
 {  
-  // // Counting the number of boot cycles
-  // if (HAL_I2C_Mem_Read(&hi2c2, 0xA0, 0x00, I2C_MEMADD_SIZE_8BIT, (uint8_t*)&boot_counter, sizeof(boot_counter), HAL_MAX_DELAY) != HAL_OK)
-  // {
-  //   FOC_F_T.EEPROM_Error = 1;
-  // }
-
-  // boot_counter += 1;
-
-  // if (HAL_I2C_Mem_Write(&hi2c2, 0xA0, 0x00, I2C_MEMADD_SIZE_8BIT, (uint8_t*)&boot_counter, sizeof(boot_counter), HAL_MAX_DELAY) != HAL_OK)
-  // {
-  //   FOC_F_T.EEPROM_Error = 1;
-  // }
-
   EEPROM_Read_Data_Boot_Counter(&boot_counter);
   boot_counter += 1;
   EEPROM_Write_Data_Boot_Counter(boot_counter);
@@ -729,14 +707,14 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 //callback to read Z data from encoder
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-    if(GPIO_Pin == GPIO_PIN_7) // If The INT Source Is EXTI Line9_5 (PE7 Pin)
-    {
-      motorControl.encoder.value = 0;
-      foc.rho = 0.0;
-      foc.rho_prev = 0.0;
-      reset_flag = 1;
-      z_trig += 1;
-    }
+  if(GPIO_Pin == GPIO_PIN_7) // If The INT Source Is EXTI Line9_5 (PE7 Pin)
+  {
+    motorControl.encoder.value = 0;
+    foc.rho = 0.0;
+    foc.rho_prev = 0.0;
+    reset_flag = 1;
+    z_trig += 1;
+  }
 }
 
 void HAL_PWR_PVDCallback(void) 
