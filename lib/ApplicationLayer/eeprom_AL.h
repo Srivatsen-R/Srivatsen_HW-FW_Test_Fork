@@ -24,5 +24,9 @@ void EEPROM_Read_Data_BOR_Counter(uint32_t*);
 void EEPROM_Write_Data_BOR_Counter(uint32_t);
 void EEPROM_Read_Data_PVD_Counter(uint32_t*);
 void EEPROM_Write_Data_PVD_Counter(uint32_t);
+void EEPROM_Read_Data_PC_Register(uint32_t*);
+void EEPROM_Write_Data_PC_Register(uint32_t);
+void EEPROM_Read_Data_LR_Register(uint32_t*);
+void EEPROM_Write_Data_LR_Register(uint32_t);
 
 #endif

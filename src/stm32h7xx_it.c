@@ -37,20 +37,6 @@ void NMI_Handler(void)
 }
 
 /**
-  * @brief This function handles Hard fault interrupt.
-  */
-__attribute__((naked)) void HardFault_Handler(void) 
-{
-  __asm volatile (
-      "TST lr, #4 \n"           // Test bit 2 of LR to determine the active stack pointer
-      "ITE EQ \n"               // If-Then-Else instruction
-      "MRSEQ r0, MSP \n"        // If equal (bit 2 is 0), move MSP to R0
-      "MRSNE r0, PSP \n"        // If not equal (bit 2 is 1), move PSP to R0
-      "B hard_fault_handler_c \n" // Branch to the C handler
-  );
-}
-
-/**
   * @brief This function handles Memory management fault.
   */
 void MemManage_Handler(void)
@@ -350,26 +336,6 @@ void TIM5_IRQHandler(void)
 }
 
 /* USER CODE BEGIN 1 */
-void hard_fault_handler_c(uint32_t *stack_address) 
-{
-  // Read the general purpose registers and the special registers
-  uint32_t stacked_r0 = stack_address[0];
-  uint32_t stacked_r1 = stack_address[1];
-  uint32_t stacked_r2 = stack_address[2];
-  uint32_t stacked_r3 = stack_address[3];
-  uint32_t stacked_r12 = stack_address[4];
-  uint32_t stacked_lr = stack_address[5];
-  uint32_t stacked_pc = stack_address[6];
-  uint32_t stacked_psr = stack_address[7];
 
-  // Read fault status registers
-  uint32_t hfsr = SCB->HFSR;
-  uint32_t cfsr = SCB->CFSR;
-  uint32_t bfar = SCB->BFAR;
-  uint32_t mmfar = SCB->MMFAR;
-
-  // Log or process the extracted register values for debugging
-  // For example, send them over a serial interface or store in non-volatile memory
-}
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

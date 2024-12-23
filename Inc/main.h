@@ -31,6 +31,7 @@ void send_on_304(void);
 void send_on_305(void);
 void send_on_306(void);
 void send_on_307(void);
+void send_on_308(void);
 void send_on_705(void);
 void send_on_706(void);
 void send_on_710(void);
@@ -50,6 +51,7 @@ void Get_and_Send_UIID(void);
 void Boot_Counter(void);
 void Led_Toggle(void);
 void hard_fault_handler_c(uint32_t*);
+void read_hard_fault_cause(void);
 
 /* Private defines -----------------------------------------------------------*/
 #define Ibus_U_Pin                GPIO_PIN_0
@@ -129,6 +131,22 @@ typedef struct {
     uint8_t throttle_disabled;
 } fnr_states;
 
+typedef struct {
+    /* data */
+    uint32_t r0;
+    uint32_t r1;
+    uint32_t r2;
+    uint32_t r3;
+    uint32_t r12;
+    uint32_t lr;
+    uint32_t pc;
+    uint32_t psr;
+    uint32_t hfsr;
+    uint32_t cfsr;
+    uint32_t bfar;
+    uint32_t mmfar;
+} hard_fault_cause;
+
 typedef enum {
     FORWARD,
     NEUTRAL,
@@ -136,6 +154,7 @@ typedef enum {
 } fnr_codes;
 
 extern fnr_states fnr;
+extern hard_fault_cause hard_fault_c;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

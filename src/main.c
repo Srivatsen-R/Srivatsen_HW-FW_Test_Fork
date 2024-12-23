@@ -91,6 +91,7 @@ extern terminal_t     terminal;
 extern motorControl_t motorControl;
 
 fnr_states fnr;
+hard_fault_cause hard_fault_c;
 
 /* Private function prototypes -----------------------------------------------*/
 typedef struct __attribute__((packed))
@@ -129,6 +130,8 @@ int main(void)
   Update_BOR_Counter();
 
   Boot_Counter();
+
+  read_hard_fault_cause();
 
   //function to keep drive disable intially.
   MotorControl_Init();
@@ -335,7 +338,21 @@ void send_on_307()
   can_data[1] = (uint8_t)((pvd_counter & 0x0000FF00) >> 8);
   can_data[2] = (uint8_t)((pvd_counter & 0x00FF0000) >> 16);
   can_data[3] = (uint8_t)((pvd_counter & 0xFF000000) >> 24);
+  can_data[4] = (uint8_t)(hard_fault_c.lr & 0x000000FF);
+  can_data[5] = (uint8_t)((hard_fault_c.lr & 0x0000FF00) >> 8);
+  can_data[6] = (uint8_t)((hard_fault_c.lr & 0x00FF0000) >> 16);
+  can_data[7] = (uint8_t)((hard_fault_c.lr & 0xFF000000) >> 24);
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_307, S, can_data, FDCAN_DLC_BYTES);
+}
+
+void send_on_308()
+{
+  uint8_t can_data[8] = {0};
+  can_data[0] = (uint8_t)(hard_fault_c.pc & 0x000000FF);
+  can_data[1] = (uint8_t)((hard_fault_c.pc & 0x0000FF00) >> 8);
+  can_data[2] = (uint8_t)((hard_fault_c.pc & 0x00FF0000) >> 16);
+  can_data[3] = (uint8_t)((hard_fault_c.pc & 0xFF000000) >> 24);
+  _fdcan_transmit_on_can(FDCAN_DEBUG_ID_308, S, can_data, FDCAN_DLC_BYTES);
 }
 
 void send_on_705()
@@ -640,6 +657,7 @@ void CAN_Transmit_routine()
     send_on_305();
     send_on_306();
     send_on_307();
+    send_on_308();
 
     prev_time = time_count;
   }
@@ -668,6 +686,13 @@ void Boot_Counter()
   EEPROM_Read_Data_Boot_Counter(&boot_counter);
   boot_counter += 1;
   EEPROM_Write_Data_Boot_Counter(boot_counter);
+}
+
+void read_hard_fault_cause()
+{
+  // Read all the stored register data
+  EEPROM_Read_Data_LR_Register(&hard_fault_c.lr);
+  EEPROM_Read_Data_PC_Register(&hard_fault_c.pc);
 }
 
 void Led_Toggle()
@@ -722,6 +747,20 @@ void HAL_PWR_PVDCallback(void)
   // Handle PVD event
   // For example, toggle an LED or log the event
   pvd_trig_flag = 1;
+}
+
+void hard_fault_handler_c(uint32_t *stack_address) 
+{
+  // Read the general purpose registers and the special registers
+  uint32_t stacked_lr = stack_address[5];
+  uint32_t stacked_pc = stack_address[6];
+
+  // Log or process the extracted register values for debugging
+  // For example, send them over a serial interface or store in non-volatile memory
+  EEPROM_Write_Data_LR_Register(stacked_lr);
+  EEPROM_Write_Data_PC_Register(stacked_pc);
+  // Reset the controller
+  NVIC_SystemReset();
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
@@ -782,6 +821,20 @@ void switch_partition_and_reset()
 {
 	sharedmemory.flags |= BL_SWITCH_PARTITION;
 	NVIC_SystemReset();
+}
+
+/**
+  * @brief This function handles Hard fault interrupt.
+  */
+__attribute__((naked)) void HardFault_Handler(void) 
+{
+  __asm volatile (
+      "TST lr, #4 \n"           // Test bit 2 of LR to determine the active stack pointer
+      "ITE EQ \n"               // If-Then-Else instruction
+      "MRSEQ r0, MSP \n"        // If equal (bit 2 is 0), move MSP to R0
+      "MRSNE r0, PSP \n"        // If not equal (bit 2 is 1), move PSP to R0
+      "B hard_fault_handler_c \n" // Branch to the C handler
+  );
 }
 
 /**

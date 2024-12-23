@@ -83,6 +83,22 @@ void EEPROM_Read_Data_PVD_Counter(uint32_t* pvd_counter)
       *pvd_counter = atoi((char*) e24lc02.pData);
 }
 
+void EEPROM_Read_Data_LR_Register(uint32_t* lr_reg)
+{
+      // Reading LR counter data from EEPROM 
+      e24lc02.status =  e24lc02.read(e24lc02.eepromI2C, e24lc02.devAddress, (e24lc02.memAddress + 36), (uint8_t*) &e24lc02.pData, e24lc02.size);
+      if(e24lc02.status != EEPROM_OK){FOC_F_T.EEPROM_Error = 1;}
+      *lr_reg = atoi((char*) e24lc02.pData);
+}
+
+void EEPROM_Read_Data_PC_Register(uint32_t* pc_reg)
+{
+      // Reading PC counter data from EEPROM 
+      e24lc02.status =  e24lc02.read(e24lc02.eepromI2C, e24lc02.devAddress, (e24lc02.memAddress + 48), (uint8_t*) &e24lc02.pData, e24lc02.size);
+      if(e24lc02.status != EEPROM_OK){FOC_F_T.EEPROM_Error = 1;}
+      *pc_reg = atoi((char*) e24lc02.pData);
+}
+
 void EEPROM_Read_Data_trip()
 {
       // Reading odometer data from EEPROM 
@@ -131,6 +147,26 @@ void EEPROM_Write_Data_PVD_Counter(uint32_t pvd_counter)
       sprintf(msg, "%lu", pvd_counter);
       e24lc02.size = strlen((char*) msg);
       e24lc02.status = e24lc02.write(e24lc02.eepromI2C, e24lc02.devAddress, (e24lc02.memAddress + 24), (uint8_t*)msg);
+      if(e24lc02.status != EEPROM_OK){FOC_F_T.EEPROM_Error = 1;}
+}
+
+void EEPROM_Write_Data_LR_Register(uint32_t lr_reg)
+{
+      // Writing LR counter data to EEPROM
+      char msg[12] ={0};
+      sprintf(msg, "%lu", lr_reg);
+      e24lc02.size = strlen((char*) msg);
+      e24lc02.status = e24lc02.write(e24lc02.eepromI2C, e24lc02.devAddress, (e24lc02.memAddress + 36), (uint8_t*)msg);
+      if(e24lc02.status != EEPROM_OK){FOC_F_T.EEPROM_Error = 1;}
+}
+
+void EEPROM_Write_Data_PC_Register(uint32_t pc_reg)
+{
+      // Writing PC counter data to EEPROM
+      char msg[12] ={0};
+      sprintf(msg, "%lu", pc_reg);
+      e24lc02.size = strlen((char*) msg);
+      e24lc02.status = e24lc02.write(e24lc02.eepromI2C, e24lc02.devAddress, (e24lc02.memAddress + 48), (uint8_t*)msg);
       if(e24lc02.status != EEPROM_OK){FOC_F_T.EEPROM_Error = 1;}
 }
 
