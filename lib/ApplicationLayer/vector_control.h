@@ -110,13 +110,15 @@ typedef struct foc_t {
 
 #define ALPHA                   0.4
 
-#define THROTTLE_CNTRL          1
-#define RAMP_CNTRL              0
-#define PEG3W                   1
-#define PEG4W                   0
+#define THROTTLE_CNTRL          0
+#define RAMP_CNTRL              1
+#define PEG3W                   0
+#define PEG4W                   1
 #define DEBUG_EN                1
 #define DEBUG_OFF               0
 #define DISABLE_ON_NEUTRAL      0
+#define TORQUE_MODE             0
+#define SPEED_MODE              1
 
 // #define POLEPAIRS               4.0// Nidec 14kg
 #define POLEPAIRS               3.0// Nidec 22kg & ULTRON
@@ -151,8 +153,8 @@ typedef struct foc_t {
 // #define ANGLE_OFFSET_RW                            4.188790//V3
 
 #if PEG4W
-#define ANGLE_OFFSET_FW                               1.076868148//X2
-#define ANGLE_OFFSET_RW                               2.0647245051//X2
+#define ANGLE_OFFSET_FW                               2.001892652//R1
+#define ANGLE_OFFSET_RW                               2.001892652//R1
 #endif
 
 #if PEG3W
@@ -208,7 +210,7 @@ typedef struct foc_t {
 #define RPM_IMR_CONST1                      0.0004251// (1-0.001)/(5000-2650)
 
 
-#define F_SW                                10000.0//FCLK/(PSCR*ARR) //100MHz/(10*1000)         // ISR Sampling frequency
+#define F_SW                                7143.0//FCLK/(PSCR*ARR) //100MHz/(10*1000)         // ISR Sampling frequency
 #define T_PRD                               2500.0         // PWM Period TIM1
 #define OFFSET_DUTY                         0.5            // DUTY OFFSET used in modulation.
 #define T_S                                 1.0/F_SW       // Sampling Time

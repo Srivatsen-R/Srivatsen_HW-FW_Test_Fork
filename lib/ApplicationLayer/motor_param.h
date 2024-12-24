@@ -11,7 +11,6 @@
 #define OVER_VOLT_LIMIT                 75.0//72 corresponds to 80V
 
 
-#define TORQUE_MODE                     1.0
 #define SPEED_LIMIT                     150.0
 #define SPORTS_MODE                     0.0
 #define ECO_MODE                        0.0

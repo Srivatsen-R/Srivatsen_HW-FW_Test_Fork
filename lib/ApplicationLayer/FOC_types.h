@@ -3,9 +3,9 @@
  *
  * Code generation for model "FOC".
  *
- * Model version              : 18.37
+ * Model version              : 18.39
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C source code generated on : Fri Dec 13 13:25:35 2024
+ * C source code generated on : Sat Dec 21 16:19:18 2024
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping

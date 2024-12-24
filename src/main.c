@@ -352,6 +352,11 @@ void send_on_308()
   can_data[1] = (uint8_t)((hard_fault_c.pc & 0x0000FF00) >> 8);
   can_data[2] = (uint8_t)((hard_fault_c.pc & 0x00FF0000) >> 16);
   can_data[3] = (uint8_t)((hard_fault_c.pc & 0xFF000000) >> 24);
+  #if SPEED_MODE
+  volatile uint16_t offest = FOC_Y.Offset_angle * 100.0f;
+  can_data[4] = (uint8_t)((offest & 0x00FF));
+  can_data[5] = (uint8_t)((offest & 0xFF00) >> 8);
+  #endif
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_308, S, can_data, FDCAN_DLC_BYTES);
 }
 
@@ -599,35 +604,19 @@ void Throttle_Control_routine()
   #endif
 
   #if RAMP_CNTRL
-  if (time_count - prev_thr_time >= 1)
+  if (time_count - prev_thr_time >= 100)
   {
-    if (FOC_U.RefSpeed < (1000.0 * 0.1047))
+    if (FOC_U.RefSpeed < (2650.0 * 0.1047))
       FOC_U.RefSpeed += 1.0;
 
-    if (FOC_U.RefSpeed > (1000.0 * 0.1047))
-      FOC_U.RefSpeed = (1000.0 * 0.1047);
+    if (FOC_U.RefSpeed > (2650.0 * 0.1047))
+      FOC_U.RefSpeed = (2650.0 * 0.1047);
 
     if (FOC_U.RefSpeed < 0.0)
       FOC_U.RefSpeed = 0.0;
 
     prev_thr_time = time_count;
   }
-
-  // if (torque_calc >= 45 && torque_calc < 50)
-  // {
-  //   FOC_U.Id_up_limit = 0.0f;
-  //   FOC_U.Id_low_limit = 0.0f;
-  // }
-  // else if (torque_calc >= 50)
-  // {
-  //   FOC_U.Id_up_limit = 15.0f;
-  //   FOC_U.Id_low_limit = 0.0f;
-  // }
-  // else
-  // {
-  //   FOC_U.Id_up_limit = 0.0f;
-  //   FOC_U.Id_low_limit = -25.0f;
-  // }
   #endif
 }
 
