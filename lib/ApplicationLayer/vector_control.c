@@ -35,17 +35,6 @@ This calculation provides quadrature voltage values vα and vβ.
 duty cycle values that generate the desired voltage vector.
 
 */
-
-#include <math.h>
-#include <stdint.h>
-#include "vector_control.h"
-#include "dr_devices.h"
-#include "structures.h"
-#include "tim.h"
-#include "sanity.h"
-#include "foc_blockset.h"
-#include "motor_param.h"
-#include "FOC.h"
 #include "main.h"
 
 extern float Duty;

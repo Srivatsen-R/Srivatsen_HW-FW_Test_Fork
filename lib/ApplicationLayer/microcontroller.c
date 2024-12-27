@@ -7,24 +7,7 @@ This file contains functions for initialization of system clock, interrupts and 
 initializations.Functions specific to STM32 are mentioned in this file.
 
 */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "main.h"
-#include "adc.h"
-#include "dma.h"
-#include "fdcan.h"
-#include "tim.h"
-#include "usart.h"
-#include "gpio.h"
-#include "i2c.h"
-#include "bor.h"
-#include "pvd.h"
-
-#include "microcontroller.h"
-#include "foc_blockset.h"
 
 /**
   * @brief System Clock Configuration

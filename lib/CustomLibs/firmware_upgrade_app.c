@@ -90,11 +90,11 @@ void handle_upgrade_init()
     case FOTA:
 
 #ifdef APP1
-        app_address =  &__app2_start__;
+        app_address =  (uint32_t)(&__app2_start__);
         uint8_t res = clearApp2();
 #endif
 #ifdef APP2
-        app_address =  &__app1_start__;
+        app_address =  (uint32_t)(&__app1_start__);
         uint8_t res = clearApp1();
 #endif
         if(res != 1)

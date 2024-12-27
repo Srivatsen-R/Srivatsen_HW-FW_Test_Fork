@@ -15,42 +15,7 @@ HAL_GPIO_EXTI_Callback          : Contain code blocks for reseting position.
 */
 
 /* Includes ------------------------------------------------------------------*/
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-
 #include "main.h"
-#include "adc.h"
-#include "dma.h"
-#include "fdcan.h"
-#include "tim.h"
-#include "gpio.h"
-#include "i2c.h"
-#include "bor.h"
-#include "pvd.h"
-
-#include "adc_AL.h"
-#include "fdcan_AL.h"
-#include "temp_AL.h"
-
-#include "vector_control.h"
-
-#include "motor_param.h"
-#include "eeprom_AL.h"
-#include "flash.h"
-#include "vehicle.h"
-#include "sanity.h"
-#include "foc_blockset.h"
-#include "microcontroller.h"
-
-#include "config.h"
-#include "can_tp_app.h"
-#include "bootloaderFunctions.h"
-#include "firmware_upgrade_app.h"
-#include "isotp/isotp_types.h"
-
-#include "FOC.h"
 
 /* Variable declaration ------------------------------------------------------*/
 static float prev_rpm = 0;
@@ -606,11 +571,11 @@ void Throttle_Control_routine()
   #if RAMP_CNTRL
   if (time_count - prev_thr_time >= 100)
   {
-    if (FOC_U.RefSpeed < (2650.0 * 0.1047))
+    if (FOC_U.RefSpeed < (500.0 * 0.1047))
       FOC_U.RefSpeed += 1.0;
 
-    if (FOC_U.RefSpeed > (2650.0 * 0.1047))
-      FOC_U.RefSpeed = (2650.0 * 0.1047);
+    if (FOC_U.RefSpeed > (500.0 * 0.1047))
+      FOC_U.RefSpeed = (500.0 * 0.1047);
 
     if (FOC_U.RefSpeed < 0.0)
       FOC_U.RefSpeed = 0.0;

@@ -112,8 +112,8 @@ typedef struct foc_t {
 
 #define THROTTLE_CNTRL          0
 #define RAMP_CNTRL              1
-#define PEG3W                   0
-#define PEG4W                   1
+#define PEG3W                   1
+#define PEG4W                   0
 #define DEBUG_EN                1
 #define DEBUG_OFF               0
 #define DISABLE_ON_NEUTRAL      0

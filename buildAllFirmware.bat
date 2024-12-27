@@ -5,8 +5,8 @@
 rd /s /q Build
 mkdir Build
 cd .\Build\
-cmake -G "MinGW Makefiles" --toolchain ../arm-none-eabi-gcc.cmake -DCMAKE_BUILD_TYPE=Debug -DNDEBUG=0 .. 
-cmake --build . -- -j16
+cmake -G "MinGW Makefiles" --toolchain ../arm-none-eabi-gcc.cmake -DCMAKE_BUILD_TYPE=Debug -DNDEBUG=1 .. 
+cmake --build . -- 
 cd ..
 python patch_image_header.py Build/Pegasus3.1v-app1.bin
 python patch_image_header.py Build/Pegasus3.1v-app2.bin

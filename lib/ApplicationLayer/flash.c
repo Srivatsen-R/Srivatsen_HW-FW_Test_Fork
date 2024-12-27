@@ -6,13 +6,8 @@ Contributors: Pujit Gandhi,Pratik Rout,Olay,Saksham
 This file contains functions associated with flash read/write.
 
 */
-
-#include "stm32h7xx_hal.h"
-#include "flash.h"
-#include "string.h"
-#include "stdio.h"
 #include "memoryMap.h"
-#include <stdint.h>
+#include "main.h"
 
 // If using STM32H7Ax/BX Series, uncomment the line below
 //#define FLASHWORD 		4
@@ -204,7 +199,7 @@ If you try to write a single 32 bit word, it will automatically write 0's for th
 
 uint32_t clearApp1(void)
 {
-  uint32_t address = &__app1_start__;
+  uint32_t address = (uint32_t)(&__app1_start__);
   static FLASH_EraseInitTypeDef EraseInitStruct;
 	uint32_t SECTORError;
 
@@ -237,7 +232,7 @@ uint32_t clearApp1(void)
 
 uint32_t clearApp2(void)
 {
-  uint32_t address = &__app2_start__;
+  uint32_t address = (uint32_t)(&__app2_start__);
 
   static FLASH_EraseInitTypeDef EraseInitStruct;
 	uint32_t SECTORError;

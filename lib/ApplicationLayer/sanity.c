@@ -7,15 +7,6 @@ This file contains functions associated with sanity checks for vehicle.
 
 */
 
-#include <stdlib.h>
-#include <math.h>
-#include "vehicle.h"
-#include "motor_param.h"
-#include "vector_control.h"
-#include "sanity.h"
-#include "adc_AL.h"
-#include "dr_devices.h"
-#include "FOC.h"
 #include "main.h"
 
 sanity_t fault = {

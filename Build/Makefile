@@ -1195,33 +1195,6 @@ lib/ApplicationLayer/FOC.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/FOC.c.s
 .PHONY : lib/ApplicationLayer/FOC.c.s
 
-lib/ApplicationLayer/Pegasus_MBD.obj: lib/ApplicationLayer/Pegasus_MBD.c.obj
-.PHONY : lib/ApplicationLayer/Pegasus_MBD.obj
-
-# target to build an object file
-lib/ApplicationLayer/Pegasus_MBD.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Pegasus_MBD.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Pegasus_MBD.c.obj
-.PHONY : lib/ApplicationLayer/Pegasus_MBD.c.obj
-
-lib/ApplicationLayer/Pegasus_MBD.i: lib/ApplicationLayer/Pegasus_MBD.c.i
-.PHONY : lib/ApplicationLayer/Pegasus_MBD.i
-
-# target to preprocess a source file
-lib/ApplicationLayer/Pegasus_MBD.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Pegasus_MBD.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Pegasus_MBD.c.i
-.PHONY : lib/ApplicationLayer/Pegasus_MBD.c.i
-
-lib/ApplicationLayer/Pegasus_MBD.s: lib/ApplicationLayer/Pegasus_MBD.c.s
-.PHONY : lib/ApplicationLayer/Pegasus_MBD.s
-
-# target to generate assembly for a file
-lib/ApplicationLayer/Pegasus_MBD.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Pegasus_MBD.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Pegasus_MBD.c.s
-.PHONY : lib/ApplicationLayer/Pegasus_MBD.c.s
-
 lib/ApplicationLayer/Position_Calculation.obj: lib/ApplicationLayer/Position_Calculation.c.obj
 .PHONY : lib/ApplicationLayer/Position_Calculation.obj
 
@@ -2443,9 +2416,6 @@ help:
 	@echo ... lib/ApplicationLayer/FOC.obj
 	@echo ... lib/ApplicationLayer/FOC.i
 	@echo ... lib/ApplicationLayer/FOC.s
-	@echo ... lib/ApplicationLayer/Pegasus_MBD.obj
-	@echo ... lib/ApplicationLayer/Pegasus_MBD.i
-	@echo ... lib/ApplicationLayer/Pegasus_MBD.s
 	@echo ... lib/ApplicationLayer/Position_Calculation.obj
 	@echo ... lib/ApplicationLayer/Position_Calculation.i
 	@echo ... lib/ApplicationLayer/Position_Calculation.s

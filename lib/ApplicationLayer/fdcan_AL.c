@@ -31,11 +31,9 @@ can_t can = {
 	.txMsg     = {{0},{0},{0},{0},{0},{0},{0},{0},{0},{0}},
 	.rx_flag   = false,
 	.verifier  = 0,
-	.write     = CAN_Write,
 	.transmit  = Transmit_on_CAN,
 	.available = isFDCAN_Available, 
 	.setup     = FDCAN_ApplicationSetup,
-	.dataLoggingForPythonScript = FDCAN_dataLoggingForPythonScript,
 };
 
 /* Function to Transmit CAN Ids on CAN1 Port
@@ -177,11 +175,6 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 	}
 }
 
-void CAN_Write(void) 
-{
-
-}
-
 FDCAN_STATUS isFDCAN_Available(void) 
 {
 	FDCAN_STATUS returnVal;
@@ -203,53 +196,8 @@ void FDCAN_ApplicationSetup (void) {
   };
 }
 
-static void __motorController_calibrateTerminalReading(terminal_t *terminal) 
-{
-
-}
-
 static uint16_t __fdcan_addScalingFactorToMessage(float scaleResult) {
 	return (scaleResult * SCALING_FACTOR);
-}
-
-static void __fdcan_transferMessagesOnID300(terminal_t terminal) 
-{
-
-}
-
-static void __fdcan_transferMessagesOnID301(terminal_t terminal) 
-{
-
-}
-
-static void __fdcan_transferMessagesOnID302(terminal_t terminal, float dcCurrent, float motorTemperature) 
-{
-
-}
-
-static void __fdcan_transferMessagesOnID303(motorControl_t motorController, char fault_status) 
-{
-
-}
-
-static void __fdcan_transferMessagesOnID304(adc_t phaseCurrent, motorControl_t motorController) 
-{
-
-}
-
-static void __fdcan_transferMessagesOnID305(terminal_t terminal, float encoderAState, float encoderBState) 
-{
-
-}
-
-static void __fdcan_transferMessagesOnID306(float Odometer, float Speed, float Trip, float current) 
-{
-
-}
-
-static void __fdcan_transferMessagesOnID307(float avg_board_temp, float v_rms, float SOC) 
-{
-
 }
 
 void __fdcan_transferMessagesOnID6FA(firmware_upgrade_error_codes_e message, uint8_t flag_msg) {
@@ -279,8 +227,3 @@ void _fdcan_transmit_on_can(uint32_t arbitration_id, TypeofCANID format, uint8_t
 	__fdcan->transmit(arbitration_id, format, __fdcan->BufferForMessageToTransmit, dlc);
 	free(__fdcan);
 }
-
-void FDCAN_dataLoggingForPythonScript(terminal_t terminal, float dcCurrent, uint8_t fault_status, 
-float motorTemperature, motorControl_t motorControllerTemperatures,
-adc_t phaseCurrent, float duty, float z_trigger, float Odometer, float Speed, float Trip, float current, float avg_board_temp, float v_rms) 
-{}

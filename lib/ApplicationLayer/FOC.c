@@ -25,7 +25,6 @@
 #include <string.h>
 #include "rt_nonfinite.h"
 #include "main.h"
-#include "motor_param.h"
 
 /* Named constants for Chart: '<S4>/Protection_States' */
 #define FOC_IN_CurrentSafe             ((uint8_T)1U)

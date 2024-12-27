@@ -7,13 +7,7 @@ This file contains functions associated with vehicle such as throttle, FNR , CAN
 
 */
 
-#include <math.h>
-#include "vehicle.h"
-#include "motor_param.h"
-#include "vector_control.h"
-#include "sanity.h"
-#include "foc_blockset.h"
-#include "FOC.h"
+#include "main.h"
 
 extern motorControl_t motorControl;
 extern adc_t analog;
@@ -40,8 +34,8 @@ void READ_MOTOR_PHASE_CURRENT()
   }
 
   #if PEG3W
-    FOC_U.PhaseCurrent[0] = (filteredValue_a * 3.297 * 400.0) / 65535.0;
-    FOC_U.PhaseCurrent[1] = (filteredValue_b * 3.297 * 400.0) / 65535.0;
+    FOC_U.PhaseCurrent[0] = (filteredValue_a * 3.297 * 800.0) / 65535.0;
+    FOC_U.PhaseCurrent[1] = (filteredValue_b * 3.297 * 800.0) / 65535.0;
     FOC_U.PhaseCurrent[2] = (-FOC_U.PhaseCurrent[0]) + (-FOC_U.PhaseCurrent[1]);
   #endif
 
