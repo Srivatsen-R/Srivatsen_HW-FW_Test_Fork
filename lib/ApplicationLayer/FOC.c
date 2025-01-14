@@ -358,7 +358,7 @@ void FOC_step(void)
    *  Product: '<S31>/Product'
    *  Switch: '<S80>/Switch2'
    */
-  rtb_Divide = 2.0 * rtb_Diff_j / (real32_T)(FOC_U.Lamda * FOC_U.p * 3.0);
+  rtb_Divide = rtb_Diff_j * FOC_U.torque_ratio / (real32_T)(FOC_U.Lamda * FOC_U.p * 3.0);
 
   /* Switch: '<S34>/Switch2' incorporates:
    *  Inport: '<Root>/Iq_low_limit'
@@ -375,9 +375,6 @@ void FOC_step(void)
      */
     rtb_Divide = FOC_U.Iq_low_limit;
   }
-
-  FOC_Y.Iq_refer = rtb_Divide;
-
   /* End of Switch: '<S34>/Switch2' */
 
   /* Math: '<S31>/Math Function2'
@@ -528,6 +525,7 @@ void FOC_step(void)
    *  Operator: magnitude^2
    */
   rtb_Divide = sqrt(fabs(rtb_Divide - rtb_Subtract * rtb_Subtract));
+  FOC_Y.Iq_refer = rtb_Divide;
 
   /* Gain: '<S204>/wm_pu2si_mech2elec' incorporates:
    *  Gain: '<S8>/Gain'
@@ -653,7 +651,7 @@ void FOC_step(void)
    */
   FOC_Y.Vq = rtb_Subtract + rtb_Diff_j;
 
-  real_T Vq_ref_max = sqrtf((61.0f*61.0f) - (FOC_Y.Vd * FOC_Y.Vd));
+  real_T Vq_ref_max = sqrtf((FOC_U.BusVoltage_V*FOC_U.BusVoltage_V) - (FOC_Y.Vd * FOC_Y.Vd));
 
   if (FOC_Y.Vq > Vq_ref_max)
     FOC_Y.Vq = Vq_ref_max;
@@ -1441,33 +1439,37 @@ void FOC_initialize(void)
   FOC_U.Lamda = 0.0263;
   FOC_U.Rs = 0.0107;
   FOC_U.p = POLEPAIRS;
+  FOC_U.torque_ratio = 0.228571f;
 
-  FOC_U.Id_up_limit = 0.0f;
-  FOC_U.Id_low_limit = -15.0f;
-  FOC_U.Iq_up_limit = 280.0f;
-  FOC_U.Iq_low_limit = 0.0f;
+  FOC_U.Id_up_limit = 300.0f;
+  FOC_U.Id_low_limit = -300.0f;
+  FOC_U.Iq_up_limit = 300.0f;
+  FOC_U.Iq_low_limit = -300.0f;
+  FOC_U.BusVoltage_V = 61.0f;
 
   #if PEG4W
-  FOC_U.Kp_speed_PID = 4.0;
-  FOC_U.Ki_speed_PID = 15.0;
+  FOC_U.I_max = 300.0f;
+
+  FOC_U.Kp_speed_PID = 5.0;
+  FOC_U.Ki_speed_PID = 38.0;
   FOC_U.Kd_speed_PID = 0.001;
-  FOC_U.Filter_speed_PID = 2;
-  FOC_U.Up_Limit_speed_PID = 550.0;
-  FOC_U.Low_Limit_speed_PID = 0.0;
+  FOC_U.Filter_speed_PID = 10;
+  FOC_U.Up_Limit_speed_PID = 300.0;
+  FOC_U.Low_Limit_speed_PID = -300.0;
 
-  FOC_U.Kp_flux_PID = 0.12;
-  FOC_U.Ki_flux_PID = 16.0;
+  FOC_U.Kp_flux_PID = 0.01;
+  FOC_U.Ki_flux_PID = 20.0;
   FOC_U.Kd_flux_PID = 0.001;
-  FOC_U.Filter_flux_PID = 2.0;
-  FOC_U.Up_Limit_flux_PID = 61.0;
-  FOC_U.Low_Limit_flux_PID = -61.0;
+  FOC_U.Filter_flux_PID = 10.0;
+  FOC_U.Up_Limit_flux_PID = FOC_U.BusVoltage_V;
+  FOC_U.Low_Limit_flux_PID = -FOC_U.BusVoltage_V;
 
-  FOC_U.Kp_torque_PID = 0.12;
-  FOC_U.Ki_torque_PID = 8.0;
+  FOC_U.Kp_torque_PID = 0.01;
+  FOC_U.Ki_torque_PID = 24.0;
   FOC_U.Kd_torque_PID = 0.001;
-  FOC_U.Filter_torque_PID = 2.0;
-  FOC_U.Up_Limit_torque_PID = 61.0;
-  FOC_U.Low_Limit_torque_PID = -61.0;
+  FOC_U.Filter_torque_PID = 10.0;
+  FOC_U.Up_Limit_torque_PID = FOC_U.BusVoltage_V;
+  FOC_U.Low_Limit_torque_PID = -FOC_U.BusVoltage_V;
   #endif
 
   #if PEG3W
@@ -1499,7 +1501,7 @@ void FOC_initialize(void)
   fnr.previous_state = FORWARD;
   fnr.throttle_disabled = 1;
 
-  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
 }
 
 /* Model terminate function */

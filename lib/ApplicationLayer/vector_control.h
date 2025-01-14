@@ -112,8 +112,8 @@ typedef struct foc_t {
 
 #define THROTTLE_CNTRL          0
 #define RAMP_CNTRL              1
-#define PEG3W                   1
-#define PEG4W                   0
+#define PEG3W                   0
+#define PEG4W                   1
 #define DEBUG_EN                1
 #define DEBUG_OFF               0
 #define DISABLE_ON_NEUTRAL      0
@@ -130,7 +130,7 @@ typedef struct foc_t {
 //#define FW_MAX_CURRENT_PU       1800.0 //72V system
 
 #define TIM1_PSCLR              4
-#define TIM1_PERIOD             2500// frequency = 200MHz/(2*(TIM1_PSCLR+1)*TIM1_PERIOD)
+#define TIM1_PERIOD             2499// frequency = 200MHz/(2*(TIM1_PSCLR+1)*TIM1_PERIOD)
 #define TIM1_DEADTIME           185
 #define MAX_RPM                 5000.0
 #define FW_MIN_CURRENT_PU       0.0
@@ -153,8 +153,8 @@ typedef struct foc_t {
 // #define ANGLE_OFFSET_RW                            4.188790//V3
 
 #if PEG4W
-#define ANGLE_OFFSET_FW                               2.001892652//R1
-#define ANGLE_OFFSET_RW                               2.001892652//R1
+#define ANGLE_OFFSET_FW                               1.2164944886//R1
+#define ANGLE_OFFSET_RW                               1.2164944886//R1
 #endif
 
 #if PEG3W
@@ -210,7 +210,7 @@ typedef struct foc_t {
 #define RPM_IMR_CONST1                      0.0004251// (1-0.001)/(5000-2650)
 
 
-#define F_SW                                7143.0//FCLK/(PSCR*ARR) //100MHz/(10*1000)         // ISR Sampling frequency
+#define F_SW                                7142.857//FCLK/(PSCR*ARR) //100MHz/(10*1000)         // ISR Sampling frequency
 #define T_PRD                               2500.0         // PWM Period TIM1
 #define OFFSET_DUTY                         0.5            // DUTY OFFSET used in modulation.
 #define T_S                                 1.0/F_SW       // Sampling Time

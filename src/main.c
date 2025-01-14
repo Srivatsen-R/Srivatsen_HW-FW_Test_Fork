@@ -177,12 +177,12 @@ void send_on_301()
   uint8_t can_data[8] = {0};
   can_data[0] = (uint8_t)((uint16_t)(irms_calc) & 0x00FF);
   can_data[1] = (uint8_t)(((uint16_t)(irms_calc) & 0xFF00) >> 8);
-  can_data[2] = (uint8_t)((uint16_t)(FOC_U.PhaseCurrent[0] + 400.0) & 0x00FF);
-  can_data[3] = (uint8_t)(((uint16_t)(FOC_U.PhaseCurrent[0] + 400.0) & 0xFF00) >> 8);
-  can_data[4] = (uint8_t)((uint16_t)(FOC_U.PhaseCurrent[1] + 400.0) & 0x00FF);
-  can_data[5] = (uint8_t)(((uint16_t)(FOC_U.PhaseCurrent[1] + 400.0) & 0xFF00) >> 8);
-  can_data[6] = (uint8_t)((uint16_t)(FOC_U.PhaseCurrent[2] + 400.0) & 0x00FF);
-  can_data[7] = (uint8_t)(((uint16_t)(FOC_U.PhaseCurrent[2] + 400.0) & 0xFF00) >> 8);
+  can_data[2] = (uint8_t)((uint16_t)(FOC_U.PhaseCurrent[0] + 800.0) & 0x00FF);
+  can_data[3] = (uint8_t)(((uint16_t)(FOC_U.PhaseCurrent[0] + 800.0) & 0xFF00) >> 8);
+  can_data[4] = (uint8_t)((uint16_t)(FOC_U.PhaseCurrent[1] + 800.0) & 0x00FF);
+  can_data[5] = (uint8_t)(((uint16_t)(FOC_U.PhaseCurrent[1] + 800.0) & 0xFF00) >> 8);
+  can_data[6] = (uint8_t)((uint16_t)(FOC_U.PhaseCurrent[2] + 800.0) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(FOC_U.PhaseCurrent[2] + 800.0) & 0xFF00) >> 8);
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_301, S, can_data, FDCAN_DLC_BYTES); 
 }
 

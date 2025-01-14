@@ -152,6 +152,7 @@ typedef struct {
   real32_T Id_low_limit;               /* '<Root>/Id_low_limit' */
   real32_T Iq_up_limit;                /* '<Root>/Iq_up_limit' */
   real32_T Iq_low_limit;               /* '<Root>/Iq_low_limit' */
+  real32_T torque_ratio;               /* '<Root>/Torque Ratio' */
 } ExtU_FOC_T;
 
 /* External outputs (root outports fed by signals with default storage) */

@@ -97,7 +97,6 @@ void SYSTEM_INIT()
   MX_TIM17_Init();
   MX_TIM7_Init();
 
-  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
   DRIVE_STOP();
 }
 
