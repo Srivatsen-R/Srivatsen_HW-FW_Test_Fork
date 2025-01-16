@@ -85,10 +85,9 @@ terminal_t terminal = {
 
 void FOC_READ_MOTOR_POSITION(void)
 {
-    foc.rotor_angle =  READ_POSITION(motorControl.encoder.value);
+    foc.rotor_angle =  READ_POSITION(TIM2->CNT);
     foc.rotor_speed =  READ_SPEED(foc.rotor_angle);
 
-    // if(foc.rotor_speed<0.0){foc.rotor_speed=0.0;}
     foc.rotor_speed_filtered = SPEED_FILTER(foc.rotor_speed,foc.rotor_speed_prev,foc.rotor_speed_filtered_prev); 
     foc.speed_sense = (foc.rotor_speed_filtered)*PU*1.0;
     if(foc.speed_sense>MAX_PU_SPEED){foc.speed_sense=MAX_PU_SPEED;} 
@@ -225,27 +224,46 @@ void FOC_READ_MOTOR_POSITION(void)
 
     foc.rho = READ_ROTOR_ANGLE(foc.rho_prev,foc.sync_speed,foc.sync_speed_prev);//electrical angle
 
+    if (foc.rho >= (4 * PI) && foc.rho <= (6 * PI))
+        FOC_U.angle = foc.rho - (4 * PI);
+    else if (foc.rho >= (2 * PI) && foc.rho <= (4 * PI))
+        FOC_U.angle = foc.rho - (2 * PI);
+    else if (foc.rho >= 0 && foc.rho <= (2 * PI))
+        FOC_U.angle = foc.rho;
+
+    if (foc.rho <= -(4 * PI) && foc.rho >= -(6 * PI))
+        FOC_U.angle = foc.rho + (4 * PI);
+    else if (foc.rho <= -(2 * PI) && foc.rho >= -(4 * PI))
+        FOC_U.angle = foc.rho + (2 * PI);
+    else if (foc.rho <= 0 && foc.rho >= -(2 * PI))
+        FOC_U.angle = foc.rho;
+
     if (fnr.current_state == FORWARD)
     {
-        FOC_U.angle = foc.rho + ANGLE_OFFSET_RW;
+        FOC_U.angle = FOC_U.angle - ANGLE_OFFSET_RW - PI;
         fnr.previous_state = fnr.current_state;
     }
     else if (fnr.current_state == REVERSE)
     {
-        FOC_U.angle = foc.rho + ANGLE_OFFSET_FW;
+        FOC_U.angle = FOC_U.angle + ANGLE_OFFSET_FW + PI;
         fnr.previous_state = fnr.current_state;
     }
     else if (fnr.current_state == NEUTRAL)
     {
         if (fnr.previous_state == FORWARD)
         {
-            FOC_U.angle = foc.rho + ANGLE_OFFSET_RW;
+            FOC_U.angle = FOC_U.angle - ANGLE_OFFSET_RW - PI;
         }
         else if (fnr.previous_state == REVERSE)
         {
-            FOC_U.angle = foc.rho + ANGLE_OFFSET_FW;
+            FOC_U.angle = FOC_U.angle + ANGLE_OFFSET_FW + PI;
         }
     }
+
+    if (FOC_U.angle >= PI)
+        FOC_U.angle -= 2 * PI;
+    else if (FOC_U.angle <= -PI)
+        FOC_U.angle += 2 * PI;
 
     foc.rotor_speed_prev          = foc.rotor_speed;  
     foc.rotor_speed_filtered_prev = foc.rotor_speed_filtered;

@@ -219,7 +219,7 @@ typedef struct foc_t {
 #define PU                                  32767.0        // PU unit calculation max. value
 #define LL                                  -1.0*PU        // LOWER LIMIT PU
 #define UL                                  1.0*PU         // UPPER LIMIT PU
-#define PI                                  3.14159        // PI Value
+#define PI                                  3.14159265358979 // PI Value
 #define PPR_TO_RAD_CONSTANT                 (2.0*PI)/PPR   // Encoder value to mechanical angle conversion
 #define DERIVATIVE_CONSTANT                 (2.0*F_SW)/(1256.0) // Constant to calculate speed
 #define SPEED_FILTER_CONSTANT_1             ((2.0*T_F_ROTOR_SPEED-T_S)/(2.0*T_F_ROTOR_SPEED+T_S)) // Constant to filter speed
@@ -263,7 +263,7 @@ typedef struct foc_t {
 
 
 #define MAX_PU_CURRENT              39321.0
-#define MAX_PU_SPEED                65535.0
+#define MAX_PU_SPEED                32767.0
 
 #define KI_AC_CURRENT               0.0
 #define KP_AC_CURRENT_UP            0.0001

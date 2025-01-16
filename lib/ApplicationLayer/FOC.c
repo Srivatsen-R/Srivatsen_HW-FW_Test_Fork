@@ -383,7 +383,8 @@ void FOC_step(void)
    *  Operator: magnitude^2
    */
   rtb_Divide *= rtb_Divide;
-
+  if (rtb_Divide > (FOC_U.I_max * FOC_U.I_max))
+    rtb_Divide = FOC_U.I_max * FOC_U.I_max;
   /* Sum: '<S31>/Subtract' incorporates:
    *  Gain: '<S31>/Gain4'
    *  Math: '<S31>/Math Function'
@@ -429,28 +430,6 @@ void FOC_step(void)
    *  Inport: '<Root>/angle'
    *  Trigonometry: '<S7>/Trigonometric Function1'
    */
-  if (fnr.current_state == FORWARD)
-  {
-    FOC_U.angle = (FOC_U.angle);
-    fnr.previous_state = fnr.current_state;
-  }
-  else if (fnr.current_state == REVERSE)
-  {
-    FOC_U.angle = (FOC_U.angle) - -3.14159274F;
-    fnr.previous_state = fnr.current_state;
-  }
-  else if (fnr.current_state == NEUTRAL)
-  {
-    if (fnr.previous_state == FORWARD)
-    {
-      FOC_U.angle = (FOC_U.angle);
-    }
-    else if (fnr.previous_state == REVERSE)
-    {
-      FOC_U.angle = (FOC_U.angle) - -3.14159274F;
-    }
-  }
-
   rtb_E_expected = sin(FOC_U.angle);
 
   /* Trigonometry: '<S6>/Trigonometric Function1' incorporates:
@@ -1078,7 +1057,7 @@ void FOC_step(void)
    * About '<S211>/TSamp':
    *  y = u * K where K = 1 / ( w * Ts )
    *   */
-  rtb_Subtract = FOC_U.Lq * FOC_Y.Iq * 7123.0f;
+  rtb_Subtract = FOC_U.Lq * FOC_Y.Iq * F_SW;
 
   /* End of Outputs for SubSystem: '<S10>/Two inputs CRL' */
 
@@ -1091,7 +1070,7 @@ void FOC_step(void)
    * About '<S210>/TSamp':
    *  y = u * K where K = 1 / ( w * Ts )
    *   */
-  rtb_E_expected = (FOC_U.Ld * FOC_Y.Id + FOC_U.Lamda) * 7123.0f;
+  rtb_E_expected = (FOC_U.Ld * FOC_Y.Id + FOC_U.Lamda) * F_SW;
 
   /* Switch: '<S3>/Switch' incorporates:
    *  Constant: '<S3>/Constant'
@@ -1441,10 +1420,10 @@ void FOC_initialize(void)
   FOC_U.p = POLEPAIRS;
   FOC_U.torque_ratio = 0.228571f;
 
-  FOC_U.Id_up_limit = 300.0f;
+  FOC_U.Id_up_limit = 0.0f;
   FOC_U.Id_low_limit = -300.0f;
   FOC_U.Iq_up_limit = 300.0f;
-  FOC_U.Iq_low_limit = -300.0f;
+  FOC_U.Iq_low_limit = 0.0f;
   FOC_U.BusVoltage_V = 61.0f;
 
   #if PEG4W
@@ -1455,7 +1434,7 @@ void FOC_initialize(void)
   FOC_U.Kd_speed_PID = 0.001;
   FOC_U.Filter_speed_PID = 10;
   FOC_U.Up_Limit_speed_PID = 300.0;
-  FOC_U.Low_Limit_speed_PID = -300.0;
+  FOC_U.Low_Limit_speed_PID = 0.0;
 
   FOC_U.Kp_flux_PID = 0.01;
   FOC_U.Ki_flux_PID = 20.0;

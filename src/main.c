@@ -159,30 +159,40 @@ void set_interrupt_flag(uint8_t value){
 void send_on_300()
 {
   uint8_t can_data[8] = {0};
+
   can_data[0] = (uint8_t)(FOC_Y.Va + 60.0);
   can_data[1] = (uint8_t)(FOC_Y.Vb + 60.0);
   can_data[2] = (uint8_t)(FOC_Y.Vc + 60.0);
+
   if (forward_set && !reverse_set){can_data[3] = 0x02;}
   else if (reverse_set && !forward_set){can_data[3] = 0x04;}
   else if (forward_set && reverse_set){can_data[3] = 0x01;}
+
   can_data[4] = (uint8_t)((uint16_t)(FOC_Y.Vq + 10000.0) & 0x00FF);
   can_data[5] = (uint8_t)(((uint16_t)(FOC_Y.Vq + 10000.0) & 0xFF00) >> 8);
+
   can_data[6] = (uint8_t)((uint16_t)(FOC_Y.Vd + 10000.0) & 0x00FF);
   can_data[7] = (uint8_t)(((uint16_t)(FOC_Y.Vd + 10000.0) & 0xFF00) >> 8);
+
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_300, S, can_data, FDCAN_DLC_BYTES);
 }
 
 void send_on_301()
 {
   uint8_t can_data[8] = {0};
+
   can_data[0] = (uint8_t)((uint16_t)(irms_calc) & 0x00FF);
   can_data[1] = (uint8_t)(((uint16_t)(irms_calc) & 0xFF00) >> 8);
+
   can_data[2] = (uint8_t)((uint16_t)(FOC_U.PhaseCurrent[0] + 800.0) & 0x00FF);
   can_data[3] = (uint8_t)(((uint16_t)(FOC_U.PhaseCurrent[0] + 800.0) & 0xFF00) >> 8);
+
   can_data[4] = (uint8_t)((uint16_t)(FOC_U.PhaseCurrent[1] + 800.0) & 0x00FF);
   can_data[5] = (uint8_t)(((uint16_t)(FOC_U.PhaseCurrent[1] + 800.0) & 0xFF00) >> 8);
+
   can_data[6] = (uint8_t)((uint16_t)(FOC_U.PhaseCurrent[2] + 800.0) & 0x00FF);
   can_data[7] = (uint8_t)(((uint16_t)(FOC_U.PhaseCurrent[2] + 800.0) & 0xFF00) >> 8);
+
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_301, S, can_data, FDCAN_DLC_BYTES); 
 }
 
@@ -190,138 +200,126 @@ void send_on_302()
 {
   uint8_t can_data[8] = {0};
 
-  float can_log_rh = 0.0f;
-  if (forward_set && !reverse_set)
-  {
-    can_log_rh = foc.rho * 100.0;
-  }
-  else if (reverse_set && !forward_set)
-  {
-    can_log_rh = foc.rho * -100.0;
-  }
+  float can_log_rh = 0.0f, speed_rpm = 0.0;
+  float speed_ref = FOC_U.RefSpeed / 0.1047;
+  
+  can_log_rh = (FOC_U.angle + PI) * 100.0f;
+  speed_rpm = (foc.speed_sense < 0) ? (foc.speed_sense * SPEED_PU_TO_RPM * -1.0f) : (foc.speed_sense * SPEED_PU_TO_RPM);
 
   can_data[0] = (uint8_t)((uint16_t)((can_log_rh)) & 0x00FF);
   can_data[1] = (uint8_t)(((uint16_t)((can_log_rh)) & 0xFF00) >> 8);
 
-  can_data[2] = (uint8_t)((uint16_t)(FOC_U.RefSpeed) & 0x00FF);
-  can_data[3] = (uint8_t)(((uint16_t)(FOC_U.RefSpeed) & 0xFF00) >> 8);
+  can_data[2] = (uint8_t)((uint16_t)(speed_ref) & 0x00FF);
+  can_data[3] = (uint8_t)(((uint16_t)(speed_ref) & 0xFF00) >> 8);
 
-  if (forward_set && !reverse_set)
-  {
-    can_data[4] = (uint8_t)((uint16_t)((foc.speed_sense * 1.0) * SPEED_PU_TO_RPM) & 0x00FF);
-    can_data[5] = (uint8_t)(((uint16_t)((foc.speed_sense * 1.0) * SPEED_PU_TO_RPM) & 0xFF00) >> 8);
-  }
-  else if (reverse_set && !forward_set)
-  {
-    can_data[4] = (uint8_t)((uint16_t)((foc.speed_sense * -1.0) * SPEED_PU_TO_RPM) & 0x00FF);
-    can_data[5] = (uint8_t)(((uint16_t)((foc.speed_sense * -1.0) * SPEED_PU_TO_RPM) & 0xFF00) >> 8);
-  }
+  can_data[4] = (uint8_t)((uint16_t)(speed_rpm) & 0x00FF);
+  can_data[5] = (uint8_t)(((uint16_t)(speed_rpm) & 0xFF00) >> 8);
 
-  can_data[6] = (uint8_t)(((uint16_t)(motorControl.encoder.value)) & 0x00FF);
-  can_data[7] = (uint8_t)(((uint16_t)(motorControl.encoder.value) & 0xFF00) >> 8);
+  can_data[6] = (uint8_t)(((uint16_t)(TIM2->CNT)) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(TIM2->CNT) & 0xFF00) >> 8);
+  
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_302, S, can_data, FDCAN_DLC_BYTES);
 }
 
 void send_on_303()
 {
   uint8_t can_data[8] = {0};
-  float can_log_mbd_elec_rh = (FOC_U.angle) * 100.0;
+
   can_data[0] = (uint8_t)((uint16_t)(motorControl.temperature.motor));
+
   can_data[1] = (uint8_t)((uint16_t)(avg_board_temp));
+
   can_data[2] = (uint8_t)(FOC_F_T.Iq_OL_Flag);
   can_data[3] = (uint8_t)(FOC_F_T.OT_Cont_Flag);
   can_data[4] = (uint8_t)(FOC_F_T.Ph_OC_Flag);
+
   can_data[5] = (uint8_t)(z_trig);
-  can_data[6] = (uint8_t)((uint16_t)(can_log_mbd_elec_rh) & 0x00FF);
-  can_data[7] = (uint8_t)(((uint16_t)(can_log_mbd_elec_rh) & 0xFF00) >> 8);
+
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_303, S, can_data, FDCAN_DLC_BYTES);
 }
 
 void send_on_304()
 {
   uint8_t can_data[8] = {0};
-  float can_log_mbd_mech_rh = (FOC_U.angle / 3.0) * 100.0;
-  float can_log_mbd_speed = 0.0f;
 
-  if (forward_set && !reverse_set)
-  {
-    can_log_mbd_speed = (FOC_U.ActualSpeed / 0.1047) * -1.0f;
-  }
-  else if (reverse_set && !forward_set)
-  {
-    can_log_mbd_speed = (FOC_U.ActualSpeed / 0.1047);
-  }
-
-  can_data[0] = (uint8_t)((uint16_t)(can_log_mbd_mech_rh) & 0x00FF);
-  can_data[1] = (uint8_t)(((uint16_t)(can_log_mbd_mech_rh) & 0xFF00) >> 8);
-  can_data[2] = (uint8_t)((uint16_t)(can_log_mbd_speed) & 0x00FF);
-  can_data[3] = (uint8_t)(((uint16_t)(can_log_mbd_speed) & 0xFF00) >> 8);
   can_data[4] = (uint8_t)((uint16_t)(FOC_Y.Id + 10000.0) & 0x00FF);
   can_data[5] = (uint8_t)(((uint16_t)(FOC_Y.Id + 10000.0) & 0xFF00) >> 8);
+  
   can_data[6] = (uint8_t)((uint16_t)(FOC_Y.Iq + 10000.0) & 0x00FF);
   can_data[7] = (uint8_t)(((uint16_t)(FOC_Y.Iq + 10000.0) & 0xFF00) >> 8);
+
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_304, S, can_data, FDCAN_DLC_BYTES);
 }
 
 void send_on_305()
 {
   uint8_t can_data[8] = {0};
+
   can_data[0] = (uint8_t)((uint16_t)(FOC_Y.Id_refer + 10000.0) & 0x00FF);
   can_data[1] = (uint8_t)(((uint16_t)(FOC_Y.Id_refer + 10000.0) & 0xFF00) >> 8);
+
   can_data[2] = (uint8_t)((uint16_t)(FOC_Y.Iq_refer + 10000.0) & 0x00FF);
   can_data[3] = (uint8_t)(((uint16_t)(FOC_Y.Iq_refer + 10000.0) & 0xFF00) >> 8);
+
   #if APP1
   can_data[4] = (uint8_t)(0x01);
   #endif
   #if APP2
   can_data[4] = (uint8_t)(0x02);
   #endif
-  can_data[5] = (uint8_t)((uint16_t)(terminal.volt.bus_volt) & 0x00FF);
-  can_data[6] = (uint8_t)(((uint16_t)(terminal.volt.bus_volt) & 0xFF00) >> 8);
+
+  can_data[5] = (uint8_t)((uint16_t)(FOC_U.BusVoltage_V) & 0x00FF);
+  can_data[6] = (uint8_t)(((uint16_t)(FOC_U.BusVoltage_V) & 0xFF00) >> 8);
+
   can_data[7] = (uint8_t)((uint16_t)(torque_calc));
+
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_305, S, can_data, FDCAN_DLC_BYTES);
 }
 
 void send_on_306()
 {
   uint8_t can_data[8] = {0};
+
   can_data[0] = (uint8_t)(boot_counter & 0x000000FF);
   can_data[1] = (uint8_t)((boot_counter & 0x0000FF00) >> 8);
   can_data[2] = (uint8_t)((boot_counter & 0x00FF0000) >> 16);
   can_data[3] = (uint8_t)((boot_counter & 0xFF000000) >> 24);
-  can_data[4] = (uint8_t)(bor_counter & 0x000000FF);
-  can_data[5] = (uint8_t)((bor_counter & 0x0000FF00) >> 8);
-  can_data[6] = (uint8_t)((bor_counter & 0x00FF0000) >> 16);
-  can_data[7] = (uint8_t)((bor_counter & 0xFF000000) >> 24);
+
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_306, S, can_data, FDCAN_DLC_BYTES);
 }
 
 void send_on_307()
 {
   uint8_t can_data[8] = {0};
+
   can_data[0] = (uint8_t)(pvd_counter & 0x000000FF);
   can_data[1] = (uint8_t)((pvd_counter & 0x0000FF00) >> 8);
   can_data[2] = (uint8_t)((pvd_counter & 0x00FF0000) >> 16);
   can_data[3] = (uint8_t)((pvd_counter & 0xFF000000) >> 24);
+
   can_data[4] = (uint8_t)(hard_fault_c.lr & 0x000000FF);
   can_data[5] = (uint8_t)((hard_fault_c.lr & 0x0000FF00) >> 8);
   can_data[6] = (uint8_t)((hard_fault_c.lr & 0x00FF0000) >> 16);
   can_data[7] = (uint8_t)((hard_fault_c.lr & 0xFF000000) >> 24);
+
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_307, S, can_data, FDCAN_DLC_BYTES);
 }
 
 void send_on_308()
 {
   uint8_t can_data[8] = {0};
+
   can_data[0] = (uint8_t)(hard_fault_c.pc & 0x000000FF);
   can_data[1] = (uint8_t)((hard_fault_c.pc & 0x0000FF00) >> 8);
   can_data[2] = (uint8_t)((hard_fault_c.pc & 0x00FF0000) >> 16);
   can_data[3] = (uint8_t)((hard_fault_c.pc & 0xFF000000) >> 24);
+
   #if SPEED_MODE
-  volatile uint16_t offest = FOC_Y.Offset_angle * 100.0f;
-  can_data[4] = (uint8_t)((offest & 0x00FF));
-  can_data[5] = (uint8_t)((offest & 0xFF00) >> 8);
+  volatile float offset_angle = (FOC_Y.Offset_angle + 2 * PI) * 100.0f;
+  can_data[4] = (uint8_t)((uint16_t)(offset_angle) & 0x00FF);
+  can_data[5] = (uint8_t)(((uint16_t)(offset_angle) & 0xFF00) >> 8);
   #endif
+
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_308, S, can_data, FDCAN_DLC_BYTES);
 }
 
@@ -688,7 +686,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
   if(GPIO_Pin == GPIO_PIN_7) // If The INT Source Is EXTI Line9_5 (PE7 Pin)
   {
-    motorControl.encoder.value = 0;
+    TIM2->CNT = 0;
     foc.rho = 0.0;
     foc.rho_prev = 0.0;
     reset_flag = 1;
@@ -759,8 +757,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
     if (motorControl.drive.check == DRIVE_DISABLE){DRIVE_STOP();}
 
     //motor angle,current
-    READ_MOTOR_POSITION();
-
     FOC_READ_MOTOR_POSITION();
 
     READ_MOTOR_PHASE_CURRENT();
