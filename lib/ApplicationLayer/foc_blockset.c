@@ -39,7 +39,12 @@ float READ_POSITION(int position) {
 
 //Filter for  speed of rotor.
 float  SPEED_FILTER(float speed ,float speed_prev,float speed_filtered_prev) {
-    return ((SPEED_FILTER_CONSTANT_1*speed_filtered_prev) +(SPEED_FILTER_CONSTANT_2*(speed+speed_prev)));
+    return ((SPEED_FILTER_CONSTANT_1*speed_filtered_prev) + (SPEED_FILTER_CONSTANT_2*(speed+speed_prev)));
+}
+
+//Filter for  current of phase.
+float  CURRENT_FILTER(float current, float current_prev, float current_filtered_prev) {
+    return ((CURRENT_FILTER_CONSTANT_1*current_filtered_prev) + (CURRENT_FILTER_CONSTANT_2*(current+current_prev)));
 }
 
 //Slip Speed Routine

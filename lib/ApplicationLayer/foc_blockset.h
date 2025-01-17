@@ -5,6 +5,7 @@
 float  READ_POSITION(int);
 float  READ_SPEED(float);
 float  SPEED_FILTER(float  ,float ,float );
+float  CURRENT_FILTER(float current,float current_prev,float current_filtered_prev);
 float  TORQUE_PI_LOOP(float ,float );
 float  CALCULATE_SYNC_SPEED(float  , float );
 float  READ_ROTOR_ANGLE(float ,float ,float );

@@ -1430,21 +1430,21 @@ void FOC_initialize(void)
   FOC_U.I_max = 300.0f;
 
   FOC_U.Kp_speed_PID = 5.0;
-  FOC_U.Ki_speed_PID = 38.0;
+  FOC_U.Ki_speed_PID = 48.0;
   FOC_U.Kd_speed_PID = 0.001;
   FOC_U.Filter_speed_PID = 10;
   FOC_U.Up_Limit_speed_PID = 300.0;
   FOC_U.Low_Limit_speed_PID = 0.0;
 
   FOC_U.Kp_flux_PID = 0.01;
-  FOC_U.Ki_flux_PID = 20.0;
+  FOC_U.Ki_flux_PID = 32.0;
   FOC_U.Kd_flux_PID = 0.001;
   FOC_U.Filter_flux_PID = 10.0;
   FOC_U.Up_Limit_flux_PID = FOC_U.BusVoltage_V;
   FOC_U.Low_Limit_flux_PID = -FOC_U.BusVoltage_V;
 
   FOC_U.Kp_torque_PID = 0.01;
-  FOC_U.Ki_torque_PID = 24.0;
+  FOC_U.Ki_torque_PID = 36.0;
   FOC_U.Kd_torque_PID = 0.001;
   FOC_U.Filter_torque_PID = 10.0;
   FOC_U.Up_Limit_torque_PID = FOC_U.BusVoltage_V;

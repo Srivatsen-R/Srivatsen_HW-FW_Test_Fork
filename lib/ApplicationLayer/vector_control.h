@@ -153,8 +153,8 @@ typedef struct foc_t {
 // #define ANGLE_OFFSET_RW                            4.188790//V3
 
 #if PEG4W
-#define ANGLE_OFFSET_FW                               1.2164944886//R1
-#define ANGLE_OFFSET_RW                               1.2164944886//R1
+#define ANGLE_OFFSET_FW                               1.216494//R1
+#define ANGLE_OFFSET_RW                               1.216494//R1
 #endif
 
 #if PEG3W
@@ -194,8 +194,9 @@ typedef struct foc_t {
 
 //General parameters
 
-#define ROTOR_TIME_CONSTANT                 0.11             // ROTOR TIME CONSTANT L/R
-#define T_F_ROTOR_SPEED                     0.03           // Constant to filter rotor speed
+#define ROTOR_TIME_CONSTANT                 0.11         // ROTOR TIME CONSTANT L/R
+#define T_F_ROTOR_SPEED                     0.03         // Constant to filter rotor speed
+#define T_F_CURRENT_PHASE                   0.001062     // Constant to filter current
 #define MAGNETISING_CURRENT_REF             0.0//6000.0//6750.0
 #define OUTPUT_LIMIT                        29200.0//17000.0       // OUTPUT LIMIT VD VQ
 #define KP_W                                0.15//2.5//1.2//GAIN CONSTANT
@@ -221,9 +222,11 @@ typedef struct foc_t {
 #define UL                                  1.0*PU         // UPPER LIMIT PU
 #define PI                                  3.14159265358979 // PI Value
 #define PPR_TO_RAD_CONSTANT                 (2.0*PI)/PPR   // Encoder value to mechanical angle conversion
-#define DERIVATIVE_CONSTANT                 (2.0*F_SW)/(1256.0) // Constant to calculate speed
+#define DERIVATIVE_CONSTANT                 (F_SW)/(628.318) // Constant to calculate speed
 #define SPEED_FILTER_CONSTANT_1             ((2.0*T_F_ROTOR_SPEED-T_S)/(2.0*T_F_ROTOR_SPEED+T_S)) // Constant to filter speed
 #define SPEED_FILTER_CONSTANT_2             (T_S/(2.0*T_F_ROTOR_SPEED+T_S)) // Constant to filter speed
+#define CURRENT_FILTER_CONSTANT_1           ((2.0*T_F_CURRENT_PHASE-T_S)/(2.0*T_F_CURRENT_PHASE+T_S)) // Constant to filter current
+#define CURRENT_FILTER_CONSTANT_2           (T_S/(2.0*T_F_CURRENT_PHASE+T_S)) // Constant to filter current
 #define PWM_CONST_1                         0.5*T_PRD        // CONSTANT FOR PWM Modulation
 #define PWM_CONST_2                         (0.5*T_PRD)/32767.0 // CONSTANT FOR PWM Modulation
 #define ROTOR_TIME_CONSTANT_NEW             0.11             // ROTOR TIME CONSTANT L/R
@@ -253,7 +256,8 @@ typedef struct foc_t {
 #define MTPA_ON                             1
 
 #define ID_PU_TO_A              0.0081*2.0/1.414
-#define SPEED_PU_TO_RPM         0.183
+#define SPEED_PU_TO_RPM         0.18311
+#define RPM_TO_RAD_S            0.10472
 #define IQ_PU_TO_A              0.00575*2.0
 
 

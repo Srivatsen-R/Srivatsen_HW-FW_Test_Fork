@@ -24,11 +24,8 @@ float speed_ref_temp = 0.0;
 extern float avg_board_temp;
 extern float torque_calc;
 extern float irms_calc;
-extern uint16_t offset_cal_w;
-extern uint16_t offset_cal_v;
 volatile uint32_t ICValue;
 volatile uint32_t z_trig = 0;
-uint8_t reset_flag = 0;
 uint8_t app_version = 0;
 uint8_t cantp_config_flag = 0;
 uint8_t interrupt_flag = 0;
@@ -57,6 +54,7 @@ extern motorControl_t motorControl;
 
 fnr_states fnr;
 hard_fault_cause hard_fault_c;
+Current_Off_Calc curr_off = {.W_Phase_Offset = 0, .V_Phase_Offset = 0};
 
 /* Private function prototypes -----------------------------------------------*/
 typedef struct __attribute__((packed))
@@ -201,7 +199,7 @@ void send_on_302()
   uint8_t can_data[8] = {0};
 
   float can_log_rh = 0.0f, speed_rpm = 0.0;
-  float speed_ref = FOC_U.RefSpeed / 0.1047;
+  float speed_ref = FOC_U.RefSpeed / RPM_TO_RAD_S;
   
   can_log_rh = (FOC_U.angle + PI) * 100.0f;
   speed_rpm = (foc.speed_sense < 0) ? (foc.speed_sense * SPEED_PU_TO_RPM * -1.0f) : (foc.speed_sense * SPEED_PU_TO_RPM);
@@ -309,16 +307,24 @@ void send_on_308()
 {
   uint8_t can_data[8] = {0};
 
-  can_data[0] = (uint8_t)(hard_fault_c.pc & 0x000000FF);
-  can_data[1] = (uint8_t)((hard_fault_c.pc & 0x0000FF00) >> 8);
-  can_data[2] = (uint8_t)((hard_fault_c.pc & 0x00FF0000) >> 16);
-  can_data[3] = (uint8_t)((hard_fault_c.pc & 0xFF000000) >> 24);
+  // can_data[0] = (uint8_t)(hard_fault_c.pc & 0x000000FF);
+  // can_data[1] = (uint8_t)((hard_fault_c.pc & 0x0000FF00) >> 8);
+  // can_data[2] = (uint8_t)((hard_fault_c.pc & 0x00FF0000) >> 16);
+  // can_data[3] = (uint8_t)((hard_fault_c.pc & 0xFF000000) >> 24);
+
+  can_data[0] = (uint8_t)(curr_off.W_Phase_Offset & 0x00FF);
+  can_data[1] = (uint8_t)((curr_off.W_Phase_Offset & 0xFF00) >> 8);
+  can_data[2] = (uint8_t)(curr_off.V_Phase_Offset & 0x00FF);
+  can_data[3] = (uint8_t)((curr_off.V_Phase_Offset & 0xFF00) >> 8);
 
   #if SPEED_MODE
   volatile float offset_angle = (FOC_Y.Offset_angle + 2 * PI) * 100.0f;
   can_data[4] = (uint8_t)((uint16_t)(offset_angle) & 0x00FF);
   can_data[5] = (uint8_t)(((uint16_t)(offset_angle) & 0xFF00) >> 8);
   #endif
+
+  can_data[6] = (uint8_t)((uint16_t)(Duty) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(Duty) & 0xFF00) >> 8);
 
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_308, S, can_data, FDCAN_DLC_BYTES);
 }
@@ -347,8 +353,8 @@ void send_on_706()
   else if (FOC_F_T.Ph_OC_Flag){can_data[3] = 0x03;}
   else if (FOC_F_T.N_Flag){can_data[3] = 0x04;}
   else if (FOC_F_T.EEPROM_Error){can_data[3] = 0x05;}
-  can_data[4] = (uint8_t)((uint16_t)(abs(FOC_U.ActualSpeed * 0.1047) * RPM_TO_KMPH * KMPH_CAN_SCALING) & 0x00FF);
-  can_data[5] = (uint8_t)(((uint16_t)(abs(FOC_U.ActualSpeed * 0.1047) * RPM_TO_KMPH * KMPH_CAN_SCALING) & 0xFF00) >> 8);
+  can_data[4] = (uint8_t)((uint16_t)(abs(FOC_U.ActualSpeed * RPM_TO_RAD_S) * RPM_TO_KMPH * KMPH_CAN_SCALING) & 0x00FF);
+  can_data[5] = (uint8_t)(((uint16_t)(abs(FOC_U.ActualSpeed * RPM_TO_RAD_S) * RPM_TO_KMPH * KMPH_CAN_SCALING) & 0xFF00) >> 8);
   _fdcan_transmit_on_can(tx_Controller_706, S, can_data, FDCAN_DLC_BYTES);
 }
 
@@ -364,8 +370,8 @@ void send_on_715()
 {
   uint8_t can_data[8] = {0};
   can_data[4] = (uint8_t)(FOC_U.BusVoltage_V);
-  can_data[6] = (uint8_t)((uint16_t)(abs(FOC_U.ActualSpeed * 0.1047)) & 0x00FF);
-  can_data[7] = (uint8_t)(((uint16_t)(abs(FOC_U.ActualSpeed * 0.1047)) & 0xFF00) >> 8);
+  can_data[6] = (uint8_t)((uint16_t)(abs(FOC_U.ActualSpeed * RPM_TO_RAD_S)) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(abs(FOC_U.ActualSpeed * RPM_TO_RAD_S)) & 0xFF00) >> 8);
   _fdcan_transmit_on_can(tx_Controller_715, S, can_data, FDCAN_DLC_BYTES);
 }
 
@@ -380,7 +386,7 @@ void send_on_716()
 void send_on_717()
 {
   uint8_t can_data[8] = {0};
-  float freq = abs(FOC_U.ActualSpeed * 0.1047) * POLEPAIRS / 120.0f;
+  float freq = abs(FOC_U.ActualSpeed * RPM_TO_RAD_S) * POLEPAIRS / 120.0f;
   can_data[0] = (uint8_t)((uint16_t)(freq) & 0x00FF);
   can_data[1] = (uint8_t)(((uint16_t)(freq) & 0xFF00) >> 8);
   _fdcan_transmit_on_can(tx_Controller_717, S, can_data, FDCAN_DLC_BYTES);
@@ -511,14 +517,14 @@ void Current_Sensor_offset_cal(void)
   offset_w = analog.bufferData[PHASE_CURRENT_W];
   offset_v = analog.bufferData[PHASE_CURRENT_V];
 
-  for (uint8_t i = 0; i < 4; i++)
+  for (uint8_t i = 0; i < 5; i++)
   {
     offset_w += analog.bufferData[PHASE_CURRENT_W];
     offset_v += analog.bufferData[PHASE_CURRENT_V];
   }
 
-  offset_cal_w = (uint16_t)(offset_w / 5.0f);
-  offset_cal_v = (uint16_t)(offset_v / 5.0f);
+  curr_off.W_Phase_Offset = (uint16_t)(offset_w / 6.0f);
+  curr_off.V_Phase_Offset = (uint16_t)(offset_v / 6.0f);
 }
 
 void Throttle_Control_routine()
@@ -534,8 +540,8 @@ void Throttle_Control_routine()
   #endif
   forward_set = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_4);
 
-  if (forward_set && !reverse_set && fabsf((FOC_U.ActualSpeed / 0.1047)) <= 10.0f && Read_Throttle(analog.bufferData[THROTTLE]) <= 600){fnr.throttle_disabled = 0; fnr.previous_state = fnr.current_state; fnr.current_state = FORWARD;}
-  else if (reverse_set && !forward_set && fabsf((FOC_U.ActualSpeed / 0.1047)) <= 10.0f && Read_Throttle(analog.bufferData[THROTTLE]) <= 600){fnr.throttle_disabled = 0; fnr.previous_state = fnr.current_state; fnr.current_state = REVERSE;}
+  if (forward_set && !reverse_set && fabsf((FOC_U.ActualSpeed / RPM_TO_RAD_S)) <= 10.0f && Read_Throttle(analog.bufferData[THROTTLE]) <= 600){fnr.throttle_disabled = 0; fnr.previous_state = fnr.current_state; fnr.current_state = FORWARD;}
+  else if (reverse_set && !forward_set && fabsf((FOC_U.ActualSpeed / RPM_TO_RAD_S)) <= 10.0f && Read_Throttle(analog.bufferData[THROTTLE]) <= 600){fnr.throttle_disabled = 0; fnr.previous_state = fnr.current_state; fnr.current_state = REVERSE;}
   else if (forward_set && reverse_set){fnr.throttle_disabled = 1; fnr.current_state = NEUTRAL;}
 
   if ((fnr.current_state == FORWARD && fnr.previous_state == NEUTRAL) || (fnr.current_state == REVERSE && fnr.previous_state == NEUTRAL)){fnr.throttle_disabled = 0;}
@@ -569,11 +575,11 @@ void Throttle_Control_routine()
   #if RAMP_CNTRL
   if (time_count - prev_thr_time >= 100)
   {
-    if (FOC_U.RefSpeed < (500.0 * 0.1047))
+    if (FOC_U.RefSpeed < (500.0 * RPM_TO_RAD_S))
       FOC_U.RefSpeed += 1.0;
 
-    if (FOC_U.RefSpeed > (500.0 * 0.1047))
-      FOC_U.RefSpeed = (500.0 * 0.1047);
+    if (FOC_U.RefSpeed > (500.0 * RPM_TO_RAD_S))
+      FOC_U.RefSpeed = (500.0 * RPM_TO_RAD_S);
 
     if (FOC_U.RefSpeed < 0.0)
       FOC_U.RefSpeed = 0.0;
@@ -686,10 +692,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
   if(GPIO_Pin == GPIO_PIN_7) // If The INT Source Is EXTI Line9_5 (PE7 Pin)
   {
-    TIM2->CNT = 0;
     foc.rho = 0.0;
     foc.rho_prev = 0.0;
-    reset_flag = 1;
     z_trig += 1;
   }
 }

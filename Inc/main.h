@@ -185,6 +185,11 @@ typedef struct {
     uint32_t mmfar;
 } hard_fault_cause;
 
+typedef struct {
+    uint16_t W_Phase_Offset;
+    uint16_t V_Phase_Offset;
+} Current_Off_Calc;
+
 typedef enum {
     FORWARD,
     NEUTRAL,
@@ -193,6 +198,7 @@ typedef enum {
 
 extern fnr_states fnr;
 extern hard_fault_cause hard_fault_c;
+extern Current_Off_Calc curr_off;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

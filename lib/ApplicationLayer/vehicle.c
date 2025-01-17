@@ -12,9 +12,6 @@ This file contains functions associated with vehicle such as throttle, FNR , CAN
 extern motorControl_t motorControl;
 extern adc_t analog;
 
-uint16_t offset_cal_w = 32767;
-uint16_t offset_cal_v = 32767;
-
 float lowPassFilter(float input, float prevFilteredValue) 
 {
   // Apply the exponential moving average (EMA) filter
@@ -27,14 +24,19 @@ void READ_MOTOR_PHASE_CURRENT()
   volatile float filteredValue_a = 0.0;
   volatile float filteredValue_b = 0.0;
 
-  for (uint8_t i = 0; i < 25; i++)
-  {
-    filteredValue_a += analog.bufferData[PHASE_CURRENT_W];
-    filteredValue_b += analog.bufferData[PHASE_CURRENT_V];
-  }
+  volatile float final_FilteredValue_a = 0.0;
+  volatile float final_FilteredValue_b = 0.0;
 
-  filteredValue_a = filteredValue_a / 25.0f - offset_cal_w;
-  filteredValue_b = filteredValue_b / 25.0f - offset_cal_v;
+  static float prevFilteredValue_a = 0.0;
+  static float prevFilteredValue_b = 0.0;
+  static float final_prevFilteredValue_a = 0.0;
+  static float final_prevFilteredValue_b = 0.0;
+
+  filteredValue_a = analog.bufferData[PHASE_CURRENT_W] - curr_off.W_Phase_Offset;
+  filteredValue_b = analog.bufferData[PHASE_CURRENT_V] - curr_off.V_Phase_Offset;
+
+  final_FilteredValue_a = CURRENT_FILTER(filteredValue_a, prevFilteredValue_a, final_prevFilteredValue_a);
+  final_FilteredValue_b = CURRENT_FILTER(filteredValue_b, prevFilteredValue_b, final_prevFilteredValue_b);
 
   #if PEG3W
     FOC_U.PhaseCurrent[0] = (filteredValue_a * 3.297 * 800.0) / 65535.0;
@@ -47,6 +49,11 @@ void READ_MOTOR_PHASE_CURRENT()
     FOC_U.PhaseCurrent[1] = (filteredValue_b * 3.297 * 800.0) / 65535.0;
     FOC_U.PhaseCurrent[0] = (-FOC_U.PhaseCurrent[2]) + (-FOC_U.PhaseCurrent[1]);
   #endif
+
+  prevFilteredValue_a = filteredValue_a;
+  prevFilteredValue_b = filteredValue_b;
+  final_prevFilteredValue_a = final_FilteredValue_a;
+  final_prevFilteredValue_b = final_FilteredValue_b;
 
 }
 void READ_MOTOR_POSITION()
