@@ -5,7 +5,7 @@
 #define MAX_DUTY_CYCLE     (int16_t) 1000-1   // 999 duty cycle pulse value at 3.3V
 #define NOMINAL_FREQUENCY  (int16_t) 90       // Nominal Frequency at 90Hz
 #define MAX_MOTOR_FREQ     (int16_t) 200      // 200Hz  max motor frequency
-#define ADC_NoOfConversion (int16_t) 11       // Number of ADC Channels
+#define ADC_NoOfConversion (int16_t) 10       // Number of ADC Channels
 #define Adc_max_Value      (uint16_t) 65535   // 16bit conversion
 #define MAX_INPUT_VOLTAGE  (double) 3.3       // Max MCU ADC reference voltage
 #define ADC_Vref           (double) 3.3

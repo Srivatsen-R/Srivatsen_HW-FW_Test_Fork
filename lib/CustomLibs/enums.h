@@ -137,17 +137,16 @@ typedef enum{
 
 
 typedef enum {
-     PHASE_CURRENT_W   = 0,
-     BOARD_TEMP_U      = 1,
-     BOARD_TEMP_W      = 2,
-     MOTOR_TEMP_SENSE  = 3,
-     BOARD_TEMP_V      = 4,
-     BUS_CURRENT_W     = 5,
-     BUS_VOLTAGE       = 6,
-     BUS_CURRENT_U     = 7, 
-     BUS_CURRENT_V     = 8,
-     PHASE_CURRENT_V   = 9,
-	 THROTTLE		   = 10,	
+	BRAKE_POT = 0,
+	PHASE_CURRENT_W = 1,
+	BOARD_TEMP_U = 2,
+	BOARD_TEMP_W = 3,
+	THROTTLE = 4,
+	MOTOR_TEMP_SENSE = 5,
+	BOARD_TEMP_V = 6,
+	BUS_VOLTAGE = 7,
+	AUX_BATTERY_VOLTAGE = 8,
+	PHASE_CURRENT_V = 9,	
 }ADC_Channels_t;
 
 typedef enum {
