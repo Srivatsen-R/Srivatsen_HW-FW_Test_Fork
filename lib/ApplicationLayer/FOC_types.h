@@ -3,9 +3,9 @@
  *
  * Code generation for model "FOC".
  *
- * Model version              : 18.39
+ * Model version              : 18.115
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C source code generated on : Sat Dec 21 16:19:18 2024
+ * C source code generated on : Fri Jan 24 14:55:07 2025
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -17,6 +17,59 @@
 #ifndef FOC_types_h_
 #define FOC_types_h_
 #include "rtwtypes.h"
+#ifndef DEFINED_TYPEDEF_FOR_Flux_PID_MTPA_
+#define DEFINED_TYPEDEF_FOR_Flux_PID_MTPA_
+
+typedef struct {
+  real32_T Kp_flux_PID_MTPA;
+  real32_T Ki_flux_PID_MTPA;
+  real32_T Kd_flux_PID_MTPA;
+  real32_T Filter_flux_PID_MTPA;
+  real32_T Up_Limit_flux_PID_MTPA;
+  real32_T Low_Limit_flux_PID_MTPA;
+} Flux_PID_MTPA;
+
+#endif
+
+#ifndef DEFINED_TYPEDEF_FOR_Speed_PID_MTPA_
+#define DEFINED_TYPEDEF_FOR_Speed_PID_MTPA_
+
+typedef struct {
+  real32_T Kp_speed_PID_MTPA;
+  real32_T Ki_speed_PID_MTPA;
+  real32_T Kd_speed_PID_MTPA;
+  real32_T Filter_speed_PID_MTPA;
+  real32_T Up_Limit_speed_PID_MTPA;
+  real32_T Low_Limit_speed_PID_MTPA;
+} Speed_PID_MTPA;
+
+#endif
+
+#ifndef DEFINED_TYPEDEF_FOR_Torque_PID_MTPA_
+#define DEFINED_TYPEDEF_FOR_Torque_PID_MTPA_
+
+typedef struct {
+  real32_T Kp_torque_PID_MTPA;
+  real32_T Ki_torque_PID_MTPA;
+  real32_T Kd_torque_PID_MTPA;
+  real32_T Filter_torque_PID_MTPA;
+  real32_T Up_Limit_torque_PID_MTPA;
+  real32_T Low_Limit_torque_PID_MTPA;
+} Torque_PID_MTPA;
+
+#endif
+
+#ifndef DEFINED_TYPEDEF_FOR_PID_MTPABus_
+#define DEFINED_TYPEDEF_FOR_PID_MTPABus_
+
+typedef struct {
+  Flux_PID_MTPA Flux_PID_MTPA;
+  Speed_PID_MTPA Speed_PID_MTPA;
+  Torque_PID_MTPA Torque_PID_MTPA;
+} PID_MTPABus;
+
+#endif
+
 #ifndef DEFINED_TYPEDEF_FOR_ThresholdsBus_
 #define DEFINED_TYPEDEF_FOR_ThresholdsBus_
 

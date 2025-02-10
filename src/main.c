@@ -55,6 +55,7 @@ extern motorControl_t motorControl;
 fnr_states fnr;
 hard_fault_cause hard_fault_c;
 Current_Off_Calc curr_off = {.W_Phase_Offset = 0, .V_Phase_Offset = 0};
+FOC_Logging foc_log = {0};
 
 /* Private function prototypes -----------------------------------------------*/
 typedef struct __attribute__((packed))
@@ -253,11 +254,11 @@ void send_on_305()
 {
   uint8_t can_data[8] = {0};
 
-  can_data[0] = (uint8_t)((uint16_t)(FOC_Y.Id_refer + 10000.0) & 0x00FF);
-  can_data[1] = (uint8_t)(((uint16_t)(FOC_Y.Id_refer + 10000.0) & 0xFF00) >> 8);
+  can_data[0] = (uint8_t)((uint16_t)(FOC_Y.Id_ref + 10000.0) & 0x00FF);
+  can_data[1] = (uint8_t)(((uint16_t)(FOC_Y.Id_ref + 10000.0) & 0xFF00) >> 8);
 
-  can_data[2] = (uint8_t)((uint16_t)(FOC_Y.Iq_refer + 10000.0) & 0x00FF);
-  can_data[3] = (uint8_t)(((uint16_t)(FOC_Y.Iq_refer + 10000.0) & 0xFF00) >> 8);
+  can_data[2] = (uint8_t)((uint16_t)(FOC_Y.Iq_ref + 10000.0) & 0x00FF);
+  can_data[3] = (uint8_t)(((uint16_t)(FOC_Y.Iq_ref + 10000.0) & 0xFF00) >> 8);
 
   #if APP1
   can_data[4] = (uint8_t)(0x01);
@@ -316,12 +317,6 @@ void send_on_308()
   can_data[1] = (uint8_t)((curr_off.W_Phase_Offset & 0xFF00) >> 8);
   can_data[2] = (uint8_t)(curr_off.V_Phase_Offset & 0x00FF);
   can_data[3] = (uint8_t)((curr_off.V_Phase_Offset & 0xFF00) >> 8);
-
-  #if SPEED_MODE
-  volatile float offset_angle = (FOC_Y.Offset_angle + 2 * PI) * 100.0f;
-  can_data[4] = (uint8_t)((uint16_t)(offset_angle) & 0x00FF);
-  can_data[5] = (uint8_t)(((uint16_t)(offset_angle) & 0xFF00) >> 8);
-  #endif
 
   can_data[6] = (uint8_t)((uint16_t)(Duty) & 0x00FF);
   can_data[7] = (uint8_t)(((uint16_t)(Duty) & 0xFF00) >> 8);
@@ -575,14 +570,16 @@ void Throttle_Control_routine()
   #if RAMP_CNTRL
   if (time_count - prev_thr_time >= 100)
   {
-    if (FOC_U.RefSpeed < (500.0 * RPM_TO_RAD_S))
+    if (FOC_U.RefSpeed < (1000.0 * RPM_TO_RAD_S))
       FOC_U.RefSpeed += 1.0;
 
-    if (FOC_U.RefSpeed > (500.0 * RPM_TO_RAD_S))
-      FOC_U.RefSpeed = (500.0 * RPM_TO_RAD_S);
+    if (FOC_U.RefSpeed > (1000.0 * RPM_TO_RAD_S))
+      FOC_U.RefSpeed = (1000.0 * RPM_TO_RAD_S);
 
     if (FOC_U.RefSpeed < 0.0)
       FOC_U.RefSpeed = 0.0;
+
+    foc_log.RefSpeed = FOC_U.RefSpeed / RPM_TO_RAD_S;
 
     prev_thr_time = time_count;
   }

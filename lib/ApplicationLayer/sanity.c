@@ -139,40 +139,7 @@ void ANALOG_READING()
 
      //bus voltage
      busVoltage = moving_Batt_voltage_measured_fun(0.00211*analog.bufferData[BUS_VOLTAGE],VOLTAGE_AVG); 
-     terminal.volt.bus_volt = busVoltage; 
-     if (busVoltage > 52.0 && busVoltage < 63.0)
-     {
-        FOC_U.BusVoltage_V = busVoltage;
-
-        FOC_U.Up_Limit_flux_PID = busVoltage;
-        FOC_U.Low_Limit_flux_PID = -busVoltage;
-
-        FOC_U.Up_Limit_torque_PID = busVoltage;
-        FOC_U.Low_Limit_torque_PID = -busVoltage;
-     }
-     else if (busVoltage < 52.0)
-     {
-        FOC_U.BusVoltage_V = 52.0;
-
-        FOC_U.Up_Limit_flux_PID = busVoltage;
-        FOC_U.Low_Limit_flux_PID = -busVoltage;
-
-        FOC_U.Up_Limit_torque_PID = busVoltage;
-        FOC_U.Low_Limit_torque_PID = -busVoltage;
-     }
-     else if (busVoltage > 63.0)
-     {
-        FOC_U.BusVoltage_V = 63.0;
-
-        FOC_U.Up_Limit_flux_PID = busVoltage;
-        FOC_U.Low_Limit_flux_PID = -busVoltage;
-
-        FOC_U.Up_Limit_torque_PID = busVoltage;
-        FOC_U.Low_Limit_torque_PID = -busVoltage;
-     }
-     #if SPEED_MODE
-     FOC_U.Vdc = FOC_U.BusVoltage_V;
-     #endif
+     terminal.volt.bus_volt = busVoltage;
 
      FOC_U.MotorTemperature_C = motorControl.temperature.motor;
      FOC_U.MCTemperature_C = avg_board_temp;

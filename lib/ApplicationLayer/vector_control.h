@@ -211,7 +211,7 @@ typedef struct foc_t {
 #define RPM_IMR_CONST1                      0.0004251// (1-0.001)/(5000-2650)
 
 
-#define F_SW                                7142.857//FCLK/(PSCR*ARR) //100MHz/(10*1000)         // ISR Sampling frequency
+#define F_SW                                10000.0//FCLK/(PSCR*ARR) //100MHz/(10*1000)         // ISR Sampling frequency
 #define T_PRD                               2500.0         // PWM Period TIM1
 #define OFFSET_DUTY                         0.5            // DUTY OFFSET used in modulation.
 #define T_S                                 1.0/F_SW       // Sampling Time
@@ -228,7 +228,7 @@ typedef struct foc_t {
 #define CURRENT_FILTER_CONSTANT_1           ((2.0*T_F_CURRENT_PHASE-T_S)/(2.0*T_F_CURRENT_PHASE+T_S)) // Constant to filter current
 #define CURRENT_FILTER_CONSTANT_2           (T_S/(2.0*T_F_CURRENT_PHASE+T_S)) // Constant to filter current
 #define PWM_CONST_1                         0.5*T_PRD        // CONSTANT FOR PWM Modulation
-#define PWM_CONST_2                         (0.5*T_PRD)/32767.0 // CONSTANT FOR PWM Modulation
+#define PWM_CONST_2                         (0.5*T_PRD) // CONSTANT FOR PWM Modulation
 #define ROTOR_TIME_CONSTANT_NEW             0.11             // ROTOR TIME CONSTANT L/R
 #define IMR_CONST1                          (2.0*ROTOR_TIME_CONSTANT_NEW-T_S)/(2.0*ROTOR_TIME_CONSTANT_NEW+T_S) // MAGNETIZING CURRENT CONSTANT
 #define IMR_CONST2                          T_S/(2.0*ROTOR_TIME_CONSTANT_NEW+T_S) // MAGNETIZING CURRENT CONSTANT

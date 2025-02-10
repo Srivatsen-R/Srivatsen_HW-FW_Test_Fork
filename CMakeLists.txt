@@ -121,6 +121,7 @@ set(FIRMWARE_FILES
     lib/ApplicationLayer/v_f_control.c
     lib/ApplicationLayer/vector_control.c
     lib/ApplicationLayer/vehicle.c
+    lib/ApplicationLayer/FOC_data.c
     lib/ApplicationLayer/FOC.c
     lib/ApplicationLayer/Position_Calculation.c
     lib/ApplicationLayer/Position_Calculation_data.c

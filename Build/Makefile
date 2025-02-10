@@ -1195,6 +1195,33 @@ lib/ApplicationLayer/FOC.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/FOC.c.s
 .PHONY : lib/ApplicationLayer/FOC.c.s
 
+lib/ApplicationLayer/FOC_data.obj: lib/ApplicationLayer/FOC_data.c.obj
+.PHONY : lib/ApplicationLayer/FOC_data.obj
+
+# target to build an object file
+lib/ApplicationLayer/FOC_data.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/FOC_data.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/FOC_data.c.obj
+.PHONY : lib/ApplicationLayer/FOC_data.c.obj
+
+lib/ApplicationLayer/FOC_data.i: lib/ApplicationLayer/FOC_data.c.i
+.PHONY : lib/ApplicationLayer/FOC_data.i
+
+# target to preprocess a source file
+lib/ApplicationLayer/FOC_data.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/FOC_data.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/FOC_data.c.i
+.PHONY : lib/ApplicationLayer/FOC_data.c.i
+
+lib/ApplicationLayer/FOC_data.s: lib/ApplicationLayer/FOC_data.c.s
+.PHONY : lib/ApplicationLayer/FOC_data.s
+
+# target to generate assembly for a file
+lib/ApplicationLayer/FOC_data.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/FOC_data.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/FOC_data.c.s
+.PHONY : lib/ApplicationLayer/FOC_data.c.s
+
 lib/ApplicationLayer/Position_Calculation.obj: lib/ApplicationLayer/Position_Calculation.c.obj
 .PHONY : lib/ApplicationLayer/Position_Calculation.obj
 
@@ -2416,6 +2443,9 @@ help:
 	@echo ... lib/ApplicationLayer/FOC.obj
 	@echo ... lib/ApplicationLayer/FOC.i
 	@echo ... lib/ApplicationLayer/FOC.s
+	@echo ... lib/ApplicationLayer/FOC_data.obj
+	@echo ... lib/ApplicationLayer/FOC_data.i
+	@echo ... lib/ApplicationLayer/FOC_data.s
 	@echo ... lib/ApplicationLayer/Position_Calculation.obj
 	@echo ... lib/ApplicationLayer/Position_Calculation.i
 	@echo ... lib/ApplicationLayer/Position_Calculation.s
