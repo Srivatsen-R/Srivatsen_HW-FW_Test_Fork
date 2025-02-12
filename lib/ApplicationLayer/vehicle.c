@@ -45,14 +45,14 @@ void READ_MOTOR_PHASE_CURRENT()
   #endif
 
   #if PEG4W
-    FOC_U.PhaseCurrent[2] = (filteredValue_a * 3.297 * 800.0) / 65535.0;
-    FOC_U.PhaseCurrent[1] = (filteredValue_b * 3.297 * 800.0) / 65535.0;
-    FOC_U.PhaseCurrent[0] = (-FOC_U.PhaseCurrent[2]) + (-FOC_U.PhaseCurrent[1]);
+    Medhya_U.I_abc[2] = (filteredValue_a * 3.297 * 800.0) / 65535.0;
+    Medhya_U.I_abc[1] = (filteredValue_b * 3.297 * 800.0) / 65535.0;
+    Medhya_U.I_abc[0] = (-Medhya_U.I_abc[2]) + (-Medhya_U.I_abc[1]);
   #endif
 
-  foc_log.Ia = FOC_U.PhaseCurrent[0];
-  foc_log.Ib = FOC_U.PhaseCurrent[1];
-  foc_log.Ic = FOC_U.PhaseCurrent[2];
+  foc_log.Ia = Medhya_U.I_abc[0];
+  foc_log.Ib = Medhya_U.I_abc[1];
+  foc_log.Ic = Medhya_U.I_abc[2];
 
   prevFilteredValue_a = filteredValue_a;
   prevFilteredValue_b = filteredValue_b;

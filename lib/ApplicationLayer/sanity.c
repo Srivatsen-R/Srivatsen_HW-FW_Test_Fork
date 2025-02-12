@@ -63,7 +63,7 @@ void FAULT_DETECTION()
 
         if (time_tick_count - prev_count_iq >= 10)
         {
-                if (FOC_Y.Iq >= 550.0)
+                if (Medhya_Y.IdqFeedback[1] >= 550.0)
                         count_iq++;
 
                 if (count_iq >= 10.0)
@@ -93,7 +93,7 @@ void FAULT_DETECTION()
 
         if (time_tick_count - prev_count_phase_curr >= 10)
         {
-                if ((FOC_U.PhaseCurrent[0] >= 550.0 || FOC_U.PhaseCurrent[0] <= -550.0) || (FOC_U.PhaseCurrent[1] >= 550.0 || FOC_U.PhaseCurrent[1] <= -550.0) || (FOC_U.PhaseCurrent[2] >= 550.0 || FOC_U.PhaseCurrent[2] <= -550.0))
+                if ((Medhya_U.I_abc[0] >= 450.0 || Medhya_U.I_abc[0] <= -450.0) || (Medhya_U.I_abc[1] >= 450.0 || Medhya_U.I_abc[1] <= -450.0) || (Medhya_U.I_abc[2] >= 450.0 || Medhya_U.I_abc[2] <= -450.0))
                         count_phase_Curr++;
 
                 if (count_phase_Curr >= 10.0)
@@ -133,14 +133,14 @@ void ANALOG_READING()
      temp_K -= KELVIN_TO_CELSIUS;
      motorControl.temperature.motor = moving_Temperature_measured_fun_M(temp_K, TEMP_AVG);
 
-     torque_calc = fmax((1.5 * POLEPAIRS * (FOC_U.Lamda * FOC_Y.Iq + (FOC_U.Ld - FOC_U.Lq) * FOC_Y.Id * FOC_Y.Iq)), torque_calc);
-     irms_calc = fmax(sqrtf(FOC_Y.Iq * FOC_Y.Iq + FOC_Y.Id * FOC_Y.Id), irms_calc) / sqrtf(2.0f);
-     v_rms = sqrtf(FOC_Y.Vq * FOC_Y.Vq + FOC_Y.Vd * FOC_Y.Vd) / sqrtf(2.0f);
+     //torque_calc = fmax((1.5 * POLEPAIRS * (FOC_U.Lamda * FOC_Y.Iq + (FOC_U.Ld - FOC_U.Lq) * FOC_Y.Id * FOC_Y.Iq)), torque_calc);
+     irms_calc = fmax(sqrtf(Medhya_Y.IdqFeedback[0] * Medhya_Y.IdqFeedback[0] + Medhya_Y.IdqFeedback[1] * Medhya_Y.IdqFeedback[1]), irms_calc) / sqrtf(2.0f);
+     v_rms = sqrtf(Medhya_Y.VqControl * Medhya_Y.VqControl + Medhya_Y.VdControl * Medhya_Y.VdControl) / sqrtf(2.0f);
 
      //bus voltage
      busVoltage = moving_Batt_voltage_measured_fun(0.00211*analog.bufferData[BUS_VOLTAGE],VOLTAGE_AVG); 
      terminal.volt.bus_volt = busVoltage;
 
-     FOC_U.MotorTemperature_C = motorControl.temperature.motor;
-     FOC_U.MCTemperature_C = avg_board_temp;
+//      FOC_U.MotorTemperature_C = motorControl.temperature.motor;
+//      FOC_U.MCTemperature_C = avg_board_temp;
 }

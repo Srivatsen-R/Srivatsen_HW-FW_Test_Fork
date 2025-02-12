@@ -49,6 +49,7 @@ extern "C" {
 #include "isotp/isotp_types.h"
 
 #include "FOC.h"
+#include "medhya.h"
 
 #define __IO volatile
 
