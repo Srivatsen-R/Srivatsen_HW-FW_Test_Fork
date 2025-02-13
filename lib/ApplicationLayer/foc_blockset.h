@@ -16,6 +16,7 @@ void   SPWM(int,int,int );
 void   SVPWM_MODE_DRIVE_FUNCTION(int,int,int);
 void   MotorControl_Init (void);
 void   DRIVE_STOP(void);
+void   DRIVE_RESET(void);
 float  CALCULATE_SLIP_SPEED(float,float);
 float  map(float,float,float,float ,float);
 float  TORQUE_PI_LOOP_2(float,float,float,float);

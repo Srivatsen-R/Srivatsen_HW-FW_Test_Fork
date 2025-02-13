@@ -125,7 +125,7 @@ void FOC_READ_MOTOR_POSITION(void)
 
     if (fnr.current_state == FORWARD)
     {
-        if((foc.speed_sense * 1.0 * SPEED_PU_TO_RPM * RPM_TO_RAD_S)<10.0 && duty_state == 0)
+        if((foc.speed_sense * 1.0 * SPEED_PU_TO_RPM)<10.0 && duty_state == 0)
         { 
             angle_mech = -(Duty)*DUTY_TO_RADIAN;
             foc.rho_prev = POLEPAIRS*angle_mech; // elec angle
@@ -136,7 +136,7 @@ void FOC_READ_MOTOR_POSITION(void)
     }
     else if (fnr.current_state == REVERSE)
     {
-        if((foc.speed_sense * -1.0 * SPEED_PU_TO_RPM * RPM_TO_RAD_S)<10.0 && duty_state == 0)
+        if((foc.speed_sense * -1.0 * SPEED_PU_TO_RPM)<10.0 && duty_state == 0)
         { 
             angle_mech = (100-Duty)*DUTY_TO_RADIAN;
             foc.rho_prev = POLEPAIRS*angle_mech; // elec angle
@@ -149,7 +149,7 @@ void FOC_READ_MOTOR_POSITION(void)
     {
         if (fnr.previous_state == FORWARD)
         {
-            if((foc.speed_sense * 1.0 * SPEED_PU_TO_RPM * RPM_TO_RAD_S)<10.0 && duty_state == 0)
+            if((foc.speed_sense * 1.0 * SPEED_PU_TO_RPM)<10.0 && duty_state == 0)
             { 
                 angle_mech = -(Duty)*DUTY_TO_RADIAN;
                 foc.rho_prev = POLEPAIRS*angle_mech; // elec angle
@@ -158,7 +158,7 @@ void FOC_READ_MOTOR_POSITION(void)
         }
         else if (fnr.previous_state == REVERSE)
         {
-            if((foc.speed_sense * -1.0 * SPEED_PU_TO_RPM * RPM_TO_RAD_S)<10.0 && duty_state == 0)
+            if((foc.speed_sense * -1.0 * SPEED_PU_TO_RPM)<10.0 && duty_state == 0)
             { 
                 angle_mech = (100-Duty)*DUTY_TO_RADIAN;
                 foc.rho_prev = POLEPAIRS*angle_mech; // elec angle
@@ -169,7 +169,7 @@ void FOC_READ_MOTOR_POSITION(void)
 
     if (fnr.current_state == FORWARD)
     {
-        if((foc.speed_sense * SPEED_PU_TO_RPM * 1.0 * RPM_TO_RAD_S) <= 0.0)
+        if((foc.speed_sense * SPEED_PU_TO_RPM * 1.0) <= 10.0)
         {
             duty_state = 0;
         }
@@ -178,7 +178,7 @@ void FOC_READ_MOTOR_POSITION(void)
     }
     else if (fnr.current_state == REVERSE)
     {
-        if((foc.speed_sense * SPEED_PU_TO_RPM * -1.0 * RPM_TO_RAD_S) <= 0.0)
+        if((foc.speed_sense * SPEED_PU_TO_RPM * -1.0) <= 10.0)
         {
             duty_state = 0;
         }
@@ -189,14 +189,14 @@ void FOC_READ_MOTOR_POSITION(void)
     {
         if (fnr.previous_state == FORWARD)
         {
-            if((foc.speed_sense * SPEED_PU_TO_RPM * 1.0 * RPM_TO_RAD_S) <= 0.0)
+            if((foc.speed_sense * SPEED_PU_TO_RPM * 1.0) <= 10.0)
             {
                 duty_state = 0;
             }
         }
         else if (fnr.previous_state == REVERSE)
         {
-            if((foc.speed_sense * SPEED_PU_TO_RPM * -1.0 * RPM_TO_RAD_S) <= 0.0)
+            if((foc.speed_sense * SPEED_PU_TO_RPM * -1.0) <= 10.0)
             {
                 duty_state = 0;
             }
@@ -260,9 +260,9 @@ void FOC_READ_MOTOR_POSITION(void)
 
 void FOC_SPACE_VECTOR_MODULATION()
 {
-    foc.pwm_a = (uint16_t)((PWM_CONST_2*((FOC_Y.Va / 61.0f)))  + PWM_CONST_1);
-    foc.pwm_b = (uint16_t)((PWM_CONST_2*((FOC_Y.Vb / 61.0f)))  + PWM_CONST_1);
-    foc.pwm_c = (uint16_t)((PWM_CONST_2*((FOC_Y.Vc / 61.0f)))  + PWM_CONST_1);   
+    foc.pwm_a = (uint16_t)((PWM_CONST_2*((FOC_Y.Va / (61.0f / sqrtf(3.0)))))  + PWM_CONST_1);
+    foc.pwm_b = (uint16_t)((PWM_CONST_2*((FOC_Y.Vb / (61.0f / sqrtf(3.0)))))  + PWM_CONST_1);
+    foc.pwm_c = (uint16_t)((PWM_CONST_2*((FOC_Y.Vc / (61.0f / sqrtf(3.0)))))  + PWM_CONST_1);   
 
     if (foc.pwm_a < 0)
         foc.pwm_a = 0;

@@ -118,9 +118,9 @@ void FAULT_DETECTION()
 void ANALOG_READING()
 {
      //controller temperature 
-     motorControl.temperature.u     = moving_Temperature_measured_fun_u(mControl.temperature.read(analog.read(BOARD_TEMP_U)),TEMP_AVG);
-     motorControl.temperature.v     = moving_Temperature_measured_fun_v(mControl.temperature.read(analog.read(BOARD_TEMP_V)),TEMP_AVG);
-     motorControl.temperature.w     = moving_Temperature_measured_fun_w(mControl.temperature.read(analog.read(BOARD_TEMP_W)),TEMP_AVG);
+     motorControl.temperature.u     = moving_Temperature_measured_fun(mControl.temperature.read(analog.read(BOARD_TEMP_U)),TEMP_AVG);
+     motorControl.temperature.v     = moving_Temperature_measured_fun(mControl.temperature.read(analog.read(BOARD_TEMP_V)),TEMP_AVG);
+     motorControl.temperature.w     = moving_Temperature_measured_fun(mControl.temperature.read(analog.read(BOARD_TEMP_W)),TEMP_AVG);
      avg_board_temp = (motorControl.temperature.u + motorControl.temperature.v + motorControl.temperature.w)/3.0;
 
      //motor temperature
@@ -131,7 +131,7 @@ void ANALOG_READING()
      temp_K += 1.0/(T_AMBIENT + KELVIN_TO_CELSIUS);
      temp_K = 1.0/temp_K;
      temp_K -= KELVIN_TO_CELSIUS;
-     motorControl.temperature.motor = moving_Temperature_measured_fun_M(temp_K, TEMP_AVG);
+     motorControl.temperature.motor = moving_Temperature_measured_fun(temp_K, TEMP_AVG);
 
      torque_calc = fmax((1.5 * POLEPAIRS * (FOC_U.Lamda * FOC_Y.Iq + (FOC_U.Ld - FOC_U.Lq) * FOC_Y.Id * FOC_Y.Iq)), torque_calc);
      irms_calc = fmax(sqrtf(FOC_Y.Iq * FOC_Y.Iq + FOC_Y.Id * FOC_Y.Id), irms_calc) / sqrtf(2.0f);

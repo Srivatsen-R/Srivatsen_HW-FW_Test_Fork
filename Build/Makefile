@@ -1222,60 +1222,6 @@ lib/ApplicationLayer/FOC_data.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/FOC_data.c.s
 .PHONY : lib/ApplicationLayer/FOC_data.c.s
 
-lib/ApplicationLayer/Position_Calculation.obj: lib/ApplicationLayer/Position_Calculation.c.obj
-.PHONY : lib/ApplicationLayer/Position_Calculation.obj
-
-# target to build an object file
-lib/ApplicationLayer/Position_Calculation.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Position_Calculation.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Position_Calculation.c.obj
-.PHONY : lib/ApplicationLayer/Position_Calculation.c.obj
-
-lib/ApplicationLayer/Position_Calculation.i: lib/ApplicationLayer/Position_Calculation.c.i
-.PHONY : lib/ApplicationLayer/Position_Calculation.i
-
-# target to preprocess a source file
-lib/ApplicationLayer/Position_Calculation.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Position_Calculation.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Position_Calculation.c.i
-.PHONY : lib/ApplicationLayer/Position_Calculation.c.i
-
-lib/ApplicationLayer/Position_Calculation.s: lib/ApplicationLayer/Position_Calculation.c.s
-.PHONY : lib/ApplicationLayer/Position_Calculation.s
-
-# target to generate assembly for a file
-lib/ApplicationLayer/Position_Calculation.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Position_Calculation.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Position_Calculation.c.s
-.PHONY : lib/ApplicationLayer/Position_Calculation.c.s
-
-lib/ApplicationLayer/Position_Calculation_data.obj: lib/ApplicationLayer/Position_Calculation_data.c.obj
-.PHONY : lib/ApplicationLayer/Position_Calculation_data.obj
-
-# target to build an object file
-lib/ApplicationLayer/Position_Calculation_data.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Position_Calculation_data.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Position_Calculation_data.c.obj
-.PHONY : lib/ApplicationLayer/Position_Calculation_data.c.obj
-
-lib/ApplicationLayer/Position_Calculation_data.i: lib/ApplicationLayer/Position_Calculation_data.c.i
-.PHONY : lib/ApplicationLayer/Position_Calculation_data.i
-
-# target to preprocess a source file
-lib/ApplicationLayer/Position_Calculation_data.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Position_Calculation_data.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Position_Calculation_data.c.i
-.PHONY : lib/ApplicationLayer/Position_Calculation_data.c.i
-
-lib/ApplicationLayer/Position_Calculation_data.s: lib/ApplicationLayer/Position_Calculation_data.c.s
-.PHONY : lib/ApplicationLayer/Position_Calculation_data.s
-
-# target to generate assembly for a file
-lib/ApplicationLayer/Position_Calculation_data.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/Position_Calculation_data.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/Position_Calculation_data.c.s
-.PHONY : lib/ApplicationLayer/Position_Calculation_data.c.s
-
 lib/ApplicationLayer/adc_AL.obj: lib/ApplicationLayer/adc_AL.c.obj
 .PHONY : lib/ApplicationLayer/adc_AL.obj
 
@@ -1302,6 +1248,33 @@ lib/ApplicationLayer/adc_AL.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/adc_AL.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/adc_AL.c.s
 .PHONY : lib/ApplicationLayer/adc_AL.c.s
+
+lib/ApplicationLayer/can_debug_and_sanity.obj: lib/ApplicationLayer/can_debug_and_sanity.c.obj
+.PHONY : lib/ApplicationLayer/can_debug_and_sanity.obj
+
+# target to build an object file
+lib/ApplicationLayer/can_debug_and_sanity.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/can_debug_and_sanity.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/can_debug_and_sanity.c.obj
+.PHONY : lib/ApplicationLayer/can_debug_and_sanity.c.obj
+
+lib/ApplicationLayer/can_debug_and_sanity.i: lib/ApplicationLayer/can_debug_and_sanity.c.i
+.PHONY : lib/ApplicationLayer/can_debug_and_sanity.i
+
+# target to preprocess a source file
+lib/ApplicationLayer/can_debug_and_sanity.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/can_debug_and_sanity.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/can_debug_and_sanity.c.i
+.PHONY : lib/ApplicationLayer/can_debug_and_sanity.c.i
+
+lib/ApplicationLayer/can_debug_and_sanity.s: lib/ApplicationLayer/can_debug_and_sanity.c.s
+.PHONY : lib/ApplicationLayer/can_debug_and_sanity.s
+
+# target to generate assembly for a file
+lib/ApplicationLayer/can_debug_and_sanity.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/can_debug_and_sanity.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/can_debug_and_sanity.c.s
+.PHONY : lib/ApplicationLayer/can_debug_and_sanity.c.s
 
 lib/ApplicationLayer/config.obj: lib/ApplicationLayer/config.c.obj
 .PHONY : lib/ApplicationLayer/config.obj
@@ -1498,33 +1471,6 @@ lib/ApplicationLayer/foc_blockset.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/foc_blockset.c.s
 .PHONY : lib/ApplicationLayer/foc_blockset.c.s
 
-lib/ApplicationLayer/foc_mtpa_lut.obj: lib/ApplicationLayer/foc_mtpa_lut.c.obj
-.PHONY : lib/ApplicationLayer/foc_mtpa_lut.obj
-
-# target to build an object file
-lib/ApplicationLayer/foc_mtpa_lut.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/foc_mtpa_lut.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/foc_mtpa_lut.c.obj
-.PHONY : lib/ApplicationLayer/foc_mtpa_lut.c.obj
-
-lib/ApplicationLayer/foc_mtpa_lut.i: lib/ApplicationLayer/foc_mtpa_lut.c.i
-.PHONY : lib/ApplicationLayer/foc_mtpa_lut.i
-
-# target to preprocess a source file
-lib/ApplicationLayer/foc_mtpa_lut.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/foc_mtpa_lut.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/foc_mtpa_lut.c.i
-.PHONY : lib/ApplicationLayer/foc_mtpa_lut.c.i
-
-lib/ApplicationLayer/foc_mtpa_lut.s: lib/ApplicationLayer/foc_mtpa_lut.c.s
-.PHONY : lib/ApplicationLayer/foc_mtpa_lut.s
-
-# target to generate assembly for a file
-lib/ApplicationLayer/foc_mtpa_lut.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/foc_mtpa_lut.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/foc_mtpa_lut.c.s
-.PHONY : lib/ApplicationLayer/foc_mtpa_lut.c.s
-
 lib/ApplicationLayer/led_AL.obj: lib/ApplicationLayer/led_AL.c.obj
 .PHONY : lib/ApplicationLayer/led_AL.obj
 
@@ -1686,33 +1632,6 @@ lib/ApplicationLayer/usart_AL.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/usart_AL.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/usart_AL.c.s
 .PHONY : lib/ApplicationLayer/usart_AL.c.s
-
-lib/ApplicationLayer/v_f_control.obj: lib/ApplicationLayer/v_f_control.c.obj
-.PHONY : lib/ApplicationLayer/v_f_control.obj
-
-# target to build an object file
-lib/ApplicationLayer/v_f_control.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/v_f_control.c.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/v_f_control.c.obj
-.PHONY : lib/ApplicationLayer/v_f_control.c.obj
-
-lib/ApplicationLayer/v_f_control.i: lib/ApplicationLayer/v_f_control.c.i
-.PHONY : lib/ApplicationLayer/v_f_control.i
-
-# target to preprocess a source file
-lib/ApplicationLayer/v_f_control.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/v_f_control.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/v_f_control.c.i
-.PHONY : lib/ApplicationLayer/v_f_control.c.i
-
-lib/ApplicationLayer/v_f_control.s: lib/ApplicationLayer/v_f_control.c.s
-.PHONY : lib/ApplicationLayer/v_f_control.s
-
-# target to generate assembly for a file
-lib/ApplicationLayer/v_f_control.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app1.elf.dir\build.make CMakeFiles/Pegasus3.1v-app1.elf.dir/lib/ApplicationLayer/v_f_control.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Pegasus3.1v-app2.elf.dir\build.make CMakeFiles/Pegasus3.1v-app2.elf.dir/lib/ApplicationLayer/v_f_control.c.s
-.PHONY : lib/ApplicationLayer/v_f_control.c.s
 
 lib/ApplicationLayer/vector_control.obj: lib/ApplicationLayer/vector_control.c.obj
 .PHONY : lib/ApplicationLayer/vector_control.obj
@@ -2446,15 +2365,12 @@ help:
 	@echo ... lib/ApplicationLayer/FOC_data.obj
 	@echo ... lib/ApplicationLayer/FOC_data.i
 	@echo ... lib/ApplicationLayer/FOC_data.s
-	@echo ... lib/ApplicationLayer/Position_Calculation.obj
-	@echo ... lib/ApplicationLayer/Position_Calculation.i
-	@echo ... lib/ApplicationLayer/Position_Calculation.s
-	@echo ... lib/ApplicationLayer/Position_Calculation_data.obj
-	@echo ... lib/ApplicationLayer/Position_Calculation_data.i
-	@echo ... lib/ApplicationLayer/Position_Calculation_data.s
 	@echo ... lib/ApplicationLayer/adc_AL.obj
 	@echo ... lib/ApplicationLayer/adc_AL.i
 	@echo ... lib/ApplicationLayer/adc_AL.s
+	@echo ... lib/ApplicationLayer/can_debug_and_sanity.obj
+	@echo ... lib/ApplicationLayer/can_debug_and_sanity.i
+	@echo ... lib/ApplicationLayer/can_debug_and_sanity.s
 	@echo ... lib/ApplicationLayer/config.obj
 	@echo ... lib/ApplicationLayer/config.i
 	@echo ... lib/ApplicationLayer/config.s
@@ -2476,9 +2392,6 @@ help:
 	@echo ... lib/ApplicationLayer/foc_blockset.obj
 	@echo ... lib/ApplicationLayer/foc_blockset.i
 	@echo ... lib/ApplicationLayer/foc_blockset.s
-	@echo ... lib/ApplicationLayer/foc_mtpa_lut.obj
-	@echo ... lib/ApplicationLayer/foc_mtpa_lut.i
-	@echo ... lib/ApplicationLayer/foc_mtpa_lut.s
 	@echo ... lib/ApplicationLayer/led_AL.obj
 	@echo ... lib/ApplicationLayer/led_AL.i
 	@echo ... lib/ApplicationLayer/led_AL.s
@@ -2497,9 +2410,6 @@ help:
 	@echo ... lib/ApplicationLayer/usart_AL.obj
 	@echo ... lib/ApplicationLayer/usart_AL.i
 	@echo ... lib/ApplicationLayer/usart_AL.s
-	@echo ... lib/ApplicationLayer/v_f_control.obj
-	@echo ... lib/ApplicationLayer/v_f_control.i
-	@echo ... lib/ApplicationLayer/v_f_control.s
 	@echo ... lib/ApplicationLayer/vector_control.obj
 	@echo ... lib/ApplicationLayer/vector_control.i
 	@echo ... lib/ApplicationLayer/vector_control.s

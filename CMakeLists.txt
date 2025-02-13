@@ -111,20 +111,17 @@ set(FIRMWARE_FILES
     lib/ApplicationLayer/fdcan_AL.c
     lib/ApplicationLayer/flash.c
     lib/ApplicationLayer/foc_blockset.c
-    lib/ApplicationLayer/foc_mtpa_lut.c
     lib/ApplicationLayer/led_AL.c
     lib/ApplicationLayer/microcontroller.c
     lib/ApplicationLayer/motor_param.c
     lib/ApplicationLayer/sanity.c
     lib/ApplicationLayer/temp_AL.c
     lib/ApplicationLayer/usart_AL.c
-    lib/ApplicationLayer/v_f_control.c
     lib/ApplicationLayer/vector_control.c
     lib/ApplicationLayer/vehicle.c
+    lib/ApplicationLayer/can_debug_and_sanity.c
     lib/ApplicationLayer/FOC_data.c
     lib/ApplicationLayer/FOC.c
-    lib/ApplicationLayer/Position_Calculation.c
-    lib/ApplicationLayer/Position_Calculation_data.c
     
     lib/ApplicationLayer/Common/rt_nonfinite.c
     lib/ApplicationLayer/Common/rt_zcfcn.c

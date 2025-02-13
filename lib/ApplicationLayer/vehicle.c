@@ -38,17 +38,9 @@ void READ_MOTOR_PHASE_CURRENT()
   final_FilteredValue_a = CURRENT_FILTER(filteredValue_a, prevFilteredValue_a, final_prevFilteredValue_a);
   final_FilteredValue_b = CURRENT_FILTER(filteredValue_b, prevFilteredValue_b, final_prevFilteredValue_b);
 
-  #if PEG3W
-    FOC_U.PhaseCurrent[0] = (filteredValue_a * 3.297 * 800.0) / 65535.0;
-    FOC_U.PhaseCurrent[1] = (filteredValue_b * 3.297 * 800.0) / 65535.0;
-    FOC_U.PhaseCurrent[2] = (-FOC_U.PhaseCurrent[0]) + (-FOC_U.PhaseCurrent[1]);
-  #endif
-
-  #if PEG4W
-    FOC_U.PhaseCurrent[2] = (filteredValue_a * 3.297 * 800.0) / 65535.0;
-    FOC_U.PhaseCurrent[1] = (filteredValue_b * 3.297 * 800.0) / 65535.0;
-    FOC_U.PhaseCurrent[0] = (-FOC_U.PhaseCurrent[2]) + (-FOC_U.PhaseCurrent[1]);
-  #endif
+  FOC_U.PhaseCurrent[2] = (filteredValue_a * 3.297 * 800.0) / 65535.0;
+  FOC_U.PhaseCurrent[1] = (filteredValue_b * 3.297 * 800.0) / 65535.0;
+  FOC_U.PhaseCurrent[0] = (-FOC_U.PhaseCurrent[2]) + (-FOC_U.PhaseCurrent[1]);
 
   foc_log.Ia = FOC_U.PhaseCurrent[0];
   foc_log.Ib = FOC_U.PhaseCurrent[1];

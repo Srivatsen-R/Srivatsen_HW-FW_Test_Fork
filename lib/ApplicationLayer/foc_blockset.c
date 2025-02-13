@@ -105,6 +105,10 @@ void DRIVE_STOP(void)
 { 
     HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
 
+    DRIVE_RESET();
+
+    HAL_TIM_Base_Stop_IT(&htim17);
+
     HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1);
     HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_2);
     HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_3);
@@ -114,7 +118,70 @@ void DRIVE_STOP(void)
     HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_3);
 }
 
+void DRIVE_RESET(void)
+{
+    /* Registration code */
+
+  /* initialize error status */
+  rtmSetErrorStatus(FOC_M, (NULL));
+
+  (void) memset(&FOC_F_T, 0, sizeof(FOC_Flag_T));
+
+  /* block I/O */
+  (void) memset(((void *) &FOC_B), 0,
+                sizeof(B_FOC_T));
+
+  /* states (dwork) */
+  (void) memset((void *)&FOC_DW, 0,
+                sizeof(DW_FOC_T));
+
+  /* external inputs */
+  (void)memset(&FOC_U, 0, sizeof(ExtU_FOC_T));
+
+  /* external outputs */
+  (void)memset(&FOC_Y, 0, sizeof(ExtY_FOC_T));
+
+  /* InitializeConditions for DiscreteIntegrator: '<S68>/Integrator' */
+  FOC_DW.Integrator_DSTATE = 0.0F;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S63>/Filter' */
+  FOC_DW.Filter_DSTATE = 0.0F;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S124>/Integrator' */
+  FOC_DW.Integrator_DSTATE_p = 0.0F;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S119>/Filter' */
+  FOC_DW.Filter_DSTATE_k = 0.0F;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S180>/Integrator' */
+  FOC_DW.Integrator_DSTATE_h = 0.0F;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S175>/Filter' */
+  FOC_DW.Filter_DSTATE_d = 0.0F;
+
+  /* SystemInitialize for Outport: '<Root>/CurrentFlag' incorporates:
+   *  Chart: '<S3>/Protection_States'
+   */
+  FOC_Y.CurrentFlag = SafeCurrent;
+
+  /* SystemInitialize for Outport: '<Root>/VoltageFlag' incorporates:
+   *  Chart: '<S3>/Protection_States'
+   */
+  FOC_Y.VoltageFlag = SafeVoltage;
+
+  /* SystemInitialize for Outport: '<Root>/TempFlag' incorporates:
+   *  Chart: '<S3>/Protection_States'
+   */
+  FOC_Y.TempFlag = SafeTemperature;
+
+  /* SystemInitialize for Chart: '<S3>/Protection_States' */
+  FOC_DW.is_active_c7_FOC = 0U;
+  FOC_DW.is_TemperatureProtection = FOC_IN_NO_ACTIVE_CHILD;
+  FOC_DW.is_VoltageProtection = FOC_IN_NO_ACTIVE_CHILD;
+  FOC_DW.is_CurrentProtection = FOC_IN_NO_ACTIVE_CHILD;
+}
+
 float map(float x, float in_min, float in_max, float out_min, float out_max)
 {
-  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
