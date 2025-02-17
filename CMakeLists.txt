@@ -124,6 +124,10 @@ set(FIRMWARE_FILES
     lib/ApplicationLayer/FOC.c
     lib/ApplicationLayer/Position_Calculation.c
     lib/ApplicationLayer/Position_Calculation_data.c
+
+    lib/ApplicationLayer/Medhya.c
+    lib/ApplicationLayer/Medhya_data.c
+    
     
     lib/ApplicationLayer/Common/rt_nonfinite.c
     lib/ApplicationLayer/Common/rt_zcfcn.c

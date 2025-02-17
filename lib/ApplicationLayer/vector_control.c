@@ -86,6 +86,7 @@ void FOC_READ_MOTOR_POSITION(void)
 {
     foc.rotor_angle =  READ_POSITION(TIM2->CNT);
     foc.rotor_speed =  READ_SPEED(foc.rotor_angle);
+    Medhya_U.Speed_Anlge_feedback[1] = foc.rotor_angle;
 
     foc.rotor_speed_filtered = SPEED_FILTER(foc.rotor_speed,foc.rotor_speed_prev,foc.rotor_speed_filtered_prev); 
     foc.speed_sense = (foc.rotor_speed_filtered)*PU*1.0;
@@ -94,23 +95,23 @@ void FOC_READ_MOTOR_POSITION(void)
 
     if (fnr.current_state == FORWARD)
     {
-        FOC_U.ActualSpeed = (foc.speed_sense * SPEED_PU_TO_RPM * 1.0) * RPM_TO_RAD_S;
+        Medhya_U.Speed_Anlge_feedback[0] = (foc.speed_sense * SPEED_PU_TO_RPM * 1.0) * RPM_TO_RAD_S;
         fnr.previous_state = fnr.current_state;
     }
     else if (fnr.current_state == REVERSE)
     {
-        FOC_U.ActualSpeed = (foc.speed_sense * SPEED_PU_TO_RPM * -1.0) * RPM_TO_RAD_S;
+        Medhya_U.Speed_Anlge_feedback[0] = (foc.speed_sense * SPEED_PU_TO_RPM * -1.0) * RPM_TO_RAD_S;
         fnr.previous_state = fnr.current_state;
     }
     else if (fnr.current_state == NEUTRAL)
     {
         if (fnr.previous_state == FORWARD)
         {
-            FOC_U.ActualSpeed = (foc.speed_sense * SPEED_PU_TO_RPM * 1.0) * RPM_TO_RAD_S;
+            Medhya_U.Speed_Anlge_feedback[0] = (foc.speed_sense * SPEED_PU_TO_RPM * 1.0) * RPM_TO_RAD_S;
         }
         else if (fnr.previous_state == REVERSE)
         {
-            FOC_U.ActualSpeed = (foc.speed_sense * SPEED_PU_TO_RPM * -1.0) * RPM_TO_RAD_S;
+            Medhya_U.Speed_Anlge_feedback[0] = (foc.speed_sense * SPEED_PU_TO_RPM * -1.0) * RPM_TO_RAD_S;
         }
     }
 
@@ -251,9 +252,9 @@ void FOC_READ_MOTOR_POSITION(void)
 
 void FOC_SPACE_VECTOR_MODULATION()
 {
-    foc.pwm_a = (uint16_t)((PWM_CONST_2*((FOC_Y.Va / FOC_U.BusVoltage_V) * 32767.0))  + PWM_CONST_1);
-    foc.pwm_b = (uint16_t)((PWM_CONST_2*((FOC_Y.Vb / FOC_U.BusVoltage_V) * 32767.0))  + PWM_CONST_1);
-    foc.pwm_c = (uint16_t)((PWM_CONST_2*((FOC_Y.Vc / FOC_U.BusVoltage_V) * 32767.0))  + PWM_CONST_1);   
+    foc.pwm_a = (uint16_t)((PWM_CONST_2*(Medhya_Y.G[0]))  + PWM_CONST_1);
+    foc.pwm_b = (uint16_t)((PWM_CONST_2*(Medhya_Y.G[2]))  + PWM_CONST_1);
+    foc.pwm_c = (uint16_t)((PWM_CONST_2*(Medhya_Y.G[4]))  + PWM_CONST_1);   
 
     if (foc.pwm_a < 0)
         foc.pwm_a = 0;

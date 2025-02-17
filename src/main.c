@@ -51,6 +51,7 @@ extern can_t          can;
 extern adc_t          analog;
 extern terminal_t     terminal;
 extern motorControl_t motorControl;
+extern float busVoltage;
 
 fnr_states fnr;
 hard_fault_cause hard_fault_c;
@@ -90,9 +91,9 @@ int main(void)
   //system clock init.
   SYSTEM_INIT();
 
-  Update_BOR_Counter();
+  // Update_BOR_Counter();
 
-  Boot_Counter();
+  // Boot_Counter();
 
   read_hard_fault_cause();
 
@@ -115,12 +116,13 @@ int main(void)
   //enabling motor control interrupts , ABZ+PWM sensing interrpts.
   ENABLE_PERIPHERALS();
 
-  Get_and_Send_UIID();
+ // Get_and_Send_UIID();
 
   Current_Sensor_offset_cal();
 
-  FOC_initialize();
-  
+  //FOC_initialize();
+  Medhya_initialize(); 
+
   //while loop running on CLK frequency.
   while (1) 
   {
@@ -158,19 +160,19 @@ void send_on_300()
 {
   uint8_t can_data[8] = {0};
 
-  can_data[0] = (uint8_t)(FOC_Y.Va + 60.0);
-  can_data[1] = (uint8_t)(FOC_Y.Vb + 60.0);
-  can_data[2] = (uint8_t)(FOC_Y.Vc + 60.0);
+  can_data[0] = (uint8_t)(Medhya_Y.ModWave[0] + 60.0);
+  can_data[1] = (uint8_t)(Medhya_Y.ModWave[1] + 60.0);
+  can_data[2] = (uint8_t)(Medhya_Y.ModWave[2] + 60.0);
 
   if (forward_set && !reverse_set){can_data[3] = 0x02;}
   else if (reverse_set && !forward_set){can_data[3] = 0x04;}
   else if (forward_set && reverse_set){can_data[3] = 0x01;}
 
-  can_data[4] = (uint8_t)((uint16_t)(FOC_Y.Vq + 10000.0) & 0x00FF);
-  can_data[5] = (uint8_t)(((uint16_t)(FOC_Y.Vq + 10000.0) & 0xFF00) >> 8);
+  can_data[4] = (uint8_t)((uint16_t)(Medhya_Y.VqControl + 10000.0) & 0x00FF);
+  can_data[5] = (uint8_t)(((uint16_t)(Medhya_Y.VqControl + 10000.0) & 0xFF00) >> 8);
 
-  can_data[6] = (uint8_t)((uint16_t)(FOC_Y.Vd + 10000.0) & 0x00FF);
-  can_data[7] = (uint8_t)(((uint16_t)(FOC_Y.Vd + 10000.0) & 0xFF00) >> 8);
+  can_data[6] = (uint8_t)((uint16_t)(Medhya_Y.VdControl + 10000.0) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(Medhya_Y.VdControl + 10000.0) & 0xFF00) >> 8);
 
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_300, S, can_data, FDCAN_DLC_BYTES);
 }
@@ -182,14 +184,14 @@ void send_on_301()
   can_data[0] = (uint8_t)((uint16_t)(irms_calc) & 0x00FF);
   can_data[1] = (uint8_t)(((uint16_t)(irms_calc) & 0xFF00) >> 8);
 
-  can_data[2] = (uint8_t)((uint16_t)(FOC_U.PhaseCurrent[0] + 800.0) & 0x00FF);
-  can_data[3] = (uint8_t)(((uint16_t)(FOC_U.PhaseCurrent[0] + 800.0) & 0xFF00) >> 8);
+  can_data[2] = (uint8_t)((uint16_t)(Medhya_U.I_abc[0] + 800.0) & 0x00FF);
+  can_data[3] = (uint8_t)(((uint16_t)(Medhya_U.I_abc[0] + 800.0) & 0xFF00) >> 8);
 
-  can_data[4] = (uint8_t)((uint16_t)(FOC_U.PhaseCurrent[1] + 800.0) & 0x00FF);
-  can_data[5] = (uint8_t)(((uint16_t)(FOC_U.PhaseCurrent[1] + 800.0) & 0xFF00) >> 8);
+  can_data[4] = (uint8_t)((uint16_t)(Medhya_U.I_abc[1] + 800.0) & 0x00FF);
+  can_data[5] = (uint8_t)(((uint16_t)(Medhya_U.I_abc[1] + 800.0) & 0xFF00) >> 8);
 
-  can_data[6] = (uint8_t)((uint16_t)(FOC_U.PhaseCurrent[2] + 800.0) & 0x00FF);
-  can_data[7] = (uint8_t)(((uint16_t)(FOC_U.PhaseCurrent[2] + 800.0) & 0xFF00) >> 8);
+  can_data[6] = (uint8_t)((uint16_t)(Medhya_U.I_abc[2] + 800.0) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(Medhya_U.I_abc[2] + 800.0) & 0xFF00) >> 8);
 
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_301, S, can_data, FDCAN_DLC_BYTES); 
 }
@@ -199,9 +201,9 @@ void send_on_302()
   uint8_t can_data[8] = {0};
 
   float can_log_rh = 0.0f, speed_rpm = 0.0;
-  float speed_ref = FOC_U.RefSpeed / RPM_TO_RAD_S;
+  float speed_ref = Medhya_Y.SpeedRef_out / RPM_TO_RAD_S;
   
-  can_log_rh = (FOC_U.angle + PI) * 100.0f;
+  can_log_rh = (Medhya_Y.ThetaSensed + PI) * 100.0f;
   speed_rpm = (foc.speed_sense < 0) ? (foc.speed_sense * SPEED_PU_TO_RPM * -1.0f) : (foc.speed_sense * SPEED_PU_TO_RPM);
 
   can_data[0] = (uint8_t)((uint16_t)((can_log_rh)) & 0x00FF);
@@ -223,6 +225,8 @@ void send_on_303()
 {
   uint8_t can_data[8] = {0};
 
+  int Offset_angle_log = (uint16_t)((Medhya_U.ManualPositionOffset + 6.28) * 100);
+
   can_data[0] = (uint8_t)((uint16_t)(motorControl.temperature.motor));
 
   can_data[1] = (uint8_t)((uint16_t)(avg_board_temp));
@@ -233,6 +237,9 @@ void send_on_303()
 
   can_data[5] = (uint8_t)(z_trig);
 
+  can_data[6] = (uint8_t)(((uint16_t)(Offset_angle_log)) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)((Offset_angle_log)) & 0xFF00) >> 8);
+
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_303, S, can_data, FDCAN_DLC_BYTES);
 }
 
@@ -240,11 +247,16 @@ void send_on_304()
 {
   uint8_t can_data[8] = {0};
 
-  can_data[4] = (uint8_t)((uint16_t)(FOC_Y.Id + 10000.0) & 0x00FF);
-  can_data[5] = (uint8_t)(((uint16_t)(FOC_Y.Id + 10000.0) & 0xFF00) >> 8);
+  int ManualPosLog = Medhya_Y.ManualPos * 1000;
+
+  can_data[0] = (uint8_t)((uint16_t)(ManualPosLog) & 0x00FF);
+  can_data[1] = (uint8_t)(((uint16_t)(ManualPosLog) & 0xFF00) >> 8); 
+
+  can_data[4] = (uint8_t)((uint16_t)(Medhya_Y.IdqFeedback[0] + 10000.0) & 0x00FF);
+  can_data[5] = (uint8_t)(((uint16_t)(Medhya_Y.IdqFeedback[0] + 10000.0) & 0xFF00) >> 8);
   
-  can_data[6] = (uint8_t)((uint16_t)(FOC_Y.Iq + 10000.0) & 0x00FF);
-  can_data[7] = (uint8_t)(((uint16_t)(FOC_Y.Iq + 10000.0) & 0xFF00) >> 8);
+  can_data[6] = (uint8_t)((uint16_t)(Medhya_Y.IdqFeedback[1] + 10000.0) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(Medhya_Y.IdqFeedback[1] + 10000.0) & 0xFF00) >> 8);
 
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_304, S, can_data, FDCAN_DLC_BYTES);
 }
@@ -253,23 +265,24 @@ void send_on_305()
 {
   uint8_t can_data[8] = {0};
 
-  can_data[0] = (uint8_t)((uint16_t)(FOC_Y.Id_refer + 10000.0) & 0x00FF);
-  can_data[1] = (uint8_t)(((uint16_t)(FOC_Y.Id_refer + 10000.0) & 0xFF00) >> 8);
+  can_data[0] = (uint8_t)((uint16_t)(Medhya_Y.IdRef_out + 10000.0) & 0x00FF);
+  can_data[1] = (uint8_t)(((uint16_t)(Medhya_Y.IdRef_out + 10000.0) & 0xFF00) >> 8);
 
-  can_data[2] = (uint8_t)((uint16_t)(FOC_Y.Iq_refer + 10000.0) & 0x00FF);
-  can_data[3] = (uint8_t)(((uint16_t)(FOC_Y.Iq_refer + 10000.0) & 0xFF00) >> 8);
+  can_data[2] = (uint8_t)((uint16_t)(Medhya_Y.IqRef_out + 10000.0) & 0x00FF);
+  can_data[3] = (uint8_t)(((uint16_t)(Medhya_Y.IqRef_out + 10000.0) & 0xFF00) >> 8);
 
-  #if APP1
-  can_data[4] = (uint8_t)(0x01);
-  #endif
-  #if APP2
-  can_data[4] = (uint8_t)(0x02);
-  #endif
 
-  can_data[5] = (uint8_t)((uint16_t)(FOC_U.BusVoltage_V) & 0x00FF);
-  can_data[6] = (uint8_t)(((uint16_t)(FOC_U.BusVoltage_V) & 0xFF00) >> 8);
+  // #if APP1
+  // can_data[4] = (uint8_t)(0x01);
+  // #endif
+  // #if APP2
+  // can_data[4] = (uint8_t)(0x02);
+  // #endif
 
-  can_data[7] = (uint8_t)((uint16_t)(torque_calc));
+  can_data[5] = (uint8_t)((uint16_t)(busVoltage) & 0x00FF);
+  can_data[6] = (uint8_t)(((uint16_t)(busVoltage) & 0xFF00) >> 8);
+
+  can_data[7] = (uint8_t)((uint16_t)(Medhya_Y.TorqueCalc));
 
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_305, S, can_data, FDCAN_DLC_BYTES);
 }
@@ -278,10 +291,18 @@ void send_on_306()
 {
   uint8_t can_data[8] = {0};
 
-  can_data[0] = (uint8_t)(boot_counter & 0x000000FF);
-  can_data[1] = (uint8_t)((boot_counter & 0x0000FF00) >> 8);
-  can_data[2] = (uint8_t)((boot_counter & 0x00FF0000) >> 16);
-  can_data[3] = (uint8_t)((boot_counter & 0xFF000000) >> 24);
+  // can_data[0] = (uint8_t)(boot_counter & 0x000000FF);
+  // can_data[1] = (uint8_t)((boot_counter & 0x0000FF00) >> 8);
+  // can_data[2] = (uint8_t)((boot_counter & 0x00FF0000) >> 16);
+  // can_data[3] = (uint8_t)((boot_counter & 0xFF000000) >> 24);
+
+  can_data[0] = (uint8_t)(Medhya_Y.G[0]);
+  can_data[1] = (uint8_t)(Medhya_Y.G[1]);
+  can_data[2] = (uint8_t)(Medhya_Y.G[2]);
+  can_data[3] = (uint8_t)(Medhya_Y.G[3]);
+  can_data[4] = (uint8_t)(Medhya_Y.G[4]);
+  can_data[5] = (uint8_t)(Medhya_Y.G[5]);
+  
 
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_306, S, can_data, FDCAN_DLC_BYTES);
 }
@@ -317,164 +338,14 @@ void send_on_308()
   can_data[2] = (uint8_t)(curr_off.V_Phase_Offset & 0x00FF);
   can_data[3] = (uint8_t)((curr_off.V_Phase_Offset & 0xFF00) >> 8);
 
-  #if SPEED_MODE
-  volatile float offset_angle = (FOC_Y.Offset_angle + 2 * PI) * 100.0f;
-  can_data[4] = (uint8_t)((uint16_t)(offset_angle) & 0x00FF);
-  can_data[5] = (uint8_t)(((uint16_t)(offset_angle) & 0xFF00) >> 8);
-  #endif
-
   can_data[6] = (uint8_t)((uint16_t)(Duty) & 0x00FF);
   can_data[7] = (uint8_t)(((uint16_t)(Duty) & 0xFF00) >> 8);
 
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_308, S, can_data, FDCAN_DLC_BYTES);
 }
 
-void send_on_705()
-{
-  uint8_t can_data[8] = {0};
-  can_data[0] = (uint8_t)(motorControl.temperature.motor + 50.0f);
-  can_data[1] = (uint8_t)(avg_board_temp + 50.0f);
-  can_data[2] = (uint8_t)(boot_counter & 0x000000FF);
-  can_data[3] = (uint8_t)((boot_counter & 0x0000FF00) >> 8);
-  can_data[4] = (uint8_t)((boot_counter & 0x00FF0000) >> 16);
-  can_data[5] = (uint8_t)((boot_counter & 0xFF000000) >> 24);
-  _fdcan_transmit_on_can(tx_Controller_705, S, can_data, FDCAN_DLC_BYTES);
-}
 
-void send_on_706()
-{
-  uint8_t can_data[8] = {0};
 
-  if (forward_set && !reverse_set){can_data[0] = 0x02;}
-  else if (reverse_set && !forward_set){can_data[0] = 0x04;}
-  else if (reverse_set == 1 && forward_set == 1){can_data[0] = 0x01;}
-  if (FOC_F_T.Iq_OL_Flag){can_data[3] = 0x01;}
-  else if (FOC_F_T.OT_Cont_Flag){can_data[3] = 0x02;}
-  else if (FOC_F_T.Ph_OC_Flag){can_data[3] = 0x03;}
-  else if (FOC_F_T.N_Flag){can_data[3] = 0x04;}
-  else if (FOC_F_T.EEPROM_Error){can_data[3] = 0x05;}
-  can_data[4] = (uint8_t)((uint16_t)(abs(FOC_U.ActualSpeed * RPM_TO_RAD_S) * RPM_TO_KMPH * KMPH_CAN_SCALING) & 0x00FF);
-  can_data[5] = (uint8_t)(((uint16_t)(abs(FOC_U.ActualSpeed * RPM_TO_RAD_S) * RPM_TO_KMPH * KMPH_CAN_SCALING) & 0xFF00) >> 8);
-  _fdcan_transmit_on_can(tx_Controller_706, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_710()
-{
-  uint8_t can_data[8] = {0};
-  can_data[0] = (uint8_t)((uint16_t)(((float)(analog.bufferData[THROTTLE]) / 65535.0) * 100.0f));
-  can_data[3] = (uint8_t)((uint16_t)((float)(analog.bufferData[THROTTLE]) * 3.297f / 65535.0f) * THROTTLE_CAN_ADC_SCALING);
-  _fdcan_transmit_on_can(tx_Controller_710, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_715()
-{
-  uint8_t can_data[8] = {0};
-  can_data[4] = (uint8_t)(FOC_U.BusVoltage_V);
-  can_data[6] = (uint8_t)((uint16_t)(abs(FOC_U.ActualSpeed * RPM_TO_RAD_S)) & 0x00FF);
-  can_data[7] = (uint8_t)(((uint16_t)(abs(FOC_U.ActualSpeed * RPM_TO_RAD_S)) & 0xFF00) >> 8);
-  _fdcan_transmit_on_can(tx_Controller_715, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_716()
-{
-  uint8_t can_data[8] = {0};
-  can_data[6] = (uint8_t)((uint16_t)(irms_calc) & 0x00FF);
-  can_data[7] = (uint8_t)(((uint16_t)(irms_calc) & 0xFF00) >> 8); 
-  _fdcan_transmit_on_can(tx_Controller_716, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_717()
-{
-  uint8_t can_data[8] = {0};
-  float freq = abs(FOC_U.ActualSpeed * RPM_TO_RAD_S) * POLEPAIRS / 120.0f;
-  can_data[0] = (uint8_t)((uint16_t)(freq) & 0x00FF);
-  can_data[1] = (uint8_t)(((uint16_t)(freq) & 0xFF00) >> 8);
-  _fdcan_transmit_on_can(tx_Controller_717, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_724()
-{
-  uint8_t can_data[8] = {0};
-  _fdcan_transmit_on_can(tx_Controller_724, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_726()
-{
-  uint8_t can_data[8] = {0};
-  can_data[0] = 0x04;
-  can_data[1] = 0x01;
-  can_data[2] = 0x01;
-  can_data[3] = 0x00;
-
-  can_data[4] = 0x01;
-  can_data[5] = 0x00;
-  can_data[6] = 0x07;
-
-  can_data[7] = 0x01;
-  _fdcan_transmit_on_can(tx_Controller_726, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_7A0()
-{
-  uint8_t can_data[8] = {0};
-  can_data[0] = 0x04;
-  can_data[1] = 0x01;
-  can_data[2] = 0x00;
-
-  can_data[3] = 0x01;
-
-  #if APP1
-    can_data[7] = 0x01;
-  #endif
-
-  #if APP2
-    can_data[7] = 0x02;
-  #endif
-
-  _fdcan_transmit_on_can(tx_Controller_7A0, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_6F0(uint8_t* UIID_Arr)
-{
-  uint8_t can_data[8] = {0};
-  can_data[0] = 0x04;
-  can_data[1] = 0x04;
-  can_data[2] = 0x01;
-  can_data[3] = 0x01;
-  can_data[4] = 0x01;
-  can_data[5] = 0x00;
-  can_data[6] = 0x01;
-  can_data[7] = UIID_Arr[0];
-  _fdcan_transmit_on_can(tx_Controller_6F0, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_6F1(uint8_t* UIID_Arr)
-{
-  uint8_t can_data[8] = {0};
-  can_data[0] = 0x04;
-  can_data[1] = 0x01;
-  can_data[2] = 0x00;
-  can_data[3] = 0x00;
-  can_data[4] = UIID_Arr[1];
-  can_data[5] = UIID_Arr[2];
-  can_data[6] = UIID_Arr[3];
-  can_data[7] = UIID_Arr[4];
-  _fdcan_transmit_on_can(tx_Controller_6F1, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_6F2(uint8_t* UIID_Arr)
-{
-  uint8_t can_data[8] = {0};
-  can_data[0] = 0x04;
-  can_data[1] = UIID_Arr[5];
-  can_data[2] = UIID_Arr[6];
-  can_data[3] = UIID_Arr[7];
-  can_data[4] = UIID_Arr[8];
-  can_data[5] = UIID_Arr[9];
-  can_data[6] = UIID_Arr[10];
-  can_data[7] = UIID_Arr[11];
-  _fdcan_transmit_on_can(tx_Controller_6F2, S, can_data, FDCAN_DLC_BYTES);
-}
 
 void get_UIID()
 {
@@ -605,7 +476,7 @@ void CAN_Transmit_routine()
   static uint32_t prev_time_700x = 0;
 
   #if DEBUG_EN
-  if (time_count - prev_time >= 100)
+  if (time_count - prev_time >= 10)
   {
     send_on_300();
     send_on_301();
@@ -614,8 +485,8 @@ void CAN_Transmit_routine()
     send_on_304();
     send_on_305();
     send_on_306();
-    send_on_307();
-    send_on_308();
+    // send_on_307();
+    // send_on_308();
 
     prev_time = time_count;
   }
@@ -765,7 +636,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
 
     READ_MOTOR_PHASE_CURRENT();
 
-    FOC_step();
+    //FOC_step();
+    Medhya_step();
 
     FOC_SPACE_VECTOR_MODULATION();
   }

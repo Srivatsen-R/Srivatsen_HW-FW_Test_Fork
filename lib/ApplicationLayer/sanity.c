@@ -133,47 +133,57 @@ void ANALOG_READING()
      temp_K -= KELVIN_TO_CELSIUS;
      motorControl.temperature.motor = moving_Temperature_measured_fun_M(temp_K, TEMP_AVG);
 
-     torque_calc = fmax((1.5 * POLEPAIRS * (FOC_U.Lamda * FOC_Y.Iq + (FOC_U.Ld - FOC_U.Lq) * FOC_Y.Id * FOC_Y.Iq)), torque_calc);
-     irms_calc = fmax(sqrtf(FOC_Y.Iq * FOC_Y.Iq + FOC_Y.Id * FOC_Y.Id), irms_calc) / sqrtf(2.0f);
-     v_rms = sqrtf(FOC_Y.Vq * FOC_Y.Vq + FOC_Y.Vd * FOC_Y.Vd) / sqrtf(2.0f);
+     torque_calc = fmax((1.5 * POLEPAIRS * (FOC_U.Lamda * Medhya_Y.IdqFeedback[1] + (FOC_U.Ld - FOC_U.Lq) * Medhya_Y.IdqFeedback[0] * Medhya_Y.IdqFeedback[1])), torque_calc);
+     irms_calc = fmax(sqrtf(Medhya_Y.IdqFeedback[1] * Medhya_Y.IdqFeedback[1] + Medhya_Y.IdqFeedback[0] * Medhya_Y.IdqFeedback[0]), irms_calc) / sqrtf(2.0f);
+     v_rms = sqrtf(Medhya_Y.VqControl * Medhya_Y.VqControl + Medhya_Y.VdControl * Medhya_Y.VdControl) / sqrtf(2.0f);
+
+//      float temp = Medhya_U.I_abc[0];
+//      for(int i = 0; i < 5; i++){ 
+//      temp += Medhya_U.I_abc[0];
+//      }
+//      temp = sqrtf((temp*temp)/5);
+//      float irms_Calc_from_phase = Medhya_U.I_abc[0] 
+//      }
+     // float irms_calc_from_phase = fmax(sqrtf(FOC_U.PhaseCurrent[0] * FOC_U.PhaseCurrent[0] + FOC_U.PhaseCurrent[1] * FOC_U.PhaseCurrent[1] + FOC_U.PhaseCurrent[2] * FOC_U.PhaseCurrent[2]), irms_calc) / sqrtf(2.0f);
+
 
      //bus voltage
      busVoltage = moving_Batt_voltage_measured_fun(0.00211*analog.bufferData[BUS_VOLTAGE],VOLTAGE_AVG); 
      terminal.volt.bus_volt = busVoltage; 
-     if (busVoltage > 52.0 && busVoltage < 63.0)
-     {
-        FOC_U.BusVoltage_V = busVoltage;
+//      if (busVoltage > 52.0 && busVoltage < 63.0)
+//      {
+//         FOC_U.BusVoltage_V = busVoltage;
 
-        FOC_U.Up_Limit_flux_PID = busVoltage;
-        FOC_U.Low_Limit_flux_PID = -busVoltage;
+//         FOC_U.Up_Limit_flux_PID = busVoltage;
+//         FOC_U.Low_Limit_flux_PID = -busVoltage;
 
-        FOC_U.Up_Limit_torque_PID = busVoltage;
-        FOC_U.Low_Limit_torque_PID = -busVoltage;
-     }
-     else if (busVoltage < 52.0)
-     {
-        FOC_U.BusVoltage_V = 52.0;
+//         FOC_U.Up_Limit_torque_PID = busVoltage;
+//         FOC_U.Low_Limit_torque_PID = -busVoltage;
+//      }
+//      else if (busVoltage < 52.0)
+//      {
+//         FOC_U.BusVoltage_V = 52.0;
 
-        FOC_U.Up_Limit_flux_PID = busVoltage;
-        FOC_U.Low_Limit_flux_PID = -busVoltage;
+//         FOC_U.Up_Limit_flux_PID = busVoltage;
+//         FOC_U.Low_Limit_flux_PID = -busVoltage;
 
-        FOC_U.Up_Limit_torque_PID = busVoltage;
-        FOC_U.Low_Limit_torque_PID = -busVoltage;
-     }
-     else if (busVoltage > 63.0)
-     {
-        FOC_U.BusVoltage_V = 63.0;
+//         FOC_U.Up_Limit_torque_PID = busVoltage;
+//         FOC_U.Low_Limit_torque_PID = -busVoltage;
+//      }
+//      else if (busVoltage > 63.0)
+//      {
+//         FOC_U.BusVoltage_V = 63.0;
 
-        FOC_U.Up_Limit_flux_PID = busVoltage;
-        FOC_U.Low_Limit_flux_PID = -busVoltage;
+//         FOC_U.Up_Limit_flux_PID = busVoltage;
+//         FOC_U.Low_Limit_flux_PID = -busVoltage;
 
-        FOC_U.Up_Limit_torque_PID = busVoltage;
-        FOC_U.Low_Limit_torque_PID = -busVoltage;
-     }
-     #if SPEED_MODE
-     FOC_U.Vdc = FOC_U.BusVoltage_V;
-     #endif
+//         FOC_U.Up_Limit_torque_PID = busVoltage;
+//         FOC_U.Low_Limit_torque_PID = -busVoltage;
+// //      }
+//      #if SPEED_MODE
+//      FOC_U.Vdc = FOC_U.BusVoltage_V;
+//      #endif
 
-     FOC_U.MotorTemperature_C = motorControl.temperature.motor;
-     FOC_U.MCTemperature_C = avg_board_temp;
+//      FOC_U.MotorTemperature_C = motorControl.temperature.motor;
+//      FOC_U.MCTemperature_C = avg_board_temp;
 }
