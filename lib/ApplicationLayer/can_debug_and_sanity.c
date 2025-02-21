@@ -51,19 +51,19 @@ void send_on_300()
 {
   uint8_t can_data[8] = {0};
 
-  can_data[0] = (uint8_t)(FOC_Y.Va + 60.0);
-  can_data[1] = (uint8_t)(FOC_Y.Vb + 60.0);
-  can_data[2] = (uint8_t)(FOC_Y.Vc + 60.0);
+  can_data[0] = (uint8_t)(rtY.V_abc[0] + 60.0);
+  can_data[1] = (uint8_t)(rtY.V_abc[1] + 60.0);
+  can_data[2] = (uint8_t)(rtY.V_abc[2] + 60.0);
 
   if (forward_set && !reverse_set){can_data[3] = 0x02;}
   else if (reverse_set && !forward_set){can_data[3] = 0x04;}
   else if (forward_set && reverse_set){can_data[3] = 0x01;}
 
-  can_data[4] = (uint8_t)((uint16_t)(FOC_Y.Vq + 10000.0) & 0x00FF);
-  can_data[5] = (uint8_t)(((uint16_t)(FOC_Y.Vq + 10000.0) & 0xFF00) >> 8);
+  can_data[4] = (uint8_t)((uint16_t)(rtY.Vdc + 10000.0) & 0x00FF);
+  can_data[5] = (uint8_t)(((uint16_t)(rtY.Vdc + 10000.0) & 0xFF00) >> 8);
 
-  can_data[6] = (uint8_t)((uint16_t)(FOC_Y.Vd + 10000.0) & 0x00FF);
-  can_data[7] = (uint8_t)(((uint16_t)(FOC_Y.Vd + 10000.0) & 0xFF00) >> 8);
+  can_data[6] = (uint8_t)((uint16_t)(rtY.Vdc_sat + 10000.0) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(rtY.Vdc_sat + 10000.0) & 0xFF00) >> 8);
 
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_300, S, can_data, FDCAN_DLC_BYTES);
 }
@@ -133,11 +133,28 @@ void send_on_304()
 {
   uint8_t can_data[8] = {0};
 
-  can_data[4] = (uint8_t)((uint16_t)(FOC_Y.Id + 10000.0) & 0x00FF);
-  can_data[5] = (uint8_t)(((uint16_t)(FOC_Y.Id + 10000.0) & 0xFF00) >> 8);
+  // can_data[4] = (uint8_t)((uint16_t)(FOC_Y.Id + 10000.0) & 0x00FF);
+  // can_data[5] = (uint8_t)(((uint16_t)(FOC_Y.Id + 10000.0) & 0xFF00) >> 8);
   
-  can_data[6] = (uint8_t)((uint16_t)(FOC_Y.Iq + 10000.0) & 0x00FF);
-  can_data[7] = (uint8_t)(((uint16_t)(FOC_Y.Iq + 10000.0) & 0xFF00) >> 8);
+  // can_data[6] = (uint8_t)((uint16_t)(FOC_Y.Iq + 10000.0) & 0x00FF);
+  // can_data[7] = (uint8_t)(((uint16_t)(FOC_Y.Iq + 10000.0) & 0xFF00) >> 8);
+  float ref_Angle_2pi_log = (rtY.ref_angle_2pi + PI) * 1000.0f;
+  float ref_Angle_6pi_log = (rtY.ref_angle_6pi + PI) * 1000.0f;
+
+  float Offset_deg_log = (rtY.Offset_deg + 360) * 100.0f;
+  float Offset_rad_log = (rtY.Offset_rad + PI) * 100.0f;
+
+  can_data[0] = (uint8_t)((uint16_t)(ref_Angle_2pi_log) & 0x00FF);
+  can_data[1] = (uint8_t)(((uint16_t)(ref_Angle_2pi_log) & 0xFF00) >> 8);
+
+  can_data[2] = (uint8_t)((uint16_t)(ref_Angle_6pi_log) & 0x00FF);
+  can_data[3] = (uint8_t)(((uint16_t)(ref_Angle_6pi_log) & 0xFF00) >> 8);
+
+  can_data[4] = (uint8_t)((uint16_t)(Offset_deg_log) & 0x00FF);
+  can_data[5] = (uint8_t)(((uint16_t)(Offset_deg_log) & 0xFF00) >> 8);
+
+  can_data[6] = (uint8_t)((uint16_t)(Offset_rad_log) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(Offset_rad_log) & 0xFF00) >> 8);
 
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_304, S, can_data, FDCAN_DLC_BYTES);
 }
@@ -496,8 +513,8 @@ void CAN_Transmit_routine()
     send_on_304();
     send_on_305();
     send_on_306();
-    send_on_307();
-    send_on_308();
+    // send_on_307();
+    // send_on_308();
 
     prev_time = time_count;
   }

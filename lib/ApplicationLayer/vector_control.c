@@ -86,6 +86,7 @@ void FOC_READ_MOTOR_POSITION(void)
 {
     foc.rotor_angle =  READ_POSITION(TIM2->CNT);
     foc_log.Angle_mech = foc.rotor_angle;
+    rtU.Encoder_count = TIM2->CNT;
     foc.rotor_speed =  READ_SPEED(foc.rotor_angle);
 
     foc.rotor_speed_filtered = SPEED_FILTER(foc.rotor_speed,foc.rotor_speed_prev,foc.rotor_speed_filtered_prev); 
@@ -260,9 +261,9 @@ void FOC_READ_MOTOR_POSITION(void)
 
 void FOC_SPACE_VECTOR_MODULATION()
 {
-    foc.pwm_a = (uint16_t)((PWM_CONST_2*((FOC_Y.Va / (61.0f / sqrtf(3.0)))))  + PWM_CONST_1);
-    foc.pwm_b = (uint16_t)((PWM_CONST_2*((FOC_Y.Vb / (61.0f / sqrtf(3.0)))))  + PWM_CONST_1);
-    foc.pwm_c = (uint16_t)((PWM_CONST_2*((FOC_Y.Vc / (61.0f / sqrtf(3.0)))))  + PWM_CONST_1);   
+    foc.pwm_a = (uint16_t)((PWM_CONST_2*((rtY.V_abc[0] / (61.0f / sqrtf(3.0)))))  + PWM_CONST_1);
+    foc.pwm_b = (uint16_t)((PWM_CONST_2*((rtY.V_abc[1] / (61.0f / sqrtf(3.0)))))  + PWM_CONST_1);
+    foc.pwm_c = (uint16_t)((PWM_CONST_2*((rtY.V_abc[2] / (61.0f / sqrtf(3.0)))))  + PWM_CONST_1);   
 
     if (foc.pwm_a < 0)
         foc.pwm_a = 0;

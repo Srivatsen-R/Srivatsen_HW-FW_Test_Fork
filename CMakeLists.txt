@@ -122,12 +122,15 @@ set(FIRMWARE_FILES
     lib/ApplicationLayer/can_debug_and_sanity.c
     lib/ApplicationLayer/FOC_data.c
     lib/ApplicationLayer/FOC.c
+
+    lib/ApplicationLayer/Open_loop6.c
+    lib/ApplicationLayer/Open_loop6_data.c
     
-    lib/ApplicationLayer/Common/rt_nonfinite.c
+    #lib/ApplicationLayer/Common/rt_nonfinite.c
     lib/ApplicationLayer/Common/rt_zcfcn.c
     lib/ApplicationLayer/Common/rtGetInf.c
     lib/ApplicationLayer/Common/rtGetNaN.c
-    lib/ApplicationLayer/Common/rt_logging.c
+    # lib/ApplicationLayer/Common/rt_logging.c
 
     lib/CustomLibs/printf.c
     lib/CustomLibs/math_func.c

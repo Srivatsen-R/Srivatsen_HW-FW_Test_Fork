@@ -50,6 +50,7 @@ extern "C" {
 #include "isotp/isotp_types.h"
 
 #include "FOC.h"
+#include "Open_loop6.h"
 
 #define __IO volatile
 

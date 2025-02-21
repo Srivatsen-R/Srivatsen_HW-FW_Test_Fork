@@ -101,8 +101,9 @@ int main(void)
 
   Current_Sensor_offset_cal();
 
-  FOC_initialize();
-  
+  //FOC_initialize();
+  Open_loop6_initialize();
+
   //while loop running on CLK frequency.
   while (1) 
   {
@@ -215,10 +216,31 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  {
 
     FOC_READ_MOTOR_POSITION();
 
-    FOC_step();
+    // FOC_step();
+    
+    Open_loop6_step();
 
     FOC_SPACE_VECTOR_MODULATION();
+
+    //rt_OneStep();
   }
+}
+
+void rt_OneStep(){
+  // static boolean_T OverrunFlag = false;
+
+  // if(OverrunFlag) {
+  //   rtmSetErrorStatus(rtM, "Overrun");
+  //   return;
+  // }
+  // OverrunFlag = true;
+
+  Open_loop6_step();
+
+  FOC_SPACE_VECTOR_MODULATION();
+
+  // OverrunFlag=false;
+
 }
 
 void switch_partition_and_reset()
