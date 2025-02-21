@@ -252,9 +252,13 @@ void FOC_READ_MOTOR_POSITION(void)
 
 void FOC_SPACE_VECTOR_MODULATION()
 {
+    // foc.pwm_a = (uint16_t)((PWM_CONST_2*(Medhya_Y.Va/ (61.0f / sqrtf(3.0))))  + PWM_CONST_1);
+    // foc.pwm_b = (uint16_t)((PWM_CONST_2*(Medhya_Y.Vb/ (61.0f / sqrtf(3.0))))  + PWM_CONST_1);
+    // foc.pwm_c = (uint16_t)((PWM_CONST_2*(Medhya_Y.Vc/ (61.0f / sqrtf(3.0))))  + PWM_CONST_1);  
+    
     foc.pwm_a = (uint16_t)((PWM_CONST_2*(Medhya_Y.G[0]))  + PWM_CONST_1);
     foc.pwm_b = (uint16_t)((PWM_CONST_2*(Medhya_Y.G[2]))  + PWM_CONST_1);
-    foc.pwm_c = (uint16_t)((PWM_CONST_2*(Medhya_Y.G[4]))  + PWM_CONST_1);   
+    foc.pwm_c = (uint16_t)((PWM_CONST_2*(Medhya_Y.G[4]))  + PWM_CONST_1); 
 
     if (foc.pwm_a < 0)
         foc.pwm_a = 0;

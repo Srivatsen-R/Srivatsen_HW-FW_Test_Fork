@@ -56,6 +56,8 @@ extern float busVoltage;
 fnr_states fnr;
 hard_fault_cause hard_fault_c;
 Current_Off_Calc curr_off = {.W_Phase_Offset = 0, .V_Phase_Offset = 0};
+FOC_Logging foc_Log = {0};
+
 
 /* Private function prototypes -----------------------------------------------*/
 typedef struct __attribute__((packed))
@@ -302,7 +304,12 @@ void send_on_306()
   can_data[3] = (uint8_t)(Medhya_Y.G[3]);
   can_data[4] = (uint8_t)(Medhya_Y.G[4]);
   can_data[5] = (uint8_t)(Medhya_Y.G[5]);
-  
+  foc_Log.G0 = Medhya_Y.G[0];
+  foc_Log.G1 = Medhya_Y.G[1];
+  foc_Log.G2 = Medhya_Y.G[2];
+  foc_Log.G3 = Medhya_Y.G[3];
+  foc_Log.G4 = Medhya_Y.G[4];
+  foc_Log.G5 = Medhya_Y.G[5];
 
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_306, S, can_data, FDCAN_DLC_BYTES);
 }

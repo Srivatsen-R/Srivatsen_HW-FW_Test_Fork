@@ -196,10 +196,46 @@ typedef enum {
     NEUTRAL,
     REVERSE
 } fnr_codes;
+typedef struct FOC_Logging {
+    float Va;
+    float Vb;
+    float Vc;
+    float Ia;
+    float Ib;
+    float Ic;
+    float G0;
+    float G1;
+    float G2;
+    float G3;
+    float G4;
+    float G5;
+    // float Id;
+    // float Iq;
+    // float Iq_ref;
+    // float Id_ref;
+    // float RefSpeed;
+    // float ActualSpeed;
+    // float Vd;
+    // float Vq;
+    // float Angle_elec;
+    // float Angle_mech;
+    // float Angle_intg;
+    // float Angle_intg_noml;
+    // float Ld_table;
+    // float Lq_table;
+    // float Lambda_table;
+    // uint8_t FWD;
+    // uint8_t REV;
+    // uint8_t ACC;
+    // uint8_t DEACC;
+    // uint32_t z_count;
+} FOC_Logging;
+
 
 extern fnr_states fnr;
 extern hard_fault_cause hard_fault_c;
 extern Current_Off_Calc curr_off;
+extern FOC_Logging foc_Log;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

@@ -3,9 +3,9 @@
  *
  * Code generation for model "Medhya".
  *
- * Model version              : 18.83
+ * Model version              : 18.86
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C source code generated on : Thu Feb 13 12:24:30 2025
+ * C source code generated on : Thu Feb 20 19:35:36 2025
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
