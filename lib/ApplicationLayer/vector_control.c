@@ -267,9 +267,9 @@ void FOC_SPACE_VECTOR_MODULATION()
     // foc.pwm_b = (uint16_t)((PWM_CONST_2*((rtY.V_abc[1] / ( busVoltage/2))))  + PWM_CONST_1);
     // foc.pwm_c = (uint16_t)((PWM_CONST_2*((rtY.V_abc[2] / ( busVoltage/2))))  + PWM_CONST_1);
     
-    foc.pwm_a = (uint16_t)((PWM_CONST_2*((rtY.V_abc[0] / (61.0f/2))))  + PWM_CONST_1);
-    foc.pwm_b = (uint16_t)((PWM_CONST_2*((rtY.V_abc[1] / (61.0f/2))))  + PWM_CONST_1);
-    foc.pwm_c = (uint16_t)((PWM_CONST_2*((rtY.V_abc[2] / (61.0f/2))))  + PWM_CONST_1);
+    foc.pwm_a = (uint16_t)((PWM_CONST_2*((rtY.V_abc[0] / (busVoltage))))  + PWM_CONST_1);
+    foc.pwm_b = (uint16_t)((PWM_CONST_2*((rtY.V_abc[1] / (busVoltage))))  + PWM_CONST_1);
+    foc.pwm_c = (uint16_t)((PWM_CONST_2*((rtY.V_abc[2] / (busVoltage))))  + PWM_CONST_1);
 
     if (foc.pwm_a < 0)
         foc.pwm_a = 0;

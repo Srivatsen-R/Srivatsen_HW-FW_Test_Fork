@@ -95,11 +95,11 @@ void send_on_302()
   float can_log_rh = 0.0f, speed_rpm = 0.0;
   float speed_ref = FOC_U.RefSpeed / RPM_TO_RAD_S;
   
-  can_log_rh = (FOC_U.angle + PI) * 100.0f;
+  // can_log_rh = (FOC_U.angle + PI) * 100.0f;
   speed_rpm = (foc.speed_sense < 0) ? (foc.speed_sense * SPEED_PU_TO_RPM * -1.0f) : (foc.speed_sense * SPEED_PU_TO_RPM);
 
-  can_data[0] = (uint8_t)((uint16_t)((can_log_rh)) & 0x00FF);
-  can_data[1] = (uint8_t)(((uint16_t)((can_log_rh)) & 0xFF00) >> 8);
+  can_data[0] = (uint8_t)((uint16_t)((rtY.ZCD_count)) & 0x00FF);
+  can_data[1] = (uint8_t)(((uint16_t)((rtY.ZCD_count)) & 0xFF00) >> 8);
 
   can_data[2] = (uint8_t)((uint16_t)(speed_ref) & 0x00FF);
   can_data[3] = (uint8_t)(((uint16_t)(speed_ref) & 0xFF00) >> 8);
@@ -126,7 +126,6 @@ void send_on_303()
   can_data[4] = (uint8_t)(FOC_F_T.Ph_OC_Flag);
 
   can_data[5] = (uint8_t)(z_trig);
-  can_data[6] = (uint8_t)(busVoltage);
 
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_303, S, can_data, FDCAN_DLC_BYTES);
 }
@@ -140,8 +139,8 @@ void send_on_304()
   
   // can_data[6] = (uint8_t)((uint16_t)(FOC_Y.Iq + 10000.0) & 0x00FF);
   // can_data[7] = (uint8_t)(((uint16_t)(FOC_Y.Iq + 10000.0) & 0xFF00) >> 8);
-  float ref_Angle_2pi_log = (rtY.ref_angle_2pi + PI) * 1000.0f;
-  float ref_Angle_6pi_log = (rtY.ref_angle_6pi + PI) * 1000.0f;
+  float ref_Angle_2pi_log = (rtY.ref_angle_2pi) * 100.0f;
+  float ref_Angle_6pi_log = (rtY.ref_angle_6pi) * 100.0f;
 
   float Offset_deg_log = (rtY.Offset_deg)  * 100.0f;
   float Offset_rad_log = (rtY.Offset_rad) *  100.0f;
@@ -165,11 +164,17 @@ void send_on_305()
 {
   uint8_t can_data[8] = {0};
 
-  can_data[0] = (uint8_t)((uint16_t)(FOC_Y.Id_ref + 10000.0) & 0x00FF);
-  can_data[1] = (uint8_t)(((uint16_t)(FOC_Y.Id_ref + 10000.0) & 0xFF00) >> 8);
+  // can_data[0] = (uint8_t)((uint16_t)(FOC_Y.Id_ref + 10000.0) & 0x00FF);
+  // can_data[1] = (uint8_t)(((uint16_t)(FOC_Y.Id_ref + 10000.0) & 0xFF00) >> 8);
 
-  can_data[2] = (uint8_t)((uint16_t)(FOC_Y.Iq_ref + 10000.0) & 0x00FF);
-  can_data[3] = (uint8_t)(((uint16_t)(FOC_Y.Iq_ref + 10000.0) & 0xFF00) >> 8);
+  // can_data[2] = (uint8_t)((uint16_t)(FOC_Y.Iq_ref + 10000.0) & 0x00FF);
+  // can_data[3] = (uint8_t)(((uint16_t)(FOC_Y.Iq_ref + 10000.0) & 0xFF00) >> 8);
+
+  can_data[0] = (uint8_t)((uint16_t)(busVoltage) & 0x00FF);
+  can_data[1] = (uint8_t)(((uint16_t)(busVoltage) & 0xFF00) >> 8);
+
+  can_data[6] = (uint8_t)((uint16_t)(Duty) & 0x00FF);
+  can_data[7] = (uint8_t)(((uint16_t)(Duty) & 0xFF00) >> 8);
 
   #if APP1
   can_data[4] = (uint8_t)(0x01);
@@ -178,10 +183,7 @@ void send_on_305()
   can_data[4] = (uint8_t)(0x02);
   #endif
 
-  can_data[5] = (uint8_t)((uint16_t)(FOC_U.BusVoltage_V) & 0x00FF);
-  can_data[6] = (uint8_t)(((uint16_t)(FOC_U.BusVoltage_V) & 0xFF00) >> 8);
-
-  can_data[7] = (uint8_t)((uint16_t)(torque_calc));
+  // can_data[7] = (uint8_t)((uint16_t)(torque_calc));
 
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_305, S, can_data, FDCAN_DLC_BYTES);
 }
@@ -229,175 +231,9 @@ void send_on_308()
   can_data[2] = (uint8_t)(curr_off.V_Phase_Offset & 0x00FF);
   can_data[3] = (uint8_t)((curr_off.V_Phase_Offset & 0xFF00) >> 8);
 
-  can_data[6] = (uint8_t)((uint16_t)(Duty) & 0x00FF);
-  can_data[7] = (uint8_t)(((uint16_t)(Duty) & 0xFF00) >> 8);
+
 
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_308, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_705()
-{
-  uint8_t can_data[8] = {0};
-  can_data[0] = (uint8_t)(motorControl.temperature.motor + 50.0f);
-  can_data[1] = (uint8_t)(avg_board_temp + 50.0f);
-  can_data[2] = (uint8_t)(boot_counter & 0x000000FF);
-  can_data[3] = (uint8_t)((boot_counter & 0x0000FF00) >> 8);
-  can_data[4] = (uint8_t)((boot_counter & 0x00FF0000) >> 16);
-  can_data[5] = (uint8_t)((boot_counter & 0xFF000000) >> 24);
-  _fdcan_transmit_on_can(tx_Controller_705, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_706()
-{
-  uint8_t can_data[8] = {0};
-
-  if (forward_set && !reverse_set){can_data[0] = 0x02;}
-  else if (reverse_set && !forward_set){can_data[0] = 0x04;}
-  else if (reverse_set == 1 && forward_set == 1){can_data[0] = 0x01;}
-  if (FOC_F_T.Iq_OL_Flag){can_data[3] = 0x01;}
-  else if (FOC_F_T.OT_Cont_Flag){can_data[3] = 0x02;}
-  else if (FOC_F_T.Ph_OC_Flag){can_data[3] = 0x03;}
-  else if (FOC_F_T.N_Flag){can_data[3] = 0x04;}
-  else if (FOC_F_T.EEPROM_Error){can_data[3] = 0x05;}
-  can_data[4] = (uint8_t)((uint16_t)(abs(FOC_U.ActualSpeed * RPM_TO_RAD_S) * RPM_TO_KMPH * KMPH_CAN_SCALING) & 0x00FF);
-  can_data[5] = (uint8_t)(((uint16_t)(abs(FOC_U.ActualSpeed * RPM_TO_RAD_S) * RPM_TO_KMPH * KMPH_CAN_SCALING) & 0xFF00) >> 8);
-  _fdcan_transmit_on_can(tx_Controller_706, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_710()
-{
-  uint8_t can_data[8] = {0};
-  can_data[0] = (uint8_t)((uint16_t)(((float)(analog.bufferData[THROTTLE]) / 65535.0) * 100.0f));
-  can_data[3] = (uint8_t)((uint16_t)((float)(analog.bufferData[THROTTLE]) * 3.297f / 65535.0f) * THROTTLE_CAN_ADC_SCALING);
-  _fdcan_transmit_on_can(tx_Controller_710, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_715()
-{
-  uint8_t can_data[8] = {0};
-  can_data[4] = (uint8_t)(FOC_U.BusVoltage_V);
-  can_data[6] = (uint8_t)((uint16_t)(abs(FOC_U.ActualSpeed * RPM_TO_RAD_S)) & 0x00FF);
-  can_data[7] = (uint8_t)(((uint16_t)(abs(FOC_U.ActualSpeed * RPM_TO_RAD_S)) & 0xFF00) >> 8);
-  _fdcan_transmit_on_can(tx_Controller_715, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_716()
-{
-  uint8_t can_data[8] = {0};
-  can_data[6] = (uint8_t)((uint16_t)(irms_calc) & 0x00FF);
-  can_data[7] = (uint8_t)(((uint16_t)(irms_calc) & 0xFF00) >> 8); 
-  _fdcan_transmit_on_can(tx_Controller_716, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_717()
-{
-  uint8_t can_data[8] = {0};
-  float freq = abs(FOC_U.ActualSpeed * RPM_TO_RAD_S) * POLEPAIRS / 120.0f;
-  can_data[0] = (uint8_t)((uint16_t)(freq) & 0x00FF);
-  can_data[1] = (uint8_t)(((uint16_t)(freq) & 0xFF00) >> 8);
-  _fdcan_transmit_on_can(tx_Controller_717, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_724()
-{
-  uint8_t can_data[8] = {0};
-  _fdcan_transmit_on_can(tx_Controller_724, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_726()
-{
-  uint8_t can_data[8] = {0};
-  can_data[0] = 0x04;
-  can_data[1] = 0x01;
-  can_data[2] = 0x01;
-  can_data[3] = 0x00;
-
-  can_data[4] = 0x01;
-  can_data[5] = 0x00;
-  can_data[6] = 0x07;
-
-  can_data[7] = 0x01;
-  _fdcan_transmit_on_can(tx_Controller_726, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_7A0()
-{
-  uint8_t can_data[8] = {0};
-  can_data[0] = 0x04;
-  can_data[1] = 0x01;
-  can_data[2] = 0x00;
-
-  can_data[3] = 0x01;
-
-  #if APP1
-    can_data[7] = 0x01;
-  #endif
-
-  #if APP2
-    can_data[7] = 0x02;
-  #endif
-
-  _fdcan_transmit_on_can(tx_Controller_7A0, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_6F0(uint8_t* UIID_Arr)
-{
-  uint8_t can_data[8] = {0};
-  can_data[0] = 0x04;
-  can_data[1] = 0x04;
-  can_data[2] = 0x01;
-  can_data[3] = 0x01;
-  can_data[4] = 0x01;
-  can_data[5] = 0x00;
-  can_data[6] = 0x01;
-  can_data[7] = UIID_Arr[0];
-  _fdcan_transmit_on_can(tx_Controller_6F0, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_6F1(uint8_t* UIID_Arr)
-{
-  uint8_t can_data[8] = {0};
-  can_data[0] = 0x04;
-  can_data[1] = 0x01;
-  can_data[2] = 0x00;
-  can_data[3] = 0x00;
-  can_data[4] = UIID_Arr[1];
-  can_data[5] = UIID_Arr[2];
-  can_data[6] = UIID_Arr[3];
-  can_data[7] = UIID_Arr[4];
-  _fdcan_transmit_on_can(tx_Controller_6F1, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void send_on_6F2(uint8_t* UIID_Arr)
-{
-  uint8_t can_data[8] = {0};
-  can_data[0] = 0x04;
-  can_data[1] = UIID_Arr[5];
-  can_data[2] = UIID_Arr[6];
-  can_data[3] = UIID_Arr[7];
-  can_data[4] = UIID_Arr[8];
-  can_data[5] = UIID_Arr[9];
-  can_data[6] = UIID_Arr[10];
-  can_data[7] = UIID_Arr[11];
-  _fdcan_transmit_on_can(tx_Controller_6F2, S, can_data, FDCAN_DLC_BYTES);
-}
-
-void get_UIID()
-{
-  UIID_Array[0] = (*first_4Bytes) & 0xFF;
-  UIID_Array[1] = (*first_4Bytes >> 8) & 0xFF;
-  UIID_Array[2] = (*first_4Bytes >> 16) & 0xFF;
-  UIID_Array[3] = (*first_4Bytes >> 24) & 0xFF;
-
-  UIID_Array[4] = (*next_4Bytes) & 0xFF;
-  UIID_Array[5] = (*next_4Bytes >> 8) & 0xFF;
-  UIID_Array[6] = (*next_4Bytes >> 16) & 0xFF;
-  UIID_Array[7] = (*next_4Bytes >> 24) & 0xFF;
-
-  UIID_Array[8] = (*last_4Bytes) & 0xFF;
-  UIID_Array[9] = (*last_4Bytes >> 8) & 0xFF;
-  UIID_Array[10] = (*last_4Bytes >> 16) & 0xFF;
-  UIID_Array[11] = (*last_4Bytes >> 24) & 0xFF;
 }
 
 // Rate limiter to smooth RPM changes
@@ -488,15 +324,6 @@ void Throttle_Control_routine()
     prev_thr_time = time_count;
   }
   #endif
-}
-
-void Get_and_Send_UIID()
-{
-  get_UIID();
-
-  send_on_6F0(UIID_Array);
-  send_on_6F1(UIID_Array);
-  send_on_6F2(UIID_Array);
 }
 
 void CAN_Transmit_routine()

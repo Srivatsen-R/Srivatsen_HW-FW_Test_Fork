@@ -209,7 +209,7 @@ void Open_loop6_step(void)
      */
     rtb_Merge_n_idx_0 = yTemp;
     rtb_Merge_n_idx_1 = 0.33333333333333331 * yTemp;
-    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
+    // HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
 
     /* End of Outputs for SubSystem: '<S4>/If Action Subsystem' */
   } else if (((rtY.ZCD_count <= 100.0) && (rtU.FwdRev == 1.0)) ||
@@ -226,7 +226,7 @@ void Open_loop6_step(void)
      */
     rtb_Merge_n_idx_0 = -yTemp + 18.849555921538759;
     rtb_Merge_n_idx_1 = (-yTemp + 18.849555921538759) * 0.33333333333333331;
-    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
+    // HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
 
     /* End of Outputs for SubSystem: '<S4>/If Action Subsystem2' */
   }
@@ -244,7 +244,7 @@ void Open_loop6_step(void)
     rtb_Merge_n_idx_0 = 0.0;
     rtb_Merge_n_idx_1 = 0.0;
     //HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
-    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
+    // HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
     /* End of Outputs for SubSystem: '<S4>/If Action Subsystem1' */
   }
 
