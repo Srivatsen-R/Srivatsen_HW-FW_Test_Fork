@@ -12,6 +12,7 @@ extern float torque_calc;
 extern float irms_calc;
 extern uint8_t pvd_trig_flag;
 extern volatile uint32_t z_trig;
+extern float busVoltage;
 
 static float prev_rpm = 0;
 float speed_ref_temp = 0.0;
@@ -125,6 +126,7 @@ void send_on_303()
   can_data[4] = (uint8_t)(FOC_F_T.Ph_OC_Flag);
 
   can_data[5] = (uint8_t)(z_trig);
+  can_data[6] = (uint8_t)(busVoltage);
 
   _fdcan_transmit_on_can(FDCAN_DEBUG_ID_303, S, can_data, FDCAN_DLC_BYTES);
 }
@@ -141,8 +143,8 @@ void send_on_304()
   float ref_Angle_2pi_log = (rtY.ref_angle_2pi + PI) * 1000.0f;
   float ref_Angle_6pi_log = (rtY.ref_angle_6pi + PI) * 1000.0f;
 
-  float Offset_deg_log = (rtY.Offset_deg + 360) * 100.0f;
-  float Offset_rad_log = (rtY.Offset_rad + PI) * 100.0f;
+  float Offset_deg_log = (rtY.Offset_deg)  * 100.0f;
+  float Offset_rad_log = (rtY.Offset_rad) *  100.0f;
 
   can_data[0] = (uint8_t)((uint16_t)(ref_Angle_2pi_log) & 0x00FF);
   can_data[1] = (uint8_t)(((uint16_t)(ref_Angle_2pi_log) & 0xFF00) >> 8);

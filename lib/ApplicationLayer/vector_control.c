@@ -82,6 +82,8 @@ terminal_t terminal = {
        .volt.bus_volt        = 0.0, 
 };
 
+extern float busVoltage;
+
 void FOC_READ_MOTOR_POSITION(void)
 {
     foc.rotor_angle =  READ_POSITION(TIM2->CNT);
@@ -261,9 +263,13 @@ void FOC_READ_MOTOR_POSITION(void)
 
 void FOC_SPACE_VECTOR_MODULATION()
 {
-    foc.pwm_a = (uint16_t)((PWM_CONST_2*((rtY.V_abc[0] / (61.0f / sqrtf(3.0)))))  + PWM_CONST_1);
-    foc.pwm_b = (uint16_t)((PWM_CONST_2*((rtY.V_abc[1] / (61.0f / sqrtf(3.0)))))  + PWM_CONST_1);
-    foc.pwm_c = (uint16_t)((PWM_CONST_2*((rtY.V_abc[2] / (61.0f / sqrtf(3.0)))))  + PWM_CONST_1);   
+    // foc.pwm_a = (uint16_t)((PWM_CONST_2*((rtY.V_abc[0] / ( busVoltage/2))))  + PWM_CONST_1);
+    // foc.pwm_b = (uint16_t)((PWM_CONST_2*((rtY.V_abc[1] / ( busVoltage/2))))  + PWM_CONST_1);
+    // foc.pwm_c = (uint16_t)((PWM_CONST_2*((rtY.V_abc[2] / ( busVoltage/2))))  + PWM_CONST_1);
+    
+    foc.pwm_a = (uint16_t)((PWM_CONST_2*((rtY.V_abc[0] / (61.0f/2))))  + PWM_CONST_1);
+    foc.pwm_b = (uint16_t)((PWM_CONST_2*((rtY.V_abc[1] / (61.0f/2))))  + PWM_CONST_1);
+    foc.pwm_c = (uint16_t)((PWM_CONST_2*((rtY.V_abc[2] / (61.0f/2))))  + PWM_CONST_1);
 
     if (foc.pwm_a < 0)
         foc.pwm_a = 0;

@@ -72,11 +72,11 @@ int main(void)
   //system clock init.
   SYSTEM_INIT();
 
-  Update_BOR_Counter();
+  // Update_BOR_Counter();
 
-  Boot_Counter();
+  // Boot_Counter();
 
-  read_hard_fault_cause();
+  // read_hard_fault_cause();
 
   //function to keep drive disable intially.
   MotorControl_Init();
@@ -94,15 +94,15 @@ int main(void)
 
   bootup_config();
 
-  //enabling motor control interrupts , ABZ+PWM sensing interrpts.
-  ENABLE_PERIPHERALS();
-
-  Get_and_Send_UIID();
+  // Get_and_Send_UIID();
 
   Current_Sensor_offset_cal();
 
   //FOC_initialize();
   Open_loop6_initialize();
+
+  //enabling motor control interrupts , ABZ+PWM sensing interrpts.
+  ENABLE_PERIPHERALS();
 
   //while loop running on CLK frequency.
   while (1) 

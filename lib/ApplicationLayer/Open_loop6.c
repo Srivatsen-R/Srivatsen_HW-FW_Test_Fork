@@ -209,6 +209,7 @@ void Open_loop6_step(void)
      */
     rtb_Merge_n_idx_0 = yTemp;
     rtb_Merge_n_idx_1 = 0.33333333333333331 * yTemp;
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
 
     /* End of Outputs for SubSystem: '<S4>/If Action Subsystem' */
   } else if (((rtY.ZCD_count <= 100.0) && (rtU.FwdRev == 1.0)) ||
@@ -225,9 +226,15 @@ void Open_loop6_step(void)
      */
     rtb_Merge_n_idx_0 = -yTemp + 18.849555921538759;
     rtb_Merge_n_idx_1 = (-yTemp + 18.849555921538759) * 0.33333333333333331;
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
 
     /* End of Outputs for SubSystem: '<S4>/If Action Subsystem2' */
-  } else {
+  }
+  // else if(rtU.FwdRev == 2.0){
+  //   rtU.Ref_Speed_rpm = 0.0;
+  //   rtU.V_up_limit = 0.0;
+  // } 
+  else {
     /* Outputs for IfAction SubSystem: '<S4>/If Action Subsystem1' incorporates:
      *  ActionPort: '<S9>/Action Port'
      */
@@ -236,7 +243,8 @@ void Open_loop6_step(void)
      */
     rtb_Merge_n_idx_0 = 0.0;
     rtb_Merge_n_idx_1 = 0.0;
-
+    //HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
     /* End of Outputs for SubSystem: '<S4>/If Action Subsystem1' */
   }
 
@@ -388,7 +396,7 @@ void Open_loop6_initialize(void)
   rtU.V_low_limit = 0.0;
   rtU.V_up_limit = 66.0;
   rtU.VFratio = 0.1992;
-  rtU.FwdRev = 1.0;
+  rtU.FwdRev = 0.0;
   //PWM_Enable = 
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
 
